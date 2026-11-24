@@ -1,0 +1,610 @@
+<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kırlangıç Çorap</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: sticky header → yarn hero (copy left, live 3D yarn right) → filter bar → product grid → values / size guide → club band → footer; cart is a right-side drawer. */
+:root{
+  --ink:#14213d;        /* kırlangıç sırtı */
+  --rust:#c2452d;       /* kırlangıç gerdanı */
+  --sky:#dfe9f6;        /* bahar göğü */
+  --paper:#f6f7f9;      /* tüy beyazı, hafif mavi */
+  --card:#ffffff;
+  --line:#dfe3ea;
+  --muted:#5b6577;
+  --fg:#111a2e;
+  --on-accent:#ffffff;
+  --tint-1:#e9eef7; --tint-2:#f7ebe6; --tint-3:#eef3ea; --tint-4:#f3eef7;
+  --ok:#2f7a4f;
+  --shadow:0 18px 40px -22px rgba(20,33,61,.45);
+  --f-display:"Bricolage Grotesque", "Figtree", system-ui, sans-serif;
+  --f-body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"DM Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --ink:#dfe7f5; --rust:#ec6b4f; --sky:#1b2a47; --paper:#0d1424; --card:#141d31; --line:#26324c;
+  --muted:#9aa6bd; --fg:#eef2f9; --on-accent:#140a07;
+  --tint-1:#18233b; --tint-2:#2a1c1c; --tint-3:#18261f; --tint-4:#221c33; --ok:#5fc08a;
+  --shadow:0 18px 40px -22px rgba(0,0,0,.7); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --ink:#dfe7f5; --rust:#ec6b4f; --sky:#1b2a47; --paper:#0d1424; --card:#141d31; --line:#26324c;
+  --muted:#9aa6bd; --fg:#eef2f9; --on-accent:#140a07;
+  --tint-1:#18233b; --tint-2:#2a1c1c; --tint-3:#18261f; --tint-4:#221c33; --ok:#5fc08a;
+  --shadow:0 18px 40px -22px rgba(0,0,0,.7); color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--ink)}
+.wrap{max-width:1200px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);letter-spacing:-.02em;text-wrap:balance;margin:0;line-height:1.05}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--rust);outline-offset:2px;border-radius:6px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+
+/* announcement + header */
+.announce{background:var(--ink);color:var(--paper);font-size:13px;letter-spacing:.02em}
+.announce .wrap{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;padding-block:8px;text-align:center}
+.announce b{color:var(--rust);font-weight:600}
+:root[data-theme="dark"] .announce b{color:var(--rust)}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;gap:20px;padding-block:12px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--fg)}
+.brand svg{width:36px;height:36px;color:var(--ink)}
+.brand span{font-family:var(--f-display);font-weight:800;font-size:20px;letter-spacing:.01em;line-height:1}
+.brand small{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.3em;color:var(--muted);margin-top:3px}
+nav.main{display:flex;gap:4px;margin-left:12px}
+nav.main button{background:none;border:0;padding:8px 12px;border-radius:999px;font-weight:500;color:var(--muted)}
+nav.main button:hover,nav.main button[aria-pressed="true"]{color:var(--fg);background:var(--sky)}
+.tools{margin-left:auto;display:flex;gap:6px;align-items:center}
+.icon-btn{position:relative;width:44px;height:44px;display:grid;place-items:center;border-radius:999px;border:1px solid var(--line);background:var(--card);transition:transform .15s}
+.icon-btn:hover{transform:translateY(-1px)}
+.icon-btn svg{width:20px;height:20px}
+.count{position:absolute;top:-4px;right:-4px;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:var(--rust);color:var(--on-accent);font:600 11px/20px var(--f-mono);text-align:center}
+.count[data-zero="true"]{display:none}
+
+/* hero */
+.hero{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--sky),var(--paper))}
+.hero .wrap{display:grid;grid-template-columns:1.05fr 1fr;gap:24px;align-items:center;padding-block:56px 40px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--rust)}
+.hero h1{font-size:clamp(44px,7vw,92px);font-weight:800;margin:14px 0 18px;color:var(--ink)}
+.hero h1 em{font-style:normal;color:var(--rust)}
+.hero p.lead{font-size:18px;color:var(--muted);max-width:44ch;margin:0 0 28px}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 22px;border-radius:999px;border:1px solid transparent;font-weight:600;text-decoration:none;transition:transform .15s,background .2s}
+.btn:hover{transform:translateY(-1px)}
+.btn.primary{background:var(--rust);color:var(--on-accent)}
+.btn.ghost{background:transparent;border-color:var(--ink);color:var(--ink)}
+.btn.block{width:100%;justify-content:center}
+.btn[disabled]{opacity:.5;cursor:not-allowed;transform:none}
+.facts{display:flex;gap:28px;margin-top:36px;flex-wrap:wrap}
+.facts div{font-size:13px;color:var(--muted)}
+.facts strong{display:block;font-family:var(--f-display);font-size:28px;color:var(--ink);font-weight:700}
+.stage{position:relative;aspect-ratio:1/1;max-width:100%;min-height:280px}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%}
+.stage .hero-sock{position:absolute;inset:14%;display:grid;place-items:center;pointer-events:none}
+.stage .hero-sock svg{width:72%;height:100%;filter:drop-shadow(0 24px 30px rgba(20,33,61,.25))}
+.tag-float{position:absolute;right:6%;bottom:12%;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-size:13px;box-shadow:var(--shadow)}
+.tag-float b{font-family:var(--f-mono);color:var(--rust)}
+
+/* filter bar */
+.shop{padding-block:48px 24px}
+.shop-head{display:flex;align-items:end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.shop-head h2{font-size:clamp(30px,4vw,44px);color:var(--ink)}
+.shop-head p{margin:6px 0 0;color:var(--muted)}
+.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:24px}
+.chip{min-height:40px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:var(--card);font-weight:500;font-size:14px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.search{flex:1 1 220px;max-width:320px;display:flex;align-items:center;gap:8px;min-height:40px;padding:0 14px;border:1px solid var(--line);border-radius:999px;background:var(--card)}
+.search input{border:0;background:transparent;outline:none;width:100%;font-size:14px}
+.search svg{width:16px;height:16px;color:var(--muted);flex:none}
+.sort{min-height:40px;border:1px solid var(--line);border-radius:999px;background:var(--card);padding:0 12px;font-size:14px}
+
+/* grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px}
+.card{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.thumb{position:relative;aspect-ratio:5/4;display:grid;place-items:center;border:0;padding:0;width:100%;cursor:zoom-in}
+.thumb svg{position:absolute;inset:8%;width:84%;height:84%;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.card:hover .thumb svg{transform:rotate(-6deg) scale(1.04)}
+.badge{position:absolute;top:12px;left:12px;font:500 11px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;padding:6px 9px;border-radius:999px;background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.badge.hot{background:var(--rust);color:var(--on-accent);border-color:var(--rust)}
+.fav{position:absolute;top:8px;right:8px;width:44px;height:44px;border-radius:999px;border:0;background:transparent;display:grid;place-items:center;color:var(--ink)}
+.fav svg{width:22px;height:22px}
+.fav[aria-pressed="true"] svg{fill:var(--rust);color:var(--rust)}
+.body{display:flex;flex-direction:column;gap:10px;padding:16px;flex:1}
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.card h3{font-size:19px;font-weight:700}
+.price{font-weight:700;font-size:16px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.comp{font-size:13px;color:var(--muted);margin:0}
+.swatches{display:flex;gap:8px}
+.sw{width:28px;height:28px;border-radius:999px;border:2px solid var(--card);box-shadow:0 0 0 1px var(--line);padding:0;position:relative}
+.sw::after{content:"";position:absolute;inset:-8px}
+.sw[aria-pressed="true"]{box-shadow:0 0 0 2px var(--ink)}
+.add-row{display:flex;gap:8px;margin-top:auto}
+.size{flex:1;min-height:44px;border:1px solid var(--line);border-radius:10px;background:var(--paper);padding:0 10px;font-size:14px}
+.add{min-height:44px;padding:0 16px;border-radius:10px;border:0;background:var(--ink);color:var(--paper);font-weight:600;font-size:14px;transition:background .2s}
+.add:hover{background:var(--rust);color:var(--on-accent)}
+.add.done{background:var(--ok);color:var(--paper)}
+.empty{grid-column:1/-1;text-align:center;padding:48px 16px;color:var(--muted);border:1px dashed var(--line);border-radius:var(--r)}
+
+/* values + size guide */
+.values{padding-block:56px}
+.values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.value svg{width:40px;height:40px;color:var(--rust)}
+.value h3{font-size:22px;margin:12px 0 6px;color:var(--ink)}
+.value p{margin:0;color:var(--muted);max-width:36ch}
+.guide{padding-block:8px 56px}
+.guide-box{display:grid;grid-template-columns:1fr 1.3fr;gap:32px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:32px}
+.guide-box h2{font-size:clamp(26px,3vw,36px);color:var(--ink)}
+.guide-box p{color:var(--muted)}
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--line)}
+th{font:500 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+td.mono{font-size:14px}
+
+/* club band */
+.club{background:var(--ink);color:var(--paper)}
+.club .wrap{display:grid;grid-template-columns:1.2fr 1fr;gap:32px;align-items:center;padding-block:56px}
+.club h2{font-size:clamp(30px,4vw,48px);color:var(--paper)}
+.club p{color:color-mix(in srgb,var(--paper) 75%,transparent);max-width:46ch}
+.club form{display:flex;gap:10px;flex-wrap:wrap}
+.club label{width:100%;font-size:13px;color:color-mix(in srgb,var(--paper) 75%,transparent)}
+.club input{flex:1 1 220px;min-height:48px;border-radius:999px;border:1px solid color-mix(in srgb,var(--paper) 30%,transparent);background:transparent;padding:0 18px;color:var(--paper)}
+.club input::placeholder{color:color-mix(in srgb,var(--paper) 50%,transparent)}
+.club .msg{width:100%;font-size:14px;min-height:1.5em;margin:0}
+:root[data-theme="dark"] .club,:root:not([data-theme="light"]) .club{}
+footer{padding-block:32px;color:var(--muted);font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgba(10,15,28,.45);z-index:80;opacity:0;pointer-events:none;transition:opacity .25s}
+.scrim.open{opacity:1;pointer-events:auto}
+aside.drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);z-index:90;background:var(--card);border-left:1px solid var(--line);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s cubic-bezier(.2,.8,.2,1);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);padding-right:env(safe-area-inset-right,0px)}
+aside.drawer.open{transform:none}
+.d-head{display:flex;justify-content:space-between;align-items:center;padding:18px 20px;border-bottom:1px solid var(--line)}
+.d-head h2{font-size:24px}
+.ship{padding:14px 20px;border-bottom:1px solid var(--line);font-size:14px}
+.bar{height:6px;background:var(--sky);border-radius:99px;margin-top:8px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--rust);border-radius:99px;transition:width .4s}
+.d-items{flex:1;overflow:auto;padding:8px 20px}
+.line{display:grid;grid-template-columns:64px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.line .mini{width:64px;height:64px;border-radius:10px;display:grid;place-items:center}
+.line .mini svg{width:100%;height:54px}
+.line h4{margin:0;font-size:15px}
+.line small{color:var(--muted)}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;margin-top:6px}
+.qty button{width:32px;height:32px;border:0;background:none;font-size:16px}
+.qty span{min-width:22px;text-align:center;font-family:var(--f-mono);font-size:14px}
+.rm{background:none;border:0;color:var(--muted);font-size:13px;text-decoration:underline;padding:6px 0}
+.d-foot{padding:16px 20px 20px;border-top:1px solid var(--line);display:grid;gap:8px}
+.sum{display:flex;justify-content:space-between;font-size:14px}
+.sum.total{font-size:18px;font-weight:700;padding-top:6px}
+.sum .save{color:var(--ok)}
+.d-empty{padding:40px 8px;text-align:center;color:var(--muted)}
+.checkout{display:grid;gap:12px;padding:16px 20px}
+.field{display:grid;gap:4px}
+.field label{font-size:13px;font-weight:600}
+.field input,.field textarea{min-height:44px;border:1px solid var(--line);border-radius:10px;background:var(--paper);padding:10px 12px;font:inherit;color:var(--fg)}
+.field .err{color:var(--rust);font-size:12px;min-height:1em}
+.demo-note{font-size:12px;color:var(--muted);background:var(--sky);padding:10px 12px;border-radius:10px}
+.success{padding:40px 20px;text-align:center}
+.success svg{width:64px;height:64px;color:var(--ok)}
+
+/* quick view */
+dialog.qv{border:0;border-radius:20px;padding:0;width:min(860px,calc(100% - 32px));max-height:calc(100% - 32px);background:var(--card);color:var(--fg);box-shadow:var(--shadow)}
+dialog.qv::backdrop{background:rgba(10,15,28,.5)}
+.qv-in{display:grid;grid-template-columns:1fr 1fr}
+.qv-art{display:grid;place-items:center;min-height:320px}
+.qv-art svg{width:80%;height:300px;max-height:60vh}
+.qv-info{padding:28px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.qv-info h2{font-size:32px;color:var(--ink)}
+.qv-close{position:absolute;top:12px;right:12px;background:var(--card)}
+.sizes{display:flex;gap:8px;flex-wrap:wrap}
+.sizes button{min-width:72px;min-height:44px;border-radius:10px;border:1px solid var(--line);background:var(--paper);font-family:var(--f-mono);font-size:14px}
+.sizes button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+dl.spec{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;margin:0;font-size:14px}
+dl.spec dt{color:var(--muted)}
+dl.spec dd{margin:0}
+
+.toast{position:fixed;left:50%;top:calc(16px + env(safe-area-inset-top,0px));transform:translate(-50%,-20px);background:var(--ink);color:var(--paper);padding:12px 18px;border-radius:999px;font-size:14px;z-index:100;opacity:0;pointer-events:none;transition:.25s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:900px){
+  nav.main{display:none}
+  .hero .wrap{grid-template-columns:1fr;padding-block:36px 24px}
+  .stage{max-width:440px;width:100%;margin:0 auto}
+  .values-grid{grid-template-columns:1fr}
+  .guide-box,.club .wrap{grid-template-columns:1fr}
+  .qv-in{grid-template-columns:1fr}
+  .qv-art{min-height:220px}
+}
+@media (max-width:480px){
+  .brand small{display:none}
+  .grid{grid-template-columns:1fr 1fr;gap:12px}
+  .body{padding:12px}
+  .card h3{font-size:16px}
+  .comp,.swatches{display:none}
+  .add-row{flex-direction:column}
+  .guide-box{padding:20px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head><body>
+
+<div class="announce"><div class="wrap"><span><b>750 TL</b> üzeri kargo bedava</span><span>Her 3 çiftte <b>en ucuzu hediye</b></span><span>Denizli'de örüldü</span></div></div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#urunler" aria-label="Kırlangıç Çorap ana sayfa">
+      <svg viewBox="0 0 256 256" aria-hidden="true"><g fill="currentColor"><path fill-rule="evenodd" d="M104 40 L132 72 L160 40 L160 136 Q160 152 176 156 L206 164 L240 196 L208 212 Q200 226 180 226 L136 226 A36 36 0 0 1 100 190 L100 150 Z M200 188 m-7 0 a7 7 0 1 0 14 0 a7 7 0 1 0 -14 0 Z"/><path d="M100 150 C70 128 40 92 16 40 C58 78 86 100 112 116 Z"/></g></svg>
+      <div><span>KIRLANGIÇ</span><small>ÇORAP</small></div>
+    </a>
+    <nav class="main" aria-label="Kategoriler">
+      <button data-cat="kadin">Kadın</button><button data-cat="erkek">Erkek</button><button data-cat="cocuk">Çocuk</button><button data-cat="kutu">Kutular</button>
+    </nav>
+    <div class="tools">
+      <button class="icon-btn" id="themeBtn" aria-label="Tema değiştir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+      <button class="icon-btn" id="favBtn" aria-label="Favoriler"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 20s-7-4.4-9.2-9A5 5 0 0 1 12 6a5 5 0 0 1 9.2 5c-2.2 4.6-9.2 9-9.2 9z"/></svg><span class="count mono" id="favCount" data-zero="true">0</span></button>
+      <button class="icon-btn" id="cartBtn" aria-label="Sepeti aç"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.2 11.1a2 2 0 0 1-2 1.9H8.2a2 2 0 0 1-2-1.9z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span class="count mono" id="cartCount" data-zero="true">0</span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-copy">
+      <div class="eyebrow">İlkbahar 2027 koleksiyonu</div>
+      <h1>Ayakların <em>hafiflesin.</em></h1>
+      <p class="lead">Taranmış pamuktan, 200 iğneli makinelerde ince örülen çoraplar. Dikişsiz burun, kaymayan konç, gün boyu nefes alan bir doku.</p>
+      <div class="cta-row">
+        <a class="btn primary" href="#urunler">Alışverişe başla</a>
+        <a class="btn ghost" href="#beden">Beden rehberi</a>
+      </div>
+      <div class="facts">
+        <div><strong class="mono">%80</strong>taranmış pamuk</div>
+        <div><strong class="mono">200</strong>iğne sıklığı</div>
+        <div><strong class="mono">4,8/5</strong>12.400 yorum</div>
+      </div>
+    </div>
+    <div class="stage" id="stage">
+      <canvas id="yarn" aria-hidden="true"></canvas>
+      <div class="hero-sock" id="heroSock" aria-hidden="true"></div>
+      <div class="tag-float">Kırlangıç Çizgili · <b class="mono">189 TL</b></div>
+    </div>
+  </div>
+</section>
+
+<section class="shop" id="urunler">
+  <div class="wrap">
+    <div class="shop-head">
+      <div><h2>Çekmecene yeni çiftler</h2><p id="resultInfo">12 model</p></div>
+    </div>
+    <div class="filters" role="group" aria-label="Filtreler">
+      <button class="chip" data-filter="all" aria-pressed="true">Tümü</button>
+      <button class="chip" data-filter="kadin" aria-pressed="false">Kadın</button>
+      <button class="chip" data-filter="erkek" aria-pressed="false">Erkek</button>
+      <button class="chip" data-filter="cocuk" aria-pressed="false">Çocuk</button>
+      <button class="chip" data-filter="kutu" aria-pressed="false">Kutular</button>
+      <button class="chip" data-filter="fav" aria-pressed="false">Favorilerim</button>
+      <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="sr">Ürün ara</span><input id="q" type="search" placeholder="Çizgili, yün, patik…"></label>
+      <label><span class="sr">Sırala</span><select class="sort" id="sort"><option value="pop">Önerilen</option><option value="asc">Fiyat: artan</option><option value="desc">Fiyat: azalan</option><option value="new">En yeniler</option></select></label>
+    </div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<section class="values">
+  <div class="wrap values-grid">
+    <div class="value"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 30c6-14 18-14 24 0"/><path d="M8 22c6-14 18-14 24 0"/><path d="M8 14c6-10 18-10 24 0"/></svg><h3>Taranmış pamuk</h3><p>Kısa lifleri ayıklanmış pamuk tüylenmez, yıkandıkça yumuşar ve formunu korur.</p></div>
+    <div class="value"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 8v16a8 8 0 0 0 8 8h12"/><path d="M26 26l6 6-6 6" transform="translate(0 -6)"/></svg><h3>Dikişsiz burun</h3><p>Burun kısmı el bağlantısıyla kapatılır; parmaklarda iz ve sürtünme bırakmaz.</p></div>
+    <div class="value"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14l16 8 16-8"/><path d="M14 30l6-8 6 8"/></svg><h3>Denizli'de örüldü</h3><p>İplikten paketlemeye her adım kendi atölyemizde. Kırlangıçlar her bahar dönüyor, biz de buradayız.</p></div>
+  </div>
+</section>
+
+<section class="guide" id="beden">
+  <div class="wrap">
+    <div class="guide-box">
+      <div><div class="eyebrow">Beden rehberi</div><h2>Ayakkabı numaran yeterli.</h2><p>İki numara arasında kalırsan büyük olanı seç. Pamuk ilk yıkamada en fazla %3 çeker.</p></div>
+      <div class="tbl"><table>
+        <thead><tr><th>Beden</th><th>Ayakkabı no</th><th>Ayak boyu</th><th>Kimler için</th></tr></thead>
+        <tbody>
+          <tr><td>Çocuk</td><td class="mono">28–34</td><td class="mono">17–21 cm</td><td>4–9 yaş</td></tr>
+          <tr><td>S/M</td><td class="mono">36–40</td><td class="mono">22,5–25,5 cm</td><td>Çoğu kadın</td></tr>
+          <tr><td>L/XL</td><td class="mono">41–45</td><td class="mono">26–29 cm</td><td>Çoğu erkek</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<section class="club">
+  <div class="wrap">
+    <div><div class="eyebrow">Kırlangıç Kulübü</div><h2>Her mevsim, kapına üç yeni çift.</h2><p>Kulüp üyeleri yeni desenleri herkesten iki hafta önce görür ve ilk siparişte %15 indirim alır.</p></div>
+    <form id="clubForm" novalidate>
+      <label for="clubMail">E-posta adresin</label>
+      <input id="clubMail" type="email" placeholder="ad@ornek.com" autocomplete="email">
+      <button class="btn primary" type="submit">Kulübe katıl</button>
+      <p class="msg" id="clubMsg" role="status"></p>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap"><span>© 2027 Kırlangıç Çorap · Denizli</span><span>Bu sayfa bir tasarım demosudur; sipariş ve ödeme alınmaz.</span></div></footer>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Sepet" aria-hidden="true">
+  <div class="d-head"><h2 id="dTitle">Sepetin</h2><button class="icon-btn" id="closeCart" aria-label="Sepeti kapat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <div id="dBody" style="display:flex;flex-direction:column;flex:1;min-height:0"></div>
+</aside>
+
+<dialog class="qv" id="qv" aria-labelledby="qvTitle"></dialog>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const TL=n=>n.toLocaleString("tr-TR")+"\u202FTL";
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+/* ---------- products ---------- */
+const P=[
+ {id:"cizgili",name:"Kırlangıç Çizgili",cat:"kadin erkek",pat:"stripes",price:189,badge:"Çok satan",hot:1,isNew:0,pop:1,comp:"%80 pamuk · %18 poliamid · %2 elastan",tags:"çizgili",colors:[["#14213d","#c2452d","Lacivert/Kızıl"],["#f2efe8","#14213d","Kırık beyaz/Lacivert"],["#2f6b4f","#f2c14e","Yeşil/Hardal"]]},
+ {id:"suru",name:"Sürü",cat:"kadin erkek",pat:"birds",price:219,badge:"Yeni",isNew:1,pop:2,comp:"%80 pamuk · %18 poliamid · %2 elastan",tags:"kuş desenli",colors:[["#dfe9f6","#14213d","Gök/Lacivert"],["#14213d","#f6f7f9","Gece"],["#f7d9cf","#c2452d","Pembe/Kızıl"]]},
+ {id:"benek",name:"Bahar Beneği",cat:"kadin",pat:"dots",price:169,isNew:0,pop:4,comp:"%82 pamuk · %16 poliamid · %2 elastan",tags:"puantiyeli",colors:[["#f4c7b8","#ffffff","Şeftali"],["#c9d8c5","#2f6b4f","Adaçayı"],["#e8dff5","#5b3f8c","Lila"]]},
+ {id:"baklava",name:"Baklava",cat:"erkek",pat:"argyle",price:239,isNew:0,pop:5,comp:"%70 merino yün · %28 poliamid · %2 elastan",tags:"yün kışlık",colors:[["#5a3a2e","#d9a441","Kahve/Hardal"],["#1f3a5f","#9fb7d6","Gece mavisi"],["#3b3b3b","#c2452d","Antrasit"]]},
+ {id:"fitil",name:"Fitil",cat:"kadin erkek",pat:"rib",price:149,isNew:0,pop:3,comp:"%85 pamuk · %13 poliamid · %2 elastan",tags:"düz basic",colors:[["#f2efe8","#d6d0c3","Kırık beyaz"],["#1b1f2a","#3a4152","Siyah"],["#b23a2a","#8e2c1f","Kiremit"]]},
+ {id:"yun",name:"Dağ Evi Yün",cat:"kadin erkek",pat:"stripesWide",price:279,badge:"Kışlık",isNew:0,pop:7,comp:"%60 kuzu yünü · %30 akrilik · %10 poliamid",tags:"yün kalın kışlık",colors:[["#e9e1d3","#8e2c1f","Krem/Bordo"],["#6b7a5a","#e9e1d3","Zeytin"],["#2a2f3a","#e0b64a","Kömür"]]},
+ {id:"kosu",name:"Rüzgâr Koşu",cat:"erkek kadin",pat:"sport",price:199,badge:"Yeni",isNew:1,pop:6,comp:"%65 pamuk · %33 poliamid · %2 elastan",tags:"spor koşu",colors:[["#f6f7f9","#c2452d","Beyaz/Kızıl"],["#1b1f2a","#7fd1c3","Siyah/Su yeşili"],["#dfe9f6","#14213d","Gök"]]},
+ {id:"patik",name:"Görünmez Patik",cat:"kadin erkek",pat:"solid",price:129,isNew:0,pop:8,comp:"%80 pamuk · %18 poliamid · %2 elastan · silikon topuk",tags:"patik babet görünmez",colors:[["#e6cdb8","#e6cdb8","Ten"],["#1b1f2a","#1b1f2a","Siyah"],["#f6f7f9","#f6f7f9","Beyaz"]]},
+ {id:"yavru",name:"Yavru Kırlangıç",cat:"cocuk",pat:"birds",price:139,badge:"Çocuk",isNew:1,pop:9,comp:"%85 pamuk · %13 poliamid · %2 elastan · kaydırmaz taban",tags:"çocuk kuş",colors:[["#f2c14e","#14213d","Güneş"],["#9fd3c7","#14213d","Nane"],["#f7d9cf","#c2452d","Pembe"]]},
+ {id:"pijama",name:"Pijama Partisi",cat:"cocuk",pat:"dots",price:129,isNew:0,pop:11,comp:"%85 pamuk · %13 poliamid · %2 elastan",tags:"çocuk puantiye",colors:[["#14213d","#f2c14e","Gece/Yıldız"],["#c2452d","#f6f7f9","Kızıl"],["#6c8fc7","#ffffff","Mavi"]]},
+ {id:"kutu3",name:"Göç Kutusu · 3 çift",cat:"kutu",pat:"box",price:449,badge:"%20 avantaj",hot:1,isNew:0,pop:2.5,comp:"Kırlangıç Çizgili + Sürü + Fitil",tags:"hediye kutu set",colors:[["#14213d","#c2452d","Klasik"],["#f2efe8","#2f6b4f","Bahar"]]},
+ {id:"kutu7",name:"Haftalık Kutu · 7 çift",cat:"kutu",pat:"box",price:899,isNew:0,pop:10,comp:"Her güne bir desen, karışık renkler",tags:"hediye kutu set haftalık",colors:[["#c2452d","#14213d","Kızıl"],["#1b1f2a","#f2c14e","Gece"]]}
+];
+const TINTS=["var(--tint-1)","var(--tint-2)","var(--tint-3)","var(--tint-4)"];
+
+/* ---------- sock svg generator ---------- */
+let uid=0;
+const SOCK="M58 12 H132 V140 Q132 158 152 164 L174 170 Q198 178 194 202 Q190 226 164 226 H92 Q58 226 58 192 Z";
+function sockSVG(p,ci,extra){
+  const [a,b]=p.colors[ci||0]; const id="s"+(++uid);
+  if(p.pat==="box") return boxSVG(a,b,extra);
+  let fill="";
+  switch(p.pat){
+    case "stripes": for(let y=48;y<230;y+=26) fill+=`<rect x="40" y="${y}" width="180" height="10" fill="${b}"/>`; break;
+    case "stripesWide": for(let y=50;y<230;y+=44) fill+=`<rect x="40" y="${y}" width="180" height="20" fill="${b}"/>`;
+      fill+=`<rect x="40" y="58" width="180" height="4" fill="${a}"/>`; break;
+    case "dots": fill=`<defs><pattern id="${id}d" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="4" fill="${b}"/><circle cx="17" cy="17" r="4" fill="${b}"/></pattern></defs><rect x="40" y="40" width="180" height="200" fill="url(#${id}d)"/>`; break;
+    case "argyle": fill=`<defs><pattern id="${id}a" width="40" height="56" patternUnits="userSpaceOnUse"><path d="M20 0 L40 28 L20 56 L0 28Z" fill="${b}" opacity=".85"/><path d="M0 0 L40 56 M40 0 L0 56" stroke="${a}" stroke-width="1.5" opacity=".6"/></pattern></defs><rect x="40" y="40" width="180" height="200" fill="url(#${id}a)"/>`; break;
+    case "birds": fill=`<defs><pattern id="${id}b" width="34" height="30" patternUnits="userSpaceOnUse"><path d="M5 10 q6 2 10 7 q4-5 10-7 q-5 6-10 9 q-5-3-10-9z" fill="${b}"/><path d="M22 26 q4 1 6 4 q2-3 6-4 q-3 4-6 5 q-3-1-6-5z" fill="${b}" opacity=".7"/></pattern></defs><rect x="40" y="40" width="180" height="200" fill="url(#${id}b)"/>`; break;
+    case "rib": for(let x=62;x<200;x+=8) fill+=`<rect x="${x}" y="12" width="3" height="220" fill="${b}" opacity=".55"/>`; break;
+    case "sport": fill=`<rect x="40" y="44" width="180" height="8" fill="${b}"/><rect x="40" y="58" width="180" height="8" fill="${b}"/><path d="M132 150 Q150 170 194 178 L200 200 Q150 196 120 170Z" fill="${b}" opacity=".9"/>`; break;
+    default: fill="";
+  }
+  const heelToe = p.pat==="solid" ? `<path d="M64 196 a30 30 0 0 0 34 26 h-10 a30 30 0 0 1 -24 -26z" fill="${shade(a,-18)}"/>`
+    : `<path d="M58 196 a34 34 0 0 0 34 30 h12 a34 34 0 0 0 -46 -44z" fill="${b}"/><path d="M178 170 a26 26 0 0 1 4 56 h20 v-60z" fill="${b}"/>`;
+  const cuff = p.pat==="solid" ? "" : `<rect x="40" y="12" width="120" height="30" fill="${a}"/>${[66,76,86,96,106,116,126].map(x=>`<rect x="${x}" y="14" width="3" height="26" fill="${shade(a,-14)}"/>`).join("")}`;
+  const top = p.pat==="solid" ? "M58 150 H132" : "";
+  return `<svg viewBox="40 0 170 240" role="img" aria-label="${p.name}, ${p.colors[ci||0][2]}" ${extra||""}><defs><clipPath id="${id}c"><path d="${p.pat==="solid"?"M58 150 H132 Q132 158 152 164 L174 170 Q198 178 194 202 Q190 226 164 226 H92 Q58 226 58 192 Z":SOCK}"/></clipPath></defs><g clip-path="url(#${id}c)"><rect x="40" y="0" width="180" height="240" fill="${a}"/>${fill}${cuff}${heelToe}</g><path d="${p.pat==="solid"?"M58 150 H132 Q132 158 152 164 L174 170 Q198 178 194 202 Q190 226 164 226 H92 Q58 226 58 192 Z":SOCK}" fill="none" stroke="rgba(10,15,28,.18)" stroke-width="1.5"/></svg>`;
+}
+function boxSVG(a,b,extra){
+  return `<svg viewBox="0 0 220 200" role="img" aria-label="Hediye kutusu" ${extra||""}><path d="M30 70 L110 40 L190 70 L110 100Z" fill="${shade(a,18)}"/><path d="M30 70 L110 100 V180 L30 150Z" fill="${a}"/><path d="M190 70 L110 100 V180 L190 150Z" fill="${shade(a,-16)}"/><path d="M70 55 L150 85 V165" fill="none" stroke="${b}" stroke-width="10"/><path d="M60 110 q14 -10 24 0 q10 -10 24 0 q-10 14 -24 22 q-14 -8 -24 -22z" transform="translate(76 -2) scale(.5)" fill="${b}"/></svg>`;
+}
+function shade(hex,amt){const n=parseInt(hex.slice(1),16);let r=(n>>16)+amt,g=(n>>8&255)+amt,b=(n&255)+amt;const c=v=>Math.max(0,Math.min(255,v));return "#"+((1<<24)+(c(r)<<16)+(c(g)<<8)+c(b)).toString(16).slice(1)}
+function sizesFor(p){return p.cat==="cocuk"?["28–31","32–34"]:p.cat==="kutu"?["36–40","41–45"]:["36–40","41–45"]}
+
+/* ---------- state ---------- */
+let cart=store.get("kc_cart",[]), favs=new Set(store.get("kc_favs",[])), filter="all", query="", sort="pop";
+const pick={}; // product id -> color index
+function save(){store.set("kc_cart",cart);store.set("kc_favs",[...favs])}
+
+/* ---------- grid ---------- */
+function visible(){
+  let list=P.filter(p=>filter==="all"||(filter==="fav"?favs.has(p.id):p.cat.split(" ").includes(filter)));
+  if(query){const q=query.toLocaleLowerCase("tr");list=list.filter(p=>(p.name+" "+p.tags+" "+p.comp).toLocaleLowerCase("tr").includes(q))}
+  const s={pop:(x,y)=>x.pop-y.pop,asc:(x,y)=>x.price-y.price,desc:(x,y)=>y.price-x.price,new:(x,y)=>y.isNew-x.isNew||x.pop-y.pop}[sort];
+  return list.sort(s);
+}
+function renderGrid(animate){
+  const list=visible(), g=$("#grid");
+  $("#resultInfo").textContent=list.length+" model"+(filter==="fav"?" · favorilerin":"");
+  if(!list.length){g.innerHTML=`<div class="empty">${filter==="fav"?"Henüz favorin yok. Beğendiğin çorabın kalbine dokun.":"Aramana uyan çorap bulamadık. Başka bir kelime dene."}</div>`;return}
+  g.innerHTML=list.map((p,i)=>{
+    const ci=pick[p.id]||0;
+    return `<article class="card" data-id="${p.id}">
+      <button class="thumb" style="background:${TINTS[i%4]}" data-qv="${p.id}" aria-label="${p.name} hızlı bak">${sockSVG(p,ci)}${p.badge?`<span class="badge ${p.hot?"hot":""}">${p.badge}</span>`:""}</button>
+      <button class="fav" data-fav="${p.id}" aria-pressed="${favs.has(p.id)}" aria-label="${p.name} favorilere ekle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 20s-7-4.4-9.2-9A5 5 0 0 1 12 6a5 5 0 0 1 9.2 5c-2.2 4.6-9.2 9-9.2 9z"/></svg></button>
+      <div class="body">
+        <div class="row"><h3>${p.name}</h3><span class="price">${TL(p.price)}</span></div>
+        <p class="comp">${p.comp}</p>
+        <div class="swatches" role="group" aria-label="Renk">${p.colors.map((c,k)=>`<button class="sw" data-sw="${p.id}" data-k="${k}" aria-pressed="${k===ci}" aria-label="${c[2]}" title="${c[2]}" style="background:linear-gradient(135deg,${c[0]} 50%,${c[1]} 50%)"></button>`).join("")}</div>
+        <div class="add-row"><label class="sr" for="sz-${p.id}">Beden</label><select class="size" id="sz-${p.id}">${sizesFor(p).map(s=>`<option>${s}</option>`).join("")}</select><button class="add" data-add="${p.id}">Sepete ekle</button></div>
+      </div></article>`}).join("");
+  // position fav button inside thumb area
+  $$(".card").forEach(c=>{c.style.position="relative"});
+  if(animate&&!reduce&&window.gsap) gsap.from(".card",{y:18,opacity:.001,duration:.45,stagger:{each:.05,grid:"auto"},ease:"back.out(1.4)",clearProps:"all"});
+}
+
+/* ---------- cart ---------- */
+function addToCart(id,size,ci,qty){
+  const key=id+"|"+size+"|"+ci; const ex=cart.find(l=>l.key===key);
+  if(ex) ex.qty+=qty||1; else cart.push({key,id,size,ci,qty:qty||1});
+  save(); renderCart(); bump($("#cartBtn"));
+  const p=P.find(x=>x.id===id); toast(`${p.name} (${size}) sepete eklendi`);
+}
+function totals(){
+  let sub=0,units=[];
+  cart.forEach(l=>{const p=P.find(x=>x.id===l.id);sub+=p.price*l.qty; if(p.cat!=="kutu") for(let i=0;i<l.qty;i++) units.push(p.price)});
+  units.sort((a,b)=>a-b); const free=Math.floor(units.length/3); const disc=units.slice(0,free).reduce((s,v)=>s+v,0);
+  const after=sub-disc, ship=after===0?0:(after>=750?0:49);
+  return {sub,disc,ship,total:after+ship,count:cart.reduce((s,l)=>s+l.qty,0),after};
+}
+function renderCart(){
+  const t=totals();
+  const cc=$("#cartCount"); cc.textContent=t.count; cc.dataset.zero=t.count===0;
+  const fc=$("#favCount"); fc.textContent=favs.size; fc.dataset.zero=favs.size===0;
+  if(view!=="cart") return;
+  const body=$("#dBody");
+  if(!cart.length){body.innerHTML=`<div class="d-empty"><p>Sepetin boş. Kırlangıçlar daha yeni geldi, bir göz at.</p><button class="btn primary" id="goShop">Çoraplara göz at</button></div>`;return}
+  const left=Math.max(0,750-t.after), pct=Math.min(100,t.after/750*100);
+  const unitsNon=cart.reduce((s,l)=>s+(P.find(x=>x.id===l.id).cat==="kutu"?0:l.qty),0), need=(3-unitsNon%3)%3;
+  body.innerHTML=`<div class="ship">${left>0?`Ücretsiz kargoya <b class="mono">${TL(left)}</b> kaldı.`:`Kargo bizden.`} ${need&&unitsNon?`<br><small>${need} çift daha eklersen en ucuzu hediye.</small>`:""}<div class="bar"><i style="width:${pct}%"></i></div></div>
+  <div class="d-items">${cart.map(l=>{const p=P.find(x=>x.id===l.id);return `<div class="line"><div class="mini" style="background:var(--tint-1)">${sockSVG(p,l.ci)}</div><div><h4>${p.name}</h4><small>${p.colors[l.ci][2]} · ${l.size}</small><br><div class="qty"><button data-dec="${l.key}" aria-label="Azalt">−</button><span>${l.qty}</span><button data-inc="${l.key}" aria-label="Artır">+</button></div></div><div style="text-align:right"><div class="price">${TL(p.price*l.qty)}</div><button class="rm" data-rm="${l.key}">Kaldır</button></div></div>`}).join("")}</div>
+  <div class="d-foot">
+    <div class="sum"><span>Ara toplam</span><span class="mono">${TL(t.sub)}</span></div>
+    ${t.disc?`<div class="sum"><span>3 al 2 öde</span><span class="mono save">−${TL(t.disc)}</span></div>`:""}
+    <div class="sum"><span>Kargo</span><span class="mono">${t.ship?TL(t.ship):"Ücretsiz"}</span></div>
+    <div class="sum total"><span>Toplam</span><span class="mono">${TL(t.total)}</span></div>
+    <button class="btn primary block" id="toCheckout">Siparişe geç</button>
+  </div>`;
+}
+let view="cart";
+function renderCheckout(){
+  const t=totals();
+  $("#dTitle").textContent="Teslimat";
+  $("#dBody").innerHTML=`<form class="checkout" id="coForm" novalidate>
+    <p class="demo-note">Bu bir demo mağaza: ödeme bilgisi istenmez, sipariş gerçekten oluşturulmaz.</p>
+    <div class="field"><label for="coName">Ad soyad</label><input id="coName" autocomplete="name"><span class="err" id="eName"></span></div>
+    <div class="field"><label for="coPhone">Telefon</label><input id="coPhone" inputmode="tel" autocomplete="tel" placeholder="05xx xxx xx xx"><span class="err" id="ePhone"></span></div>
+    <div class="field"><label for="coAddr">Adres</label><textarea id="coAddr" rows="3" autocomplete="street-address"></textarea><span class="err" id="eAddr"></span></div>
+    <div class="sum total"><span>Ödenecek</span><span class="mono">${TL(t.total)}</span></div>
+    <button class="btn primary block" type="submit">Siparişi onayla</button>
+    <button class="btn ghost block" type="button" id="backCart">Sepete dön</button>
+  </form>`;
+}
+function openCart(){view="cart";$("#dTitle").textContent="Sepetin";renderCart();$("#drawer").classList.add("open");$("#drawer").setAttribute("aria-hidden","false");$("#scrim").classList.add("open");setTimeout(()=>$("#closeCart").focus(),50)}
+function closeCart(){$("#drawer").classList.remove("open");$("#drawer").setAttribute("aria-hidden","true");$("#scrim").classList.remove("open");$("#cartBtn").focus()}
+
+/* ---------- quick view ---------- */
+function openQV(id){
+  const p=P.find(x=>x.id===id); let ci=pick[id]||0, size=sizesFor(p)[0], qty=1;
+  const d=$("#qv");
+  const draw=()=>{d.innerHTML=`<div class="qv-in" style="position:relative">
+    <div class="qv-art" style="background:var(--tint-1)">${sockSVG(p,ci)}</div>
+    <div class="qv-info">
+      <div class="eyebrow">${p.badge||"Kırlangıç Çorap"}</div>
+      <h2 id="qvTitle">${p.name}</h2>
+      <div class="price" style="font-size:22px">${TL(p.price)}</div>
+      <div><small style="color:var(--muted)">Renk: ${p.colors[ci][2]}</small><div class="swatches" style="margin-top:8px">${p.colors.map((c,k)=>`<button class="sw" data-qsw="${k}" aria-pressed="${k===ci}" aria-label="${c[2]}" style="background:linear-gradient(135deg,${c[0]} 50%,${c[1]} 50%)"></button>`).join("")}</div></div>
+      <div><small style="color:var(--muted)">Beden</small><div class="sizes" style="margin-top:8px">${sizesFor(p).map(s=>`<button data-qsz="${s}" aria-pressed="${s===size}">${s}</button>`).join("")}</div></div>
+      <dl class="spec"><dt>İçerik</dt><dd>${p.comp}</dd><dt>Yıkama</dt><dd>30°, ters çevirerek</dd><dt>Üretim</dt><dd>Denizli, Türkiye</dd></dl>
+      <div style="display:flex;gap:10px;align-items:center"><div class="qty" style="margin:0"><button data-qd aria-label="Azalt">−</button><span>${qty}</span><button data-qi aria-label="Artır">+</button></div><button class="btn primary" style="flex:1;justify-content:center" data-qadd>Sepete ekle · ${TL(p.price*qty)}</button></div>
+    </div>
+    <button class="icon-btn qv-close" data-qclose aria-label="Kapat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>`};
+  draw();
+  d.onclick=e=>{
+    const t=e.target.closest("button"); if(e.target===d){d.close();return} if(!t) return;
+    if(t.dataset.qsw!==undefined){ci=+t.dataset.qsw;pick[id]=ci;draw();renderGrid()}
+    else if(t.dataset.qsz){size=t.dataset.qsz;draw()}
+    else if(t.hasAttribute("data-qi")){qty++;draw()}
+    else if(t.hasAttribute("data-qd")){qty=Math.max(1,qty-1);draw()}
+    else if(t.hasAttribute("data-qadd")){addToCart(id,size,ci,qty);d.close()}
+    else if(t.hasAttribute("data-qclose")) d.close();
+  };
+  if(typeof d.showModal==="function") d.showModal(); else d.setAttribute("open","");
+}
+
+/* ---------- ui helpers ---------- */
+let tt; function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("show"),2200)}
+function bump(el){if(reduce||!window.gsap)return;gsap.fromTo(el,{scale:1},{scale:1.15,duration:.15,yoyo:true,repeat:1,ease:"power2.out"})}
+function setFilter(f){filter=f;$$(".chip").forEach(c=>c.setAttribute("aria-pressed",c.dataset.filter===f));$$("nav.main button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.cat===f));renderGrid(true)}
+
+/* ---------- events ---------- */
+document.addEventListener("click",e=>{
+  const t=e.target.closest("button,a"); if(!t) return;
+  const d=t.dataset;
+  if(d.filter) setFilter(d.filter);
+  else if(d.cat){setFilter(d.cat);$("#urunler").scrollIntoView({behavior:reduce?"auto":"smooth"})}
+  else if(d.fav){favs.has(d.fav)?favs.delete(d.fav):favs.add(d.fav);save();t.setAttribute("aria-pressed",favs.has(d.fav));renderCart();bump(t);if(filter==="fav")renderGrid()}
+  else if(d.sw){pick[d.sw]=+d.k;renderGrid()}
+  else if(d.qv) openQV(d.qv);
+  else if(d.add){const sel=$("#sz-"+d.add);addToCart(d.add,sel.value,pick[d.add]||0,1);t.textContent="Eklendi ✓";t.classList.add("done");setTimeout(()=>{t.textContent="Sepete ekle";t.classList.remove("done")},1400)}
+  else if(d.inc||d.dec){const l=cart.find(x=>x.key===(d.inc||d.dec));l.qty+=d.inc?1:-1;if(l.qty<1)cart=cart.filter(x=>x!==l);save();renderCart()}
+  else if(d.rm){cart=cart.filter(x=>x.key!==d.rm);save();renderCart()}
+  else if(t.id==="cartBtn") openCart();
+  else if(t.id==="favBtn"){setFilter("fav");$("#urunler").scrollIntoView({behavior:reduce?"auto":"smooth"})}
+  else if(t.id==="closeCart") closeCart();
+  else if(t.id==="goShop"){closeCart();$("#urunler").scrollIntoView({behavior:reduce?"auto":"smooth"})}
+  else if(t.id==="toCheckout"){view="checkout";renderCheckout();setTimeout(()=>$("#coName").focus(),30)}
+  else if(t.id==="backCart"){view="cart";$("#dTitle").textContent="Sepetin";renderCart()}
+  else if(t.id==="themeBtn"){const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;r.dataset.theme=dark?"light":"dark";store.set("kc_theme",r.dataset.theme)}
+});
+$("#scrim").addEventListener("click",closeCart);
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("#drawer").classList.contains("open"))closeCart()});
+document.addEventListener("submit",e=>{
+  e.preventDefault();
+  if(e.target.id==="coForm"){
+    const n=$("#coName").value.trim(),ph=$("#coPhone").value.replace(/\D/g,""),a=$("#coAddr").value.trim();
+    $("#eName").textContent=n.length<3?"Ad soyadını yaz.":"";
+    $("#ePhone").textContent=!/^0?5\d{9}$/.test(ph)?"05 ile başlayan 11 haneli numara gir.":"";
+    $("#eAddr").textContent=a.length<10?"Adresi mahalle ve ilçeyle birlikte yaz.":"";
+    if(n.length<3||!/^0?5\d{9}$/.test(ph)||a.length<10){const f=[...e.target.querySelectorAll(".err")].find(x=>x.textContent);f&&f.previousElementSibling.focus();return}
+    const no="KC-"+String(Date.now()).slice(-6);
+    cart=[];save();renderCart();view="done";$("#dTitle").textContent="Teşekkürler";
+    $("#dBody").innerHTML=`<div class="success"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></svg><h3 style="margin:12px 0 6px;font-size:24px">Sipariş alındı (demo)</h3><p style="color:var(--muted)">Demo sipariş no: <span class="mono">${no}</span><br>Gerçek bir sipariş oluşturulmadı.</p><button class="btn primary" id="goShop">Alışverişe dön</button></div>`;
+  } else if(e.target.id==="clubForm"){
+    const v=$("#clubMail").value.trim(), m=$("#clubMsg");
+    m.textContent=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)?"Kaydını aldık (demo). İlk bülten baharla birlikte gelecek.":"Geçerli bir e-posta adresi yaz, örneğin ad@ornek.com.";
+  }
+});
+let qT; $("#q").addEventListener("input",e=>{clearTimeout(qT);qT=setTimeout(()=>{query=e.target.value.trim();renderGrid()},150)});
+$("#sort").addEventListener("change",e=>{sort=e.target.value;renderGrid(true)});
+
+/* ---------- boot ---------- */
+const th=store.get("kc_theme",null); if(th) document.documentElement.dataset.theme=th;
+$("#heroSock").innerHTML=sockSVG(P[0],0);
+renderGrid(false); renderCart();
+
+if(window.gsap&&!reduce){
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.from(".hero-copy > *",{y:24,opacity:.001,duration:.7,stagger:.08,ease:"power3.out",clearProps:"all"});
+  gsap.from("#heroSock svg",{rotate:-14,y:30,duration:1.1,ease:"elastic.out(1,.6)",clearProps:"transform"});
+  gsap.to("#heroSock svg",{y:-10,rotate:3,duration:3,ease:"sine.inOut",yoyo:true,repeat:-1,delay:1.1});
+  gsap.utils.toArray(".value,.guide-box,.club .wrap > *").forEach(el=>gsap.from(el,{y:30,duration:.7,ease:"power2.out",scrollTrigger:{trigger:el,start:"top 90%"}}));
+}
+
+/* ---------- three.js yarn ---------- */
+(function yarn(){
+  if(!window.THREE) return;
+  const cv=$("#yarn"), stage=$("#stage");
+  let renderer; try{renderer=new THREE.WebGLRenderer({canvas:cv,alpha:true,antialias:true})}catch(e){return}
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  const scene=new THREE.Scene(), cam=new THREE.PerspectiveCamera(40,1,.1,100); cam.position.set(0,0,9);
+  scene.add(new THREE.AmbientLight(0xffffff,.65)); const dl=new THREE.DirectionalLight(0xffffff,.9); dl.position.set(3,4,6); scene.add(dl);
+  const group=new THREE.Group(); scene.add(group);
+  const cols=[0xc2452d,0x14213d,0xf2c14e,0x6c8fc7,0x2f6b4f];
+  let seed=7; const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647};
+  for(let s=0;s<5;s++){
+    const pts=[]; const R=2.2+s*.35;
+    for(let i=0;i<9;i++){const a=i/9*Math.PI*2+s; pts.push(new THREE.Vector3(Math.cos(a)*R*(0.8+rnd()*.4),Math.sin(a*2)*1.1+(rnd()-.5),Math.sin(a)*R*(0.7+rnd()*.4)))}
+    const curve=new THREE.CatmullRomCurve3(pts,true);
+    const geo=new THREE.TubeGeometry(curve,220,.07+.02*(s%2),10,true);
+    const mat=new THREE.MeshStandardMaterial({color:cols[s],roughness:.75,metalness:0});
+    const m=new THREE.Mesh(geo,mat); m.rotation.set(rnd()*Math.PI,rnd()*Math.PI,0); group.add(m);
+  }
+  function size(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}
+  size(); addEventListener("resize",size);
+  let mx=0,my=0; stage.addEventListener("pointermove",e=>{const r=stage.getBoundingClientRect();mx=(e.clientX-r.left)/r.width-.5;my=(e.clientY-r.top)/r.height-.5});
+  let visibleNow=true; new IntersectionObserver(es=>{visibleNow=es[0].isIntersecting}).observe(stage);
+  function frame(t){
+    if(visibleNow){group.rotation.y=t*.00012+mx*.6;group.rotation.x=Math.sin(t*.0003)*.2+my*.4;group.children.forEach((m,i)=>m.rotation.z+=.0015*(i%2?1:-1));renderer.render(scene,cam)}
+    if(!reduce) requestAnimationFrame(frame);
+  }
+  reduce?renderer.render(scene,cam):requestAnimationFrame(frame);
+})();
+})();
+</script>
+</body></html>
