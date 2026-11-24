@@ -1,6 +1,30 @@
-# Dürbün Mum Telegram Botu
+# Dürbün Mum + ChoCh Telegram Botu
 
-Seçtiğin kripto paraları ve hisseleri tarar. **Dürbün mum** formasyonu oluşunca Telegram'a bildirim yollar.
+Binance'teki kripto paritelerini tarar. Üst zaman diliminde **dürbün mum** formasyonu bulunca alt zaman diliminde **ChoCh** onayı bekler. Onay gelince Telegram'a bildirim yollar.
+
+## Akış
+
+1. **Dürbün:** Üst zaman diliminde (ör. 4h) formasyon aranır. Tarama her yeni mum kapanışında bir kez yapılır.
+2. **Bekleme:** Bulunan dürbün kaydedilir ve alt zaman dilimi (ör. 15m) her dakika kontrol edilir.
+3. **Onay:** Dürbün tamamlandıktan sonra alt zaman diliminde aynı yönde ChoCh olursa ✅ **ONAYLI** bildirimi gider.
+   - Yükseliş dürbünü için yukarı ChoCh: alt zaman dilimi önce aşağı dönmüş olmalı, sonra son tepe kapanışla kırılmalı.
+4. **İptal:** Şu iki durumda bildirim gitmez:
+   - `SETUP_EXPIRE_BARS` üst zaman dilimi mumu içinde ChoCh gelmezse.
+   - Fiyat dürbünün dibinin altında (düşüşte tepesinin üstünde) kapanırsa.
+
+ChoCh mantığı TradingView'daki **BoS/ChoCh (Nephew_Sam_)** göstergesinin ekrandaki ayarlarıyla aynı:
+- Pivot lb = 5, Pivot rb = 5.
+- Kırılım kapanışla onaylanır.
+- Trend aşağıyken son pivot tepenin üstünde kapanış = yukarı ChoCh. Trend zaten yukarıysa = BOS.
+
+| Üst TF | Alt TF (varsayılan) |
+|---|---|
+| 1d | 1h |
+| 4h | 15m |
+| 1h | 5m |
+| 15m | 1m |
+
+Bunları `.env` dosyasındaki `LTF_MAP` ile değiştirebilirsin.
 
 ## Formasyon kuralları
 
@@ -14,6 +38,8 @@ Seçtiğin kripto paraları ve hisseleri tarar. **Dürbün mum** formasyonu olu�
 - Mumların boyuna bakılmaz. Sadece renk sırası ve gövde ihlali önemlidir.
 - `STRICT_WICKS=1` yaparsan ortadaki mumların iğneleri de çizgiyi geçemez.
 - Sadece **kapanmış** mumlara bakılır. Aynı sinyal iki kez gönderilmez (`state.json`).
+- `BINANCE_SYMBOLS=ALL` yaparsan hacme göre ilk `TOP_N` USDT paritesi taranır. Stabil coinler ve kaldıraçlı tokenler hariç tutulur.
+- Dürbün bulunduğu an da haber almak istersen `NOTIFY_PENDING=1` yap.
 
 ## Kurulum
 

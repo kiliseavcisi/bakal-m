@@ -4,9 +4,17 @@ from __future__ import annotations
 import time
 from typing import List
 
+import os
+
 import requests
 
 from pattern import Candle
+
+def _base() -> str:
+    return os.getenv("BINANCE_BASE", "https://api.binance.com").rstrip("/")
+
+STABLES = {"USDC", "FDUSD", "TUSD", "BUSD", "USDP", "DAI", "EUR", "EURI", "AEUR",
+           "USDE", "XUSD", "USD1", "BFUSD", "PAXG", "WBTC", "WBETH"}
 
 INTERVAL_MS = {
     "1m": 60_000, "5m": 300_000, "15m": 900_000, "30m": 1_800_000,
@@ -32,9 +40,26 @@ def _only_closed(candles: List[Candle], interval: str) -> List[Candle]:
     return [c for c in candles if c.time + step <= now]
 
 
+def binance_universe(quote: str = "USDT", top_n: int = 100) -> List[str]:
+    """İşlem gören QUOTE paritelerini 24s hacme göre sırala, ilk top_n'i al."""
+    info = requests.get(f"{_base()}/api/v3/exchangeInfo",
+                        params={"permissions": "SPOT"}, timeout=30).json()
+    ok = set()
+    for s in info["symbols"]:
+        base = s["baseAsset"]
+        if (s["status"] == "TRADING" and s["quoteAsset"] == quote
+                and base not in STABLES
+                and not base.endswith(("UP", "DOWN", "BULL", "BEAR"))):
+            ok.add(s["symbol"])
+    tickers = requests.get(f"{_base()}/api/v3/ticker/24hr", timeout=30).json()
+    vols = sorted(((float(t["quoteVolume"]), t["symbol"]) for t in tickers
+                   if t["symbol"] in ok), reverse=True)
+    return [s for _, s in vols[:top_n]]
+
+
 def fetch_binance(symbol: str, interval: str, limit: int = 20) -> List[Candle]:
     r = requests.get(
-        "https://api.binance.com/api/v3/klines",
+        f"{_base()}/api/v3/klines",
         params={"symbol": symbol.upper(), "interval": interval, "limit": limit},
         timeout=15,
     )
