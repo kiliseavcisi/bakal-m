@@ -679,7 +679,7 @@ const multi = w => w.sq.replace(/[?!.,…]/g, "").trim().includes(" ");
 function recallKind(w) { return multi(w) && w.sq.split(" ").length <= 7 ? "build" : "toSq"; }
 function typesFor(w, review = false) {
   // used by review sessions: retrieval-heavy, production-leaning
-  const t = ["listen", recallKind(w), recallKind(w), "type"];
+  const t = ["listen", recallKind(w), recallKind(w), "dictate"];
   if (fillable(w)) t.push("fill");
   if (review) t.push("speak");
   return t;
@@ -706,9 +706,9 @@ function startLesson(L) {
   // 4. produce: shadow one item aloud, write one from dictation
   const prod = shuffle(words);
   if (prod[0]) steps.push({ k: "speak", w: prod[0] });
-  if (prod[1]) steps.push({ k: "type", w: prod[1] });
+  if (prod[1]) steps.push({ k: "dictate", w: prod[1] });
   // 5. spaced review of earlier items that are due
-  review.forEach(w => steps.push({ k: pickOne(["listen", recallKind(w), "type"]), w }));
+  review.forEach(w => steps.push({ k: pickOne(["listen", recallKind(w), "dictate"]), w }));
   preload([...words, ...review].map(w => w.a));
   LS = { L, steps, i: 0, hearts: 5, total: steps.length, right: 0, tries: 0, t0: Date.now(), practice, redo: [] };
   renderStep();
@@ -756,7 +756,7 @@ function renderStep() {
   }
   const st = LS.steps[LS.i];
   const ui = lessonShell();
-  ({ intro, listen, toSq, toTr, match, build, type, speak, tip, fill })[st.k](st, ui);
+  ({ intro, listen, toSq, toTr, match, build, type, speak, tip, fill, dictate })[st.k](st, ui);
 }
 
 /* Bottom-sheet result + continue */
@@ -913,13 +913,23 @@ function match(st, ui) {
 }
 
 /* -- Exercise: build Albanian sentence from tiles -- */
-function build(st, ui) {
+function build(st, ui, byEar = false) {
   const w = st.w;
-  const target = w.sq.replace(/[?!.]/g, "").split(" ");
-  const extra = pick(UNITS.flatMap(u => u.w).flatMap(x => x.sq.replace(/[?!.]/g, "").split(" ")).filter(t => !target.includes(t)), Math.min(4, 8 - target.length));
+  const target = w.sq.replace(/[?!.,…]/g, "").split(" ");
+  const strip = x => x.sq.replace(/[?!.,…]/g, "").split(" ");
+  const near = unitOf(w).w ? unitOf(w).w.flatMap(strip) : [];
+  const pool = [...new Set([...near, ...allWords().flatMap(strip)])].filter(t => !target.includes(t));
+  const extra = [...pick(pool.filter(t => near.includes(t)), 2), ...pick(pool, 4)].filter((t, i, a) => a.indexOf(t) === i).slice(0, Math.max(3, 8 - target.length));
   const tiles = shuffle([...target, ...extra]);
-  ui.body.append($(`<div class="tag">Cümleyi kur</div>`));
-  ui.body.append($(`<div class="speak-row">${w.p ? pic(w.p) : eagle(64)}<div class="bubble-say">${hint(w.tr, "tr")}</div></div>`));
+  if (byEar) {
+    ui.body.append($(`<div class="tag">Duyduğunu kur</div>`));
+    ui.body.append($(`<h2 class="prompt">Dinle ve kelimeleri sırayla seç</h2>`));
+    ui.body.append(speakerRow(w));
+    setTimeout(() => say(w), 250);
+  } else {
+    ui.body.append($(`<div class="tag">Cümleyi kur</div>`));
+    ui.body.append($(`<div class="speak-row">${w.p ? pic(w.p) : eagle(64)}<div class="bubble-say">${hint(w.tr, "tr")}</div></div>`));
+  }
   const line = $(`<div class="answer-line" aria-label="Cevabın"></div>`);
   const bank = $(`<div class="bank"></div>`);
   const chosen = [];
@@ -940,6 +950,30 @@ function build(st, ui) {
     const ok = norm(chosen.map(c => c.t).join(" ")) === norm(target.join(" "));
     resolve(ui, ok, w.sq, st);
   };
+}
+
+/* -- Dictation with a word bank: hear it, build it (single words: pick the right spelling) -- */
+function dictate(st, ui) {
+  const w = st.w;
+  if (multi(w)) return build(st, ui, true);
+  const clean = x => x.sq.replace(/[?!.,…]/g, "");
+  const same = unitOf(w).w.filter(x => x !== w && !multi(x));
+  const opts = shuffle([w, ...pick(same.length >= 3 ? same : allWords().filter(x => x !== w && !multi(x)), 3)]);
+  ui.body.append($(`<div class="tag">Duyduğunu seç</div>`));
+  ui.body.append($(`<h2 class="prompt">Hangisini duydun?</h2>`));
+  ui.body.append(speakerRow(w));
+  const g = $(`<div class="grid2"></div>`); let sel = null;
+  opts.forEach(o => {
+    const b = $(`<button class="opt">${esc(clean(o))}</button>`);
+    b.onclick = () => { g.querySelectorAll(".opt").forEach(x => x.classList.remove("sel")); b.classList.add("sel"); sel = o; ui.btn.disabled = false; };
+    g.append(b);
+  });
+  ui.body.append(g);
+  ui.btn.onclick = () => {
+    g.querySelectorAll(".opt").forEach((b, i) => { b.disabled = true; if (opts[i] === w) b.classList.add("ok"); else if (opts[i] === sel) b.classList.add("no"); });
+    resolve(ui, sel === w, w.sq + " = " + w.tr, st);
+  };
+  setTimeout(() => say(w), 250);
 }
 
 /* -- Exercise: listen and type -- */
