@@ -1,0 +1,540 @@
+<title>Shqip Defteri</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Layout: one narrow study column; sticky top bar with mode tabs; deck grid on home, single card stage in study modes. */
+:root {
+  --bg: #f6f4f3;
+  --surface: #ffffff;
+  --surface-2: #efeae8;
+  --fg: #1f1a1b;
+  --muted: #6b6162;
+  --line: #ddd4d2;
+  --accent: #b3122b;        /* flag red */
+  --accent-soft: #f7dfe2;
+  --accent-fg: #ffffff;
+  --tr: #1f6f6a;            /* Turkish side */
+  --tr-soft: #dcefed;
+  --good: #2f7d3b;
+  --good-soft: #e0f1e2;
+  --bad: #b3122b;
+  --bad-soft: #f9e1e4;
+  --shadow: 0 1px 2px rgba(40,20,22,.06), 0 6px 20px rgba(40,20,22,.06);
+  --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Source Sans 3", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --r: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #161213; --surface: #211b1c; --surface-2: #2b2425; --fg: #f1eceb; --muted: #a89c9d;
+    --line: #3a3132; --accent: #ef4a5f; --accent-soft: #3d1c21; --accent-fg: #1a0d0f;
+    --tr: #5cc2b9; --tr-soft: #17312f; --good: #6cc47a; --good-soft: #1b3120; --bad: #ef6b7c; --bad-soft: #3d1c21;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #161213; --surface: #211b1c; --surface-2: #2b2425; --fg: #f1eceb; --muted: #a89c9d;
+  --line: #3a3132; --accent: #ef4a5f; --accent-soft: #3d1c21; --accent-fg: #1a0d0f;
+  --tr: #5cc2b9; --tr-soft: #17312f; --good: #6cc47a; --good-soft: #1b3120; --bad: #ef6b7c; --bad-soft: #3d1c21;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--f-body); font-size: 17px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 48px;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 760px; margin: 0 auto; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+header.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg);
+  padding-block: 14px 10px; display: flex; flex-direction: column; gap: 10px; border-bottom: 1px solid var(--line);
+}
+.brand { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.brand h1 { font-family: var(--f-display); font-weight: 800; font-size: 1.6rem; margin: 0; letter-spacing: -.01em; }
+.brand h1 span { color: var(--accent); }
+.brand .stat { color: var(--muted); font-size: .9rem; font-variant-numeric: tabular-nums; }
+nav.tabs { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+nav.tabs button {
+  border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 6px 14px;
+  font-weight: 600; font-size: .95rem; white-space: nowrap;
+}
+nav.tabs button[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+
+main { padding-top: 20px; display: flex; flex-direction: column; gap: 18px; }
+h2 { font-family: var(--f-display); font-weight: 700; font-size: 1.3rem; margin: 0; text-wrap: balance; }
+.lead { color: var(--muted); margin: 0; max-width: 62ch; }
+
+/* Deck grid */
+.decks { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+.deck {
+  text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r);
+  padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; min-width: 0;
+}
+.deck:hover { border-color: var(--accent); }
+.deck[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.deck .no { font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.deck .t { font-weight: 700; line-height: 1.25; }
+.deck .meta { display: flex; justify-content: space-between; font-size: .85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.bar { height: 5px; background: var(--surface-2); border-radius: 99px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--good); width: 0; transition: width .3s; }
+
+.toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+select, .seg button, .btn {
+  border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 8px 12px; font-size: .95rem;
+}
+select { max-width: 100%; min-width: 0; flex: 1 1 220px; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.seg button { border: 0; border-radius: 0; background: var(--surface); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg); }
+.btn.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); font-weight: 700; }
+.btn.good { background: var(--good-soft); border-color: var(--good); color: var(--good); font-weight: 700; }
+.btn.bad { background: var(--bad-soft); border-color: var(--bad); color: var(--bad); font-weight: 700; }
+
+/* Card stage */
+.stage { display: flex; flex-direction: column; gap: 14px; }
+.progress { display: flex; justify-content: space-between; color: var(--muted); font-size: .9rem; font-variant-numeric: tabular-nums; }
+.card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow);
+  min-height: 240px; padding: 28px 22px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 12px; text-align: center; position: relative; width: 100%;
+}
+button.card { cursor: pointer; }
+.lang { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; padding: 3px 10px; border-radius: 99px; }
+.lang.sq { background: var(--accent-soft); color: var(--accent); }
+.lang.tr { background: var(--tr-soft); color: var(--tr); }
+.word { font-family: var(--f-display); font-weight: 700; font-size: clamp(1.6rem, 6vw, 2.4rem); line-height: 1.15; overflow-wrap: anywhere; }
+.word.sm { font-size: clamp(1.2rem, 4.5vw, 1.6rem); }
+.answer { color: var(--tr); font-size: 1.25rem; font-weight: 600; overflow-wrap: anywhere; }
+.hint { color: var(--muted); font-size: .85rem; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.choices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 520px) { .choices { grid-template-columns: 1fr; } }
+.choice {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px; text-align: left;
+  font-weight: 600; min-width: 0; overflow-wrap: anywhere;
+}
+.choice:hover:not([disabled]) { border-color: var(--fg); }
+.choice.ok { background: var(--good-soft); border-color: var(--good); color: var(--good); }
+.choice.no { background: var(--bad-soft); border-color: var(--bad); color: var(--bad); }
+.choice[disabled] { cursor: default; }
+.type-in { display: flex; gap: 8px; flex-wrap: wrap; }
+.type-in input {
+  flex: 1 1 220px; min-width: 0; font: inherit; font-size: 1.1rem; padding: 12px 14px; border-radius: 12px;
+  border: 1px solid var(--line); background: var(--surface); color: var(--fg);
+}
+.keys { display: flex; flex-wrap: wrap; gap: 6px; }
+.keys button { border: 1px solid var(--line); background: var(--surface-2); border-radius: 8px; padding: 6px 12px; font-weight: 700; }
+.feedback { min-height: 1.6em; font-weight: 600; text-align: center; }
+.feedback.ok { color: var(--good); } .feedback.no { color: var(--bad); }
+.done { text-align: center; display: flex; flex-direction: column; gap: 10px; align-items: center; padding: 26px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; }
+.done .big { font-family: var(--f-display); font-size: 3rem; font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; }
+
+/* Word list + alphabet */
+.list-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: .98rem; }
+th, td { text-align: left; padding: 9px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); background: var(--surface-2); }
+td.sq { font-weight: 700; color: var(--accent); }
+td.k { width: 1%; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+.mark { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--line); }
+.mark.on { background: var(--good); }
+.alpha { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.letter { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.letter.diff { border-color: var(--accent); }
+.letter b { font-family: var(--f-display); font-size: 1.5rem; color: var(--accent); }
+.letter .say { font-weight: 600; }
+.letter .ex { color: var(--muted); font-size: .88rem; overflow-wrap: anywhere; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; color: var(--muted); font-size: .88rem; }
+.legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; border: 1px solid var(--line); vertical-align: -1px; }
+.legend .d::before { border-color: var(--accent); background: var(--accent-soft); }
+.tip { background: var(--tr-soft); color: var(--fg); border-radius: var(--r); padding: 12px 14px; font-size: .95rem; }
+.tip b { color: var(--tr); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <h1>Shqip <span>Defteri</span></h1>
+      <div class="stat" id="stat">0 / 0 kelime öğrenildi</div>
+    </div>
+    <nav class="tabs" aria-label="Bölümler">
+      <button data-tab="home" aria-pressed="true">Dersler</button>
+      <button data-tab="cards" aria-pressed="false">Kartlar</button>
+      <button data-tab="quiz" aria-pressed="false">Test</button>
+      <button data-tab="write" aria-pressed="false">Yazma</button>
+      <button data-tab="list" aria-pressed="false">Kelime listesi</button>
+      <button data-tab="alpha" aria-pressed="false">Alfabe</button>
+    </nav>
+  </header>
+  <main id="main"></main>
+</div>
+
+<script>
+/* ---------- Data: from Mimoza Elezi's playlist notes, lessons 1–31 ---------- */
+const DECKS = [
+  { id: "selam", no: "Ders 3, 8, 27", t: "Selamlaşma", w: [
+    ["Përshëndetje","Merhaba"],["Tungjatjeta","Merhaba (resmî)"],["Mirëmëngjes","Günaydın"],["Mirëdita","İyi günler"],
+    ["Mirëmbrëma","İyi akşamlar"],["Natën e mirë","İyi geceler"],["Mirupafshim","Hoşça kal"],["Shihemi","Görüşürüz"],
+    ["Shihemi nesër","Yarın görüşürüz"],["Shihemi së shpejti","Yakında görüşürüz"],["Faleminderit","Teşekkürler"],
+    ["S'ka përse","Bir şey değil"],["Ju lutem","Lütfen"],["Më falni","Affedersiniz"],["Urdhëroni","Buyurun"],
+    ["Gjumë të ëmbël","İyi uykular"],["Ç'kemi?","Ne haber?"],["Kohë pa u parë","Uzun zamandır görüşemedik"]]},
+  { id: "hal", no: "Ders 3, 8, 27", t: "Hal hatır ve tanışma", w: [
+    ["Si je?","Nasılsın?"],["Si jeni?","Nasılsınız?"],["Mirë jam","İyiyim"],["Shumë mirë","Çok iyi"],["Jo keq","Fena değil"],
+    ["Jo aq mirë","O kadar iyi değil"],["Po ti?","Ya sen?"],["Si quhesh?","Adın ne?"],["Unë quhem…","Benim adım…"],
+    ["Gëzohem që u njohëm","Tanıştığıma memnun oldum"],["Edhe unë","Ben de"],["Nga jeni?","Nerelisiniz?"],
+    ["Jam nga Turqia","Türkiye'denim"],["Sa vjeç jeni?","Kaç yaşındasınız?"],["Kush jeni ju?","Siz kimsiniz?"],
+    ["Unë jam student","Ben öğrenciyim"],["Ku jeni?","Neredesiniz?"],["A flisni shqip?","Arnavutça konuşuyor musunuz?"]]},
+  { id: "zamir", no: "Ders 5, 6, 7, 17", t: "Zamirler ve jam (olmak)", w: [
+    ["unë","ben"],["ti","sen"],["ai","o (erkek)"],["ajo","o (kadın)"],["ne","biz"],["ju","siz"],["ata","onlar (erkek/karışık)"],
+    ["ato","onlar (kadın)"],["unë jam","ben -im"],["ti je","sen -sin"],["ai është","o -dir"],["ne jemi","biz -iz"],
+    ["ju jeni","siz -siniz"],["ata janë","onlar -dir"],["isha","idim"],["ishte","idi"],["do të jem","olacağım"],["vetë","kendi"]]},
+  { id: "aile", no: "Ders 7", t: "Aile", w: [
+    ["familje","aile"],["nënë","anne"],["baba","baba"],["burrë","erkek, koca"],["grua","kadın, eş"],["fëmijë","çocuk"],
+    ["djalë","oğlan"],["bir","oğul"],["bijë","kız evlat"],["vajzë","kız"],["vëlla","erkek kardeş"],["motër","kız kardeş"],
+    ["gjysh","dede"],["gjyshe","nine"],["xhaxha","amca"],["daja","dayı"],["teze","teyze"],["hallë","hala"],
+    ["nip","erkek yeğen"],["mbesë","kız yeğen"],["kushëri","erkek kuzen"],["kushërirë","kız kuzen"]]},
+  { id: "sayi", no: "Ders 3, 14", t: "Sayılar", w: [
+    ["një","bir"],["dy","iki"],["tre","üç"],["katër","dört"],["pesë","beş"],["gjashtë","altı"],["shtatë","yedi"],["tetë","sekiz"],
+    ["nëntë","dokuz"],["dhjetë","on"],["njëmbëdhjetë","on bir"],["dymbëdhjetë","on iki"],["pesëmbëdhjetë","on beş"],
+    ["njëzet","yirmi"],["njëzet e një","yirmi bir"],["tridhjetë","otuz"],["dyzet","kırk"],["pesëdhjetë","elli"],
+    ["njëqind","yüz"],["një mijë","bin"],["i parë","birinci"],["i dytë","ikinci"],["i tretë","üçüncü"]]},
+  { id: "gun", no: "Ders 15, 25", t: "Günler ve aylar", w: [
+    ["e hënë","pazartesi"],["e martë","salı"],["e mërkurë","çarşamba"],["e enjte","perşembe"],["e premte","cuma"],
+    ["e shtunë","cumartesi"],["e diel","pazar"],["javë","hafta"],["fundjavë","hafta sonu"],["muaj","ay"],["vit","yıl"],
+    ["janar","ocak"],["shkurt","şubat"],["mars","mart"],["prill","nisan"],["maj","mayıs"],["qershor","haziran"],
+    ["korrik","temmuz"],["gusht","ağustos"],["shtator","eylül"],["tetor","ekim"],["nëntor","kasım"],["dhjetor","aralık"]]},
+  { id: "zaman", no: "Ders 12, 20", t: "Zaman ve saat", w: [
+    ["sot","bugün"],["dje","dün"],["pardje","evvelki gün"],["nesër","yarın"],["pasnesër","yarından sonra"],
+    ["ora","saat"],["Sa është ora?","Saat kaç?"],["Ora është tre e gjysmë","Saat üç buçuk"],["e çerek","çeyrek geçe"],
+    ["pa çerek","çeyrek var"],["minutë","dakika"],["sekondë","saniye"],["mëngjes","sabah"],["drekë","öğle"],
+    ["mbrëmje","akşam"],["natë","gece"],["mesnatë","gece yarısı"],["para një jave","bir hafta önce"],
+    ["javën që vjen","gelecek hafta"],["javën e kaluar","geçen hafta"]]},
+  { id: "mevsim", no: "Ders 24", t: "Mevsimler ve hava", w: [
+    ["pranverë","ilkbahar"],["verë","yaz"],["vjeshtë","sonbahar"],["dimër","kış"],["stinë","mevsim"],["diell","güneş"],
+    ["shi","yağmur"],["borë","kar"],["erë","rüzgâr"],["re","bulut"],["Bie shi","Yağmur yağıyor"],["Fryn erë","Rüzgâr esiyor"],
+    ["nxehtë","sıcak"],["ftohtë","soğuk"],["Si është moti?","Hava nasıl?"],["ylber","gökkuşağı"],["bubullimë","gök gürültüsü"]]},
+  { id: "renk", no: "Ders 19", t: "Renkler", w: [
+    ["ngjyrë","renk"],["i/e bardhë","beyaz"],["i/e zi","siyah"],["i/e kuq","kırmızı"],["i/e verdhë","sarı"],
+    ["blu","mavi"],["i/e gjelbër","yeşil"],["portokalli","turuncu"],["kafe","kahverengi"],["gri","gri"],["vjollcë","mor"],["rozë","pembe"],
+    ["flamur","bayrak"],["Ç'ngjyrë është?","Ne renk?"]]},
+  { id: "meyve", no: "Ders 4", t: "Meyveler", w: [
+    ["mollë","elma"],["dardhë","armut"],["qershi","kiraz"],["kajsi","kayısı"],["ftua","ayva"],["banane","muz"],["limon","limon"],
+    ["fik","incir"],["luleshtrydhe","çilek"],["shegë","nar"],["portokall","portakal"],["rrush","üzüm"],["shalqi","karpuz"],
+    ["pjepër","kavun"],["kumbull","erik"],["arrë","ceviz"],["lajthi","fındık"],["bajame","badem"],["ulli","zeytin"]]},
+  { id: "hayvan", no: "Ders 4", t: "Hayvanlar", w: [
+    ["shqiponjë","kartal"],["bilbil","bülbül"],["mace","kedi"],["qen","köpek"],["pulë","tavuk"],["lopë","inek"],
+    ["pëllumb","güvercin"],["lepur","tavşan"],["ujk","kurt"],["sorrë","karga"],["bretkosë","kurbağa"],["dre","geyik"],
+    ["dallëndyshe","kırlangıç"],["flutur","kelebek"],["peshk","balık"],["gjarpër","yılan"],["kalë","at"],["gomar","eşek"],["dele","koyun"]]},
+  { id: "ev", no: "Ders 18", t: "Ev", w: [
+    ["shtëpi","ev"],["apartament","daire"],["dhomë","oda"],["derë","kapı"],["dritare","pencere"],["kuzhinë","mutfak"],
+    ["banjo","banyo"],["dhoma e ndenjes","oturma odası"],["dhoma e gjumit","yatak odası"],["çati","çatı"],["bodrum","bodrum"],
+    ["kopsht","bahçe"],["kat","kat"],["tavolinë","masa"],["karrige","sandalye"],["divan","kanepe"],["kolltuk","koltuk"],
+    ["jastëk","yastık"],["lart","yukarıda"],["poshtë","aşağıda"],["para","önünde"],["prapa","arkasında"],["pranë","yanında"],
+    ["këtu","burada"],["atje","orada"]]},
+  { id: "okul", no: "Ders 9, 11", t: "Okul ve okuma-yazma", w: [
+    ["shkollë","okul"],["klasë","sınıf"],["mësues","öğretmen (erkek)"],["mësuese","öğretmen (kadın)"],["nxënës","öğrenci"],
+    ["mësim","ders"],["libër","kitap"],["fletore","defter"],["laps","kalem"],["shkronjë","harf"],["fjalë","kelime"],
+    ["fjali","cümle"],["tekst","metin"],["letër","mektup"],["gjuhë","dil"],["lexoj","okumak"],["shkruaj","yazmak"],
+    ["mësoj","öğrenmek"],["kuptoj","anlamak"],["Përsërit!","Tekrarla!"]]},
+  { id: "ulke", no: "Ders 10", t: "Ülkeler ve diller", w: [
+    ["Shqipëri","Arnavutluk"],["Turqi","Türkiye"],["Kosovë","Kosova"],["Greqi","Yunanistan"],["Gjermani","Almanya"],
+    ["Spanjë","İspanya"],["Francë","Fransa"],["Japoni","Japonya"],["Egjipt","Mısır"],["shqip","Arnavutça"],["turqisht","Türkçe"],
+    ["anglisht","İngilizce"],["gjermanisht","Almanca"],["frëngjisht","Fransızca"],["spanjisht","İspanyolca"],["italisht","İtalyanca"],
+    ["rusisht","Rusça"],["kryeqytet","başkent"],["ndodhet në","-de bulunur"],["Evropë","Avrupa"],["Azi","Asya"]]},
+  { id: "icecek", no: "Ders 16, 21", t: "Yiyecek ve içecek", w: [
+    ["ujë","su"],["çaj","çay"],["kafe","kahve"],["qumësht","süt"],["birrë","bira"],["verë","şarap"],["lëng","meyve suyu"],
+    ["ujë mineral","maden suyu"],["akullore","dondurma"],["sheqer","şeker"],["me limon","limonlu"],["bukë","ekmek"],
+    ["supë","çorba"],["peshk","balık"],["gotë","bardak"],["pjatë","tabak"],["kamerier","garson"],["faturë","hesap"],
+    ["Sa kushton?","Ne kadar?"],["Gëzuar!","Şerefe!"],["Ju bëftë mirë!","Afiyet olsun!"]]},
+  { id: "fiil", no: "Ders 5, 9, 11, 23", t: "Temel fiiller", w: [
+    ["jam","olmak"],["kam","sahip olmak"],["bëj","yapmak"],["dua","istemek / sevmek"],["flas","konuşmak"],["shkoj","gitmek"],
+    ["vij","gelmek"],["shoh","görmek"],["pi","içmek"],["ha","yemek"],["fle","uyumak"],["punoj","çalışmak"],["pushoj","dinlenmek"],
+    ["takoj","buluşmak"],["dal","çıkmak"],["rri","kalmak"],["pres","beklemek"],["qesh","gülmek"],["qaj","ağlamak"],
+    ["vrapoj","koşmak"],["notoj","yüzmek"],["këndoj","şarkı söylemek"],["ndihmoj","yardım etmek"],["dëgjoj","dinlemek"],
+    ["numëroj","saymak"],["jetoj","yaşamak"],["preferoj","tercih etmek"],["kërkoj","aramak"]]},
+  { id: "sifat", no: "Ders 2, 7, 28", t: "Sıfatlar ve duygular", w: [
+    ["i/e mirë","iyi"],["i/e keq","kötü"],["i/e bukur","güzel"],["i/e madh","büyük"],["i/e vogël","küçük"],["i/e ri","yeni / genç"],
+    ["i/e vjetër","eski / yaşlı"],["i/e lodhur","yorgun"],["i/e ëmbël","tatlı"],["i/e rëndë","ağır"],["i/e rëndësishëm","önemli"],
+    ["i/e qetë","sakin"],["i/e huaj","yabancı"],["i/e pashëm","yakışıklı"],["dashuri","aşk"],["urrejtje","nefret"],
+    ["xhelozi","kıskançlık"],["respekt","saygı"],["durim","sabır"],["lumturi","mutluluk"],["shpresë","umut"]]},
+  { id: "cumle", no: "Ders 3, 13, 21, 28", t: "Kalıp cümleler", w: [
+    ["Të dua","Seni seviyorum"],["Më pëlqen","Hoşuma gidiyor"],["Nuk më pëlqen","Hoşuma gitmiyor"],["Më pëlqen të lexoj","Okumayı seviyorum"],
+    ["Dua të pi ujë","Su içmek istiyorum"],["Nuk kuptoj","Anlamıyorum"],["Ç'po bën?","Ne yapıyorsun?"],["Ku po shkon?","Nereye gidiyorsun?"],
+    ["Do të vij nesër","Yarın geleceğim"],["Kam një shok","Bir arkadaşım var"],["Nuk kam kohë","Vaktim yok"],
+    ["Më ka marrë malli për ty","Seni özledim"],["Gëzuar ditëlindjen!","Doğum günün kutlu olsun!"],["Më fal","Beni affet"],
+    ["Më ndihmo!","Yardım et!"],["Lexo dhe mëso!","Oku ve öğren!"],["Familja ime është këtu","Ailem burada"],
+    ["Unë punoj në zyrë","Büroda çalışıyorum"],["Jam në shkollë","Okuldayım"]]}
+];
+
+const ALPHABET = [
+  ["a","a","Ankara'daki a",""],["b","b","bukë = ekmek",""],["c","ts","cili = hangisi","d"],["ç","ç","çikë = kız",""],
+  ["d","d","derë = kapı",""],["dh","İng. this","dhe = ve","d"],["e","e","emër = isim",""],["ë","ı/ö arası, sonda yutulur","një = bir","d"],
+  ["f","f","fjalë = kelime",""],["g","g","gur = taş",""],["gj","yumuşak c","gjuhë = dil","d"],["h","h","hallë = hala",""],
+  ["i","i","ishte = idi",""],["j","y","ju = siz","d"],["k","k","kush = kim",""],["l","ince l","lule = çiçek",""],
+  ["ll","kalın l (oldu)","llambë = lamba","d"],["m","m","motër = kız kardeş",""],["n","n","nënë = anne",""],["nj","ny (ñ)","njeri = insan","d"],
+  ["o","o","orë = saat",""],["p","p","pi = içmek",""],["q","yumuşak ç","qen = köpek","d"],["r","r","rri = kalmak",""],
+  ["rr","kalın, titrek r","rrugë = yol","d"],["s","s","sot = bugün",""],["sh","ş","shumë = çok","d"],["t","t","tre = üç",""],
+  ["th","İng. think","thua = söylersin","d"],["u","u","ujë = su",""],["v","v","vëlla = erkek kardeş",""],["x","dz","xixë = kıvılcım","d"],
+  ["xh","c","xhami = cami","d"],["y","ü","ylber = gökkuşağı","d"],["z","z","zemër = kalp",""],["zh","j","zhurmë = gürültü","d"]
+];
+
+/* ---------- State ---------- */
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+let known = store.get("sq-known", {});           // key "deck|sq" -> true
+let state = { tab: "home", deck: store.get("sq-deck", "selam"), dir: store.get("sq-dir", "sq") };
+const keyOf = (d, w) => d + "|" + w[0];
+const deckById = id => DECKS.find(d => d.id === id) || DECKS[0];
+const total = DECKS.reduce((s, d) => s + d.w.length, 0);
+const knownIn = d => d.w.filter(w => known[keyOf(d.id, w)]).length;
+
+function saveKnown() { store.set("sq-known", known); updateStat(); }
+function updateStat() {
+  const n = DECKS.reduce((s, d) => s + knownIn(d), 0);
+  document.getElementById("stat").textContent = n + " / " + total + " kelime öğrenildi";
+}
+const $ = (h) => { const t = document.createElement("template"); t.innerHTML = h.trim(); return t.content.firstElementChild; };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const norm = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/ı/g, "i").replace(/[?!.,…'’]/g, "").replace(/\s+/g, " ").trim();
+
+const main = document.getElementById("main");
+document.querySelectorAll("nav.tabs button").forEach(b => b.addEventListener("click", () => go(b.dataset.tab)));
+function go(tab) {
+  state.tab = tab;
+  document.querySelectorAll("nav.tabs button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.tab === tab)));
+  render();
+  window.scrollTo({ top: 0 });
+}
+
+/* ---------- Shared toolbar: deck + direction ---------- */
+function toolbar(withDir = true) {
+  const el = $(`<div class="toolbar">
+    <select id="deck-select" aria-label="Konu seç">
+      <option value="__all">Tüm konular (karışık)</option>
+      ${DECKS.map(d => `<option value="${d.id}" ${d.id === state.deck ? "selected" : ""}>${esc(d.t)} (${d.w.length})</option>`).join("")}
+    </select>
+    ${withDir ? `<div class="seg" role="group" aria-label="Yön">
+      <button data-dir="sq" aria-pressed="${state.dir === "sq"}">Arnavutça → Türkçe</button>
+      <button data-dir="tr" aria-pressed="${state.dir === "tr"}">Türkçe → Arnavutça</button></div>` : ""}
+  </div>`);
+  if (state.deck === "__all") el.querySelector("select").value = "__all";
+  el.querySelector("select").addEventListener("change", e => { state.deck = e.target.value; store.set("sq-deck", state.deck); render(); });
+  el.querySelectorAll("[data-dir]").forEach(b => b.addEventListener("click", () => { state.dir = b.dataset.dir; store.set("sq-dir", state.dir); render(); }));
+  return el;
+}
+function currentItems() {
+  if (state.deck === "__all") return DECKS.flatMap(d => d.w.map(w => ({ d: d.id, w })));
+  const d = deckById(state.deck); return d.w.map(w => ({ d: d.id, w }));
+}
+function poolFor(item) {  // same-deck distractors on the answer side
+  const d = deckById(item.d); return d.w;
+}
+
+/* ---------- Home ---------- */
+function renderHome() {
+  main.append($(`<section style="display:flex;flex-direction:column;gap:6px">
+    <h2>Konuya göre çalış</h2>
+    <p class="lead">Mimoza Elezi'nin ilk 31 dersinden derlenen ${total} kelime ve kalıp. Bir konu seç, sonra kartlarla ezberle, testle kendini dene, yazarak pekiştir.</p></section>`));
+  const grid = $(`<div class="decks"></div>`);
+  DECKS.forEach(d => {
+    const k = knownIn(d), pct = Math.round(k / d.w.length * 100);
+    const b = $(`<button class="deck" aria-pressed="${d.id === state.deck}">
+      <span class="no">${esc(d.no)}</span><span class="t">${esc(d.t)}</span>
+      <span class="bar"><i style="width:${pct}%"></i></span>
+      <span class="meta"><span>${k} / ${d.w.length} öğrenildi</span><span>${pct}%</span></span></button>`);
+    b.addEventListener("click", () => { state.deck = d.id; store.set("sq-deck", d.id); go("cards"); });
+    grid.append(b);
+  });
+  main.append(grid);
+  main.append($(`<p class="tip"><b>Öğretmenin tavsiyesi:</b> Her gün yarım saat çalış, kelimeleri sesli tekrar et ve mutlaka yaz. Ne kadar çok yazarsan o kadar çabuk öğrenirsin.</p>`));
+  const reset = $(`<div class="toolbar"><button class="btn" id="reset">İlerlemeyi sıfırla</button><span class="hint" id="reset-msg"></span></div>`);
+  let armed = false;
+  reset.querySelector("#reset").addEventListener("click", e => {
+    if (!armed) { armed = true; e.target.textContent = "Emin misin? Tekrar bas"; return; }
+    known = {}; saveKnown(); render();
+  });
+  main.append(reset);
+}
+
+/* ---------- Flashcards ---------- */
+let cardQ = null;
+function renderCards() {
+  main.append(toolbar());
+  const items = currentItems();
+  const sig = state.deck + state.dir;
+  if (!cardQ || cardQ.sig !== sig) {
+    const unknown = items.filter(i => !known[keyOf(i.d, i.w)]);
+    cardQ = { sig, list: shuffle(unknown.length ? unknown : items), i: 0, flipped: false, right: 0 };
+  }
+  const st = $(`<div class="stage"></div>`); main.append(st);
+  if (cardQ.i >= cardQ.list.length) {
+    st.append($(`<div class="done"><div class="big">${cardQ.right} / ${cardQ.list.length}</div>
+      <h2>Bu tur bitti</h2><p class="lead">Bilmediğin kartlar bir sonraki turda tekrar gelecek.</p>
+      <div class="toolbar"><button class="btn primary" id="again">Yeni tur</button><button class="btn" id="toquiz">Teste geç</button></div></div>`));
+    st.querySelector("#again").onclick = () => { cardQ = null; render(); };
+    st.querySelector("#toquiz").onclick = () => go("quiz");
+    return;
+  }
+  const it = cardQ.list[cardQ.i], [sq, tr] = it.w;
+  const front = state.dir === "sq" ? sq : tr, back = state.dir === "sq" ? tr : sq;
+  const fl = state.dir === "sq" ? "sq" : "tr", bl = state.dir === "sq" ? "tr" : "sq";
+  const names = { sq: "Arnavutça", tr: "Türkçe" };
+  st.append($(`<div class="progress"><span>${esc(deckLabel(it.d))}</span><span>${cardQ.i + 1} / ${cardQ.list.length}</span></div>`));
+  const card = $(`<button class="card" aria-live="polite">
+    <span class="lang ${fl}">${names[fl]}</span>
+    <span class="word ${front.length > 22 ? "sm" : ""}">${esc(front)}</span>
+    ${cardQ.flipped ? `<span class="lang ${bl}">${names[bl]}</span><span class="answer">${esc(back)}</span>` : `<span class="hint">Çevirmek için dokun</span>`}
+  </button>`);
+  card.onclick = () => { cardQ.flipped = !cardQ.flipped; render(); };
+  st.append(card);
+  if (cardQ.flipped) {
+    const r = $(`<div class="row"><button class="btn bad">Tekrar göster</button><button class="btn good">Bildim</button></div>`);
+    r.children[0].onclick = () => { delete known[keyOf(it.d, it.w)]; saveKnown(); next(false); };
+    r.children[1].onclick = () => { known[keyOf(it.d, it.w)] = true; saveKnown(); next(true); };
+    st.append(r);
+  } else {
+    st.append($(`<p class="hint" style="text-align:center;margin:0">Önce cevabı kendin söyle, sonra kartı çevir.</p>`));
+  }
+  function next(ok) { if (ok) cardQ.right++; cardQ.i++; cardQ.flipped = false; render(); }
+}
+const deckLabel = id => deckById(id).t;
+
+/* ---------- Quiz ---------- */
+let quiz = null;
+function renderQuiz() {
+  main.append(toolbar());
+  const sig = state.deck + state.dir;
+  if (!quiz || quiz.sig !== sig) {
+    quiz = { sig, list: shuffle(currentItems()).slice(0, 15), i: 0, score: 0, picked: null };
+  }
+  const st = $(`<div class="stage"></div>`); main.append(st);
+  if (quiz.i >= quiz.list.length) {
+    const pct = Math.round(quiz.score / quiz.list.length * 100);
+    st.append($(`<div class="done"><div class="big">${pct}%</div><h2>${quiz.score} / ${quiz.list.length} doğru</h2>
+      <p class="lead">${pct >= 80 ? "Harika! Bu konu oturmuş." : pct >= 50 ? "İyi gidiyor. Yanlışları kartlarla tekrar et." : "Kartlarla biraz daha çalışıp tekrar dene."}</p>
+      <div class="toolbar"><button class="btn primary" id="again">Yeni test</button><button class="btn" id="tocards">Kartlara dön</button></div></div>`));
+    st.querySelector("#again").onclick = () => { quiz = null; render(); };
+    st.querySelector("#tocards").onclick = () => go("cards");
+    return;
+  }
+  const it = quiz.list[quiz.i];
+  const qi = state.dir === "sq" ? 0 : 1, ai = 1 - qi;
+  if (!quiz.opts || quiz.optsFor !== quiz.i) {
+    const others = shuffle(poolFor(it).filter(w => w[ai] !== it.w[ai])).slice(0, 3).map(w => w[ai]);
+    quiz.opts = shuffle([it.w[ai], ...others]); quiz.optsFor = quiz.i; quiz.picked = null;
+  }
+  st.append($(`<div class="progress"><span>Skor: ${quiz.score}</span><span>${quiz.i + 1} / ${quiz.list.length}</span></div>`));
+  st.append($(`<div class="card"><span class="lang ${qi === 0 ? "sq" : "tr"}">${qi === 0 ? "Bu ne demek?" : "Arnavutçası ne?"}</span>
+    <span class="word ${it.w[qi].length > 22 ? "sm" : ""}">${esc(it.w[qi])}</span></div>`));
+  const ch = $(`<div class="choices"></div>`);
+  quiz.opts.forEach(o => {
+    const b = $(`<button class="choice">${esc(o)}</button>`);
+    if (quiz.picked !== null) {
+      b.disabled = true;
+      if (o === it.w[ai]) b.classList.add("ok"); else if (o === quiz.picked) b.classList.add("no");
+    }
+    b.onclick = () => {
+      quiz.picked = o;
+      if (o === it.w[ai]) { quiz.score++; known[keyOf(it.d, it.w)] = true; saveKnown(); }
+      render();
+    };
+    ch.append(b);
+  });
+  st.append(ch);
+  if (quiz.picked !== null) {
+    const nb = $(`<button class="btn primary">${quiz.i + 1 < quiz.list.length ? "Sonraki soru" : "Sonucu gör"}</button>`);
+    nb.onclick = () => { quiz.i++; render(); };
+    st.append(nb); nb.focus();
+  }
+}
+
+/* ---------- Writing practice ---------- */
+let wr = null;
+const SPECIAL = ["ë", "ç", "Ë", "Ç"];
+function renderWrite() {
+  main.append(toolbar(false));
+  const sig = state.deck;
+  if (!wr || wr.sig !== sig) wr = { sig, list: shuffle(currentItems()).slice(0, 12), i: 0, score: 0, res: null, val: "" };
+  const st = $(`<div class="stage"></div>`); main.append(st);
+  if (wr.i >= wr.list.length) {
+    st.append($(`<div class="done"><div class="big">${wr.score} / ${wr.list.length}</div><h2>Yazma turu bitti</h2>
+      <p class="lead">Arnavutça kelimeyi yazmak, ezberin en kalıcı yolu.</p>
+      <button class="btn primary" id="again">Yeni tur</button></div>`));
+    st.querySelector("#again").onclick = () => { wr = null; render(); };
+    return;
+  }
+  const it = wr.list[wr.i], [sq, tr] = it.w;
+  st.append($(`<div class="progress"><span>Skor: ${wr.score}</span><span>${wr.i + 1} / ${wr.list.length}</span></div>`));
+  st.append($(`<div class="card"><span class="lang tr">Türkçe</span><span class="word ${tr.length > 22 ? "sm" : ""}">${esc(tr)}</span>
+    <span class="hint">Arnavutçasını yaz</span></div>`));
+  const form = $(`<form class="type-in" autocomplete="off"><input id="write-input" lang="sq" spellcheck="false" placeholder="Arnavutça…" value="${esc(wr.val)}" ${wr.res ? "disabled" : ""}>
+    <button class="btn primary" type="submit">${wr.res ? (wr.i + 1 < wr.list.length ? "Sonraki" : "Sonucu gör") : "Kontrol et"}</button></form>`);
+  const input = form.querySelector("input");
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    if (wr.res) { wr.i++; wr.res = null; wr.val = ""; render(); return; }
+    wr.val = input.value;
+    const exact = input.value.trim().toLowerCase() === sq.toLowerCase();
+    const close = norm(input.value) === norm(sq);
+    wr.res = exact ? "ok" : close ? "almost" : "no";
+    if (exact || close) { wr.score++; known[keyOf(it.d, it.w)] = true; saveKnown(); }
+    render();
+  });
+  st.append(form);
+  if (!wr.res) {
+    const keys = $(`<div class="keys" aria-label="Özel harfler"></div>`);
+    SPECIAL.forEach(ch => {
+      const b = $(`<button type="button">${ch}</button>`);
+      b.onclick = () => { const s = input.selectionStart ?? input.value.length; input.value = input.value.slice(0, s) + ch + input.value.slice(input.selectionEnd ?? s); input.focus(); input.setSelectionRange(s + 1, s + 1); };
+      keys.append(b);
+    });
+    st.append(keys);
+  }
+  const msg = wr.res === "ok" ? `Doğru: ${esc(sq)}` : wr.res === "almost" ? `Neredeyse! Doğru yazımı: ${esc(sq)}` : wr.res === "no" ? `Doğrusu: ${esc(sq)}` : "";
+  st.append($(`<p class="feedback ${wr.res === "no" ? "no" : "ok"}" aria-live="polite">${msg}</p>`));
+  if (!wr.res) setTimeout(() => input.focus(), 0);
+  else form.querySelector("button").focus();
+}
+
+/* ---------- Word list ---------- */
+function renderList() {
+  main.append(toolbar(false));
+  const items = currentItems();
+  main.append($(`<p class="lead">${items.length} kelime. Yeşil nokta: öğrenildi olarak işaretlenmiş.</p>`));
+  const wrap = $(`<div class="list-wrap"><table><thead><tr><th class="k"></th><th>Arnavutça</th><th>Türkçe</th></tr></thead><tbody></tbody></table></div>`);
+  const tb = wrap.querySelector("tbody");
+  items.forEach(it => tb.append($(`<tr><td class="k"><span class="mark ${known[keyOf(it.d, it.w)] ? "on" : ""}"></span></td><td class="sq">${esc(it.w[0])}</td><td>${esc(it.w[1])}</td></tr>`)));
+  main.append(wrap);
+}
+
+/* ---------- Alphabet ---------- */
+function renderAlpha() {
+  main.append($(`<section style="display:flex;flex-direction:column;gap:6px"><h2>Arnavut alfabesi: 36 harf</h2>
+    <p class="lead">Arnavutça yazıldığı gibi okunur. Türkçede olmayan ya da farklı okunan harfler kırmızı çerçeveli.</p></section>`));
+  main.append($(`<div class="legend"><span class="d">Türkçeden farklı</span></div>`));
+  const g = $(`<div class="alpha"></div>`);
+  ALPHABET.forEach(([l, say, ex, d]) => g.append($(`<div class="letter ${d ? "diff" : ""}"><b>${esc(l.toUpperCase().length > 1 ? l[0].toUpperCase() + l.slice(1) : l.toUpperCase())} ${esc(l)}</b><span class="say">${esc(say)}</span><span class="ex">${esc(ex)}</span></div>`)));
+  main.append(g);
+  main.append($(`<p class="tip"><b>Akılda tut:</b> Türkçedeki <b>c</b> sesi Arnavutçada <b>xh</b>, <b>j</b> sesi <b>zh</b>, <b>y</b> sesi <b>j</b>, <b>ü</b> sesi <b>y</b> ile yazılır.</p>`));
+}
+
+function render() {
+  main.replaceChildren();
+  ({ home: renderHome, cards: renderCards, quiz: renderQuiz, write: renderWrite, list: renderList, alpha: renderAlpha })[state.tab]();
+}
+updateStat();
+render();
+</script>
