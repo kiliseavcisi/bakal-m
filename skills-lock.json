@@ -43,6 +43,13 @@
       "skillPath": "skills/content-strategy/SKILL.md",
       "computedHash": "94a23ddb279c20ea8c7c7751eb07f548c855a5287aed8983f31e63b49e7dbf1a"
     },
+    "design-dna": {
+      "source": "zanwei/design-dna",
+      "commit": "593e39bc9e3652734653bd75544a333d7d43615e",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "8a4b3f7999fed6d1ef1f713f5efb1dbda197df093acbb52e6403afca201fbde9"
+    },
     "find-skills": {
       "source": "vercel-labs/skills",
       "commit": "57217cf86ba38148a57af9e90d14a4c049558330",
