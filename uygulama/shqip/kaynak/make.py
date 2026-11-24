@@ -8,7 +8,7 @@ from data import UNITS
 from extra import UNIT_INFO, STORIES, ALPHA, YT
 from sezon2 import UNITS2, STORIES2, VIDEO_GROUPS
 from gloss import FUNCTION
-from visual import UNIT_LOOK, EXTRA_PICS, STORY_LOOK, AVATARS
+from visual import UNIT_LOOK, EXTRA_PICS, STORY_LOOK, AVATARS, FEMALE
 from pairs import PAIRS
 
 OUT = os.path.dirname(HERE)
@@ -39,13 +39,15 @@ def clip(text):
     return key
 
 GEMINI = os.path.join(HERE, ".clips-gemini")
-VOICE_DIR = os.path.join(HERE, os.environ.get("VOICE_DIR", ".clips-piper"))   # chosen voice: Piper "Edon"
+VOICE_DIR = os.path.join(HERE, os.environ.get("VOICE_DIR", ".clips-kokoro-agon"))      # main voice: Kokoro shqip "Agon" (male)
+ALT_DIR = os.path.join(HERE, os.environ.get("ALT_DIR", ".clips-kokoro-pf_dora"))       # second voice: Kokoro shqip + "Dora" style (female)
 def audio(pack, text):
     key = hashlib.md5(text.encode()).hexdigest()[:10]
     chosen = os.path.join(VOICE_DIR, key + ".mp3")
     src = chosen if os.path.exists(chosen) else os.path.join(CACHE, clip(text) + ".mp3")   # fall back to MMS
     packs.setdefault(pack, {})[key] = base64.b64encode(open(src, "rb").read()).decode()
-    alt = os.path.join(CACHE, clip(text) + ".mp3")                                   # second talker: MMS
+    alt = os.path.join(ALT_DIR, key + ".mp3")                                         # second talker (female)
+    if not os.path.exists(alt): alt = os.path.join(CACHE, clip(text) + ".mp3")
     packs2.setdefault(pack, {})[key] = base64.b64encode(open(alt, "rb").read()).decode()
     return pack + "#" + key
 
@@ -65,7 +67,7 @@ for s in STORIES + STORIES2:
     used_videos.add(s["src"][0])
     stories.append({"id": s["id"], "t": s["t"], "after": s["after"],
                     "cover": STORY_LOOK.get(s["id"], "📖"),
-                    "lines": [{"who": who, "av": AVATARS.get(who, ""), "sq": sq, "tr": tr, "a": audio("s-" + s["id"], sq)} for who, sq, tr in s["lines"]],
+                    "lines": [{"who": who, "av": AVATARS.get(who, ""), "f": who in FEMALE, "sq": sq, "tr": tr, "a": audio("s-" + s["id"], sq)} for who, sq, tr in s["lines"]],
                     "q": [{"q": q, "o": o, "c": c} for q, o, c in s["q"]]})
 alpha = [{"l": l, "say": say, "hint": hint, "ex": ex, "tr": tr, "d": bool(d), "a": audio("alfabe", ex)} for l, say, hint, ex, tr, d in ALPHA]
 used_videos.add("QxxBvnhw3AA")

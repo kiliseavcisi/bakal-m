@@ -606,7 +606,7 @@ function learnTab(view) {
     }
     view.append(sec);
   });
-  view.append($(`<p class="foot">Her gün 10 dakika: yeni ders, ardından tekrar sekmesi. Sesler açık kaynak Arnavutça ses (Piper “Edon”) ile üretildi.</p>`));
+  view.append($(`<p class="foot">Her gün 10 dakika: yeni ders, ardından tekrar sekmesi. Sesler Arnavutça için eğitilmiş açık kaynak Kokoro modeliyle üretildi: erkek sesi Agon, kadın sesi Dora.</p>`));
   const curNode = view.querySelector(".node.current");
   if (curNode && cur > 0) setTimeout(() => curNode.scrollIntoView({ block: "center" }), 0);
 }
@@ -656,7 +656,7 @@ function storiesTab(view) {
 }
 let storyPlay = null;
 function openStory(s) {
-  preload(s.lines.map(l => l.a));
+  preload(s.lines.map(l => l.a)); loadPack("s-" + s.id, true);
   if (curAudio) curAudio.pause();
   app.replaceChildren();
   const el = $(`<div class="lesson">
@@ -674,8 +674,8 @@ function openStory(s) {
     const side = l.who ? (speakers.indexOf(l.who) % 2 ? "right" : "left") : "narr";
     const r = $(`<div class="line ${side}">${l.av ? `<div class="av" aria-hidden="true">${l.av}</div>` : ""}<button class="speaker sm" aria-label="Dinle">${I.speaker}</button>
       <div class="txt" role="button" tabindex="0">${l.who ? `<div class="who">${esc(l.who)}</div>` : ""}<div class="sq">${hint(l.sq, "sq")}</div><div class="tr" hidden>${esc(l.tr)}</div></div></div>`);
-    r.querySelector(".speaker").onclick = () => say(l);
-    r.querySelector(".txt").onclick = e => { if (e.target.closest(".hw")) return; const t = r.querySelector(".tr"); t.hidden = !t.hidden; say(l); };
+    r.querySelector(".speaker").onclick = () => say(l, false, l.f);
+    r.querySelector(".txt").onclick = e => { if (e.target.closest(".hw")) return; const t = r.querySelector(".tr"); t.hidden = !t.hidden; say(l, false, l.f); };
     lines.append(r); return r;
   });
   el.querySelector(".x").onclick = () => { stopStory(); home(); };
@@ -687,7 +687,7 @@ function openStory(s) {
       rows.forEach(r => r.classList.remove("playing"));
       if (!storyPlay || i >= s.lines.length) { storyPlay = null; return; }
       const r = rows[i]; r.classList.add("playing"); r.scrollIntoView({ block: "nearest", behavior: "smooth" });
-      playClip(s.lines[i].a).then(au => { if (!au) { i++; return next(); } au.onended = () => { i++; setTimeout(next, 450); }; au.onerror = () => { i++; next(); }; });
+      playClip(s.lines[i].a, false, s.lines[i].f).then(au => { if (!au) { i++; return next(); } au.onended = () => { i++; setTimeout(next, 450); }; au.onerror = () => { i++; next(); }; });
     };
     next();
   };
@@ -865,7 +865,7 @@ function intro(st, ui) {
   if (ex) {
     const exr = $(`<div class="example"><div class="k">Cümlede</div><div class="row"><button class="speaker sm" aria-label="Cümleyi dinle">${I.speaker}</button>
       <div><div class="s">${hint(ex.sq, "sq")}</div><div class="t">${esc(ex.tr)}</div></div></div></div>`);
-    exr.querySelector(".speaker").onclick = () => say(ex);
+    exr.querySelector(".speaker").onclick = () => say(ex, false, ex.f);
     ui.body.append(exr);
     preload([ex.a]);
   }
@@ -1166,7 +1166,7 @@ function openSettings() {
     <h2 class="section-h" style="margin-top:0">Ayarlar</h2>
     <div class="set-row"><div><b>Konuşma hızı</b><div class="sub">Bütün seslere uygulanır</div></div>
       <div class="seg" role="group">${[[.8, "Yavaş"], [1, "Normal"], [1.2, "Hızlı"]].map(([v, l]) => `<button data-v="${v}" aria-pressed="${RATE() === v}">${l}</button>`).join("")}</div></div>
-    <div class="set-row"><div><b>Farklı sesler</b><div class="sub">Dinleme alıştırmalarında ikinci bir ses de kullanılır; kulağın kelimeyi farklı konuşanlardan tanımayı öğrenir</div></div>
+    <div class="set-row"><div><b>Farklı sesler</b><div class="sub">Dinleme alıştırmalarında erkek ve kadın sesi karışık çalar; kulağın kelimeyi farklı konuşanlardan tanımayı öğrenir</div></div>
       <label class="switch"><input type="checkbox" id="vary" ${P.vary !== false ? "checked" : ""}><span></span></label></div>
     <button class="btn" id="close-set">Tamam</button></div></div>`);
   ov.querySelectorAll(".seg button").forEach(b => b.onclick = () => { P.speed = +b.dataset.v; save(); ov.querySelectorAll(".seg button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); say(UNITS[0].w[0]); });

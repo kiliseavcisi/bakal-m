@@ -35,7 +35,7 @@ model = KModel(config=os.path.join(MODEL_DIR, "config.json"),
                model=os.path.join(MODEL_DIR, "kokoro-shqip.pth")).eval()
 vocab = model.vocab
 pack = torch.load(os.path.join(MODEL_DIR, "voices", VOICE + ".pt"), weights_only=True)
-SPEED = {"agon": 0.78 * 1.154, "dardan": 0.78 * 1.168}.get(VOICE, 0.9) * 0.92   # natural pace, a little slower for learners
+SPEED = {"agon": 0.78 * 1.154, "dardan": 0.78 * 1.168, "pf_dora": 0.66, "if_sara": 0.68, "af_heart": 0.62}.get(VOICE, 0.9) * 0.92   # natural pace, a little slower for learners
 FILTER = ("silenceremove=start_periods=1:start_threshold=-45dB,areverse,silenceremove=start_periods=1:start_threshold=-45dB,areverse,"
           "adelay=100,apad=pad_dur=0.12,loudnorm=I=-16")
 

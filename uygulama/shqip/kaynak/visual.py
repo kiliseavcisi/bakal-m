@@ -35,3 +35,5 @@ AVATARS = {  # speaker name -> avatar emoji
  "Mësuesja": "👩‍🏫", "Nxënësit": "🧒", "Arbeni": "👦", "Arturi": "🧑", "Dritani": "👦🏻", "Kamerieri": "🧑‍🍳", "Kamerierja": "👩‍🍳",
  "Ana": "👩", "Artani": "👨", "Djali": "👦", "Unë": "🙂", "Lypësi": "🧓", "Talesi": "🧙", "Shitësi": "🧔", "Mjeku": "👨‍⚕️", "Pacienti": "🤒",
 }
+
+FEMALE = {"Mësuesja", "Kamerierja", "Ana"}   # story speakers voiced by the female voice
