@@ -303,6 +303,13 @@ nav.bottom button { font-size: .72rem; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .intro, :root:not([data-theme="light"]) .see-card { background: var(--surface); } :root:not([data-theme="light"]) .tip-hero { background: var(--surface-2); } }
 :root[data-theme="dark"] .intro, :root[data-theme="dark"] .see-card { background: var(--surface); }
 :root[data-theme="dark"] .tip-hero { background: var(--surface-2); }
+.example { border: 2px dashed var(--line); border-radius: 18px; padding: 12px 14px; background: var(--surface); }
+.example .k { font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.example .row { display: flex; gap: 12px; align-items: center; }
+.example .s { font-weight: 600; font-size: 1.08rem; }
+.example .t { color: var(--muted); font-size: .92rem; }
+.example .speaker { width: 44px; height: 44px; border-radius: 12px; }
+.example .speaker svg { width: 22px; height: 22px; }
 </style>
 
 <div class="app" id="app"><p class="loading">Yükleniyor…</p></div>
@@ -667,14 +674,14 @@ function alphaTab(view) {
 
 /* ---------- Lesson engine ---------- */
 let LS = null;
+/* Lesson flow (research-based): introduce in context → recognise by ear → recall/build → produce → spaced review */
+const multi = w => w.sq.replace(/[?!.,…]/g, "").trim().includes(" ");
+function recallKind(w) { return multi(w) && w.sq.split(" ").length <= 7 ? "build" : "toSq"; }
 function typesFor(w, review = false) {
-  const t = ["listen", "toSq", "toTr", "speak"];
-  const unit = UNITS.find(u => u.id === w.u);
-  if (w.p && unitHasPics(unit)) t.push("picture", "see", "hear");
-  if (w.sq.includes(" ") && w.sq.split(" ").length <= 6) t.push("build", "build");
-  if (fillable(w)) t.push("fill", "fill");
-  else t.push("type");
-  if (review) t.push("type");
+  // used by review sessions: retrieval-heavy, production-leaning
+  const t = ["listen", recallKind(w), recallKind(w), "type"];
+  if (fillable(w)) t.push("fill");
+  if (review) t.push("speak");
   return t;
 }
 function startLesson(L) {
@@ -685,13 +692,23 @@ function startLesson(L) {
   const review = (dueOld.length ? shuffle(dueOld) : shuffle(prev)).slice(0, Math.min(3, prev.length));
   const steps = [];
   if (L.li === 0 && !P.tipsSeen[L.unit.id]) steps.push({ k: "tip", u: L.unit });
+  // 1. introduce each new item, immediately followed by hearing it again (recognition)
   words.forEach(w => {
     if (!practice && !P.seen[w.sq]) steps.push({ k: "intro", w });
-    steps.push({ k: pickOne(typesFor(w).filter(t => t !== "speak")), w });
+    steps.push({ k: "listen", w });
   });
+  // 2. consolidate the set
   if (words.length >= 3) steps.push({ k: "match", ws: words.slice(0, 5) });
-  shuffle(words).slice(0, 3).forEach(w => steps.push({ k: pickOne(typesFor(w).filter(t => t !== "toTr")), w }));
-  review.forEach(w => steps.push({ k: pickOne(["listen", "toSq", "toTr"]), w }));
+  // 3. recall: Turkish → Albanian (build the sentence or choose the word), fill the gap where possible
+  shuffle(words).forEach(w => steps.push({ k: recallKind(w), w }));
+  const gap = words.filter(fillable);
+  if (gap.length) steps.push({ k: "fill", w: pickOne(gap) });
+  // 4. produce: shadow one item aloud, write one from dictation
+  const prod = shuffle(words);
+  if (prod[0]) steps.push({ k: "speak", w: prod[0] });
+  if (prod[1]) steps.push({ k: "type", w: prod[1] });
+  // 5. spaced review of earlier items that are due
+  review.forEach(w => steps.push({ k: pickOne(["listen", recallKind(w), "type"]), w }));
   preload([...words, ...review].map(w => w.a));
   LS = { L, steps, i: 0, hearts: 5, total: steps.length, right: 0, tries: 0, t0: Date.now(), practice, redo: [] };
   renderStep();
@@ -739,7 +756,7 @@ function renderStep() {
   }
   const st = LS.steps[LS.i];
   const ui = lessonShell();
-  ({ intro, picture, listen, toSq, toTr, match, build, type, speak, tip, fill, see, hear })[st.k](st, ui);
+  ({ intro, listen, toSq, toTr, match, build, type, speak, tip, fill })[st.k](st, ui);
 }
 
 /* Bottom-sheet result + continue */
@@ -772,36 +789,30 @@ function speakerRow(w, label = "") {
 }
 
 /* -- Exercise: new word intro -- */
+function findExample(w) {
+  if (multi(w)) return null;
+  const key = w.sq.toLowerCase().replace(/^(i|e) /, "");
+  const re = new RegExp("(^|[\\s,.?!])" + key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "([\\s,.?!]|$)", "i");
+  const pool = [...allWords().filter(x => multi(x) && x !== w), ...STORIES.flatMap(s => s.lines)];
+  return pool.find(x => re.test(x.sq)) || null;
+}
 function intro(st, ui) {
   const w = st.w;
-  ui.body.append($(`<div class="tag new">Yeni kelime</div>`));
-  const card = $(`<div class="intro pop" style="--h:${unitOf(w).hue}">${pic(w.p, true)}<div class="sq">${esc(w.sq)}</div><div class="tr">${esc(w.tr)}</div></div>`);
+  const ex = findExample(w);
+  ui.body.append($(`<div class="tag new">${multi(w) ? "Yeni kalıp" : "Yeni kelime"}</div>`));
+  const card = $(`<div class="intro pop" style="--h:${unitOf(w).hue}">${pic(w.p)}<div class="sq">${hint(w.sq, "sq")}</div><div class="tr">${esc(w.tr)}</div></div>`);
   const sp = speakerRow(w); sp.style.justifyContent = "center"; card.append(sp);
   ui.body.append(card);
+  if (ex) {
+    const exr = $(`<div class="example"><div class="k">Cümlede</div><div class="row"><button class="speaker sm" aria-label="Cümleyi dinle">${I.speaker}</button>
+      <div><div class="s">${hint(ex.sq, "sq")}</div><div class="t">${esc(ex.tr)}</div></div></div></div>`);
+    exr.querySelector(".speaker").onclick = () => say(ex);
+    ui.body.append(exr);
+    preload([ex.a]);
+  }
   ui.btn.disabled = false; ui.btn.textContent = "Devam";
   ui.btn.onclick = () => { P.seen[w.sq] = 1; if (!P.srs[w.sq]) P.srs[w.sq] = { b: 0, due: dayNum() + 1 }; save(); LS.i++; renderStep(); };
   setTimeout(() => say(w), 200);
-}
-
-/* -- Exercise: choose picture for Turkish word -- */
-function picture(st, ui) {
-  const w = st.w;
-  const opts = shuffle([w, ...distractors(w, "sq").filter(x => x.p).slice(0, 3)]);
-  while (opts.length < 4) { const x = distractors(w, "sq", 6).find(x => x.p && !opts.includes(x)); if (!x) break; opts.push(x); }
-  ui.body.append($(`<div class="tag">Resmi seç</div>`));
-  ui.body.append($(`<h2 class="prompt">“${esc(w.tr)}” hangisi?</h2>`));
-  const g = $(`<div class="grid2"></div>`); let sel = null;
-  opts.forEach(o => {
-    const b = $(`<button class="opt">${pic(o.p)}<span>${esc(o.sq)}</span></button>`);
-    b.onclick = () => { g.querySelectorAll(".opt").forEach(x => x.classList.remove("sel")); b.classList.add("sel"); sel = o; say(o); ui.btn.disabled = false; };
-    g.append(b);
-  });
-  ui.body.append(g);
-  ui.btn.onclick = () => {
-    const ok = sel === w;
-    g.querySelectorAll(".opt").forEach((b, i) => { b.disabled = true; if (opts[i] === w) b.classList.add("ok"); else if (opts[i] === sel) b.classList.add("no"); });
-    resolve(ui, ok, w.sq + " = " + w.tr, st);
-  };
 }
 
 /* -- Exercise: listen, choose Turkish meaning -- */
@@ -1025,45 +1036,6 @@ document.addEventListener("click", e => {
   hintPop.style.left = x + "px"; hintPop.style.top = (r.bottom + window.scrollY + 8) + "px";
 }, true);
 window.addEventListener("scroll", closeHint, { passive: true });
-
-/* -- See the picture, choose the Albanian word -- */
-function see(st, ui) {
-  const w = st.w;
-  const opts = shuffle([w, ...distractors(w, "sq")]);
-  ui.body.append($(`<div class="tag">Bu ne?</div>`));
-  ui.body.append($(`<div class="see-card" style="--h:${unitOf(w).hue}">${pic(w.p, true)}</div>`));
-  const g = $(`<div class="grid2"></div>`); let sel = null;
-  opts.forEach(o => {
-    const b = $(`<button class="opt">${esc(o.sq)}</button>`);
-    b.onclick = () => { g.querySelectorAll(".opt").forEach(x => x.classList.remove("sel")); b.classList.add("sel"); sel = o; say(o); ui.btn.disabled = false; };
-    g.append(b);
-  });
-  ui.body.append(g);
-  ui.btn.onclick = () => {
-    g.querySelectorAll(".opt").forEach((b, i) => { b.disabled = true; if (opts[i] === w) b.classList.add("ok"); else if (opts[i] === sel) b.classList.add("no"); });
-    resolve(ui, sel === w, w.sq + " = " + w.tr, st);
-  };
-}
-/* -- Hear the word, tap its picture -- */
-function hear(st, ui) {
-  const w = st.w;
-  let opts = [w, ...distractors(w, "sq", 8).filter(x => x.p && x.p !== w.p)].slice(0, 4);
-  opts = shuffle(opts);
-  ui.body.append($(`<div class="tag">Dinle, resmini bul</div>`));
-  ui.body.append(speakerRow(w));
-  const g = $(`<div class="grid2"></div>`); let sel = null;
-  opts.forEach(o => {
-    const b = $(`<button class="opt pic-only" aria-label="seçenek">${pic(o.p)}</button>`);
-    b.onclick = () => { g.querySelectorAll(".opt").forEach(x => x.classList.remove("sel")); b.classList.add("sel"); sel = o; ui.btn.disabled = false; };
-    g.append(b);
-  });
-  ui.body.append(g);
-  ui.btn.onclick = () => {
-    g.querySelectorAll(".opt").forEach((b, i) => { b.disabled = true; b.insertAdjacentHTML("beforeend", `<span class="lbl">${esc(opts[i].sq)}</span>`); if (opts[i] === w) b.classList.add("ok"); else if (opts[i] === sel) b.classList.add("no"); });
-    resolve(ui, sel === w, w.sq + " = " + w.tr, st);
-  };
-  setTimeout(() => say(w), 250);
-}
 
 /* -- Fill in the blank -- */
 function fillable(w) {
