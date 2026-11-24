@@ -1,0 +1,658 @@
+<title>Shqiponja</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Lexend:wght@400;500;600&display=swap">
+<style>
+/* Layout: single centered column. Home = unit banners + zig-zag lesson path. Lesson = full-height screen: top bar, exercise, bottom check sheet. */
+:root {
+  --bg: #fbf8f6;
+  --surface: #ffffff;
+  --surface-2: #f2ece9;
+  --line: #e4dcd8;
+  --fg: #2a2122;
+  --muted: #7d7172;
+  --accent: #c8162f;          /* Albanian red */
+  --accent-deep: #8f0f22;
+  --accent-soft: #fbe3e6;
+  --ink: #241c1d;             /* eagle black */
+  --good: #3a9a46; --good-deep: #2a7434; --good-soft: #e3f4e4;
+  --bad: #d43b3b; --bad-deep: #a32626; --bad-soft: #fde6e4;
+  --gold: #f2a516; --gold-soft: #fff1d2;
+  --blue: #2e7bd6;
+  --f-display: "Fredoka", "Segoe UI Rounded", "Arial Rounded MT Bold", system-ui, sans-serif;
+  --f-body: "Lexend", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #171314; --surface: #221c1d; --surface-2: #2d2627; --line: #3b3233; --fg: #f3eeed; --muted: #a99d9e;
+    --accent: #f04a5f; --accent-deep: #a8182c; --accent-soft: #3c1b20; --ink: #f3eeed;
+    --good: #5cc46a; --good-deep: #2f8a3b; --good-soft: #1b3320; --bad: #f06b6b; --bad-deep: #b23434; --bad-soft: #3f1d1d;
+    --gold: #f5b73a; --gold-soft: #3a2d12; --blue: #5fa2ef; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #171314; --surface: #221c1d; --surface-2: #2d2627; --line: #3b3233; --fg: #f3eeed; --muted: #a99d9e;
+  --accent: #f04a5f; --accent-deep: #a8182c; --accent-soft: #3c1b20; --ink: #f3eeed;
+  --good: #5cc46a; --good-deep: #2f8a3b; --good-soft: #1b3320; --bad: #f06b6b; --bad-deep: #b23434; --bad-soft: #3f1d1d;
+  --gold: #f5b73a; --gold-soft: #3a2d12; --blue: #5fa2ef; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--f-body); font-size: 17px; line-height: 1.45;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg); }
+button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; }
+button:focus-visible, input:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+.app { max-width: 620px; margin: 0 auto; min-height: 100%; display: flex; flex-direction: column; }
+svg { display: block; }
+
+/* chunky game buttons */
+.btn {
+  font-family: var(--f-display); font-weight: 600; font-size: 1.05rem; letter-spacing: .04em; text-transform: uppercase;
+  border-radius: 16px; padding: 14px 20px; background: var(--accent); color: #fff;
+  box-shadow: 0 4px 0 var(--accent-deep); transition: transform .08s, box-shadow .08s; width: 100%;
+}
+.btn:active:not([disabled]) { transform: translateY(3px); box-shadow: 0 1px 0 var(--accent-deep); }
+.btn[disabled] { background: var(--surface-2); color: var(--muted); box-shadow: 0 4px 0 var(--line); cursor: default; }
+.btn.good { background: var(--good); box-shadow: 0 4px 0 var(--good-deep); }
+.btn.bad { background: var(--bad); box-shadow: 0 4px 0 var(--bad-deep); }
+.btn.ghost { background: var(--surface); color: var(--fg); box-shadow: 0 4px 0 var(--line); border: 2px solid var(--line); }
+
+/* ---- Home ---- */
+.topbar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg);
+  display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-block: 12px; border-bottom: 2px solid var(--line);
+}
+.logo { display: flex; align-items: center; gap: 8px; font-family: var(--f-display); font-weight: 700; font-size: 1.35rem; color: var(--accent); }
+.stats { display: flex; gap: 14px; align-items: center; font-family: var(--f-display); font-weight: 600; font-variant-numeric: tabular-nums; }
+.stats span { display: flex; align-items: center; gap: 4px; }
+.s-fire { color: var(--gold); } .s-xp { color: var(--blue); } .s-heart { color: var(--bad); }
+
+.goal { display: flex; gap: 14px; align-items: center; background: var(--surface); border: 2px solid var(--line); border-radius: 18px; padding: 12px 16px; margin-top: 16px; }
+.goal .txt { flex: 1; min-width: 0; }
+.goal b { font-family: var(--f-display); font-size: 1.1rem; }
+.goal .sub { color: var(--muted); font-size: .9rem; }
+.gbar { height: 12px; background: var(--surface-2); border-radius: 99px; overflow: hidden; margin-top: 6px; }
+.gbar i { display: block; height: 100%; background: var(--gold); border-radius: 99px; transition: width .4s; }
+
+.unit { margin-top: 22px; }
+.unit-head {
+  background: var(--accent); color: #fff; border-radius: 18px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  box-shadow: 0 4px 0 var(--accent-deep);
+}
+.unit-head.locked { background: var(--surface-2); color: var(--muted); box-shadow: 0 4px 0 var(--line); }
+.unit-head .k { font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; opacity: .85; font-weight: 600; }
+.unit-head h2 { font-family: var(--f-display); font-weight: 700; font-size: 1.3rem; margin: 0; }
+.unit-head .peek { font-size: .88rem; opacity: .9; text-align: right; }
+.path { display: flex; flex-direction: column; align-items: center; gap: 14px; padding-block: 22px 6px; }
+.node-wrap { position: relative; display: flex; flex-direction: column; align-items: center; }
+.node {
+  width: 74px; height: 70px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: #fff;
+  box-shadow: 0 6px 0 var(--accent-deep); transition: transform .08s, box-shadow .08s; font-family: var(--f-display); font-weight: 700; font-size: 1.3rem;
+}
+.node:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--accent-deep); }
+.node.done { background: var(--gold); box-shadow: 0 6px 0 #b77a06; }
+.node.locked { background: var(--surface-2); color: var(--muted); box-shadow: 0 6px 0 var(--line); cursor: default; }
+.node.current { outline: 6px solid var(--accent-soft); }
+.bubble {
+  position: absolute; bottom: calc(100% + 10px); background: var(--surface); border: 2px solid var(--line); color: var(--accent);
+  font-family: var(--f-display); font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: 6px 12px; border-radius: 12px; white-space: nowrap;
+  animation: bob 1.4s ease-in-out infinite;
+}
+.bubble::after { content: ""; position: absolute; left: 50%; top: 100%; transform: translateX(-50%); border: 8px solid transparent; border-top-color: var(--line); }
+@keyframes bob { 50% { transform: translateY(-4px); } }
+.mascot-row { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 4px; }
+.foot { color: var(--muted); font-size: .85rem; text-align: center; padding-block: 28px; max-width: 52ch; margin: 0 auto; }
+
+/* ---- Lesson ---- */
+.lesson { min-height: 100%; display: flex; flex-direction: column; }
+.l-top { display: flex; align-items: center; gap: 12px; padding-block: 14px; }
+.l-top .x { width: 40px; height: 40px; display: grid; place-items: center; color: var(--muted); border-radius: 10px; }
+.l-prog { flex: 1; height: 16px; background: var(--surface-2); border-radius: 99px; overflow: hidden; }
+.l-prog i { display: block; height: 100%; background: var(--good); border-radius: 99px; transition: width .35s; box-shadow: inset 0 -4px 0 rgba(0,0,0,.08); }
+.hearts { display: flex; align-items: center; gap: 4px; color: var(--bad); font-family: var(--f-display); font-weight: 700; }
+.l-body { flex: 1; display: flex; flex-direction: column; gap: 18px; padding-block: 8px 24px; }
+.prompt { font-family: var(--f-display); font-weight: 700; font-size: 1.5rem; margin: 0; text-wrap: balance; }
+.tag { display: inline-flex; align-items: center; gap: 6px; font-size: .78rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+.tag.new { color: var(--blue); }
+.speak-row { display: flex; align-items: center; gap: 14px; }
+.speaker {
+  width: 72px; height: 72px; border-radius: 20px; background: var(--blue); color: #fff; display: grid; place-items: center; flex: none;
+  box-shadow: 0 5px 0 #1f5aa0;
+}
+.speaker.sm { width: 52px; height: 52px; border-radius: 14px; }
+.speaker:active { transform: translateY(3px); box-shadow: 0 2px 0 #1f5aa0; }
+.slow { width: 44px; height: 44px; border-radius: 12px; border: 2px solid var(--line); color: var(--blue); display: grid; place-items: center; font-family: var(--f-display); font-weight: 700; font-size: .8rem; }
+.bubble-say { position: relative; border: 2px solid var(--line); border-radius: 16px; padding: 12px 16px; font-size: 1.2rem; font-weight: 600; background: var(--surface); min-width: 0; overflow-wrap: anywhere; }
+
+.intro { display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; padding: 22px 16px; border: 2px solid var(--line); border-radius: 22px; background: var(--surface); }
+.intro .sq { font-family: var(--f-display); font-weight: 700; font-size: clamp(1.8rem, 7vw, 2.6rem); color: var(--accent); overflow-wrap: anywhere; }
+.intro .tr { font-size: 1.2rem; color: var(--muted); }
+
+.pic { display: grid; place-items: center; line-height: 1; }
+.pic.emoji { font-size: 64px; }
+.pic.big.emoji { font-size: 96px; }
+.pic .sw { width: 64px; height: 64px; border-radius: 16px; border: 2px solid var(--line); }
+.pic.big .sw { width: 110px; height: 110px; border-radius: 24px; }
+.pic .num { font-family: var(--f-display); font-weight: 700; font-size: 46px; color: var(--blue); font-variant-numeric: tabular-nums; }
+.pic.big .num { font-size: 80px; }
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.opt {
+  border: 2px solid var(--line); border-radius: 18px; background: var(--surface); padding: 14px; box-shadow: 0 4px 0 var(--line);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center; min-width: 0;
+  font-weight: 600; overflow-wrap: anywhere; transition: transform .08s;
+}
+.opt.row { flex-direction: row; justify-content: flex-start; text-align: left; padding: 14px 16px; }
+.opt:active:not([disabled]) { transform: translateY(3px); box-shadow: 0 1px 0 var(--line); }
+.opt.sel { border-color: var(--blue); background: color-mix(in srgb, var(--blue) 12%, var(--surface)); box-shadow: 0 4px 0 var(--blue); }
+.opt.ok { border-color: var(--good); background: var(--good-soft); box-shadow: 0 4px 0 var(--good); color: var(--good-deep); }
+.opt.no { border-color: var(--bad); background: var(--bad-soft); box-shadow: 0 4px 0 var(--bad); color: var(--bad-deep); }
+.opt.gone { opacity: .35; pointer-events: none; }
+.opt .num-k { width: 26px; height: 26px; border: 2px solid var(--line); border-radius: 8px; display: grid; place-items: center; font-size: .8rem; color: var(--muted); flex: none; }
+.list { display: flex; flex-direction: column; gap: 10px; }
+.match { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.match .col { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+
+.answer-line { min-height: 64px; border-bottom: 2px solid var(--line); display: flex; flex-wrap: wrap; gap: 8px; align-content: flex-start; padding-bottom: 10px; }
+.bank { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.tile { border: 2px solid var(--line); border-radius: 12px; padding: 8px 14px; background: var(--surface); box-shadow: 0 3px 0 var(--line); font-weight: 600; }
+.tile.used { color: transparent; background: var(--surface-2); box-shadow: none; pointer-events: none; }
+textarea {
+  width: 100%; min-height: 110px; resize: vertical; border: 2px solid var(--line); border-radius: 16px; background: var(--surface-2);
+  font: inherit; font-size: 1.15rem; padding: 14px; color: var(--fg);
+}
+.keys { display: flex; gap: 8px; flex-wrap: wrap; }
+.keys button { border: 2px solid var(--line); border-radius: 10px; padding: 6px 14px; font-weight: 700; background: var(--surface); }
+
+.sheet {
+  position: sticky; bottom: 0; margin-left: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); margin-right: calc(-1 * max(16px, env(safe-area-inset-right, 0px)));
+  padding: 16px max(16px, env(safe-area-inset-right, 0px)) calc(16px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  border-top: 2px solid var(--line); background: var(--bg); display: flex; flex-direction: column; gap: 12px;
+}
+.sheet.ok { background: var(--good-soft); border-color: transparent; }
+.sheet.no { background: var(--bad-soft); border-color: transparent; }
+.sheet .fb { display: flex; gap: 12px; align-items: center; }
+.sheet .fb .ic { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; background: var(--surface); flex: none; }
+.sheet.ok .fb { color: var(--good-deep); } .sheet.no .fb { color: var(--bad-deep); }
+.sheet .fb b { font-family: var(--f-display); font-size: 1.35rem; display: block; }
+.sheet .fb span { font-size: 1rem; overflow-wrap: anywhere; }
+:root[data-theme="dark"] .sheet.ok .fb, :root[data-theme="dark"] .sheet.no .fb { color: var(--fg); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .sheet.ok .fb, :root:not([data-theme="light"]) .sheet.no .fb { color: var(--fg); } }
+
+.end { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; text-align: center; padding-block: 24px; }
+.end h2 { font-family: var(--f-display); font-size: 2rem; margin: 0; color: var(--gold); }
+.end h2.fail { color: var(--bad); }
+.end-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; }
+.es { border: 2px solid; border-radius: 16px; overflow: hidden; }
+.es .h { font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #fff; padding: 4px; }
+.es .v { font-family: var(--f-display); font-size: 1.5rem; font-weight: 700; padding: 10px 4px; background: var(--surface); font-variant-numeric: tabular-nums; }
+.es.x { border-color: var(--gold); } .es.x .h { background: var(--gold); } .es.x .v { color: var(--gold); }
+.es.a { border-color: var(--good); } .es.a .h { background: var(--good); } .es.a .v { color: var(--good); }
+.es.t { border-color: var(--blue); } .es.t .h { background: var(--blue); } .es.t .v { color: var(--blue); }
+.pop { animation: pop .35s ease-out; }
+@keyframes pop { 0% { transform: scale(.9); } 60% { transform: scale(1.05); } 100% { transform: scale(1); } }
+.shake { animation: shake .35s; }
+@keyframes shake { 20%,60% { transform: translateX(-6px); } 40%,80% { transform: translateX(6px); } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+.loading { padding: 40px 0; text-align: center; color: var(--muted); }
+</style>
+
+<div class="app" id="app"><p class="loading">Yükleniyor…</p></div>
+
+<script>
+/* ---------- Icons ---------- */
+const I = {
+  fire: '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c1 3.5 5 5.6 5 10.2A5 5 0 0 1 7 12.5c0-2 .8-3.3 2-4.5.2 1.7 1 2.8 2 3.2C11 8 10.5 5 12 2z"/></svg>',
+  xp: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg>',
+  heart: '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.6-9.2C1 8.6 3 5 6.5 5c2 0 3.4 1.1 4.2 2.3h2.6C14.1 6.1 15.5 5 17.5 5 21 5 23 8.6 21.6 11.8 19.5 16.4 12 21 12 21z"/></svg>',
+  x: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+  speaker: '<svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+  check: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17 19 7"/></svg>',
+  star: '<svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.5 7 .8-5.2 4.8 1.5 7L12 17.5 5.7 21l1.5-7L2 9.3l7-.8z"/></svg>',
+  lock: '<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1zm2 0h6V8a3 3 0 0 0-6 0z"/></svg>',
+};
+/* Mascot: Shqiponja, a friendly eagle */
+function eagle(size = 88, mood = "happy") {
+  const mouth = mood === "sad" ? '<path d="M44 66q6-5 12 0" stroke="#7a3b00" stroke-width="3" fill="none" stroke-linecap="round"/>' : '';
+  return `<svg width="${size}" height="${size}" viewBox="0 0 100 100" aria-hidden="true">
+    <path d="M14 58c-8-10-6-24 4-30 0 10 6 16 14 18z" fill="#2a2122"/><path d="M86 58c8-10 6-24-4-30 0 10-6 16-14 18z" fill="#2a2122"/>
+    <ellipse cx="50" cy="62" rx="30" ry="30" fill="#c8162f"/>
+    <circle cx="50" cy="40" r="24" fill="#2a2122"/>
+    <path d="M30 34c6-10 34-10 40 0-8-4-32-4-40 0z" fill="#3a2f30"/>
+    <circle cx="41" cy="38" r="7" fill="#fff"/><circle cx="59" cy="38" r="7" fill="#fff"/>
+    <circle cx="${mood === "sad" ? 41 : 42}" cy="${mood === "sad" ? 40 : 38}" r="3.4" fill="#2a2122"/><circle cx="${mood === "sad" ? 59 : 60}" cy="${mood === "sad" ? 40 : 38}" r="3.4" fill="#2a2122"/>
+    <path d="M44 47h12l-6 12z" fill="#f2a516"/>${mouth}
+    <path d="M38 88l-4 8M50 90v8M62 88l4 8" stroke="#f2a516" stroke-width="3" stroke-linecap="round"/>
+  </svg>`;
+}
+
+/* ---------- Storage (per-viewer convenience) ---------- */
+const S = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
+};
+const today = () => new Date().toISOString().slice(0, 10);
+let P = S.get("shq-progress", { done: {}, xp: 0, streak: 0, last: "", day: "", dayXp: 0, seen: {} });
+if (P.day !== today()) { P.day = today(); P.dayXp = 0; }
+const save = () => S.set("shq-progress", P);
+const GOAL = 30;
+
+/* ---------- Sound ---------- */
+let AC = null;
+function tone(seq) {
+  try {
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    let t = AC.currentTime;
+    seq.forEach(([f, d, type = "sine", v = .18]) => {
+      const o = AC.createOscillator(), g = AC.createGain();
+      o.type = type; o.frequency.value = f; g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(.001, t + d);
+      o.connect(g).connect(AC.destination); o.start(t); o.stop(t + d); t += d * .75;
+    });
+  } catch {}
+}
+const sfx = {
+  ok: () => tone([[660, .12, "triangle"], [990, .22, "triangle"]]),
+  no: () => tone([[220, .18, "square", .08], [170, .26, "square", .08]]),
+  win: () => tone([[523, .14, "triangle"], [659, .14, "triangle"], [784, .14, "triangle"], [1047, .4, "triangle"]]),
+  tap: () => tone([[880, .05, "sine", .06]])
+};
+let curAudio = null;
+function say(w, slow = false) {
+  try {
+    if (curAudio) curAudio.pause();
+    curAudio = new Audio(w.a); curAudio.playbackRate = slow ? .7 : 1; curAudio.play().catch(() => {});
+  } catch {}
+}
+
+/* ---------- Helpers ---------- */
+const $ = h => { const t = document.createElement("template"); t.innerHTML = h.trim(); return t.content.firstElementChild; };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.random() * (i + 1) | 0; [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const pick = (a, n) => shuffle(a).slice(0, n);
+const norm = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/ı/g, "i").replace(/[?!.,…'’"]/g, "").replace(/\s+/g, " ").trim();
+function pic(p, big = false) {
+  if (!p) return "";
+  const c = "pic" + (big ? " big" : "");
+  if (p.startsWith("#")) return `<span class="${c}"><span class="sw" style="background:${p}"></span></span>`;
+  if (p.startsWith("n:")) return `<span class="${c}"><span class="num">${p.slice(2)}</span></span>`;
+  return `<span class="${c} emoji" role="img">${p}</span>`;
+}
+
+/* ---------- Course structure ---------- */
+let UNITS = [], LESSONS = [];
+const app = document.getElementById("app");
+fetch("data.json").then(r => r.json()).then(d => {
+  UNITS = d;
+  UNITS.forEach((u, ui) => {
+    u.w.forEach(w => w.u = u.id);
+    const n = Math.ceil(u.w.length / 5), size = Math.ceil(u.w.length / n);
+    u.lessons = [];
+    for (let i = 0; i < n; i++) {
+      const L = { id: u.id + "-" + i, unit: u, ui, li: i, words: u.w.slice(i * size, (i + 1) * size) };
+      u.lessons.push(L); LESSONS.push(L);
+    }
+  });
+  home();
+}).catch(() => { app.innerHTML = '<p class="loading">Ders verisi yüklenemedi. Sayfayı yenile.</p>'; });
+
+const isDone = L => !!P.done[L.id];
+const unlockedIndex = () => { const i = LESSONS.findIndex(L => !isDone(L)); return i < 0 ? LESSONS.length - 1 : i; };
+
+/* ---------- Home ---------- */
+function home() {
+  if (curAudio) curAudio.pause();
+  const cur = unlockedIndex();
+  const streakAlive = P.last === today() || P.last === new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+  const streak = streakAlive ? P.streak : 0;
+  app.replaceChildren();
+  app.append($(`<header class="topbar">
+    <div class="logo">${eagle(34)}Shqiponja</div>
+    <div class="stats"><span class="s-fire" title="Seri">${I.fire}${streak}</span><span class="s-xp" title="Toplam XP">${I.xp}${P.xp}</span></div>
+  </header>`));
+  const pct = Math.min(100, Math.round(P.dayXp / GOAL * 100));
+  app.append($(`<div class="goal">${eagle(56)}<div class="txt"><b>${P.dayXp >= GOAL ? "Günlük hedef tamam!" : "Günlük hedef"}</b>
+    <div class="sub">${Math.min(P.dayXp, GOAL)} / ${GOAL} XP · Her ders 10 XP</div><div class="gbar"><i style="width:${pct}%"></i></div></div></div>`));
+
+  let gi = 0;
+  UNITS.forEach((u, ui) => {
+    const unitLocked = LESSONS.indexOf(u.lessons[0]) > cur;
+    const doneCount = u.lessons.filter(isDone).length;
+    const sec = $(`<section class="unit"><div class="unit-head ${unitLocked ? "locked" : ""}">
+      <div><div class="k">Ünite ${ui + 1}</div><h2>${esc(u.t)}</h2></div>
+      <div class="peek">${doneCount} / ${u.lessons.length} ders<br>${u.w.length} kelime</div></div><div class="path"></div></section>`);
+    const path = sec.querySelector(".path");
+    u.lessons.forEach((L, li) => {
+      const idx = LESSONS.indexOf(L), done = isDone(L), locked = idx > cur, current = idx === cur;
+      const offset = [0, 70, 100, 70, 0, -70, -100, -70][gi++ % 8];
+      const w = $(`<div class="node-wrap" style="transform:translateX(${offset}px)">
+        ${current ? `<div class="bubble">${done ? "Tekrar" : "Başla"}</div>` : ""}
+        <button class="node ${done ? "done" : ""} ${locked ? "locked" : ""} ${current ? "current" : ""}" aria-label="${esc(u.t)}, ders ${li + 1}${locked ? ", kilitli" : ""}">
+          ${locked ? I.lock : done ? I.star : `<span>${li + 1}</span>`}</button></div>`);
+      if (!locked) w.querySelector(".node").onclick = () => { sfx.tap(); startLesson(L); };
+      path.append(w);
+    });
+    app.append(sec);
+  });
+  app.append($(`<p class="foot">Kelimeler Mimoza Elezi'nin Arnavutça derslerinden derlendi. Sesler bilgisayar sesiyle (eSpeak) üretildi; doğal konuşmadan biraz robotik gelebilir ama harflerin okunuşu doğrudur.</p>`));
+  const curNode = app.querySelector(".node.current");
+  if (curNode && cur > 0) curNode.scrollIntoView({ block: "center" });
+}
+
+/* ---------- Lesson engine ---------- */
+let LS = null;
+function startLesson(L) {
+  const practice = isDone(L);
+  const words = L.words;
+  const prev = LESSONS.slice(0, LESSONS.indexOf(L)).flatMap(x => x.words);
+  const review = pick(prev, Math.min(3, prev.length));
+  const steps = [];
+  const typesFor = w => {
+    const t = ["listen", "toSq", "toTr"];
+    if (w.p && unitHasPics(L.unit)) t.push("picture", "picture");
+    if (w.sq.includes(" ") && w.sq.split(" ").length <= 6) t.push("build", "build");
+    else t.push("type");
+    return t;
+  };
+  words.forEach(w => {
+    if (!practice && !P.seen[w.sq]) steps.push({ k: "intro", w });
+    steps.push({ k: pickOne(typesFor(w)), w });
+  });
+  if (words.length >= 3) steps.push({ k: "match", ws: words.slice(0, 5) });
+  shuffle(words).slice(0, 3).forEach(w => steps.push({ k: pickOne(typesFor(w).filter(t => t !== "toTr")), w }));
+  review.forEach(w => steps.push({ k: pickOne(["listen", "toSq", "toTr"]), w }));
+  LS = { L, steps, i: 0, hearts: 5, total: steps.length, right: 0, tries: 0, t0: Date.now(), practice, redo: [] };
+  renderStep();
+}
+const pickOne = a => a[Math.random() * a.length | 0];
+const unitHasPics = u => u.w.filter(w => w.p).length >= 4;
+function distractors(w, field, n = 3) {
+  const same = w.u ? UNITS.find(u => u.id === w.u).w : [];
+  let pool = same.filter(x => x[field] !== w[field]);
+  if (pool.length < n) pool = pool.concat(UNITS.flatMap(u => u.w).filter(x => x[field] !== w[field] && !pool.includes(x)));
+  return pick(pool, n);
+}
+
+function lessonShell() {
+  app.replaceChildren();
+  const done = LS.i, total = LS.steps.length;
+  const el = $(`<div class="lesson">
+    <div class="l-top"><button class="x" aria-label="Dersten çık">${I.x}</button>
+      <div class="l-prog" role="progressbar" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${done}"><i style="width:${Math.round(done / total * 100)}%"></i></div>
+      <div class="hearts" title="Can">${I.heart}${LS.hearts}</div></div>
+    <div class="l-body"></div>
+    <div class="sheet"><button class="btn" disabled>Kontrol et</button></div></div>`);
+  el.querySelector(".x").onclick = () => { if (confirmQuit(el)) home(); };
+  app.append(el);
+  return { body: el.querySelector(".l-body"), sheet: el.querySelector(".sheet"), btn: el.querySelector(".sheet .btn"), root: el };
+}
+let quitArmed = false;
+function confirmQuit(el) {
+  if (LS.i === 0 || quitArmed) { quitArmed = false; return true; }
+  quitArmed = true;
+  const s = el.querySelector(".sheet");
+  s.className = "sheet"; s.innerHTML = "";
+  s.append($(`<div class="fb"><div class="ic">${eagle(44, "sad")}</div><div><b>Çıkmak istiyor musun?</b><span>Bu dersteki ilerlemen kaybolacak.</span></div></div>`));
+  const row = $(`<div class="grid2"><button class="btn ghost">Devam et</button><button class="btn bad">Çık</button></div>`);
+  row.children[0].onclick = () => { quitArmed = false; renderStep(); };
+  row.children[1].onclick = () => { quitArmed = false; home(); };
+  s.append(row);
+  return false;
+}
+
+function renderStep() {
+  if (LS.i >= LS.steps.length) {
+    if (LS.redo.length) { LS.steps.push(...LS.redo); LS.redo = []; }
+    else return finish(true);
+  }
+  const st = LS.steps[LS.i];
+  const ui = lessonShell();
+  ({ intro, picture, listen, toSq, toTr, match, build, type })[st.k](st, ui);
+}
+
+/* Bottom-sheet result + continue */
+function resolve(ui, ok, correctText, st) {
+  LS.tries++;
+  ui.sheet.className = "sheet " + (ok ? "ok" : "no");
+  ui.sheet.innerHTML = "";
+  const praise = pickOne(["Harika!", "Çok iyi!", "Aferin!", "Shumë mirë!", "Bravo!"]);
+  ui.sheet.append($(`<div class="fb pop"><div class="ic">${ok ? `<span style="color:var(--good)">${I.check}</span>` : eagle(44, "sad")}</div>
+    <div><b>${ok ? praise : "Doğru cevap:"}</b>${ok ? (correctText ? `<span>${esc(correctText)}</span>` : "") : `<span>${esc(correctText)}</span>`}</div></div>`));
+  const b = $(`<button class="btn ${ok ? "good" : "bad"}">Devam</button>`);
+  ui.sheet.append(b); b.focus();
+  if (ok) { LS.right++; sfx.ok(); }
+  else {
+    sfx.no(); LS.hearts--; ui.root.querySelector(".hearts").innerHTML = I.heart + LS.hearts;
+    ui.body.classList.add("shake");
+    if (st && st.k !== "match") LS.redo.push({ ...st });
+  }
+  if (st && st.w) setTimeout(() => say(st.w), ok ? 250 : 400);
+  b.onclick = () => {
+    if (LS.hearts <= 0) return finish(false);
+    LS.i++; renderStep();
+  };
+}
+function speakerRow(w, label = "") {
+  const r = $(`<div class="speak-row"><button class="speaker" aria-label="Dinle">${I.speaker}</button><button class="slow" aria-label="Yavaş dinle">YAVAŞ</button>${label}</div>`);
+  r.children[0].onclick = () => say(w); r.children[1].onclick = () => say(w, true);
+  return r;
+}
+
+/* -- Exercise: new word intro -- */
+function intro(st, ui) {
+  const w = st.w;
+  ui.body.append($(`<div class="tag new">Yeni kelime</div>`));
+  const card = $(`<div class="intro pop">${pic(w.p, true)}<div class="sq">${esc(w.sq)}</div><div class="tr">${esc(w.tr)}</div></div>`);
+  const sp = speakerRow(w); sp.style.justifyContent = "center"; card.append(sp);
+  ui.body.append(card);
+  ui.btn.disabled = false; ui.btn.textContent = "Devam";
+  ui.btn.onclick = () => { P.seen[w.sq] = 1; save(); LS.i++; renderStep(); };
+  setTimeout(() => say(w), 200);
+}
+
+/* -- Exercise: choose picture for Turkish word -- */
+function picture(st, ui) {
+  const w = st.w;
+  const opts = shuffle([w, ...distractors(w, "sq").filter(x => x.p).slice(0, 3)]);
+  while (opts.length < 4) { const x = distractors(w, "sq", 6).find(x => x.p && !opts.includes(x)); if (!x) break; opts.push(x); }
+  ui.body.append($(`<div class="tag">Resmi seç</div>`));
+  ui.body.append($(`<h2 class="prompt">“${esc(w.tr)}” hangisi?</h2>`));
+  const g = $(`<div class="grid2"></div>`); let sel = null;
+  opts.forEach(o => {
+    const b = $(`<button class="opt">${pic(o.p)}<span>${esc(o.sq)}</span></button>`);
+    b.onclick = () => { g.querySelectorAll(".opt").forEach(x => x.classList.remove("sel")); b.classList.add("sel"); sel = o; say(o); ui.btn.disabled = false; };
+    g.append(b);
+  });
+  ui.body.append(g);
+  ui.btn.onclick = () => {
+    const ok = sel === w;
+    g.querySelectorAll(".opt").forEach((b, i) => { b.disabled = true; if (opts[i] === w) b.classList.add("ok"); else if (opts[i] === sel) b.classList.add("no"); });
+    resolve(ui, ok, w.sq + " = " + w.tr, st);
+  };
+}
+
+/* -- Exercise: listen, choose Turkish meaning -- */
+function listen(st, ui) {
+  const w = st.w;
+  const opts = shuffle([w, ...distractors(w, "tr")]);
+  ui.body.append($(`<div class="tag">Dinle ve seç</div>`));
+  ui.body.append($(`<h2 class="prompt">Ne duyuyorsun?</h2>`));
+  ui.body.append(speakerRow(w));
+  const list = $(`<div class="list"></div>`); let sel = null;
+  opts.forEach((o, i) => {
+    const b = $(`<button class="opt row"><span class="num-k">${i + 1}</span><span>${esc(o.tr)}</span></button>`);
+    b.onclick = () => { list.querySelectorAll(".opt").forEach(x => x.classList.remove("sel")); b.classList.add("sel"); sel = o; ui.btn.disabled = false; };
+    list.append(b);
+  });
+  ui.body.append(list);
+  ui.btn.onclick = () => {
+    list.querySelectorAll(".opt").forEach((b, i) => { b.disabled = true; if (opts[i] === w) b.classList.add("ok"); else if (opts[i] === sel) b.classList.add("no"); });
+    resolve(ui, sel === w, w.sq + " = " + w.tr, st);
+  };
+  setTimeout(() => say(w), 250);
+}
+
+/* -- Exercise: Turkish → choose Albanian -- */
+function toSq(st, ui) {
+  const w = st.w;
+  const opts = shuffle([w, ...distractors(w, "sq")]);
+  ui.body.append($(`<div class="tag">Arnavutçası hangisi?</div>`));
+  ui.body.append($(`<div class="speak-row">${w.p ? pic(w.p) : eagle(64)}<div class="bubble-say">${esc(w.tr)}</div></div>`));
+  const list = $(`<div class="list"></div>`); let sel = null;
+  opts.forEach((o, i) => {
+    const b = $(`<button class="opt row"><span class="num-k">${i + 1}</span><span>${esc(o.sq)}</span></button>`);
+    b.onclick = () => { list.querySelectorAll(".opt").forEach(x => x.classList.remove("sel")); b.classList.add("sel"); sel = o; say(o); ui.btn.disabled = false; };
+    list.append(b);
+  });
+  ui.body.append(list);
+  ui.btn.onclick = () => {
+    list.querySelectorAll(".opt").forEach((b, i) => { b.disabled = true; if (opts[i] === w) b.classList.add("ok"); else if (opts[i] === sel) b.classList.add("no"); });
+    resolve(ui, sel === w, w.sq, st);
+  };
+}
+
+/* -- Exercise: Albanian (with audio) → choose Turkish -- */
+function toTr(st, ui) {
+  const w = st.w;
+  const opts = shuffle([w, ...distractors(w, "tr")]);
+  ui.body.append($(`<div class="tag">Türkçesi ne?</div>`));
+  const row = speakerRow(w, `<div class="bubble-say">${esc(w.sq)}</div>`);
+  row.children[0].classList.add("sm"); row.children[1].remove();
+  ui.body.append(row);
+  const g = $(`<div class="grid2"></div>`); let sel = null;
+  opts.forEach(o => {
+    const b = $(`<button class="opt">${esc(o.tr)}</button>`);
+    b.onclick = () => { g.querySelectorAll(".opt").forEach(x => x.classList.remove("sel")); b.classList.add("sel"); sel = o; ui.btn.disabled = false; };
+    g.append(b);
+  });
+  ui.body.append(g);
+  ui.btn.onclick = () => {
+    g.querySelectorAll(".opt").forEach((b, i) => { b.disabled = true; if (opts[i] === w) b.classList.add("ok"); else if (opts[i] === sel) b.classList.add("no"); });
+    resolve(ui, sel === w, w.tr, st);
+  };
+  setTimeout(() => say(w), 250);
+}
+
+/* -- Exercise: match pairs -- */
+function match(st, ui) {
+  const ws = st.ws;
+  ui.body.append($(`<div class="tag">Eşleştir</div>`));
+  ui.body.append($(`<h2 class="prompt">Eşleri bul</h2>`));
+  const m = $(`<div class="match"><div class="col"></div><div class="col"></div></div>`);
+  const [L, R] = m.children;
+  let a = null, b = null, found = 0, mistakes = 0;
+  const mk = (w, side) => {
+    const btn = $(`<button class="opt">${esc(side === "sq" ? w.sq : w.tr)}</button>`);
+    btn.dataset.k = w.sq;
+    btn.onclick = () => {
+      if (side === "sq") { say(w); L.querySelectorAll(".opt").forEach(x => x.classList.remove("sel")); a = btn; }
+      else { R.querySelectorAll(".opt").forEach(x => x.classList.remove("sel")); b = btn; }
+      btn.classList.add("sel");
+      if (a && b) {
+        if (a.dataset.k === b.dataset.k) {
+          sfx.tap(); [a, b].forEach(x => { x.classList.remove("sel"); x.classList.add("ok"); });
+          const aa = a, bb = b; setTimeout(() => { aa.classList.add("gone"); bb.classList.add("gone"); }, 350);
+          if (++found === ws.length) { ui.btn.disabled = false; ui.btn.textContent = "Devam"; ui.btn.className = "btn good"; ui.btn.onclick = () => { LS.right++; LS.tries++; sfx.ok(); LS.i++; renderStep(); }; }
+        } else {
+          mistakes++; sfx.no(); const aa = a, bb = b;
+          [aa, bb].forEach(x => { x.classList.remove("sel"); x.classList.add("no"); });
+          setTimeout(() => [aa, bb].forEach(x => x.classList.remove("no")), 500);
+        }
+        a = b = null;
+      }
+    };
+    return btn;
+  };
+  shuffle(ws).forEach(w => L.append(mk(w, "sq")));
+  shuffle(ws).forEach(w => R.append(mk(w, "tr")));
+  ui.body.append(m);
+}
+
+/* -- Exercise: build Albanian sentence from tiles -- */
+function build(st, ui) {
+  const w = st.w;
+  const target = w.sq.replace(/[?!.]/g, "").split(" ");
+  const extra = pick(UNITS.flatMap(u => u.w).flatMap(x => x.sq.replace(/[?!.]/g, "").split(" ")).filter(t => !target.includes(t)), Math.min(4, 8 - target.length));
+  const tiles = shuffle([...target, ...extra]);
+  ui.body.append($(`<div class="tag">Cümleyi kur</div>`));
+  ui.body.append($(`<div class="speak-row">${w.p ? pic(w.p) : eagle(64)}<div class="bubble-say">${esc(w.tr)}</div></div>`));
+  const line = $(`<div class="answer-line" aria-label="Cevabın"></div>`);
+  const bank = $(`<div class="bank"></div>`);
+  const chosen = [];
+  tiles.forEach((t, i) => {
+    const tb = $(`<button class="tile">${esc(t)}</button>`);
+    tb.onclick = () => {
+      sfx.tap(); tb.classList.add("used");
+      const ub = $(`<button class="tile">${esc(t)}</button>`);
+      chosen.push({ t, ub, tb });
+      ub.onclick = () => { ub.remove(); tb.classList.remove("used"); chosen.splice(chosen.findIndex(c => c.ub === ub), 1); ui.btn.disabled = !chosen.length; };
+      line.append(ub); ui.btn.disabled = false;
+    };
+    bank.append(tb);
+  });
+  ui.body.append(line, bank);
+  ui.btn.onclick = () => {
+    line.querySelectorAll("button").forEach(x => x.disabled = true); bank.querySelectorAll("button").forEach(x => x.disabled = true);
+    const ok = norm(chosen.map(c => c.t).join(" ")) === norm(target.join(" "));
+    resolve(ui, ok, w.sq, st);
+  };
+}
+
+/* -- Exercise: listen and type -- */
+function type(st, ui) {
+  const w = st.w;
+  ui.body.append($(`<div class="tag">Duyduğunu yaz</div>`));
+  ui.body.append($(`<h2 class="prompt">Arnavutça yaz</h2>`));
+  ui.body.append(speakerRow(w));
+  const ta = $(`<textarea id="type-answer" lang="sq" spellcheck="false" autocapitalize="off" placeholder="Arnavutça yaz…"></textarea>`);
+  const keys = $(`<div class="keys" aria-label="Özel harfler"></div>`);
+  ["ë", "ç"].forEach(ch => {
+    const k = $(`<button type="button">${ch}</button>`);
+    k.onclick = () => { const s = ta.selectionStart ?? ta.value.length; ta.value = ta.value.slice(0, s) + ch + ta.value.slice(ta.selectionEnd ?? s); ta.focus(); ta.setSelectionRange(s + 1, s + 1); ui.btn.disabled = false; };
+    keys.append(k);
+  });
+  ta.addEventListener("input", () => ui.btn.disabled = !ta.value.trim());
+  ta.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); if (!ui.btn.disabled) ui.btn.click(); } });
+  ui.body.append(ta, keys);
+  ui.btn.onclick = () => {
+    ta.disabled = true;
+    const exact = ta.value.trim().toLowerCase().replace(/[?!.]/g, "") === w.sq.toLowerCase().replace(/[?!.]/g, "");
+    const close = norm(ta.value) === norm(w.sq);
+    resolve(ui, exact || close, (exact ? "" : close ? "Doğru yazımı: " : "") + w.sq + " = " + w.tr, st);
+  };
+  setTimeout(() => { say(w); ta.focus(); }, 250);
+}
+
+/* ---------- Finish ---------- */
+function finish(passed) {
+  app.replaceChildren();
+  const secs = Math.round((Date.now() - LS.t0) / 1000);
+  const acc = LS.tries ? Math.round(LS.right / LS.tries * 100) : 100;
+  let xp = 0;
+  if (passed) {
+    xp = LS.practice ? 5 : 10;
+    if (LS.hearts === 5) xp += 5;
+    P.xp += xp; P.dayXp += xp; P.done[LS.L.id] = 1;
+    const y = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+    if (P.last !== today()) { P.streak = P.last === y ? P.streak + 1 : 1; P.last = today(); }
+    save(); sfx.win();
+  }
+  const el = $(`<div class="lesson"><div class="end">
+    <div class="pop">${eagle(140, passed ? "happy" : "sad")}</div>
+    <h2 class="${passed ? "" : "fail"}">${passed ? (LS.hearts === 5 ? "Kusursuz ders!" : "Ders tamamlandı!") : "Canların bitti"}</h2>
+    <p style="margin:0;color:var(--muted)">${passed ? esc(LS.L.unit.t) + " · ders " + (LS.L.li + 1) + (P.streak > 1 ? " · " + P.streak + " günlük seri" : "") : "Sorun değil, tekrar dene. Yanlışlar en iyi öğretmendir."}</p>
+    <div class="end-stats">
+      <div class="es x"><div class="h">XP</div><div class="v">+${xp}</div></div>
+      <div class="es a"><div class="h">Doğruluk</div><div class="v">${acc}%</div></div>
+      <div class="es t"><div class="h">Süre</div><div class="v">${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, "0")}</div></div>
+    </div></div>
+    <div class="sheet"><button class="btn ${passed ? "good" : ""}">${passed ? "Devam" : "Tekrar dene"}</button></div></div>`);
+  el.querySelector(".sheet .btn").onclick = () => passed ? home() : startLesson(LS.L);
+  app.append(el);
+  el.querySelector(".sheet .btn").focus();
+}
+</script>
