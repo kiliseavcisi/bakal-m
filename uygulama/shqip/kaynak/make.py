@@ -36,9 +36,12 @@ def clip(text):
                             "-ac", "1", "-ar", "22050", "-b:a", "40k", dst], check=True)
     return key
 
+GEMINI = os.path.join(HERE, ".clips-gemini")
 def audio(pack, text):
-    key = clip(text)
-    packs.setdefault(pack, {})[key] = base64.b64encode(open(os.path.join(CACHE, key + ".mp3"), "rb").read()).decode()
+    key = hashlib.md5(text.encode()).hexdigest()[:10]
+    gem = os.path.join(GEMINI, key + ".mp3")
+    src = gem if os.path.exists(gem) else os.path.join(CACHE, clip(text) + ".mp3")   # prefer Gemini, fall back to MMS
+    packs.setdefault(pack, {})[key] = base64.b64encode(open(src, "rb").read()).decode()
     return pack + "#" + key
 
 units, used_videos = [], set()
@@ -88,5 +91,5 @@ for u in units:
 for name, d in packs.items():
     json.dump(d, open(os.path.join(OUT, "packs", name + ".json"), "w"), separators=(",", ":"))
 json.dump({"units": units, "stories": stories, "alpha": alpha, "gloss": gloss, "rev": rev}, open(os.path.join(OUT, "data.json"), "w"), ensure_ascii=False, separators=(",", ":"))
-print("units", len(units), "words", sum(len(u["w"]) for u in units), "stories", len(stories), "packs", len(packs),
+print("gemini clips used", sum(1 for f in os.listdir(GEMINI)) if os.path.isdir(GEMINI) else 0, "units", len(units), "words", sum(len(u["w"]) for u in units), "stories", len(stories), "packs", len(packs),
       "clips", sum(len(p) for p in packs.values()))
