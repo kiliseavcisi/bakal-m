@@ -57,6 +57,13 @@
       "skillPath": "skills/productivity/grill-me/SKILL.md",
       "computedHash": "ab1acb9fbd9eaee03da254abb8a8de228d1e7a07475fe959da4a5eefa34ea4b9"
     },
+    "logo-design": {
+      "source": "kaankiziltug/logo-design-skill",
+      "commit": "e9eaddc07895575253d6663320354a708f53e955",
+      "sourceType": "github",
+      "skillPath": "skills/logo-design/SKILL.md",
+      "computedHash": "1e43981509936ee4ba378f9cff590f5e547a6ed3d8b9a65ece6a43473b671ed1"
+    },
     "pricing": {
       "source": "coreyhaines31/marketingskills",
       "commit": "8fd2fcade2fd6629026e9dfe6d133b55b36968b9",
