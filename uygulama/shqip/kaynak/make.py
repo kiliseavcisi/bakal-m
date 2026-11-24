@@ -8,6 +8,7 @@ from data import UNITS
 from extra import UNIT_INFO, STORIES, ALPHA, YT
 from sezon2 import UNITS2, STORIES2, VIDEO_GROUPS
 from gloss import FUNCTION
+from visual import UNIT_LOOK, EXTRA_PICS, STORY_LOOK, AVATARS
 
 OUT = os.path.dirname(HERE)
 CACHE = os.path.join(HERE, ".clips"); os.makedirs(CACHE, exist_ok=True)
@@ -43,17 +44,20 @@ def audio(pack, text):
 units, used_videos = [], set()
 for uid, title, words in UNITS:
     vid, vtitle, tips = UNIT_INFO[uid]; used_videos.add(vid)
-    units.append({"id": uid, "t": title, "season": 1, "video": {"url": YT + vid, "t": vtitle}, "tips": tips,
-                  "w": [{"sq": sq, "tr": tr, "p": p, "a": audio(uid, sq)} for sq, tr, p in words]})
+    units.append({"id": uid, "t": title, "season": 1, "tips": tips,
+                  "ic": UNIT_LOOK[uid][0], "hue": UNIT_LOOK[uid][1],
+                  "w": [{"sq": sq, "tr": tr, "p": p or EXTRA_PICS.get(sq, ""), "a": audio(uid, sq)} for sq, tr, p in words]})
 for uid, title, vid, vtitle, words, tips in UNITS2:
     used_videos.add(vid)
-    units.append({"id": uid, "t": title, "season": 2, "video": {"url": YT + vid, "t": vtitle}, "tips": tips,
-                  "w": [{"sq": sq, "tr": tr, "p": p, "a": audio(uid, sq)} for sq, tr, p in words]})
+    units.append({"id": uid, "t": title, "season": 2, "tips": tips,
+                  "ic": UNIT_LOOK[uid][0], "hue": UNIT_LOOK[uid][1],
+                  "w": [{"sq": sq, "tr": tr, "p": p or EXTRA_PICS.get(sq, ""), "a": audio(uid, sq)} for sq, tr, p in words]})
 stories = []
 for s in STORIES + STORIES2:
     used_videos.add(s["src"][0])
-    stories.append({"id": s["id"], "t": s["t"], "after": s["after"], "video": {"url": YT + s["src"][0], "t": s["src"][1]},
-                    "lines": [{"who": who, "sq": sq, "tr": tr, "a": audio("s-" + s["id"], sq)} for who, sq, tr in s["lines"]],
+    stories.append({"id": s["id"], "t": s["t"], "after": s["after"],
+                    "cover": STORY_LOOK.get(s["id"], "📖"),
+                    "lines": [{"who": who, "av": AVATARS.get(who, ""), "sq": sq, "tr": tr, "a": audio("s-" + s["id"], sq)} for who, sq, tr in s["lines"]],
                     "q": [{"q": q, "o": o, "c": c} for q, o, c in s["q"]]})
 alpha = [{"l": l, "say": say, "hint": hint, "ex": ex, "tr": tr, "d": bool(d), "a": audio("alfabe", ex)} for l, say, hint, ex, tr, d in ALPHA]
 used_videos.add("QxxBvnhw3AA")
@@ -83,7 +87,6 @@ for u in units:
 
 for name, d in packs.items():
     json.dump(d, open(os.path.join(OUT, "packs", name + ".json"), "w"), separators=(",", ":"))
-json.dump({"units": units, "stories": stories, "alpha": alpha, "alphaVideo": {"url": YT + "QxxBvnhw3AA", "t": "Ders 1 · Alfabe ve telaffuz"},
-           "videos": videos, "gloss": gloss, "rev": rev}, open(os.path.join(OUT, "data.json"), "w"), ensure_ascii=False, separators=(",", ":"))
+json.dump({"units": units, "stories": stories, "alpha": alpha, "gloss": gloss, "rev": rev}, open(os.path.join(OUT, "data.json"), "w"), ensure_ascii=False, separators=(",", ":"))
 print("units", len(units), "words", sum(len(u["w"]) for u in units), "stories", len(stories), "packs", len(packs),
       "clips", sum(len(p) for p in packs.values()))

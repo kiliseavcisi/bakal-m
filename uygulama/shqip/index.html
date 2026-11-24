@@ -208,7 +208,7 @@ nav.bottom {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 15; background: var(--bg); border-top: 2px solid var(--line);
   display: flex; justify-content: center; padding: 6px max(16px, env(safe-area-inset-right, 0px)) calc(6px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
 }
-nav.bottom .in { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; width: 100%; max-width: 620px; }
+nav.bottom .in { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; width: 100%; max-width: 620px; }
 nav.bottom button { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 2px; border-radius: 12px; color: var(--muted); font-size: .78rem; font-weight: 600; position: relative; }
 nav.bottom button[aria-current="page"] { color: var(--accent); background: var(--accent-soft); }
 nav.bottom .badge { position: absolute; top: 2px; right: calc(50% - 22px); background: var(--bad); color: #fff; border-radius: 99px; font-size: .68rem; padding: 0 6px; font-variant-numeric: tabular-nums; }
@@ -246,6 +246,7 @@ nav.bottom .badge { position: absolute; top: 2px; right: calc(50% - 22px); backg
 .letter .say { font-weight: 600; }
 .letter .ex { color: var(--muted); font-size: .86rem; overflow-wrap: anywhere; }
 .shadow-steps { display: flex; flex-direction: column; gap: 8px; color: var(--muted); font-size: .95rem; }
+.tipbox[hidden] { display: none; }
 .hw { border-bottom: 2px dashed color-mix(in srgb, var(--muted) 60%, transparent); cursor: pointer; }
 .hw:hover { border-bottom-color: var(--blue); }
 .hint-pop { position: absolute; z-index: 50; background: var(--surface); border: 2px solid var(--line); border-radius: 14px; box-shadow: 0 8px 24px rgba(0,0,0,.15);
@@ -267,6 +268,41 @@ nav.bottom .badge { position: absolute; top: 2px; right: calc(50% - 22px); backg
 .vrow.seen .vmain { opacity: .6; }
 .season-note { font-size: .8rem; color: var(--muted); margin-top: 6px; }
 nav.bottom button { font-size: .72rem; }
+.unit-head { gap: 12px; background: hsl(var(--h, 350) 68% 46%); box-shadow: 0 4px 0 hsl(var(--h, 350) 68% 32%); }
+.unit-head .u-ic { font-size: 40px; line-height: 1; width: 56px; height: 56px; display: grid; place-items: center; background: rgba(255,255,255,.18); border-radius: 16px; flex: none; }
+.unit-head.locked .u-ic { filter: grayscale(1); opacity: .6; background: var(--surface); }
+.unit .node:not(.locked):not(.done) { background: hsl(var(--h, 350) 68% 46%); box-shadow: 0 6px 0 hsl(var(--h, 350) 68% 32%); }
+.unit .node.current { outline-color: hsl(var(--h, 350) 70% 88%); }
+.unit .node .n-ic { font-size: 34px; }
+.unit .bubble { color: hsl(var(--h, 350) 68% 42%); }
+.chip.words { gap: 2px; font-size: 1.1rem; padding: 4px 10px; }
+.chip.words span { line-height: 1; }
+.mini-sw { display: inline-block; width: 16px; height: 16px; border-radius: 5px; border: 1px solid var(--line); }
+.mini-t { font-family: var(--f-display); font-size: .8rem; color: var(--blue); padding: 0 2px; }
+.intro { background: linear-gradient(180deg, hsl(var(--h, 350) 80% 94%), var(--surface) 70%); }
+.see-card { display: grid; place-items: center; padding: 26px; border-radius: 24px; border: 2px solid var(--line);
+  background: radial-gradient(circle at 50% 40%, hsl(var(--h, 350) 85% 92%), var(--surface) 70%); }
+.tip-hero { font-size: 72px; text-align: center; line-height: 1.1; padding: 12px; border-radius: 24px; background: hsl(var(--h, 350) 80% 93%); }
+.opt.pic-only { min-height: 120px; }
+.opt .lbl { font-size: .9rem; }
+.pic .cal { display: inline-flex; flex-direction: column; align-items: center; justify-content: flex-end; width: 64px; height: 64px; border-radius: 12px; background: var(--surface);
+  border: 2px solid var(--line); overflow: hidden; font-family: var(--f-display); font-weight: 700; font-size: .95rem; color: var(--fg); padding-bottom: 8px; }
+.pic .cal i { display: block; width: 100%; height: 18px; background: var(--accent); margin-bottom: auto; }
+.pic.big .cal { width: 110px; height: 110px; font-size: 1.4rem; border-radius: 20px; }
+.pic.big .cal i { height: 28px; }
+.pic .sym { display: grid; place-items: center; min-width: 64px; height: 64px; padding: 0 10px; border-radius: 16px; background: color-mix(in srgb, var(--blue) 14%, var(--surface));
+  color: var(--blue); font-family: var(--f-display); font-weight: 700; font-size: 34px; }
+.pic.big .sym { min-width: 110px; height: 110px; font-size: 56px; border-radius: 24px; }
+.story-cover { font-size: 54px; text-align: center; letter-spacing: 6px; padding: 10px 0 4px; }
+.story-card .ic.cover { width: auto; min-width: 52px; padding: 0 8px; font-size: 22px; letter-spacing: 1px; background: var(--surface-2); }
+.line { align-items: flex-end; }
+.line .av { font-size: 30px; line-height: 1; flex: none; width: 40px; text-align: center; }
+.line.right { flex-direction: row-reverse; }
+.line.right .txt { background: color-mix(in srgb, var(--blue) 10%, var(--surface)); }
+.line.narr .txt { background: var(--surface-2); border-style: dashed; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .intro, :root:not([data-theme="light"]) .see-card { background: var(--surface); } :root:not([data-theme="light"]) .tip-hero { background: var(--surface-2); } }
+:root[data-theme="dark"] .intro, :root[data-theme="dark"] .see-card { background: var(--surface); }
+:root[data-theme="dark"] .tip-hero { background: var(--surface-2); }
 </style>
 
 <div class="app" id="app"><p class="loading">Yükleniyor…</p></div>
@@ -376,15 +412,26 @@ function pic(p, big = false) {
   const c = "pic" + (big ? " big" : "");
   if (p.startsWith("#")) return `<span class="${c}"><span class="sw" style="background:${p}"></span></span>`;
   if (p.startsWith("n:")) return `<span class="${c}"><span class="num">${p.slice(2)}</span></span>`;
+  if (p.startsWith("cal:")) return `<span class="${c}"><span class="cal"><i></i>${esc(p.slice(4))}</span></span>`;
+  if (p.startsWith("sym:")) return `<span class="${c}"><span class="sym">${esc(p.slice(4))}</span></span>`;
   return `<span class="${c} emoji" role="img">${p}</span>`;
 }
 
+function picMini(p) {
+  if (!p) return "";
+  if (p.startsWith("#")) return `<i class="mini-sw" style="background:${p}"></i>`;
+  if (p.startsWith("n:")) return `<b class="mini-t">${esc(p.slice(2))}</b>`;
+  if (p.startsWith("cal:") || p.startsWith("sym:")) return `<b class="mini-t">${esc(p.slice(4, 7))}</b>`;
+  return `<span>${p}</span>`;
+}
+const unitOf = w => UNITS.find(u => u.id === w.u) || { hue: 350, ic: "📘" };
+
 /* ---------- Course structure ---------- */
-let UNITS = [], LESSONS = [], STORIES = [], ALPHA = [], ALPHA_VIDEO = null, VIDEOS = [], GLOSS = {}, REV = {};
+let UNITS = [], LESSONS = [], STORIES = [], ALPHA = [], GLOSS = {}, REV = {};
 let TAB = "learn";
 const app = document.getElementById("app");
 fetch("data.json").then(r => r.json()).then(d => {
-  UNITS = d.units; STORIES = d.stories; ALPHA = d.alpha; ALPHA_VIDEO = d.alphaVideo; VIDEOS = d.videos; GLOSS = d.gloss; REV = d.rev;
+  UNITS = d.units; STORIES = d.stories; ALPHA = d.alpha; GLOSS = d.gloss; REV = d.rev;
   UNITS.forEach((u, ui) => {
     u.w.forEach(w => w.u = u.id);
     const n = Math.ceil(u.w.length / 5), size = Math.ceil(u.w.length / n);
@@ -394,7 +441,7 @@ fetch("data.json").then(r => r.json()).then(d => {
       u.lessons.push(L); LESSONS.push(L);
     }
   });
-  try { const h = location.hash.slice(1); if (["learn", "review", "stories", "alpha", "videos"].includes(h)) TAB = h; } catch {}
+  try { const h = location.hash.slice(1); if (["learn", "review", "stories", "alpha"].includes(h)) TAB = h; } catch {}
   home();
 }).catch(() => { app.innerHTML = '<p class="loading">Ders verisi yüklenemedi. Sayfayı yenile.</p>'; });
 
@@ -414,14 +461,13 @@ function home(tab) {
     <div class="stats"><span class="s-fire" title="Günlük seri">${I.fire}${streak}</span><span class="s-xp" title="Toplam XP">${I.xp}${P.xp}</span></div>
   </header>`));
   const view = $(`<div class="view"></div>`); app.append(view);
-  ({ learn: learnTab, review: reviewTab, stories: storiesTab, alpha: alphaTab, videos: videosTab })[TAB](view);
+  ({ learn: learnTab, review: reviewTab, stories: storiesTab, alpha: alphaTab })[TAB](view);
   const due = dueWords().length;
   const nav = $(`<nav class="bottom" aria-label="Bölümler"><div class="in">
     <button data-t="learn">${I.path}Öğren</button>
     <button data-t="review">${I.repeat}Tekrar${due ? `<span class="badge">${due}</span>` : ""}</button>
     <button data-t="stories">${I.book}Hikâyeler</button>
-    <button data-t="alpha">${I.abc}Alfabe</button>
-    <button data-t="videos">${I.video}Videolar</button></div></nav>`);
+    <button data-t="alpha">${I.abc}Alfabe</button></div></nav>`);
   nav.querySelectorAll("button").forEach(b => {
     if (b.dataset.t === TAB) b.setAttribute("aria-current", "page");
     b.onclick = () => { sfx.tap(); home(b.dataset.t); window.scrollTo({ top: 0 }); };
@@ -448,12 +494,13 @@ function learnTab(view) {
   UNITS.forEach((u, ui) => {
     const unitLocked = LESSONS.indexOf(u.lessons[0]) > cur;
     const doneCount = u.lessons.filter(isDone).length;
-    const sec = $(`<section class="unit"><div class="unit-head ${unitLocked ? "locked" : ""}">
-      <div><div class="k">Ünite ${ui + 1}</div><h2>${esc(u.t)}</h2></div>
+    const sec = $(`<section class="unit" style="--h:${u.hue}"><div class="unit-head ${unitLocked ? "locked" : ""}">
+      <div class="u-ic" aria-hidden="true">${u.ic}</div>
+      <div style="flex:1;min-width:0"><div class="k">Ünite ${ui + 1}</div><h2>${esc(u.t)}</h2></div>
       <div class="peek">${doneCount} / ${u.lessons.length} ders<br>${u.w.length} kelime</div></div>
-      <div class="unit-tools"><a class="chip yt" href="${esc(u.video.url)}" target="_blank" rel="noopener">${I.play}Videoyu izle</a>
-      <button class="chip tipbtn" aria-expanded="false">${I.bulb}Mimoza'nın notları</button></div>${u.season === 2 ? `<div class="season-note">Bu ünite videonun konusuna göre hazırlandı; kelimeler videodan değil, standart Arnavutçadan.</div>` : ""}
-      <div class="tipbox" hidden>${u.tips.map(t => `<div>${t}</div>`).join("")}<div style="color:var(--muted);font-size:.85rem">Kaynak: ${esc(u.video.t)}</div></div>
+      <div class="unit-tools"><button class="chip tipbtn" aria-expanded="false">${I.bulb}Dil notları</button>
+      <span class="chip words">${u.w.slice(0, 6).map(w => picMini(w.p)).join("")}</span></div>
+      <div class="tipbox" hidden>${u.tips.map(t => `<div>${t}</div>`).join("")}</div>
       <div class="path"></div></section>`);
     const tb = sec.querySelector(".tipbtn"), box = sec.querySelector(".tipbox");
     tb.onclick = () => { box.hidden = !box.hidden; tb.setAttribute("aria-expanded", String(!box.hidden)); };
@@ -464,7 +511,7 @@ function learnTab(view) {
       const w = $(`<div class="node-wrap" style="transform:translateX(${offset}px)">
         ${current ? `<div class="bubble">${done ? "Tekrar" : "Başla"}</div>` : ""}
         <button class="node ${done ? "done" : ""} ${locked ? "locked" : ""} ${current ? "current" : ""}" aria-label="${esc(u.t)}, ders ${li + 1}${locked ? ", kilitli" : ""}">
-          ${locked ? I.lock : done ? I.star : `<span>${li + 1}</span>`}</button></div>`);
+          ${locked ? I.lock : done ? I.star : current ? `<span class="n-ic">${u.ic}</span>` : `<span>${li + 1}</span>`}</button></div>`);
       if (!locked) w.querySelector(".node").onclick = () => { sfx.tap(); startLesson(L); };
       path.append(w);
     });
@@ -472,13 +519,13 @@ function learnTab(view) {
     if (story) {
       const ok = unitDone(u.id);
       const sc = $(`<button class="story-card ${P.stories[story.id] ? "done" : ""}" ${ok ? "" : "disabled"} style="margin:6px auto 0;max-width:360px;width:100%;${ok ? "" : "opacity:.55;cursor:default"}">
-        <span class="ic">${ok ? I.book : I.lock}</span><span><span class="t">Hikâye: ${esc(story.t)}</span><br><span class="s">${ok ? "Dinle, oku, anla" : "Üniteyi bitirince açılır"}</span></span></button>`);
+        <span class="ic cover">${ok ? story.cover : I.lock}</span><span><span class="t">Hikâye: ${esc(story.t)}</span><br><span class="s">${ok ? "Dinle, oku, anla" : "Üniteyi bitirince açılır"}</span></span></button>`);
       if (ok) sc.onclick = () => openStory(story);
       sec.append(sc);
     }
     view.append(sec);
   });
-  view.append($(`<p class="foot">İçerik Mimoza Elezi'nin YouTube'daki Arnavutça derslerinden derlendi; her ünitede ilgili videonun bağlantısı var. Sesler Meta'nın açık Arnavutça ses modeliyle (MMS) üretildi.</p>`));
+  view.append($(`<p class="foot">Her gün 10 dakika: yeni ders, ardından tekrar sekmesi. Sesler Arnavutça yapay zekâ sesiyle üretildi.</p>`));
   const curNode = view.querySelector(".node.current");
   if (curNode && cur > 0) setTimeout(() => curNode.scrollIntoView({ block: "center" }), 0);
 }
@@ -520,8 +567,8 @@ function storiesTab(view) {
   STORIES.forEach(s => {
     const unit = UNITS.find(u => u.id === s.after), ok = unitDone(s.after);
     const c = $(`<button class="story-card ${P.stories[s.id] ? "done" : ""}" ${ok ? "" : "disabled"} style="${ok ? "" : "opacity:.6;cursor:default"}">
-      <span class="ic">${ok ? (P.stories[s.id] ? I.star : I.book) : I.lock}</span>
-      <span><span class="t">${esc(s.t)}</span><br><span class="s">${ok ? s.lines.length + " cümle · " + esc(s.video.t) : "“" + esc(unit.t) + "” ünitesini bitirince açılır"}</span></span></button>`);
+      <span class="ic cover">${ok ? s.cover : I.lock}</span>
+      <span><span class="t">${esc(s.t)}${P.stories[s.id] ? " ⭐" : ""}</span><br><span class="s">${ok ? s.lines.length + " cümle · sesli" : "“" + esc(unit.t) + "” ünitesini bitirince açılır"}</span></span></button>`);
     if (ok) c.onclick = () => openStory(s);
     list.append(c);
   });
@@ -535,15 +582,17 @@ function openStory(s) {
   const el = $(`<div class="lesson">
     <div class="l-top"><button class="x" aria-label="Kapat">${I.x}</button><div style="flex:1;font-family:var(--f-display);font-weight:700;font-size:1.2rem">${esc(s.t)}</div></div>
     <div class="l-body">
-      <div class="unit-tools" style="margin:0"><button class="chip" id="play-all">${I.play}Tümünü dinle</button><button class="chip" id="show-tr">Çevirileri göster</button>
-        <a class="chip yt" href="${esc(s.video.url)}" target="_blank" rel="noopener">${I.play}Kaynak video</a></div>
+      <div class="story-cover" aria-hidden="true">${s.cover}</div>
+      <div class="unit-tools" style="margin:0;justify-content:center"><button class="chip" id="play-all">${I.play}Tümünü dinle</button><button class="chip" id="show-tr">Çevirileri göster</button></div>
       <div class="lines"></div>
     </div>
     <div class="sheet"><button class="btn">Anladım, sorulara geç</button></div></div>`);
   const lines = el.querySelector(".lines");
+  const speakers = [...new Set(s.lines.filter(l => l.who).map(l => l.who))];
   let showAll = false;
   const rows = s.lines.map(l => {
-    const r = $(`<div class="line"><button class="speaker sm" aria-label="Dinle">${I.speaker}</button>
+    const side = l.who ? (speakers.indexOf(l.who) % 2 ? "right" : "left") : "narr";
+    const r = $(`<div class="line ${side}">${l.av ? `<div class="av" aria-hidden="true">${l.av}</div>` : ""}<button class="speaker sm" aria-label="Dinle">${I.speaker}</button>
       <div class="txt" role="button" tabindex="0">${l.who ? `<div class="who">${esc(l.who)}</div>` : ""}<div class="sq">${hint(l.sq, "sq")}</div><div class="tr" hidden>${esc(l.tr)}</div></div></div>`);
     r.querySelector(".speaker").onclick = () => say(l);
     r.querySelector(".txt").onclick = e => { if (e.target.closest(".hw")) return; const t = r.querySelector(".tr"); t.hidden = !t.hidden; say(l); };
@@ -605,7 +654,6 @@ function storyQuiz(s, qi, right) {
 function alphaTab(view) {
   view.append($(`<h2 class="section-h">Alfabe: 36 harf</h2>`));
   view.append($(`<p class="lead">Arnavutça yazıldığı gibi okunur. Kırmızı çerçeveli harfler Türkçeden farklıdır. Bir harfe dokun, örnek kelimeyi dinle.</p>`));
-  view.append($(`<div class="unit-tools" style="margin:0 0 14px"><a class="chip yt" href="${esc(ALPHA_VIDEO.url)}" target="_blank" rel="noopener">${I.play}${esc(ALPHA_VIDEO.t)}</a></div>`));
   const g = $(`<div class="alpha"></div>`);
   ALPHA.forEach(a => {
     const b = $(`<button class="letter ${a.d ? "d" : ""}"><span class="L">${esc(a.l.length > 1 ? a.l[0].toUpperCase() + a.l.slice(1) : a.l.toUpperCase())} ${esc(a.l)}</span>
@@ -622,7 +670,7 @@ let LS = null;
 function typesFor(w, review = false) {
   const t = ["listen", "toSq", "toTr", "speak"];
   const unit = UNITS.find(u => u.id === w.u);
-  if (w.p && unitHasPics(unit)) t.push("picture", "picture");
+  if (w.p && unitHasPics(unit)) t.push("picture", "see", "hear");
   if (w.sq.includes(" ") && w.sq.split(" ").length <= 6) t.push("build", "build");
   if (fillable(w)) t.push("fill", "fill");
   else t.push("type");
@@ -691,7 +739,7 @@ function renderStep() {
   }
   const st = LS.steps[LS.i];
   const ui = lessonShell();
-  ({ intro, picture, listen, toSq, toTr, match, build, type, speak, tip, fill })[st.k](st, ui);
+  ({ intro, picture, listen, toSq, toTr, match, build, type, speak, tip, fill, see, hear })[st.k](st, ui);
 }
 
 /* Bottom-sheet result + continue */
@@ -727,7 +775,7 @@ function speakerRow(w, label = "") {
 function intro(st, ui) {
   const w = st.w;
   ui.body.append($(`<div class="tag new">Yeni kelime</div>`));
-  const card = $(`<div class="intro pop">${pic(w.p, true)}<div class="sq">${esc(w.sq)}</div><div class="tr">${esc(w.tr)}</div></div>`);
+  const card = $(`<div class="intro pop" style="--h:${unitOf(w).hue}">${pic(w.p, true)}<div class="sq">${esc(w.sq)}</div><div class="tr">${esc(w.tr)}</div></div>`);
   const sp = speakerRow(w); sp.style.justifyContent = "center"; card.append(sp);
   ui.body.append(card);
   ui.btn.disabled = false; ui.btn.textContent = "Devam";
@@ -921,13 +969,13 @@ function speak(st, ui) {
   ui.btn.onclick = () => { LS.right++; LS.tries++; srsUpdate(w, true); sfx.ok(); LS.i++; renderStep(); };
   setTimeout(() => say(w), 250);
 }
-/* -- Grammar tip from the video lesson -- */
+/* -- Grammar tip card -- */
 function tip(st, ui) {
   const u = st.u;
-  ui.body.append($(`<div class="tag new">${I.bulb} Mimoza'nın notu</div>`));
+  ui.body.append($(`<div class="tip-hero" style="--h:${u.hue}">${u.ic}</div>`));
+  ui.body.append($(`<div class="tag new">${I.bulb} Dil notu</div>`));
   ui.body.append($(`<h2 class="prompt">${esc(u.t)}: bilmen gerekenler</h2>`));
   ui.body.append($(`<div class="tipbox" style="font-size:1.05rem">${u.tips.map(t => `<div>${t}</div>`).join("")}</div>`));
-  ui.body.append($(`<div class="unit-tools"><a class="chip yt" href="${esc(u.video.url)}" target="_blank" rel="noopener">${I.play}${esc(u.video.t)}</a></div>`));
   ui.btn.disabled = false; ui.btn.textContent = "Anladım";
   ui.btn.onclick = () => { P.tipsSeen[u.id] = 1; save(); LS.i++; renderStep(); };
 }
@@ -978,6 +1026,45 @@ document.addEventListener("click", e => {
 }, true);
 window.addEventListener("scroll", closeHint, { passive: true });
 
+/* -- See the picture, choose the Albanian word -- */
+function see(st, ui) {
+  const w = st.w;
+  const opts = shuffle([w, ...distractors(w, "sq")]);
+  ui.body.append($(`<div class="tag">Bu ne?</div>`));
+  ui.body.append($(`<div class="see-card" style="--h:${unitOf(w).hue}">${pic(w.p, true)}</div>`));
+  const g = $(`<div class="grid2"></div>`); let sel = null;
+  opts.forEach(o => {
+    const b = $(`<button class="opt">${esc(o.sq)}</button>`);
+    b.onclick = () => { g.querySelectorAll(".opt").forEach(x => x.classList.remove("sel")); b.classList.add("sel"); sel = o; say(o); ui.btn.disabled = false; };
+    g.append(b);
+  });
+  ui.body.append(g);
+  ui.btn.onclick = () => {
+    g.querySelectorAll(".opt").forEach((b, i) => { b.disabled = true; if (opts[i] === w) b.classList.add("ok"); else if (opts[i] === sel) b.classList.add("no"); });
+    resolve(ui, sel === w, w.sq + " = " + w.tr, st);
+  };
+}
+/* -- Hear the word, tap its picture -- */
+function hear(st, ui) {
+  const w = st.w;
+  let opts = [w, ...distractors(w, "sq", 8).filter(x => x.p && x.p !== w.p)].slice(0, 4);
+  opts = shuffle(opts);
+  ui.body.append($(`<div class="tag">Dinle, resmini bul</div>`));
+  ui.body.append(speakerRow(w));
+  const g = $(`<div class="grid2"></div>`); let sel = null;
+  opts.forEach(o => {
+    const b = $(`<button class="opt pic-only" aria-label="seçenek">${pic(o.p)}</button>`);
+    b.onclick = () => { g.querySelectorAll(".opt").forEach(x => x.classList.remove("sel")); b.classList.add("sel"); sel = o; ui.btn.disabled = false; };
+    g.append(b);
+  });
+  ui.body.append(g);
+  ui.btn.onclick = () => {
+    g.querySelectorAll(".opt").forEach((b, i) => { b.disabled = true; b.insertAdjacentHTML("beforeend", `<span class="lbl">${esc(opts[i].sq)}</span>`); if (opts[i] === w) b.classList.add("ok"); else if (opts[i] === sel) b.classList.add("no"); });
+    resolve(ui, sel === w, w.sq + " = " + w.tr, st);
+  };
+  setTimeout(() => say(w), 250);
+}
+
 /* -- Fill in the blank -- */
 function fillable(w) {
   const toks = w.sq.replace(/[?!.,]/g, "").split(" ");
@@ -1005,27 +1092,6 @@ function fill(st, ui) {
     list.querySelectorAll(".opt").forEach((b, i) => { b.disabled = true; if (opts[i] === gap.t) b.classList.add("ok"); else if (opts[i] === sel) b.classList.add("no"); });
     resolve(ui, sel === gap.t, w.sq, st);
   };
-}
-
-/* ---------- Videos tab: the whole playlist ---------- */
-function videosTab(view) {
-  P.watched = P.watched || {};
-  const seen = VIDEOS.filter(v => P.watched[v.id]).length;
-  view.append($(`<h2 class="section-h">Mimoza Elezi'nin dersleri</h2>`));
-  view.append($(`<p class="lead">Oynatma listesindeki ${VIDEOS.length} videonun hepsi burada. İzlediklerini işaretle; bir videoyu izledikten sonra ilgili ünitede alıştırma yapmak öğrendiğini kalıcı yapar. ${seen} / ${VIDEOS.length} izlendi.</p>`));
-  let g = "";
-  VIDEOS.forEach(v => {
-    if (v.g !== g) { g = v.g; view.append($(`<h3 class="vgroup">${esc(g)}</h3>`)); }
-    const unit = UNITS.find(u => u.video.url.endsWith(v.id)), story = STORIES.find(s => s.video.url.endsWith(v.id));
-    const tags = [unit ? `Ünite: ${esc(unit.t)}` : "", story ? `Hikâye: ${esc(story.t)}` : "", v.notes ? "Notlar çıkarıldı" : ""].filter(Boolean);
-    const row = $(`<div class="vrow ${P.watched[v.id] ? "seen" : ""}">
-      <label class="vchk"><input type="checkbox" id="w-${esc(v.id)}" ${P.watched[v.id] ? "checked" : ""}><span class="sr">İzledim</span></label>
-      <a class="vmain" href="https://www.youtube.com/watch?v=${esc(v.id)}" target="_blank" rel="noopener">
-        <span class="vn">${v.n}</span><span class="vt">${esc(v.t.replace(/[#@]+/g, " ").replace(/\s+/g, " ").trim())}</span>
-        <span class="vmeta">${v.min ? v.min + " dk" : "kısa"}${tags.length ? " · " + tags.join(" · ") : ""}</span></a></div>`);
-    row.querySelector("input").onchange = e => { P.watched[v.id] = e.target.checked ? 1 : 0; save(); row.classList.toggle("seen", e.target.checked); };
-    view.append(row);
-  });
 }
 
 /* ---------- Finish ---------- */
