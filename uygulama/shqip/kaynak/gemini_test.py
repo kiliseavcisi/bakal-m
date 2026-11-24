@@ -9,12 +9,14 @@ TEXTS = [("1-miremengjes", "Mirëmëngjes!"), ("4-gezohem", "Gëzohem që u njoh
 URL = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent"
 for voice in VOICES:
     for name, text in TEXTS:
-        body = {"contents": [{"parts": [{"text": f"Lexoje qartë dhe ngadalë, me shqiptim standard shqip: {text}"}]}],
+        body = {"contents": [{"parts": [{"text": f"Read aloud in standard Albanian, clearly and a little slowly, for a language learner. Say only this: {text}"}]}],
                 "generationConfig": {"responseModalities": ["AUDIO"],
                                      "speechConfig": {"voiceConfig": {"prebuiltVoiceConfig": {"voiceName": voice}}}}}
-        req = urllib.request.Request(URL, data=json.dumps(body).encode(), headers={"Content-Type": "application/json", "x-goog-api-key": "placeholder"})
+        req = urllib.request.Request(URL, data=json.dumps(body).encode(), headers={"Content-Type": "application/json", "x-goog-api-key": os.environ.get("GEMINI_KEY", "placeholder")})
         r = json.load(urllib.request.urlopen(req, timeout=60))
-        pcm = base64.b64decode(r["candidates"][0]["content"]["parts"][0]["inlineData"]["data"])
+        c = r["candidates"][0]
+        if "content" not in c: print("no audio", voice, name, c.get("finishReason")); continue
+        pcm = base64.b64decode(c["content"]["parts"][0]["inlineData"]["data"])
         raw = f"/tmp/gem-{voice}-{name}.pcm"; open(raw, "wb").write(pcm)
         subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-f", "s16le", "-ar", "24000", "-ac", "1", "-i", raw,
                         "-b:a", "64k", os.path.join(OUT, f"gemini-{voice}-{name}.mp3")], check=True)
