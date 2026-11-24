@@ -1,0 +1,6 @@
+{
+  "appId": "com.bakalm.shqiponja",
+  "appName": "Shqiponja",
+  "webDir": "www",
+  "android": { "allowMixedContent": false }
+}
