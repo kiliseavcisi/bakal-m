@@ -71,6 +71,13 @@
       "skillPath": "skills/seo-audit/SKILL.md",
       "computedHash": "537ccf84d4a257cb1b6a9a3643fe56738632989768e1823ffe206ad1c64cd68a"
     },
+    "ui-ux-pro-max": {
+      "source": "nextlevelbuilder/ui-ux-pro-max-skill",
+      "commit": "a4fc248f6136552cb881e298847abc7ddce84e6b",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/ui-ux-pro-max/SKILL.md",
+      "computedHash": "b2defbac0cde30996f120c953d243b5ccd396c55e550a98a08d4206eaadac670"
+    },
     "video-lens": {
       "source": "kar2phi/video-lens",
       "commit": "fa14db0e80b83be1214bfa16e117cac9701785e8",
