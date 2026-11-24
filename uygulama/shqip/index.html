@@ -208,7 +208,7 @@ nav.bottom {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 15; background: var(--bg); border-top: 2px solid var(--line);
   display: flex; justify-content: center; padding: 6px max(16px, env(safe-area-inset-right, 0px)) calc(6px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
 }
-nav.bottom .in { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; width: 100%; max-width: 620px; }
+nav.bottom .in { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; width: 100%; max-width: 620px; }
 nav.bottom button { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 2px; border-radius: 12px; color: var(--muted); font-size: .78rem; font-weight: 600; position: relative; }
 nav.bottom button[aria-current="page"] { color: var(--accent); background: var(--accent-soft); }
 nav.bottom .badge { position: absolute; top: 2px; right: calc(50% - 22px); background: var(--bad); color: #fff; border-radius: 99px; font-size: .68rem; padding: 0 6px; font-variant-numeric: tabular-nums; }
@@ -246,6 +246,27 @@ nav.bottom .badge { position: absolute; top: 2px; right: calc(50% - 22px); backg
 .letter .say { font-weight: 600; }
 .letter .ex { color: var(--muted); font-size: .86rem; overflow-wrap: anywhere; }
 .shadow-steps { display: flex; flex-direction: column; gap: 8px; color: var(--muted); font-size: .95rem; }
+.hw { border-bottom: 2px dashed color-mix(in srgb, var(--muted) 60%, transparent); cursor: pointer; }
+.hw:hover { border-bottom-color: var(--blue); }
+.hint-pop { position: absolute; z-index: 50; background: var(--surface); border: 2px solid var(--line); border-radius: 14px; box-shadow: 0 8px 24px rgba(0,0,0,.15);
+  display: flex; flex-direction: column; min-width: 120px; max-width: 260px; overflow: hidden; font-size: .98rem; }
+.hint-pop b { padding: 8px 14px; background: var(--surface-2); font-family: var(--f-display); }
+.hint-pop span { padding: 8px 14px; border-top: 2px solid var(--line); }
+.gap { display: inline-block; min-width: 4em; border-bottom: 3px solid var(--blue); color: var(--blue); text-align: center; }
+.sub-tr { color: var(--muted); font-size: .9rem; font-weight: 400; margin-top: 6px; }
+.vgroup { font-family: var(--f-display); font-size: 1.1rem; margin: 18px 0 8px; color: var(--accent); }
+.vrow { display: flex; gap: 10px; align-items: stretch; margin-bottom: 8px; }
+.vchk { display: grid; place-items: center; width: 44px; flex: none; border: 2px solid var(--line); border-radius: 12px; background: var(--surface); cursor: pointer; }
+.vchk input { width: 22px; height: 22px; accent-color: var(--good); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.vmain { flex: 1; min-width: 0; display: grid; grid-template-columns: auto 1fr; column-gap: 10px; text-decoration: none; color: var(--fg);
+  border: 2px solid var(--line); border-radius: 12px; padding: 8px 12px; background: var(--surface); }
+.vmain .vn { grid-row: span 2; font-family: var(--f-display); font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; min-width: 1.6em; }
+.vmain .vt { font-weight: 600; overflow-wrap: anywhere; }
+.vmain .vmeta { color: var(--muted); font-size: .82rem; }
+.vrow.seen .vmain { opacity: .6; }
+.season-note { font-size: .8rem; color: var(--muted); margin-top: 6px; }
+nav.bottom button { font-size: .72rem; }
 </style>
 
 <div class="app" id="app"><p class="loading">Yükleniyor…</p></div>
@@ -253,6 +274,7 @@ nav.bottom .badge { position: absolute; top: 2px; right: calc(50% - 22px); backg
 <script>
 /* ---------- Icons ---------- */
 const I = {
+  video: '<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M3 5h13a2 2 0 0 1 2 2v2.5l4-2.5v10l-4-2.5V17a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/></svg>',
   path: '<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M10 3 3 7v2h18V7zM5 10v7h2v-7zm4 0v7h2v-7zm4 0v7h2v-7zm4 0v7h2v-7zM3 18h18v3H3z"/></svg>',
   repeat: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5.3L20 9"/><path d="M20 4v5h-5"/><path d="M20 12a8 8 0 0 1-14 5.3L4 15"/><path d="M4 20v-5h5"/></svg>',
   book: '<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v16H6.5a1.5 1.5 0 0 0 0 3H20v1H6.5A2.5 2.5 0 0 1 4 19.5z"/></svg>',
@@ -327,12 +349,21 @@ const sfx = {
   tap: () => tone([[880, .05, "sine", .06]])
 };
 let curAudio = null;
-function say(w, slow = false) {
-  try {
-    if (curAudio) curAudio.pause();
-    curAudio = new Audio(w.a); curAudio.playbackRate = slow ? .7 : 1; curAudio.play().catch(() => {});
-  } catch {}
+const PACKS = {}, PACK_LOADING = {};
+function loadPack(name) {
+  if (PACKS[name]) return Promise.resolve(PACKS[name]);
+  return PACK_LOADING[name] = PACK_LOADING[name] || fetch("packs/" + name + ".json").then(r => r.json()).then(d => PACKS[name] = d).catch(() => { delete PACK_LOADING[name]; return {}; });
 }
+function preload(items) { new Set(items.filter(Boolean).map(a => a.split("#")[0])).forEach(loadPack); }
+function clipSrc(a) { const [p, k] = a.split("#"); return PACKS[p] && PACKS[p][k] ? "data:audio/mpeg;base64," + PACKS[p][k] : null; }
+function playClip(a, slow = false) {
+  if (curAudio) curAudio.pause();
+  const go = src => { if (!src) return null; try { curAudio = new Audio(src); curAudio.playbackRate = slow ? .7 : 1; curAudio.play().catch(() => {}); return curAudio; } catch { return null; } };
+  const src = clipSrc(a);
+  if (src) return Promise.resolve(go(src));
+  return loadPack(a.split("#")[0]).then(() => go(clipSrc(a)));
+}
+function say(w, slow = false) { if (w && w.a) playClip(w.a, slow); }
 
 /* ---------- Helpers ---------- */
 const $ = h => { const t = document.createElement("template"); t.innerHTML = h.trim(); return t.content.firstElementChild; };
@@ -349,11 +380,11 @@ function pic(p, big = false) {
 }
 
 /* ---------- Course structure ---------- */
-let UNITS = [], LESSONS = [], STORIES = [], ALPHA = [], ALPHA_VIDEO = null;
+let UNITS = [], LESSONS = [], STORIES = [], ALPHA = [], ALPHA_VIDEO = null, VIDEOS = [], GLOSS = {}, REV = {};
 let TAB = "learn";
 const app = document.getElementById("app");
 fetch("data.json").then(r => r.json()).then(d => {
-  UNITS = d.units; STORIES = d.stories; ALPHA = d.alpha; ALPHA_VIDEO = d.alphaVideo;
+  UNITS = d.units; STORIES = d.stories; ALPHA = d.alpha; ALPHA_VIDEO = d.alphaVideo; VIDEOS = d.videos; GLOSS = d.gloss; REV = d.rev;
   UNITS.forEach((u, ui) => {
     u.w.forEach(w => w.u = u.id);
     const n = Math.ceil(u.w.length / 5), size = Math.ceil(u.w.length / n);
@@ -363,7 +394,7 @@ fetch("data.json").then(r => r.json()).then(d => {
       u.lessons.push(L); LESSONS.push(L);
     }
   });
-  try { const h = location.hash.slice(1); if (["learn", "review", "stories", "alpha"].includes(h)) TAB = h; } catch {}
+  try { const h = location.hash.slice(1); if (["learn", "review", "stories", "alpha", "videos"].includes(h)) TAB = h; } catch {}
   home();
 }).catch(() => { app.innerHTML = '<p class="loading">Ders verisi yüklenemedi. Sayfayı yenile.</p>'; });
 
@@ -383,13 +414,14 @@ function home(tab) {
     <div class="stats"><span class="s-fire" title="Günlük seri">${I.fire}${streak}</span><span class="s-xp" title="Toplam XP">${I.xp}${P.xp}</span></div>
   </header>`));
   const view = $(`<div class="view"></div>`); app.append(view);
-  ({ learn: learnTab, review: reviewTab, stories: storiesTab, alpha: alphaTab })[TAB](view);
+  ({ learn: learnTab, review: reviewTab, stories: storiesTab, alpha: alphaTab, videos: videosTab })[TAB](view);
   const due = dueWords().length;
   const nav = $(`<nav class="bottom" aria-label="Bölümler"><div class="in">
     <button data-t="learn">${I.path}Öğren</button>
     <button data-t="review">${I.repeat}Tekrar${due ? `<span class="badge">${due}</span>` : ""}</button>
     <button data-t="stories">${I.book}Hikâyeler</button>
-    <button data-t="alpha">${I.abc}Alfabe</button></div></nav>`);
+    <button data-t="alpha">${I.abc}Alfabe</button>
+    <button data-t="videos">${I.video}Videolar</button></div></nav>`);
   nav.querySelectorAll("button").forEach(b => {
     if (b.dataset.t === TAB) b.setAttribute("aria-current", "page");
     b.onclick = () => { sfx.tap(); home(b.dataset.t); window.scrollTo({ top: 0 }); };
@@ -420,7 +452,7 @@ function learnTab(view) {
       <div><div class="k">Ünite ${ui + 1}</div><h2>${esc(u.t)}</h2></div>
       <div class="peek">${doneCount} / ${u.lessons.length} ders<br>${u.w.length} kelime</div></div>
       <div class="unit-tools"><a class="chip yt" href="${esc(u.video.url)}" target="_blank" rel="noopener">${I.play}Videoyu izle</a>
-      <button class="chip tipbtn" aria-expanded="false">${I.bulb}Mimoza'nın notları</button></div>
+      <button class="chip tipbtn" aria-expanded="false">${I.bulb}Mimoza'nın notları</button></div>${u.season === 2 ? `<div class="season-note">Bu ünite videonun konusuna göre hazırlandı; kelimeler videodan değil, standart Arnavutçadan.</div>` : ""}
       <div class="tipbox" hidden>${u.tips.map(t => `<div>${t}</div>`).join("")}<div style="color:var(--muted);font-size:.85rem">Kaynak: ${esc(u.video.t)}</div></div>
       <div class="path"></div></section>`);
     const tb = sec.querySelector(".tipbtn"), box = sec.querySelector(".tipbox");
@@ -475,6 +507,7 @@ function startReview(words) {
   const ws = shuffle(words).slice(0, 12);
   const steps = ws.map(w => ({ k: pickOne(typesFor(w, true)), w }));
   if (ws.length >= 4) steps.splice(Math.min(4, steps.length), 0, { k: "match", ws: ws.slice(0, 5) });
+  preload(ws.map(w => w.a));
   LS = { L: null, review: true, steps, i: 0, hearts: 5, total: steps.length, right: 0, tries: 0, t0: Date.now(), practice: true, redo: [] };
   renderStep();
 }
@@ -496,6 +529,7 @@ function storiesTab(view) {
 }
 let storyPlay = null;
 function openStory(s) {
+  preload(s.lines.map(l => l.a));
   if (curAudio) curAudio.pause();
   app.replaceChildren();
   const el = $(`<div class="lesson">
@@ -510,9 +544,9 @@ function openStory(s) {
   let showAll = false;
   const rows = s.lines.map(l => {
     const r = $(`<div class="line"><button class="speaker sm" aria-label="Dinle">${I.speaker}</button>
-      <button class="txt">${l.who ? `<div class="who">${esc(l.who)}</div>` : ""}<div class="sq">${esc(l.sq)}</div><div class="tr" hidden>${esc(l.tr)}</div></button></div>`);
+      <div class="txt" role="button" tabindex="0">${l.who ? `<div class="who">${esc(l.who)}</div>` : ""}<div class="sq">${hint(l.sq, "sq")}</div><div class="tr" hidden>${esc(l.tr)}</div></div></div>`);
     r.querySelector(".speaker").onclick = () => say(l);
-    r.querySelector(".txt").onclick = () => { const t = r.querySelector(".tr"); t.hidden = !t.hidden; say(l); };
+    r.querySelector(".txt").onclick = e => { if (e.target.closest(".hw")) return; const t = r.querySelector(".tr"); t.hidden = !t.hidden; say(l); };
     lines.append(r); return r;
   });
   el.querySelector(".x").onclick = () => { stopStory(); home(); };
@@ -523,7 +557,7 @@ function openStory(s) {
       rows.forEach(r => r.classList.remove("playing"));
       if (!storyPlay || i >= s.lines.length) { storyPlay = null; return; }
       const r = rows[i]; r.classList.add("playing"); r.scrollIntoView({ block: "nearest", behavior: "smooth" });
-      try { if (curAudio) curAudio.pause(); curAudio = new Audio(s.lines[i].a); curAudio.onended = () => { i++; setTimeout(next, 450); }; curAudio.onerror = () => { i++; next(); }; curAudio.play().catch(() => { storyPlay = null; }); } catch { storyPlay = null; }
+      playClip(s.lines[i].a).then(au => { if (!au) { i++; return next(); } au.onended = () => { i++; setTimeout(next, 450); }; au.onerror = () => { i++; next(); }; });
     };
     next();
   };
@@ -590,6 +624,7 @@ function typesFor(w, review = false) {
   const unit = UNITS.find(u => u.id === w.u);
   if (w.p && unitHasPics(unit)) t.push("picture", "picture");
   if (w.sq.includes(" ") && w.sq.split(" ").length <= 6) t.push("build", "build");
+  if (fillable(w)) t.push("fill", "fill");
   else t.push("type");
   if (review) t.push("type");
   return t;
@@ -609,6 +644,7 @@ function startLesson(L) {
   if (words.length >= 3) steps.push({ k: "match", ws: words.slice(0, 5) });
   shuffle(words).slice(0, 3).forEach(w => steps.push({ k: pickOne(typesFor(w).filter(t => t !== "toTr")), w }));
   review.forEach(w => steps.push({ k: pickOne(["listen", "toSq", "toTr"]), w }));
+  preload([...words, ...review].map(w => w.a));
   LS = { L, steps, i: 0, hearts: 5, total: steps.length, right: 0, tries: 0, t0: Date.now(), practice, redo: [] };
   renderStep();
 }
@@ -655,7 +691,7 @@ function renderStep() {
   }
   const st = LS.steps[LS.i];
   const ui = lessonShell();
-  ({ intro, picture, listen, toSq, toTr, match, build, type, speak, tip })[st.k](st, ui);
+  ({ intro, picture, listen, toSq, toTr, match, build, type, speak, tip, fill })[st.k](st, ui);
 }
 
 /* Bottom-sheet result + continue */
@@ -746,7 +782,7 @@ function toSq(st, ui) {
   const w = st.w;
   const opts = shuffle([w, ...distractors(w, "sq")]);
   ui.body.append($(`<div class="tag">Arnavutçası hangisi?</div>`));
-  ui.body.append($(`<div class="speak-row">${w.p ? pic(w.p) : eagle(64)}<div class="bubble-say">${esc(w.tr)}</div></div>`));
+  ui.body.append($(`<div class="speak-row">${w.p ? pic(w.p) : eagle(64)}<div class="bubble-say">${hint(w.tr, "tr")}</div></div>`));
   const list = $(`<div class="list"></div>`); let sel = null;
   opts.forEach((o, i) => {
     const b = $(`<button class="opt row"><span class="num-k">${i + 1}</span><span>${esc(o.sq)}</span></button>`);
@@ -765,7 +801,7 @@ function toTr(st, ui) {
   const w = st.w;
   const opts = shuffle([w, ...distractors(w, "tr")]);
   ui.body.append($(`<div class="tag">Türkçesi ne?</div>`));
-  const row = speakerRow(w, `<div class="bubble-say">${esc(w.sq)}</div>`);
+  const row = speakerRow(w, `<div class="bubble-say">${hint(w.sq, "sq")}</div>`);
   row.children[0].classList.add("sm"); row.children[1].remove();
   ui.body.append(row);
   const g = $(`<div class="grid2"></div>`); let sel = null;
@@ -824,7 +860,7 @@ function build(st, ui) {
   const extra = pick(UNITS.flatMap(u => u.w).flatMap(x => x.sq.replace(/[?!.]/g, "").split(" ")).filter(t => !target.includes(t)), Math.min(4, 8 - target.length));
   const tiles = shuffle([...target, ...extra]);
   ui.body.append($(`<div class="tag">Cümleyi kur</div>`));
-  ui.body.append($(`<div class="speak-row">${w.p ? pic(w.p) : eagle(64)}<div class="bubble-say">${esc(w.tr)}</div></div>`));
+  ui.body.append($(`<div class="speak-row">${w.p ? pic(w.p) : eagle(64)}<div class="bubble-say">${hint(w.tr, "tr")}</div></div>`));
   const line = $(`<div class="answer-line" aria-label="Cevabın"></div>`);
   const bank = $(`<div class="bank"></div>`);
   const chosen = [];
@@ -898,6 +934,98 @@ function tip(st, ui) {
 function bumpStreak() {
   const y = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
   if (P.last !== today()) { P.streak = P.last === y ? P.streak + 1 : 1; P.last = today(); }
+}
+
+/* ---------- Tap-to-translate hints ---------- */
+const TOK = /([\p{L}'’]+)/u;
+function lookup(words, i, dict) {
+  // try two-word phrases first ("e madhe", "u ul"), then single words
+  if (i + 1 < words.length) { const two = (words[i] + " " + words[i + 1]).toLowerCase(); if (dict[two]) return [two, 2]; }
+  const one = words[i].toLowerCase().replace(/’/g, "'");
+  if (dict[one]) return [one, 1];
+  if (dict === GLOSS) { // strip common definite endings: libri -> libër is not derivable, but shtëpia -> shtëpi is
+    for (const suf of ["a", "ja", "i", "u", "in", "në", "t", "ve"]) if (one.endsWith(suf) && dict[one.slice(0, -suf.length)]) return [one.slice(0, -suf.length), 1];
+  }
+  return null;
+}
+function hint(text, lang) {
+  const dict = lang === "sq" ? GLOSS : REV;
+  const parts = text.split(TOK);       // odd indexes are words
+  const words = [], idx = [];
+  parts.forEach((p, k) => { if (k % 2) { words.push(p); idx.push(k); } });
+  let out = parts.map(esc);
+  for (let i = 0; i < words.length; i++) {
+    const hit = lookup(words, i, dict);
+    if (!hit) continue;
+    const [key, n] = hit, g = dict[key];
+    if (n === 2) { out[idx[i]] = `<span class="hw" data-g="${esc(g)}">${esc(words[i])}${parts[idx[i] + 1] ? esc(parts[idx[i] + 1]) : " "}${esc(words[i + 1])}</span>`; out[idx[i] + 1] = ""; out[idx[i + 1]] = ""; i++; }
+    else out[idx[i]] = `<span class="hw" data-g="${esc(g)}">${esc(words[i])}</span>`;
+  }
+  return out.join("");
+}
+let hintPop = null;
+function closeHint() { if (hintPop) { hintPop.remove(); hintPop = null; } }
+document.addEventListener("click", e => {
+  const h = e.target.closest(".hw");
+  closeHint();
+  if (!h) return;
+  e.stopPropagation();
+  const r = h.getBoundingClientRect();
+  hintPop = $(`<div class="hint-pop" role="tooltip"><b>${esc(h.textContent)}</b>${h.dataset.g.split(";").map(x => `<span>${esc(x.trim())}</span>`).join("")}</div>`);
+  document.body.append(hintPop);
+  const w = hintPop.offsetWidth, x = Math.max(8, Math.min(window.innerWidth - w - 8, r.left + r.width / 2 - w / 2));
+  hintPop.style.left = x + "px"; hintPop.style.top = (r.bottom + window.scrollY + 8) + "px";
+}, true);
+window.addEventListener("scroll", closeHint, { passive: true });
+
+/* -- Fill in the blank -- */
+function fillable(w) {
+  const toks = w.sq.replace(/[?!.,]/g, "").split(" ");
+  return toks.length >= 3 && toks.some(t => GLOSS[t.toLowerCase()]);
+}
+function fill(st, ui) {
+  const w = st.w;
+  const toks = w.sq.split(" ");
+  const cand = toks.map((t, i) => ({ t: t.replace(/[?!.,]/g, ""), i })).filter(c => GLOSS[c.t.toLowerCase()] && c.t.length > 1);
+  const gap = pickOne(cand.length ? cand : toks.map((t, i) => ({ t: t.replace(/[?!.,]/g, ""), i })));
+  const pool = [...new Set(allWords().flatMap(x => x.sq.replace(/[?!.,]/g, "").split(" ")).filter(t => t.toLowerCase() !== gap.t.toLowerCase() && t.length > 1))];
+  const opts = shuffle([gap.t, ...pick(pool, 2)]);
+  ui.body.append($(`<div class="tag">Boşluğu doldur</div>`));
+  const shown = toks.map((t, i) => i === gap.i ? `<span class="gap" id="gap">${"&nbsp;".repeat(8)}</span>${esc(t.slice(gap.t.length))}` : hint(t, "sq")).join(" ");
+  const row = $(`<div class="speak-row">${w.p ? pic(w.p) : eagle(64)}<div class="bubble-say">${shown}<div class="sub-tr">${esc(w.tr)}</div></div></div>`);
+  ui.body.append(row);
+  const list = $(`<div class="list"></div>`); let sel = null;
+  opts.forEach(o => {
+    const b = $(`<button class="opt">${esc(o)}</button>`);
+    b.onclick = () => { list.querySelectorAll(".opt").forEach(x => x.classList.remove("sel")); b.classList.add("sel"); sel = o; row.querySelector("#gap").textContent = o; ui.btn.disabled = false; };
+    list.append(b);
+  });
+  ui.body.append(list);
+  ui.btn.onclick = () => {
+    list.querySelectorAll(".opt").forEach((b, i) => { b.disabled = true; if (opts[i] === gap.t) b.classList.add("ok"); else if (opts[i] === sel) b.classList.add("no"); });
+    resolve(ui, sel === gap.t, w.sq, st);
+  };
+}
+
+/* ---------- Videos tab: the whole playlist ---------- */
+function videosTab(view) {
+  P.watched = P.watched || {};
+  const seen = VIDEOS.filter(v => P.watched[v.id]).length;
+  view.append($(`<h2 class="section-h">Mimoza Elezi'nin dersleri</h2>`));
+  view.append($(`<p class="lead">Oynatma listesindeki ${VIDEOS.length} videonun hepsi burada. İzlediklerini işaretle; bir videoyu izledikten sonra ilgili ünitede alıştırma yapmak öğrendiğini kalıcı yapar. ${seen} / ${VIDEOS.length} izlendi.</p>`));
+  let g = "";
+  VIDEOS.forEach(v => {
+    if (v.g !== g) { g = v.g; view.append($(`<h3 class="vgroup">${esc(g)}</h3>`)); }
+    const unit = UNITS.find(u => u.video.url.endsWith(v.id)), story = STORIES.find(s => s.video.url.endsWith(v.id));
+    const tags = [unit ? `Ünite: ${esc(unit.t)}` : "", story ? `Hikâye: ${esc(story.t)}` : "", v.notes ? "Notlar çıkarıldı" : ""].filter(Boolean);
+    const row = $(`<div class="vrow ${P.watched[v.id] ? "seen" : ""}">
+      <label class="vchk"><input type="checkbox" id="w-${esc(v.id)}" ${P.watched[v.id] ? "checked" : ""}><span class="sr">İzledim</span></label>
+      <a class="vmain" href="https://www.youtube.com/watch?v=${esc(v.id)}" target="_blank" rel="noopener">
+        <span class="vn">${v.n}</span><span class="vt">${esc(v.t.replace(/[#@]+/g, " ").replace(/\s+/g, " ").trim())}</span>
+        <span class="vmeta">${v.min ? v.min + " dk" : "kısa"}${tags.length ? " · " + tags.join(" · ") : ""}</span></a></div>`);
+    row.querySelector("input").onchange = e => { P.watched[v.id] = e.target.checked ? 1 : 0; save(); row.classList.toggle("seen", e.target.checked); };
+    view.append(row);
+  });
 }
 
 /* ---------- Finish ---------- */
