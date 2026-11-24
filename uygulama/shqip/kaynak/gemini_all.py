@@ -3,8 +3,11 @@
 import base64, hashlib, json, os, subprocess, sys, time, urllib.request, urllib.error
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE)
 OUT = os.path.join(HERE, ".clips-gemini"); os.makedirs(OUT, exist_ok=True)
-MODEL = os.environ.get("GEMINI_TTS_MODEL", "gemini-3.8-flash-tts"); VOICE = os.environ.get("GEMINI_VOICE", "Kore")
-URL = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent"
+# Free tier allows ~10 requests/day per model, so rotate through the TTS models (same voice name).
+MODELS = os.environ.get("GEMINI_TTS_MODELS", "gemini-3.8-flash-tts,gemini-3.1-flash-tts-preview,gemini-2.5-flash-preview-tts,gemini-3.8-flash-lite-tts").split(",")
+VOICE = os.environ.get("GEMINI_VOICE", "Kore")
+mi = 0
+def url(): return f"https://generativelanguage.googleapis.com/v1beta/models/{MODELS[mi]}:generateContent"
 KEY = os.environ.get("GEMINI_KEY", "placeholder")
 d = json.load(open(os.path.join(ROOT, "data.json")))
 texts = [w["sq"] for u in d["units"] for w in u["w"]] + [l["sq"] for s in d["stories"] for l in s["lines"]] + [a["ex"] for a in d["alpha"]]
@@ -21,7 +24,7 @@ for n, (k, t) in enumerate(todo, 1):
             "generationConfig": {"responseModalities": ["AUDIO"], "speechConfig": {"voiceConfig": {"prebuiltVoiceConfig": {"voiceName": VOICE}}}}}
     for attempt in range(6):
         try:
-            req = urllib.request.Request(URL, data=json.dumps(body).encode(), headers={"Content-Type": "application/json", "x-goog-api-key": KEY})
+            req = urllib.request.Request(url(), data=json.dumps(body).encode(), headers={"Content-Type": "application/json", "x-goog-api-key": KEY})
             r = json.load(urllib.request.urlopen(req, timeout=90)); fails429 = 0
             c = r["candidates"][0]
             if "content" not in c: print("no audio", k, t, c.get("finishReason"), flush=True); time.sleep(7); continue
@@ -29,11 +32,16 @@ for n, (k, t) in enumerate(todo, 1):
             raw = f"/tmp/gem-{k}.pcm"; open(raw, "wb").write(pcm)
             subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-f", "s16le", "-ar", "24000", "-ac", "1", "-i", raw, "-af", FILTER,
                             "-ac", "1", "-ar", "22050", "-b:a", "40k", os.path.join(OUT, k + ".mp3")], check=True)
-            os.remove(raw); print(f"{n}/{len(todo)} ok", t, flush=True); break
+            os.remove(raw); print(f"{n}/{len(todo)} ok [{MODELS[mi]}]", t, flush=True); break
         except urllib.error.HTTPError as e:
             if e.code == 429:
+                msg = e.read().decode(errors="ignore")
+                if "PerDay" in msg:                      # this model's daily quota is used up: next model
+                    print("daily quota used:", MODELS[mi], flush=True); mi += 1
+                    if mi >= len(MODELS): print("STOP: all models used for today", flush=True); sys.exit(2)
+                    continue
                 fails429 += 1
-                if fails429 >= 8: print("STOP: rate/daily limit reached", flush=True); sys.exit(2)
+                if fails429 >= 8: print("STOP: rate limit", flush=True); sys.exit(2)
                 time.sleep(60); continue
             print("HTTP", e.code, t, e.read()[:200], flush=True); time.sleep(10)
         except Exception as e:
