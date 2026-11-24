@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Paşa Döner Reels</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+  :root {
+    --orange: #E4572E;
+    --dark: #2B1A12;
+    --cream: #FFF4E6;
+    --gold: #FFB627;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--dark); }
+  #stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: 'Montserrat', sans-serif; }
+  .scene { position: absolute; inset: 0; opacity: 0; }
+  .abs { position: absolute; will-change: transform, opacity; }
+  .anton { font-family: 'Anton', sans-serif; text-transform: none; line-height: .92; }
+  .center-x { left: 0; right: 0; text-align: center; }
+
+  /* S1 */
+  #s1 { background: var(--dark); }
+  #s1 .w { font-size: 270px; color: var(--cream); }
+  #s1 .w.o { color: var(--orange); }
+  #s1-grain { inset: 0; background: radial-gradient(circle at 50% 45%, rgba(228,87,46,.35), transparent 60%); }
+
+  /* S2 */
+  #s2 { background: var(--orange); }
+  #s2-glow { left: 140px; top: 520px; width: 800px; height: 1100px; border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(255,182,39,.55), rgba(255,182,39,0)); }
+  #s2 .tag { font-size: 190px; color: var(--cream); left: 70px; }
+  #s2 .tag span { color: var(--dark); }
+  #s2-cap { font-weight: 800; font-size: 52px; color: var(--dark); background: var(--cream);
+    padding: 22px 38px; border-radius: 999px; left: 50%; top: 1500px; white-space: nowrap; }
+  .shaving { width: 70px; height: 26px; border-radius: 40% 60% 50% 50%; background: #9C4A1E;
+    box-shadow: inset 0 -6px 0 #6E2F10, inset 0 5px 0 #C9733A; }
+
+  /* S3 */
+  #s3 { background: var(--cream); }
+  #s3-title { font-size: 150px; color: var(--dark); top: 230px; }
+  #s3-title span { color: var(--orange); }
+  .card { left: 80px; width: 920px; height: 300px; border-radius: 44px; background: #fff;
+    box-shadow: 0 24px 60px rgba(43,26,18,.16); display: flex; align-items: center; gap: 44px; padding: 0 54px; }
+  .card .num { font-family: 'Anton'; font-size: 120px; color: var(--orange); width: 150px; text-align: center; }
+  .card h3 { font-family: 'Anton'; font-weight: 400; font-size: 104px; color: var(--dark); line-height: 1; }
+  .card p { font-weight: 600; font-size: 38px; color: #7A5A48; margin-top: 10px; }
+  .card.hot { background: var(--orange); }
+  .card.hot .num, .card.hot h3 { color: var(--cream); }
+  .card.hot p { color: #FFE2CF; }
+
+  /* S4 */
+  #s4 { background: var(--dark); }
+  #s4 .l { font-size: 250px; color: var(--cream); }
+  #s4-bar { background: var(--orange); height: 250px; left: 40px; width: 1000px; transform-origin: left center; }
+
+  /* S5 */
+  #s5 { background: var(--orange); }
+  #s5-ring { left: 290px; top: 300px; width: 500px; height: 500px; border-radius: 50%; border: 14px solid rgba(255,244,230,.35); }
+  #s5-word { top: 860px; font-family: 'Montserrat'; font-weight: 800; font-size: 210px; letter-spacing: 16px; color: var(--cream); }
+  #s5-sub { top: 1100px; font-family: 'Montserrat'; font-weight: 600; font-size: 70px; letter-spacing: 52px; color: var(--dark); padding-left: 52px; }
+  #s5-cta { left: 50%; top: 1290px; background: var(--dark); color: var(--cream); font-weight: 800; font-size: 54px;
+    padding: 30px 56px; border-radius: 999px; white-space: nowrap; }
+  #s5-loc { top: 1430px; font-weight: 600; font-size: 42px; color: var(--dark); display: flex; justify-content: center; align-items: center; gap: 14px; }
+
+  #flash { inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- S1: hook -->
+  <section class="scene" id="s1">
+    <div class="abs" id="s1-grain"></div>
+    <div class="abs anton w center-x" id="s1a" style="top:620px">ACIKTIN</div>
+    <div class="abs anton w o center-x" id="s1b" style="top:920px">MI?</div>
+  </section>
+
+  <!-- S2: rotating doner -->
+  <section class="scene" id="s2">
+    <div class="abs" id="s2-glow"></div>
+    <svg class="abs" id="doner" viewBox="0 0 600 1100" width="600" height="1100" style="left:240px; top:470px">
+      <defs>
+        <clipPath id="cone"><path d="M60 140 H540 Q575 140 566 176 L392 960 Q384 990 354 990 H246 Q216 990 208 960 L34 176 Q25 140 60 140 Z"/></clipPath>
+        <linearGradient id="shade" x1="0" x2="1">
+          <stop offset="0" stop-color="#000" stop-opacity=".55"/>
+          <stop offset=".3" stop-color="#000" stop-opacity="0"/>
+          <stop offset=".55" stop-color="#fff" stop-opacity=".18"/>
+          <stop offset="1" stop-color="#000" stop-opacity=".6"/>
+        </linearGradient>
+      </defs>
+      <rect x="290" y="20" width="20" height="1060" rx="10" fill="#3A3A3A"/>
+      <rect x="292" y="20" width="6" height="1060" rx="3" fill="#8A8A8A"/>
+      <g clip-path="url(#cone)">
+        <rect x="0" y="100" width="600" height="920" fill="#A9521F"/>
+        <g id="bands"></g>
+        <g id="layers"></g>
+        <rect x="0" y="100" width="600" height="920" fill="url(#shade)"/>
+      </g>
+      <ellipse cx="300" cy="140" rx="250" ry="26" fill="#C8733A"/>
+      <ellipse cx="300" cy="140" rx="250" ry="26" fill="none" stroke="#6E2F10" stroke-width="6"/>
+    </svg>
+    <div id="shavings"></div>
+    <div class="abs anton tag" id="t1" style="top:190px">TAZE.</div>
+    <div class="abs anton tag" id="t2" style="top:380px; left:auto; right:70px"><span>SICAK.</span></div>
+    <div class="abs anton tag center-x" id="t3" style="top:1290px; left:0">BOL BOL.</div>
+    <div class="abs" id="s2-cap">Şişten taze kesim, tabağa sıcak!</div>
+  </section>
+
+  <!-- S3: menu -->
+  <section class="scene" id="s3">
+    <div class="abs anton center-x" id="s3-title">NE <span>YESEM?</span></div>
+    <div class="abs card" id="c1" style="top:520px"><div class="num">01</div><div><h3>DÜRÜM</h3><p>Lavaşa sarılı, dolu dolu</p></div></div>
+    <div class="abs card hot" id="c2" style="top:860px"><div class="num">02</div><div><h3>EKMEK ARASI</h3><p>Çıtır ekmek, bol döner</p></div></div>
+    <div class="abs card" id="c3" style="top:1200px"><div class="num">03</div><div><h3>PORSİYON</h3><p>Tabakta, garnitürüyle</p></div></div>
+  </section>
+
+  <!-- S4: tagline -->
+  <section class="scene" id="s4">
+    <div class="abs anton l center-x" id="l1" style="top:540px">BUGÜN</div>
+    <div class="abs" id="s4-bar" style="top:830px"></div>
+    <div class="abs anton l center-x" id="l2" style="top:840px">PAŞA GİBİ</div>
+    <div class="abs anton l center-x" id="l3" style="top:1180px; color:var(--orange)">YE.</div>
+  </section>
+
+  <!-- S5: logo + CTA -->
+  <section class="scene" id="s5">
+    <div class="abs" id="s5-ring"></div>
+    <svg class="abs" id="s5-logo" viewBox="0 0 256 256" width="440" height="440" style="left:320px; top:330px">
+      <g fill="#FFF4E6"><rect x="121" y="10" width="14" height="236" rx="7"/><path d="M74 44 H182 Q200 44 196 62 L162 198 Q158 212 144 212 H112 Q98 212 94 198 L60 62 Q56 44 74 44 Z"/></g>
+      <path d="M178 30 Q160 120 150 226" fill="none" stroke="#E4572E" stroke-width="10" stroke-linecap="round"/>
+    </svg>
+    <div class="abs center-x" id="s5-word">PAŞA</div>
+    <div class="abs center-x" id="s5-sub">DÖNER</div>
+    <div class="abs" id="s5-cta">Sipariş için DM'den yaz</div>
+    <div class="abs center-x" id="s5-loc">
+      <svg width="40" height="40" viewBox="0 0 24 24"><path fill="#2B1A12" d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+      <span>Konum ve iletişim profilde</span>
+    </div>
+  </section>
+
+  <div class="abs" id="flash"></div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const easeOut = x => 1 - Math.pow(1 - x, 3);
+const easeIn = x => x * x * x;
+const easeInOut = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const backOut = x => { const c1 = 1.9, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
+const lerp = (a, b, x) => a + (b - a) * x;
+function set(el, { x = 0, y = 0, s = 1, r = 0, o = 1, extra = '' }) {
+  el.style.transform = `${extra} translate(${x}px, ${y}px) scale(${s}) rotate(${r}deg)`;
+  el.style.opacity = o;
+}
+// "slam": big -> normal with overshoot, fading in quickly
+function slam(el, t, t0, extra = '') {
+  const p = prog(t, t0, t0 + .28);
+  set(el, { s: lerp(2.4, 1, backOut(p)), o: clamp(p * 4), extra });
+}
+
+const SCENES = [['s1', 0, 2], ['s2', 2, 6], ['s3', 6, 10], ['s4', 10, 12.5], ['s5', 12.5, 15.01]];
+
+// döner bands (vertical stripes that scroll horizontally -> rotation illusion)
+const bandsG = $('bands');
+const BAND_W = 46;
+for (let i = 0; i < 30; i++) {
+  const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  r.setAttribute('y', 100); r.setAttribute('height', 920); r.setAttribute('width', BAND_W * .55);
+  r.setAttribute('fill', i % 3 === 0 ? '#7A3511' : (i % 3 === 1 ? '#C2692F' : '#8E4317'));
+  r.setAttribute('opacity', .75);
+  bandsG.appendChild(r);
+}
+const layersG = $('layers');
+for (let y = 160; y < 1000; y += 34) {
+  const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  p.setAttribute('d', `M0 ${y} Q300 ${y + 22} 600 ${y}`);
+  p.setAttribute('stroke', '#5E260C'); p.setAttribute('stroke-width', 5); p.setAttribute('fill', 'none'); p.setAttribute('opacity', .55);
+  layersG.appendChild(p);
+}
+
+// falling shavings
+const shavHost = $('shavings');
+const SHAV = [];
+function rnd(seed) { let s = seed; return () => (s = (s * 16807) % 2147483647) / 2147483647; }
+const R = rnd(42);
+for (let i = 0; i < 22; i++) {
+  const d = document.createElement('div');
+  d.className = 'abs shaving';
+  shavHost.appendChild(d);
+  SHAV.push({ el: d, t0: 3.0 + R() * 2.6, x: 330 + R() * 220, vx: (R() - .2) * 260, rot: R() * 360, vr: (R() - .5) * 500, sc: .7 + R() * .7 });
+}
+
+function render(t) {
+  for (const [id, a, b] of SCENES) $(id).style.opacity = (t >= a && t < b) ? 1 : 0;
+
+  // ---------- S1 hook (0-2)
+  if (t < 2) {
+    slam($('s1a'), t, 0.05);
+    slam($('s1b'), t, 0.55);
+    const shake = t > .55 && t < .8 ? Math.sin(t * 120) * 14 * (1 - prog(t, .55, .8)) : 0;
+    $('s1b').style.transform += ` translateX(${shake}px)`;
+    const zoom = lerp(1, 1.12, easeIn(prog(t, 1.2, 2)));
+    $('s1a').style.transform += ` scale(${zoom})`;
+    $('s1b').style.transform += ` scale(${zoom})`;
+    $('s1-grain').style.opacity = .6 + .4 * Math.sin(t * 6);
+  }
+
+  // ---------- S2 doner (2-6)
+  if (t >= 2 && t < 6) {
+    const lt = t - 2;
+    const enter = easeOut(prog(lt, 0, .6));
+    set($('doner'), { y: lerp(700, 0, enter), s: lerp(.8, 1, enter) });
+    // rotation illusion
+    const off = (lt * 150) % (BAND_W * 3);
+    [...bandsG.children].forEach((r, i) => r.setAttribute('x', i * BAND_W - BAND_W * 3 + off));
+    $('s2-glow').style.opacity = .7 + .3 * Math.sin(lt * 9);
+    slam($('t1'), t, 2.5);
+    slam($('t2'), t, 3.0);
+    slam($('t3'), t, 3.5);
+    const cp = easeOut(prog(t, 4.5, 4.9));
+    set($('s2-cap'), { extra: 'translateX(-50%)', y: lerp(80, 0, cp), o: cp });
+    for (const s of SHAV) {
+      const st = t - s.t0;
+      if (st < 0) { s.el.style.opacity = 0; continue; }
+      set(s.el, { extra: `translate(${s.x + s.vx * st}px, ${620 + 260 * st + 900 * st * st}px)`, r: s.rot + s.vr * st, s: s.sc, o: 1 });
+    }
+  }
+
+  // ---------- S3 menu (6-10)
+  if (t >= 6 && t < 10) {
+    const tp = easeOut(prog(t, 6, 6.4));
+    set($('s3-title'), { y: lerp(-120, 0, tp), o: tp });
+    [['c1', 6.5, -1], ['c2', 7.25, 1], ['c3', 8.0, -1]].forEach(([id, t0, dir]) => {
+      const p = backOut(prog(t, t0, t0 + .45));
+      set($(id), { x: lerp(dir * 1150, 0, p), r: lerp(dir * -6, 0, clamp(p)), o: prog(t, t0, t0 + .1) });
+    });
+    // gentle drift / beat bump
+    const bump = 1 + .03 * Math.max(0, Math.cos((t - 6) * Math.PI * 4)) * prog(t, 8.5, 9);
+    ['c1', 'c2', 'c3'].forEach(id => { if (t > 8.5) $(id).style.transform += ` scale(${bump})`; });
+    // exit
+    const ex = easeIn(prog(t, 9.6, 10));
+    if (ex > 0) $('s3').style.transform = `scale(${1 + ex * .15})`, $('s3').style.filter = `blur(${ex * 10}px)`;
+    else $('s3').style.transform = '', $('s3').style.filter = '';
+  }
+
+  // ---------- S4 tagline (10-12.5)
+  if (t >= 10 && t < 12.5) {
+    slam($('l1'), t, 10.05);
+    const bp = easeInOut(prog(t, 10.5, 10.85));
+    $('s4-bar').style.transform = `scaleX(${bp}) rotate(-2deg)`;
+    slam($('l2'), t, 10.55);
+    slam($('l3'), t, 11.05);
+    const pulse = 1 + .05 * Math.max(0, Math.sin((t - 11.05) * Math.PI * 2)) * (t > 11.4 ? 1 : 0);
+    if (t > 11.4) $('l3').style.transform += ` scale(${pulse})`;
+  }
+
+  // ---------- S5 logo + CTA (12.5-15)
+  if (t >= 12.5) {
+    const lp = backOut(prog(t, 12.55, 13.0));
+    set($('s5-logo'), { s: lerp(.2, 1, lp), r: lerp(-25, 0, clamp(lp)), o: prog(t, 12.55, 12.65) });
+    const rp = easeOut(prog(t, 12.6, 13.4));
+    set($('s5-ring'), { s: lerp(.6, 1.25, rp), o: 1 - rp * .6 });
+    const wp = easeOut(prog(t, 12.9, 13.3));
+    set($('s5-word'), { y: lerp(60, 0, wp), o: wp });
+    $('s5-word').style.letterSpacing = lerp(60, 16, wp) + 'px';
+    const sp = easeOut(prog(t, 13.1, 13.5));
+    set($('s5-sub'), { y: lerp(40, 0, sp), o: sp });
+    const cp = backOut(prog(t, 13.5, 13.9));
+    const breath = t > 14 ? 1 + .035 * Math.sin((t - 14) * Math.PI * 4) : 1;
+    set($('s5-cta'), { extra: 'translateX(-50%)', s: lerp(.5, 1, cp) * breath, o: prog(t, 13.5, 13.6) });
+    const op = easeOut(prog(t, 13.8, 14.2));
+    set($('s5-loc'), { y: lerp(30, 0, op), o: op });
+  }
+
+  // white flashes on scene cuts
+  const cuts = [2, 6, 12.5];
+  let f = 0;
+  for (const c of cuts) if (t >= c && t < c + .18) f = Math.max(f, .85 * (1 - (t - c) / .18));
+  $('flash').style.opacity = f;
+}
+
+window.render = render;
+window.ready = document.fonts.ready;
+// preview mode: play in real time when opened directly
+if (!location.hash.includes('capture')) {
+  const start = performance.now();
+  (function loop() { render(((performance.now() - start) / 1000) % 15); requestAnimationFrame(loop); })();
+}
+</script>
+</body>
+</html>
