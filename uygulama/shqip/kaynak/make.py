@@ -9,6 +9,7 @@ from extra import UNIT_INFO, STORIES, ALPHA, YT
 from sezon2 import UNITS2, STORIES2, VIDEO_GROUPS
 from gloss import FUNCTION
 from visual import UNIT_LOOK, EXTRA_PICS, STORY_LOOK, AVATARS
+from pairs import PAIRS
 
 OUT = os.path.dirname(HERE)
 CACHE = os.path.join(HERE, ".clips"); os.makedirs(CACHE, exist_ok=True)
@@ -17,6 +18,7 @@ MODEL = sys.argv[1] if len(sys.argv) > 1 else "facebook/mms-tts-sqi"
 model = VitsModel.from_pretrained(MODEL).eval(); tok = AutoTokenizer.from_pretrained(MODEL)
 model.config.speaking_rate = 0.9; model.config.noise_scale = 0.5
 packs = {}
+packs2 = {}
 
 def clean(t):
     t = t.lower().replace("?", ",").replace("!", ",").replace(".", ",").replace("…", "")
@@ -43,6 +45,8 @@ def audio(pack, text):
     chosen = os.path.join(VOICE_DIR, key + ".mp3")
     src = chosen if os.path.exists(chosen) else os.path.join(CACHE, clip(text) + ".mp3")   # fall back to MMS
     packs.setdefault(pack, {})[key] = base64.b64encode(open(src, "rb").read()).decode()
+    alt = os.path.join(CACHE, clip(text) + ".mp3")                                   # second talker: MMS
+    packs2.setdefault(pack, {})[key] = base64.b64encode(open(alt, "rb").read()).decode()
     return pack + "#" + key
 
 units, used_videos = [], set()
@@ -89,8 +93,13 @@ for u in units:
         t = w["tr"].lower().split(" (")[0].split(",")[0].split(" / ")[0].strip("?!. ")
         if " " not in t and " " not in w["sq"].strip("?!. "): rev.setdefault(t, w["sq"].strip("?!. "))
 
+pairs = [{"id": pid, "t": lbl, "tip": tip, "pairs": [[{"sq": a, "tr": at, "a": audio("ciftler", a)}, {"sq": b, "tr": bt, "a": audio("ciftler", b)}] for (a, at), (b, bt) in prs]}
+         for pid, lbl, tip, prs in PAIRS]
+os.makedirs(os.path.join(OUT, "packs2"), exist_ok=True)
+for name, d in packs2.items():
+    json.dump(d, open(os.path.join(OUT, "packs2", name + ".json"), "w"), separators=(",", ":"))
 for name, d in packs.items():
     json.dump(d, open(os.path.join(OUT, "packs", name + ".json"), "w"), separators=(",", ":"))
-json.dump({"units": units, "stories": stories, "alpha": alpha, "gloss": gloss, "rev": rev}, open(os.path.join(OUT, "data.json"), "w"), ensure_ascii=False, separators=(",", ":"))
+json.dump({"units": units, "stories": stories, "alpha": alpha, "gloss": gloss, "rev": rev, "pairs": pairs}, open(os.path.join(OUT, "data.json"), "w"), ensure_ascii=False, separators=(",", ":"))
 print("voice clips", len(os.listdir(VOICE_DIR)) if os.path.isdir(VOICE_DIR) else 0, "units", len(units), "words", sum(len(u["w"]) for u in units), "stories", len(stories), "packs", len(packs),
       "clips", sum(len(p) for p in packs.values()))

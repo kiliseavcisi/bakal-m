@@ -7,7 +7,7 @@ OUT = os.path.join(HERE, ".clips-piper"); os.makedirs(OUT, exist_ok=True)
 voice = PiperVoice.load(sys.argv[1])
 cfg = SynthesisConfig(length_scale=1.1)          # a little slower for learners
 d = json.load(open(os.path.join(ROOT, "data.json")))
-texts = [w["sq"] for u in d["units"] for w in u["w"]] + [l["sq"] for s in d["stories"] for l in s["lines"]] + [a["ex"] for a in d["alpha"]]
+texts = [w["sq"] for u in d["units"] for w in u["w"]] + [l["sq"] for s in d["stories"] for l in s["lines"]] + [a["ex"] for a in d["alpha"]] + [x["sq"] for p in d.get("pairs", []) for pr in p["pairs"] for x in pr]
 done = 0
 for t in dict.fromkeys(texts):
     k = hashlib.md5(t.encode()).hexdigest()[:10]
