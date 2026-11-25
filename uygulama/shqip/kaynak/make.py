@@ -119,9 +119,6 @@ for u in units:
 
 pairs = [{"id": pid, "t": lbl, "tip": tip, "pairs": [[{"sq": a, "tr": at, "a": audio("ciftler", a)}, {"sq": b, "tr": bt, "a": audio("ciftler", b)}] for (a, at), (b, bt) in prs]}
          for pid, lbl, tip, prs in PAIRS]
-os.makedirs(os.path.join(OUT, "packs2"), exist_ok=True)
-for name, d in packs2.items():
-    json.dump(d, open(os.path.join(OUT, "packs2", name + ".json"), "w"), separators=(",", ":"))
 # Extra phrases spoken in the grammar "mirror" section
 EXTRA = ["Dua të pi ujë", "Jam nga Turqia", "Jam në shkollë", "Do të vij nesër", "Nuk flas shqip", "Unë flas turqisht",
          "shtëpia ime", "vajzë e bukur", "me ty", "A je mirë?"]
@@ -176,6 +173,10 @@ print("icons", len(icons), "missing", missing)
 
 for name, d in packs.items():
     json.dump(d, open(os.path.join(OUT, "packs", name + ".json"), "w"), separators=(",", ":"))
+os.makedirs(os.path.join(OUT, "packs2"), exist_ok=True)
+for name, d in packs2.items():
+    json.dump(d, open(os.path.join(OUT, "packs2", name + ".json"), "w"), separators=(",", ":"))
+
 json.dump({"units": units, "stories": stories, "alpha": alpha, "gloss": gloss, "rev": rev, "pairs": pairs, "extra": extra, "roles": roles, "conj": conj}, open(os.path.join(OUT, "data.json"), "w"), ensure_ascii=False, separators=(",", ":"))
 json.dump(list(dict.fromkeys(SAY)), open(os.path.join(HERE, ".say.json"), "w"), ensure_ascii=False)
 print("voice clips", len(os.listdir(VOICE_DIR)) if os.path.isdir(VOICE_DIR) else 0, "units", len(units), "words", sum(len(u["w"]) for u in units), "stories", len(stories), "packs", len(packs),
