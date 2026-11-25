@@ -607,6 +607,29 @@ a.btn { text-decoration: none; display: flex; align-items: center; justify-conte
 .rl.receipt { font-family: ui-monospace, monospace; max-width: 300px; align-self: center; width: 100%; } .rl.news .nh { font-weight: 700; font-family: var(--f-display); border-left: 4px solid #c8162f; padding-left: 8px; }
 .rl.card { text-align: center; background: linear-gradient(#fff, #fdf2f4); border-color: #e8b4c0; } .rl.card p { margin: 0; }
 .rq { display: flex; flex-direction: column; gap: 10px; } .rqi .row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; } .chip.okc { border-color: var(--good); background: color-mix(in srgb, var(--good) 20%, var(--surface)); } .chip.noc { border-color: var(--accent); background: var(--accent-soft); }
+
+.xw { display: grid; gap: 2px; justify-content: center; margin: 4px auto; }
+.xb { background: transparent; }
+.xc { position: relative; border: 2px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--fg); padding: 0; font-family: var(--f-display); font-weight: 700; text-transform: lowercase; cursor: pointer; display: grid; place-items: center; }
+.xc i { position: absolute; top: 1px; left: 3px; font: 600 9px var(--f-body, sans-serif); color: var(--muted); font-style: normal; }
+.xc.in { background: color-mix(in srgb, var(--blue) 14%, var(--surface)); border-color: color-mix(in srgb, var(--blue) 50%, var(--line)); }
+.xc.at { border-color: var(--blue); box-shadow: 0 0 0 2px var(--blue); } .xc.bad { background: var(--accent-soft); border-color: var(--accent); }
+.xbar { display: flex; gap: 8px; justify-content: center; align-items: center; flex-wrap: wrap; }
+.xkeys { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; max-width: 480px; margin: 0 auto; width: 100%; }
+.xkeys button { height: 40px; border-radius: 8px; border: 2px solid var(--line); border-bottom-width: 3px; background: var(--surface); color: var(--fg); font: 700 1rem var(--f-display); cursor: pointer; padding: 0; } .xkeys .wide { grid-column: span 2; }
+.xclues { display: flex; flex-direction: column; gap: 6px; }
+.xcl { display: grid; grid-template-columns: 44px 44px 1fr auto; gap: 8px; align-items: center; padding: 6px 10px; border-radius: 12px; border: 2px solid var(--line); background: var(--surface); color: var(--fg); font: inherit; text-align: left; cursor: pointer; }
+.xcl .xn { font-weight: 700; color: var(--blue); } .xcl .xp { width: 40px; height: 40px; display: grid; place-items: center; } .xcl .xp .tw, .xcl .xp img { width: 34px; height: 34px; } .xcl .xp .tt { font: 700 .8rem var(--f-display); }
+.xcl .xl { font-size: .75rem; color: var(--muted); } .xcl.on { border-color: var(--blue); } .xcl.done { border-color: var(--good); background: color-mix(in srgb, var(--good) 12%, var(--surface)); }
+.xcl:not(:has(.xp)) { grid-template-columns: 44px 1fr auto; }
+.mem { display: grid; gap: 8px; }
+.mc2 { position: relative; aspect-ratio: 3/4; border: 0; padding: 0; background: none; cursor: pointer; perspective: 600px; }
+.mc2 .back, .mc2 .front { position: absolute; inset: 0; border-radius: 14px; display: grid; place-items: center; backface-visibility: hidden; transition: transform .35s; border: 2px solid var(--line); }
+.mc2 .back { background: linear-gradient(135deg, var(--accent), #8f0f22); } .mc2 .back .tw { width: 40%; height: 40%; filter: brightness(0) invert(1); opacity: .9; }
+.mc2 .front { background: var(--surface); transform: rotateY(180deg); padding: 6px; text-align: center; }
+.mc2.up .back { transform: rotateY(180deg); } .mc2.up .front { transform: rotateY(360deg); }
+.mc2.got .front { border-color: var(--good); background: color-mix(in srgb, var(--good) 14%, var(--surface)); }
+.mc2 .mp .tw, .mc2 .mp img { width: 56px; height: 56px; } .mc2 .ms { font: 700 1.05rem var(--f-display); } .mc2 .mt { font-size: .85rem; color: var(--muted); } .mc2 .mp .tt { font: 700 1rem var(--f-display); }
 </style>
 
 <div class="app" id="app"><p class="loading">Yükleniyor…</p></div>
@@ -887,13 +910,14 @@ function learnTab(view) {
       <div style="flex:1;min-width:0"><div class="k">Ünite ${ui + 1} <span class="lvl ${u.lv === "A2" ? "a2" : ""}">${u.lv || "A1"}</span>${u.kos ? ` <span class="lvl kos">her zaman açık</span>` : ""}</div><h2>${esc(u.t)}</h2></div>
       <div class="peek">${doneCount} / ${u.lessons.length} ders<br>${u.w.length} kelime</div></div>
       <div class="unit-tools"><button class="chip tipbtn" aria-expanded="false">${I.bulb}Dil notları</button>
-      <span class="chip words">${u.w.slice(0, 6).map(w => picMini(w.p)).join("")}</span>${!unitLocked ? `<button class="chip scenebtn" type="button">${icon(SCENEMAP[u.id] ? "🗺️" : "🏛️")}${SCENEMAP[u.id] ? "Sahne" : "Hafıza sarayı"}</button>` : ""}${unitLocked && ui > 0 ? `<button class="chip jumpbtn" type="button">${I.lock}Teste gir, atla</button>` : ""}</div>
+      <span class="chip words">${u.w.slice(0, 6).map(w => picMini(w.p)).join("")}</span>${!unitLocked && SCENEMAP[u.id] ? `<button class="chip scenebtn" type="button">${icon("🗺️")}Sahne</button>` : ""}${!unitLocked ? `<button class="chip puzbtn" type="button">${icon("🧩")}Bulmaca</button>` : ""}${unitLocked && ui > 0 ? `<button class="chip jumpbtn" type="button">${I.lock}Teste gir, atla</button>` : ""}</div>
       <div class="tipbox" hidden>${u.tips.map(t => `<div>${t}</div>`).join("")}</div>
       <div class="path"></div></section>`);
     const tb = sec.querySelector(".tipbtn"), box = sec.querySelector(".tipbox");
     tb.onclick = () => { box.hidden = !box.hidden; tb.setAttribute("aria-expanded", String(!box.hidden)); };
     const jbt = sec.querySelector(".jumpbtn"); if (jbt) jbt.onclick = () => jumpTest(ui);
     const scb = sec.querySelector(".scenebtn"); if (scb) scb.onclick = () => openScene(u);
+    const pzb = sec.querySelector(".puzbtn"); if (pzb) pzb.onclick = () => openPuzzles(u);
     const path = sec.querySelector(".path");
     u.lessons.forEach((L, li) => {
       const idx = LESSONS.indexOf(L), done = isDone(L), locked = idx > cur && !u.kos && !done, current = idx === cur;
@@ -1106,8 +1130,9 @@ function startLesson(L) {
   if (held) steps.push(held);
   // 2. consolidate the set; where the unit has a picture scene, find the new words in it (place + picture + sound)
   if (words.length >= 3) steps.push({ k: "match", ws: words.slice(0, 5) });
-  const sw = words.filter(w => sceneFor(L.unit).items.some(it => it[0] === w.sq));
+  const sw = SCENEMAP[L.unit.id] ? words.filter(w => SCENEMAP[L.unit.id].items.some(it => it[0] === w.sq)) : [];
   if (sw.length >= 2) steps.push({ k: "sceneFind", ws: sw.slice(0, 4), u: L.unit });
+  else if (words.length >= 3) steps.push({ k: "pairs", ws: words.slice(0, 4) });
   // 3. recall: Turkish → Albanian (build the sentence or choose the word), fill the gap where possible
   shuffle(words).forEach(w => steps.push({ k: recallKind(w), w }));
   const gap = words.filter(fillable);
@@ -1166,7 +1191,7 @@ function renderStep() {
   }
   const st = LS.steps[LS.i];
   const ui = lessonShell();
-  ({ intro, listen, toSq, toTr, match, build, type, speak, tip, fill, dictate, spell, sceneFind })[st.k](st, ui);
+  ({ intro, listen, toSq, toTr, match, build, type, speak, tip, fill, dictate, spell, sceneFind, pairs })[st.k](st, ui);
 }
 
 /* Bottom-sheet result + continue */
@@ -2321,7 +2346,7 @@ function openScene(u, mode = "explore") {
   preload(u.w.map(w => w.a));
   app.replaceChildren();
   const el = $(`<div class="lesson"><div class="l-top"><button class="x" aria-label="Kapat">${I.x}</button><div style="flex:1;font-family:var(--f-display);font-weight:700;font-size:1.15rem">${icons(u.ic)} ${esc(u.t)}</div></div>
-    <div class="l-body"><div class="seg modes" role="group"><button data-m="explore">Keşfet</button><button data-m="find">Bul</button><button data-m="walk">Hafıza sarayı</button></div><div class="sbody"></div></div>
+    <div class="l-body"><div class="seg modes" role="group"><button data-m="explore">Keşfet</button><button data-m="find">Bul</button></div><div class="sbody"></div></div>
     <div class="sheet"></div></div>`);
   el.querySelector(".x").onclick = () => { if (curAudio) curAudio.pause(); home("learn"); };
   el.querySelectorAll(".modes button").forEach(b => { b.setAttribute("aria-pressed", String(b.dataset.m === mode)); b.onclick = () => openScene(u, b.dataset.m); });
@@ -2339,7 +2364,7 @@ function openScene(u, mode = "explore") {
     const pr = $(`<div class="scene-q"><button class="speaker sm" aria-label="Dinle">${I.speaker}</button><b></b><span class="sub"></span></div>`);
     body.append(pr, sc.el);
     const ask = () => { if (k >= queue.length) return done(); const w = queue[k]; miss = false; pr.querySelector("b").textContent = w.sq; pr.querySelector(".sub").textContent = `${k + 1} / ${queue.length}`; pr.querySelector(".speaker").onclick = () => say(w); say(w); };
-    const done = () => { sheet.className = "sheet ok"; sheet.innerHTML = `<div class="fb pop"><div class="ic">${icon("🗺️")}</div><div><b>${right} / ${queue.length} ilk denemede</b><span>Şimdi hafıza sarayında kelimeleri kendin söyle.</span></div></div>`; const nb = $(`<button class="btn good">Hafıza sarayına geç</button>`); nb.onclick = () => openScene(u, "walk"); sheet.append(nb); };
+    const done = () => { sheet.className = "sheet ok"; sheet.innerHTML = `<div class="fb pop"><div class="ic">${icon("🗺️")}</div><div><b>${right} / ${queue.length} ilk denemede</b><span>Şimdi bulmacada kelimeleri kendin yaz.</span></div></div>`; const nb = $(`<button class="btn good">Bulmacaya geç</button>`); nb.onclick = () => openPuzzles(u); sheet.append(nb); };
     sc.btns.forEach(b => b.onclick = () => {
       const w = queue[k]; if (!w) return;
       if (b.w === w) { sfx.tap(); if (!miss) right++; b.classList.add("found"); b.querySelector(".lb").hidden = false; k++; setTimeout(ask, 450); }
@@ -3056,6 +3081,144 @@ function realiaSection() {
     list.append(b);
   });
   return box;
+}
+
+
+/* ---------- Puzzles: picture crossword (production) and memory cards (picture ↔ word + sound) ---------- */
+const XW_OK = w => { const a = w.sq.toLowerCase().replace(/[?!.,…]/g, "").trim(); return /^[a-zëç]{3,10}$/.test(a) ? a : null; };
+function makeCross(words) {
+  const ws = words.map(w => ({ w, a: XW_OK(w) })).filter(x => x.a).sort((x, y) => y.a.length - x.a.length);
+  const cells = new Map(), K = (r, c) => r + "," + c, placed = [];
+  const fits = (a, r, c, d) => {
+    let cross = 0;
+    if (cells.has(d ? K(r - 1, c) : K(r, c - 1)) || cells.has(d ? K(r + a.length, c) : K(r, c + a.length))) return -1;
+    for (let i = 0; i < a.length; i++) {
+      const rr = r + (d ? i : 0), cc = c + (d ? 0 : i), ex = cells.get(K(rr, cc));
+      if (ex) { if (ex.ch !== a[i] || ex.dirs.has(d)) return -1; cross++; }
+      else if (cells.has(d ? K(rr, cc - 1) : K(rr - 1, cc)) || cells.has(d ? K(rr, cc + 1) : K(rr + 1, cc))) return -1;
+    }
+    return cross;
+  };
+  const put = (x, r, c, d) => { for (let i = 0; i < x.a.length; i++) { const k = d ? K(r + i, c) : K(r, c + i); const e = cells.get(k) || { ch: x.a[i], dirs: new Set() }; e.dirs.add(d); cells.set(k, e); } placed.push({ ...x, r, c, d }); };
+  ws.forEach((x, n) => {
+    if (!placed.length) return put(x, 0, 0, 0);
+    let best = null;
+    cells.forEach((e, k) => { const [r, c] = k.split(",").map(Number); for (let i = 0; i < x.a.length; i++) if (x.a[i] === e.ch) for (const d of [0, 1]) {
+      const r0 = d ? r - i : r, c0 = d ? c : c - i, f = fits(x.a, r0, c0, d);
+      if (f > 0) { const all = [...cells.keys()].map(q => q.split(",").map(Number)).concat([[r0, c0], [d ? r0 + x.a.length : r0, d ? c0 : c0 + x.a.length]]);
+        const area = (Math.max(...all.map(a => a[0])) - Math.min(...all.map(a => a[0]))) * (Math.max(...all.map(a => a[1])) - Math.min(...all.map(a => a[1])));
+        const sc = f * 100 - area; if (!best || sc > best.sc) best = { r: r0, c: c0, d, sc }; } } });
+    if (best && placed.length < 8) put(x, best.r, best.c, best.d);
+  });
+  const rs = [...cells.keys()].map(k => +k.split(",")[0]), cs = [...cells.keys()].map(k => +k.split(",")[1]);
+  const r0 = Math.min(...rs), c0 = Math.min(...cs);
+  placed.forEach(p => { p.r -= r0; p.c -= c0; });
+  placed.sort((a, b) => a.r - b.r || a.c - b.c);
+  let n = 0; const num = {};
+  placed.forEach(p => { const k = K(p.r, p.c); if (!num[k]) num[k] = ++n; p.n = num[k]; });
+  return { placed, rows: Math.max(...rs) - r0 + 1, cols: Math.max(...cs) - c0 + 1, num };
+}
+function crossword(host, u, onDone) {
+  const X = makeCross(shuffle(u.w).filter(XW_OK).slice(0, 12));
+  if (X.placed.length < 3) { host.append($(`<p class="sub">Bu ünitede çengel bulmacaya uygun yeterli tek kelime yok; hafıza kartlarını dene.</p>`)); return; }
+  preload(X.placed.map(p => p.w.a));
+  const K = (r, c) => r + "," + c, val = {}, sol = {};
+  X.placed.forEach(p => { for (let i = 0; i < p.a.length; i++) sol[p.d ? K(p.r + i, p.c) : K(p.r, p.c + i)] = p.a[i]; });
+  let cur = X.placed[0], pos = 0, hints = 0;
+  const cell = Math.max(24, Math.min(38, Math.floor((Math.min(window.innerWidth, 560) - 40) / X.cols)));
+  const grid = $(`<div class="xw" style="grid-template-columns:repeat(${X.cols},${cell}px);grid-auto-rows:${cell}px"></div>`);
+  for (let r = 0; r < X.rows; r++) for (let c = 0; c < X.cols; c++) {
+    const k = K(r, c);
+    grid.append(sol[k] ? $(`<button class="xc" data-k="${k}" type="button" style="font-size:${Math.round(cell * .5)}px">${X.num[k] ? `<i>${X.num[k]}</i>` : ""}<b></b></button>`) : $(`<span class="xb"></span>`));
+  }
+  const clues = $(`<div class="xclues"></div>`);
+  X.placed.forEach(p => {
+    const cl = $(`<button class="xcl" type="button"><span class="xn">${p.n} ${p.d ? "↓" : "→"}</span>${p.w.p || P.img[p.w.sq] ? `<span class="xp">${hsPic(p.w)}</span>` : ""}<span class="xt">${esc(p.w.tr)}</span><span class="xl">${p.a.length} harf</span></button>`);
+    cl.onclick = () => { cur = p; pos = 0; draw(); };
+    p.el = cl; clues.append(cl);
+  });
+  const keys = $(`<div class="xkeys">${[..."qwertyuiopasdfghjklëçzxcvbnm"].map(ch => `<button type="button" data-ch="${ch}">${ch}</button>`).join("")}<button type="button" data-ch="⌫" class="wide">⌫</button></div>`);
+  const bar = $(`<div class="row xbar"><button class="chip xh" type="button">${I.bulb} Harf ver</button><button class="chip xs" type="button">${I.speaker} Dinle</button><button class="btn sm xk" type="button">Kontrol et</button></div>`);
+  host.append($(`<p class="sub" style="margin:0">Bir ipucuna ya da kareye dokun, harfleri yaz. İpucu = resim + Türkçesi. Kelimeyi hatırlayarak yazmak, onu en kalıcı öğrenme yoludur.</p>`), grid, bar, keys, clues);
+  const cellsOf = p => Array.from({ length: p.a.length }, (_, i) => p.d ? K(p.r + i, p.c) : K(p.r, p.c + i));
+  const draw = () => {
+    const mine = new Set(cellsOf(cur)), at = cellsOf(cur)[pos];
+    grid.querySelectorAll(".xc").forEach(b => { const k = b.dataset.k; b.querySelector("b").textContent = val[k] || ""; b.classList.toggle("in", mine.has(k)); b.classList.toggle("at", k === at); });
+    X.placed.forEach(p => p.el.classList.toggle("on", p === cur));
+  };
+  grid.querySelectorAll(".xc").forEach(b => b.onclick = () => {
+    const k = b.dataset.k, ps = X.placed.filter(p => cellsOf(p).includes(k));
+    if (ps.includes(cur) && cellsOf(cur)[pos] === k && ps.length > 1) cur = ps.find(p => p !== cur);
+    else if (!ps.includes(cur)) cur = ps[0];
+    pos = cellsOf(cur).indexOf(k); draw();
+  });
+  const type = ch => {
+    const ks = cellsOf(cur);
+    if (ch === "⌫") { if (!val[ks[pos]] && pos > 0) pos--; delete val[ks[pos]]; }
+    else { val[ks[pos]] = ch; sfx.tap(); if (pos < ks.length - 1) pos++; if (cellsOf(cur).every(k => val[k])) { const okw = cellsOf(cur).every(k => val[k] === sol[k]); if (okw) { say(cur.w); cur.el.classList.add("done"); } } }
+    grid.querySelectorAll(".xc").forEach(b => b.classList.remove("bad"));
+    draw();
+  };
+  keys.querySelectorAll("button").forEach(b => b.onclick = () => type(b.dataset.ch));
+  const onKey = e => { if (!document.body.contains(grid)) return document.removeEventListener("keydown", onKey); if (e.key === "Backspace") { e.preventDefault(); type("⌫"); } else if (/^[a-zëç]$/i.test(e.key)) type(e.key.toLowerCase()); };
+  document.addEventListener("keydown", onKey);
+  bar.querySelector(".xh").onclick = () => { const k = cellsOf(cur)[pos]; val[k] = sol[k]; hints++; if (pos < cur.a.length - 1) pos++; draw(); };
+  bar.querySelector(".xs").onclick = () => { hints++; say(cur.w); };
+  bar.querySelector(".xk").onclick = () => {
+    let wrong = 0, empty = 0;
+    grid.querySelectorAll(".xc").forEach(b => { const k = b.dataset.k; if (!val[k]) empty++; else if (val[k] !== sol[k]) { wrong++; b.classList.add("bad"); } });
+    if (wrong || empty) { sfx.no(); bar.querySelector(".xk").textContent = wrong ? `${wrong} harf yanlış` : `${empty} boş kare`; setTimeout(() => bar.querySelector(".xk").textContent = "Kontrol et", 1500); return; }
+    X.placed.forEach(p => { srsUpdate(p.w, true, hints ? 2 : 3); skill("y", true); });
+    onDone(X.placed.length, hints);
+  };
+  draw();
+}
+function memoryCards(host, ws, onDone) {
+  ws = ws.filter(Boolean).slice(0, 6); preload(ws.map(w => w.a));
+  const face = w => w.p && !/^(n:|cal:|sym:|#)/.test(w.p) || P.img[w.sq] ? `<span class="mp">${hsPic(w)}</span>` : `<span class="mt">${esc(w.tr)}</span>`;
+  const cards = shuffle(ws.flatMap((w, i) => [{ i, w, html: face(w) }, { i, w, html: `<span class="ms">${esc(w.sq)}</span>` }]));
+  const g = $(`<div class="mem" style="grid-template-columns:repeat(${cards.length > 8 ? 4 : cards.length > 6 ? 4 : 3},1fr)"></div>`);
+  let open = [], moves = 0, found = 0, busy = false;
+  cards.forEach(c => {
+    const b = $(`<button class="mc2" type="button" aria-label="Kart"><span class="back">${icon("🦅")}</span><span class="front">${c.html}</span></button>`);
+    b.onclick = () => {
+      if (busy || b.classList.contains("up")) return;
+      b.classList.add("up"); open.push([b, c]); if (c.html.includes("ms")) say(c.w);
+      if (open.length === 2) {
+        moves++; const [[b1, c1], [b2, c2]] = open; open = [];
+        if (c1.i === c2.i) { sfx.ok(); [b1, b2].forEach(x => x.classList.add("got")); say(c1.w); if (++found === ws.length) setTimeout(() => onDone(moves, ws.length), 600); }
+        else { busy = true; sfx.no(); setTimeout(() => { b1.classList.remove("up"); b2.classList.remove("up"); busy = false; }, 900); }
+      }
+    };
+    g.append(b);
+  });
+  host.append($(`<p class="sub" style="margin:0">Kartları çevir: resmi (ya da Türkçesini) Arnavutça kelimesiyle eşleştir. Kelime kartı açılınca sesli okunur.</p>`), g);
+}
+function pairs(st, ui) {
+  ui.body.append($(`<div class="tag">${icon("🃏")} Hafıza kartları</div>`));
+  memoryCards(ui.body, st.ws, (moves, n) => {
+    const ok = moves <= n + 2; LS.tries++; if (ok) LS.right++;
+    st.ws.forEach(w => srsUpdate(w, true, 2)); skill("o", ok);
+    ui.btn.disabled = false; ui.btn.textContent = `Devam · ${moves} hamle`; ui.btn.className = "btn good"; ui.btn.onclick = () => { LS.i++; renderStep(); };
+  });
+}
+function openPuzzles(u, mode) {
+  if (curAudio) curAudio.pause();
+  const canX = u.w.filter(XW_OK).length >= 3;
+  mode = mode || (canX ? "cross" : "mem");
+  app.replaceChildren();
+  const el = $(`<div class="lesson"><div class="l-top"><button class="x" aria-label="Kapat">${I.x}</button><div style="flex:1;font-family:var(--f-display);font-weight:700;font-size:1.1rem">${icons(u.ic)} ${esc(u.t)}</div></div>
+    <div class="l-body"><div class="seg modes" role="group">${canX ? `<button data-m="cross">Çengel bulmaca</button>` : ""}<button data-m="mem">Hafıza kartları</button></div><div class="pbody"></div></div><div class="sheet"></div></div>`);
+  el.querySelector(".x").onclick = () => { if (curAudio) curAudio.pause(); home("learn"); };
+  el.querySelectorAll(".modes button").forEach(b => { b.setAttribute("aria-pressed", String(b.dataset.m === mode)); b.onclick = () => openPuzzles(u, b.dataset.m); });
+  app.append(el);
+  const body = el.querySelector(".pbody"), sheet = el.querySelector(".sheet");
+  const win = (t, sub) => { const xp = 5; P.xp += xp; P.dayXp += xp; logDay(xp); bumpStreak(); save(); sfx.win();
+    sheet.className = "sheet ok"; sheet.innerHTML = `<div class="fb pop"><div class="ic">${icon("🧩")}</div><div><b>${t} · +${xp} XP</b><span>${sub}</span></div></div>`;
+    const row = $(`<div class="grid2"><button class="btn ghost">Yeni bulmaca</button><button class="btn good">Bitti</button></div>`);
+    row.children[0].onclick = () => openPuzzles(u, mode); row.children[1].onclick = () => home("learn"); sheet.append(row); celebrate(el.querySelector(".l-body"), xp, false); };
+  if (mode === "cross") crossword(body, u, (n, hints) => win(`Bulmaca çözüldü: ${n} kelime`, hints ? `${hints} ipucu kullandın. Bir dahaki sefere ipucusuz dene!` : "İpucusuz! Bu kelimeler artık uzun süre aklında."));
+  else memoryCards(body, pick(u.w.filter(w => w.a), 6), (moves, n) => win(`${n} çift, ${moves} hamle`, moves <= n + 3 ? "Harika hafıza!" : "Tekrar oyna: hamle sayını düşür."));
 }
 
 /* ---------- Finish ---------- */
