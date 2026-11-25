@@ -1,0 +1,256 @@
+<title>Kose Tasarım Yönü</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@400;600;700&family=Onest:wght@400;500;600&family=Manrope:wght@400;600;800&display=swap&subset=latin-ext,cyrillic">
+<style>
+/* Layout: tek sütun pano. Başlık → 3 renk yönü (her biri canlı mini vitrin) → yazı tipleri (4 dil örneği) → geçici logo → karar özeti. */
+:root{
+  --bg:#f6f8fc; --surface:#ffffff; --fg:#0e1a33; --muted:#5a6680; --line:#dde3ef;
+  --brand:#244aa5;      /* Kosova bayrağı mavisi */
+  --gold:#c9a24a;       /* bayraktaki harita sarısı, sadece küçük vurgu */
+  --f-display:"Geologica","Onest",system-ui,sans-serif;
+  --f-body:"Onest",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:16px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0b1222; --surface:#121b30; --fg:#eaf0fb; --muted:#9aa8c3; --line:#25314b; --brand:#7fa2ff; --gold:#e0bd6a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0b1222; --surface:#121b30; --fg:#eaf0fb; --muted:#9aa8c3; --line:#25314b; --brand:#7fa2ff; --gold:#e0bd6a; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:16px/1.6 var(--f-body);-webkit-font-smoothing:antialiased;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:40px 72px}
+.wrap{max-width:1080px;margin:0 auto;display:grid;gap:56px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(2rem,4.5vw,3rem);font-weight:700;line-height:1.1}
+h2{font-size:1.5rem;font-weight:700}
+h3{font-size:1.1rem;font-weight:600}
+p{margin:0;max-width:65ch}
+.lead{color:var(--muted);font-size:1.08rem}
+.eyebrow{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+section{display:grid;gap:20px}
+.sechead{display:grid;gap:6px}
+
+/* Renk yönleri */
+.dirs{display:grid;gap:24px}
+.dir{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr)}
+.dir.rec{border-color:var(--brand);box-shadow:0 0 0 2px var(--brand)}
+.dinfo{padding:24px;display:grid;gap:14px;align-content:start}
+.tagrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.tag{font-size:.75rem;font-weight:600;padding:3px 10px;border-radius:99px;border:1px solid var(--line);color:var(--muted)}
+.tag.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+:root[data-theme="dark"] .tag.on{color:#0b1222}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tag.on{color:#0b1222}}
+.sw{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.sw div{aspect-ratio:1/1;max-width:100%;border-radius:10px;border:1px solid rgba(0,0,0,.08)}
+.swl{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;font-size:.68rem;color:var(--muted);font-variant-numeric:tabular-nums;margin-top:-8px}
+.swl span{overflow-wrap:anywhere}
+.dinfo ul{margin:0;padding-left:18px;color:var(--muted);font-size:.94rem;display:grid;gap:4px}
+
+/* Mini vitrin (örnek; renkler bilerek sabit) */
+.shop{--p:#244aa5;--ink:#0e1a33;--soft:#f3f6fc;--pg:#fff;--hero:var(--soft);--btn:var(--p);--acc:#c9a24a;
+  background:var(--pg);color:var(--ink);font-family:var(--f-body);display:grid;align-content:start;border-left:1px solid var(--line);min-width:0}
+.s-top{display:flex;align-items:center;gap:14px;padding:12px 16px;border-bottom:1px solid rgba(14,26,51,.08);font-size:.82rem}
+.s-top nav{display:flex;gap:14px;flex:1;min-width:0;overflow:hidden;white-space:nowrap}
+.s-top nav a{color:inherit;text-decoration:none;opacity:.75}
+.s-search{flex:0 1 150px;min-width:0;border-radius:99px;background:var(--soft);padding:6px 12px;opacity:.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.s-strip{background:var(--ink);color:#fff;font-size:.74rem;text-align:center;padding:6px 10px}
+.s-hero{background:var(--hero);padding:26px 20px;display:grid;gap:10px}
+.s-hero b{font-family:var(--f-display);font-size:1.55rem;line-height:1.15;font-weight:700;letter-spacing:-.01em}
+.s-hero span{font-size:.88rem;opacity:.8}
+.s-btn{justify-self:start;background:var(--btn);color:#fff;border-radius:99px;padding:9px 18px;font-size:.85rem;font-weight:600}
+.s-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:16px}
+.s-card{display:grid;gap:6px;font-size:.8rem;min-width:0}
+.s-img{aspect-ratio:4/5;max-width:100%;border-radius:12px;background:var(--soft);position:relative}
+.s-img i{position:absolute;left:8px;top:8px;font-style:normal;font-size:.66rem;font-weight:600;background:var(--acc);color:var(--ink);padding:2px 7px;border-radius:99px}
+.s-card b{font-weight:600;font-variant-numeric:tabular-nums}
+.s-cod{margin:0 16px 16px;border:1px dashed rgba(14,26,51,.2);border-radius:12px;padding:10px 12px;font-size:.78rem;display:flex;gap:8px;align-items:center}
+.s-cod::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--p);flex:none}
+
+.shop.a{--p:#244aa5;--soft:#f2f5fb;--hero:#f2f5fb;--btn:#244aa5}
+.shop.b{--p:#2a5bd7;--soft:#eef4fd;--hero:linear-gradient(135deg,#1d3f9e 0%,#3a7be0 55%,#8cc8f2 100%);--btn:linear-gradient(135deg,#1d3f9e,#3a7be0)}
+.shop.b .s-hero{color:#fff}
+.shop.c{--p:#244aa5;--soft:#f3f6fb;--hero:linear-gradient(160deg,#eaf1fd 0%,#ffffff 70%);--btn:#244aa5}
+.shop.c .s-hero{position:relative;overflow:hidden}
+.shop.c .s-hero::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle at 30% 30%,#5aa0ea 0%,#244aa5 55%,transparent 72%);opacity:.9}
+.shop.c .s-hero > *{position:relative;z-index:1}
+
+/* Yazı tipleri */
+.fonts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.fcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:24px;display:grid;gap:14px;align-content:start;min-width:0}
+.fcard.rec{border-color:var(--brand);box-shadow:0 0 0 2px var(--brand)}
+.big{font-size:2.2rem;line-height:1.1;font-weight:700;letter-spacing:-.01em}
+.langs{display:grid;gap:8px;font-size:.95rem}
+.langs div{display:grid;grid-template-columns:3.2rem minmax(0,1fr);gap:10px}
+.langs small{color:var(--muted);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;padding-top:3px}
+
+/* Logo */
+.logos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.lbox{border-radius:var(--r);border:1px solid var(--line);padding:28px 20px;display:grid;place-items:center;gap:10px;min-height:150px}
+.lbox.l1{background:#ffffff;color:#0e1a33}
+.lbox.l2{background:#244aa5;color:#ffffff}
+.lbox.l3{background:#0e1a33;color:#ffffff}
+.lbox small{font-size:.72rem;opacity:.7}
+.mark{display:flex;align-items:center;gap:10px}
+.mark span{font-family:var(--f-display);font-weight:700;font-size:2rem;letter-spacing:-.03em;line-height:1}
+.fav{display:flex;gap:14px;align-items:end}
+
+/* Karar */
+.decide{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:24px;display:grid;gap:12px}
+.decide ol{margin:0;padding-left:20px;display:grid;gap:6px}
+.decide b{color:var(--brand)}
+
+@media (max-width:820px){
+  .dir{grid-template-columns:minmax(0,1fr)}
+  .shop{border-left:0;border-top:1px solid var(--line)}
+  .fonts{grid-template-columns:minmax(0,1fr)}
+  .logos{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:460px){
+  .s-top nav{display:none}
+  .s-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .s-grid .s-card:nth-child(3){display:none}
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- Geçici işaret: çanta gövdesi + bayraktaki altı yıldıza gönderme olan altı noktalı sap -->
+    <symbol id="kmark" viewBox="0 0 48 48">
+      <rect x="6" y="17" width="36" height="27" rx="9" fill="currentColor"/>
+      <g fill="currentColor">
+        <circle cx="13" cy="15" r="2.2"/><circle cx="16.2" cy="9.6" r="2.2"/><circle cx="21.2" cy="6.4" r="2.2"/>
+        <circle cx="26.8" cy="6.4" r="2.2"/><circle cx="31.8" cy="9.6" r="2.2"/><circle cx="35" cy="15" r="2.2"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+  <header class="sechead" style="gap:12px">
+    <span class="eyebrow">Kose · Adım 2 · Tasarım yönü</span>
+    <h1>Mavi-beyaz mı, gradyan mı? İkisinin dengeli bir karışımını öneriyorum.</h1>
+    <p class="lead">Aşağıda üç renk yönü, iki yazı tipi seçeneği ve geçici logo var. Önizlemelerdeki metinler sitenin ana dili olan Arnavutçada. Birini seçmen yeterli, gerisini panelden her zaman değiştirebileceğiz.</p>
+  </header>
+
+  <section>
+    <div class="sechead"><span class="eyebrow">Renk</span><h2>Üç yön</h2></div>
+    <div class="dirs">
+
+      <article class="dir">
+        <div class="dinfo">
+          <div class="tagrow"><span class="tag">A</span><h3>Flamuri · Düz mavi-beyaz</h3></div>
+          <div class="sw"><div style="background:#244aa5"></div><div style="background:#0e1a33"></div><div style="background:#f2f5fb"></div><div style="background:#ffffff"></div><div style="background:#c9a24a"></div></div>
+          <div class="swl"><span>Mavi</span><span>Mürekkep</span><span>Zemin</span><span>Beyaz</span><span>Altın</span></div>
+          <ul><li>Doğrudan Kosova bayrağının renkleri.</li><li>En sade ve en güvenilir görünen seçenek.</li><li>Riski: biraz kurumsal ve soğuk kalabilir.</li></ul>
+        </div>
+        <div class="shop a" aria-label="A yönü örnek vitrin">
+          <div class="s-strip">Pagesa në dorëzim · Dërgesa falas mbi 30 €</div>
+          <div class="s-top"><svg width="22" height="22" style="color:#244aa5"><use href="#kmark"/></svg><nav><a>Të rejat</a><a>Kategoritë</a><a>Oferta</a></nav><span class="s-search">Kërko produkte…</span></div>
+          <div class="s-hero"><b>Koleksioni i ri i dimrit</b><span>Porosit sot, paguaj kur të vjen.</span><span class="s-btn">Bli tani</span></div>
+          <div class="s-grid">
+            <div class="s-card"><div class="s-img"><i>E re</i></div>Xhaketë leshi<b>49,90 €</b></div>
+            <div class="s-card"><div class="s-img"></div>Shall pambuku<b>14,50 €</b></div>
+            <div class="s-card"><div class="s-img"></div>Çantë lëkure<b>39,00 €</b></div>
+          </div>
+          <div class="s-cod">Paguaj me para në dorë kur të vjen porosia</div>
+        </div>
+      </article>
+
+      <article class="dir">
+        <div class="dinfo">
+          <div class="tagrow"><span class="tag">B</span><h3>Agim · Tam gradyan</h3></div>
+          <div class="sw"><div style="background:#1d3f9e"></div><div style="background:#3a7be0"></div><div style="background:#8cc8f2"></div><div style="background:#eef4fd"></div><div style="background:#0e1a33"></div></div>
+          <div class="swl"><span>Gece</span><span>Gök</span><span>Şafak</span><span>Zemin</span><span>Mürekkep</span></div>
+          <ul><li>Koyu maviden açık göğe geçen bir gradyan. Ana bant ve butonlarda kullanılır.</li><li>Enerjik ve genç bir his verir.</li><li>Riski: her yerde kullanılırsa sadelik kaybolur ve ürün fotoğraflarıyla yarışır.</li></ul>
+        </div>
+        <div class="shop b" aria-label="B yönü örnek vitrin">
+          <div class="s-strip">Pagesa në dorëzim · Dërgesa falas mbi 30 €</div>
+          <div class="s-top"><svg width="22" height="22" style="color:#2a5bd7"><use href="#kmark"/></svg><nav><a>Të rejat</a><a>Kategoritë</a><a>Oferta</a></nav><span class="s-search">Kërko produkte…</span></div>
+          <div class="s-hero"><b>Koleksioni i ri i dimrit</b><span>Porosit sot, paguaj kur të vjen.</span><span class="s-btn" style="background:#fff;color:#1d3f9e">Bli tani</span></div>
+          <div class="s-grid">
+            <div class="s-card"><div class="s-img"><i>E re</i></div>Xhaketë leshi<b>49,90 €</b></div>
+            <div class="s-card"><div class="s-img"></div>Shall pambuku<b>14,50 €</b></div>
+            <div class="s-card"><div class="s-img"></div>Çantë lëkure<b>39,00 €</b></div>
+          </div>
+          <div class="s-cod">Paguaj me para në dorë kur të vjen porosia</div>
+        </div>
+      </article>
+
+      <article class="dir rec">
+        <div class="dinfo">
+          <div class="tagrow"><span class="tag on">Önerim</span><span class="tag">C</span><h3>Qiell · Beyaz zemin, ölçülü gradyan</h3></div>
+          <div class="sw"><div style="background:#244aa5"></div><div style="background:linear-gradient(135deg,#244aa5,#5aa0ea)"></div><div style="background:#eaf1fd"></div><div style="background:#ffffff"></div><div style="background:#0e1a33"></div></div>
+          <div class="swl"><span>Mavi</span><span>Gradyan</span><span>Buz</span><span>Beyaz</span><span>Mürekkep</span></div>
+          <ul><li>Site beyaz ve sade, butonlar düz bayrak mavisi.</li><li>Gradyan sadece ana bantta yumuşak bir ışık olarak, bir de kampanya alanlarında kullanılır.</li><li>Ürün fotoğrafları öne çıkar ama site kimliksiz de görünmez.</li></ul>
+        </div>
+        <div class="shop c" aria-label="C yönü örnek vitrin">
+          <div class="s-strip">Pagesa në dorëzim · Dërgesa falas mbi 30 €</div>
+          <div class="s-top"><svg width="22" height="22" style="color:#244aa5"><use href="#kmark"/></svg><nav><a>Të rejat</a><a>Kategoritë</a><a>Oferta</a></nav><span class="s-search">Kërko produkte…</span></div>
+          <div class="s-hero"><b>Koleksioni i ri i dimrit</b><span>Porosit sot, paguaj kur të vjen.</span><span class="s-btn">Bli tani</span></div>
+          <div class="s-grid">
+            <div class="s-card"><div class="s-img"><i>E re</i></div>Xhaketë leshi<b>49,90 €</b></div>
+            <div class="s-card"><div class="s-img"></div>Shall pambuku<b>14,50 €</b></div>
+            <div class="s-card"><div class="s-img"></div>Çantë lëkure<b>39,00 €</b></div>
+          </div>
+          <div class="s-cod">Paguaj me para në dorë kur të vjen porosia</div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <div class="sechead"><span class="eyebrow">Yazı tipi</span><h2>Dört dili de eksiksiz yazan iki seçenek</h2>
+      <p class="lead">Arnavutça (ë, ç), Türkçe (ğ, ş, ı, İ) ve Sırpçanın hem Latin (č, ć, đ, ž) hem Kiril alfabesi için tam destek şarttı. İki seçenek de ücretsiz ve Google Fonts'ta.</p></div>
+    <div class="fonts">
+      <div class="fcard rec">
+        <div class="tagrow"><span class="tag on">Önerim</span><h3>Geologica + Onest</h3></div>
+        <div class="big" style="font-family:'Geologica',sans-serif">Blej thjesht.</div>
+        <div class="langs" style="font-family:'Onest',sans-serif">
+          <div><small>SQ</small><span>Porosit sot, paguaj në dorëzim. Çmimet përfshijnë TVSH-në.</span></div>
+          <div><small>EN</small><span>Order today, pay on delivery.</span></div>
+          <div><small>TR</small><span>Bugün sipariş ver, kapıda öde. Ğüzel, şık, ılık, İpek.</span></div>
+          <div><small>SR</small><span>Poruči danas, plati pouzećem. Ћирилица: Поручи данас.</span></div>
+        </div>
+        <p style="color:var(--muted);font-size:.9rem">Başlıklar karakterli ve geometrik, metin yazı tipi sıcak ve çok okunaklı.</p>
+      </div>
+      <div class="fcard">
+        <div class="tagrow"><h3>Manrope (tek aile)</h3></div>
+        <div class="big" style="font-family:'Manrope',sans-serif;font-weight:800">Blej thjesht.</div>
+        <div class="langs" style="font-family:'Manrope',sans-serif">
+          <div><small>SQ</small><span>Porosit sot, paguaj në dorëzim. Çmimet përfshijnë TVSH-në.</span></div>
+          <div><small>EN</small><span>Order today, pay on delivery.</span></div>
+          <div><small>TR</small><span>Bugün sipariş ver, kapıda öde. Ğüzel, şık, ılık, İpek.</span></div>
+          <div><small>SR</small><span>Poruči danas, plati pouzećem. Ћирилица: Поручи данас.</span></div>
+        </div>
+        <p style="color:var(--muted);font-size:.9rem">Daha nötr ve teknoloji sitesi havasında. Güvenli seçim ama daha az ayırt edici.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sechead"><span class="eyebrow">Logo</span><h2>Geçici logo</h2>
+      <p class="lead">Ortalama ve sade bir işaret: bir alışveriş çantası, sapı Kosova bayrağındaki altı yıldıza gönderme olarak altı noktadan oluşuyor. Admin panelinden logo yüklenince bunun yerine o görünecek.</p></div>
+    <div class="logos">
+      <div class="lbox l1"><div class="mark"><svg width="40" height="40" style="color:#244aa5"><use href="#kmark"/></svg><span>kose</span></div><small>Açık zemin</small></div>
+      <div class="lbox l2"><div class="mark"><svg width="40" height="40" style="color:#ffffff"><use href="#kmark"/></svg><span>kose</span></div><small>Mavi zemin</small></div>
+      <div class="lbox l3"><div class="fav">
+        <svg width="48" height="48" style="color:#ffffff"><use href="#kmark"/></svg>
+        <svg width="32" height="32" style="color:#ffffff"><use href="#kmark"/></svg>
+        <svg width="16" height="16" style="color:#ffffff"><use href="#kmark"/></svg></div><small>Uygulama ikonu ve favicon boyutları</small></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="decide">
+      <span class="eyebrow">Senden istediğim</span>
+      <ol>
+        <li>Renk yönü: <b>A</b>, <b>B</b> veya <b>C</b> (benim önerim C)</li>
+        <li>Yazı tipi: <b>Geologica + Onest</b> veya <b>Manrope</b></li>
+        <li>Geçici logo bu hâliyle yeterli mi?</li>
+      </ol>
+    </div>
+  </section>
+</div>
