@@ -13,6 +13,10 @@ from pairs import PAIRS
 from memo import MEMO
 from a2 import UNITS3
 from a2_stories import STORIES3, ROLES
+from freq import UNITS_F
+from stories4 import STORIES4
+from gram import GRAM
+import csv, re
 from verbs import VERBS, TENSES, PRON, rows as verb_rows
 
 OUT = os.path.dirname(HERE)
@@ -80,14 +84,18 @@ for uid, title, vid, vtitle, words, tips in UNITS2:
     units.append({"id": uid, "t": title, "season": 2, "tips": tips,
                   "ic": UNIT_LOOK[uid][0], "hue": UNIT_LOOK[uid][1],
                   "w": [{"sq": sq, "tr": tr, "p": p or EXTRA_PICS.get(sq, ""), "a": audio(uid, sq), "k": tm(sq), "m": MEMO.get(sq)} for sq, tr, p in words]})
+for uid, title, vid, vtitle, words, tips in UNITS_F:
+    units.append({"id": uid, "t": title, "season": 2, "lv": "A1", "freq": True, "tips": tips,
+                  "ic": UNIT_LOOK[uid][0], "hue": UNIT_LOOK[uid][1],
+                  "w": [{"sq": sq, "tr": tr, "p": p or EXTRA_PICS.get(sq, ""), "a": audio(uid, sq), "k": tm(sq), "m": MEMO.get(sq)} for sq, tr, p in words]})
 for uid, title, vid, vtitle, words, tips in UNITS3:
     units.append({"id": uid, "t": title, "season": 3, "lv": "A2", "tips": tips, "kos": uid == "kosova",
                   "ic": UNIT_LOOK[uid][0], "hue": UNIT_LOOK[uid][1],
                   "w": [{"sq": sq, "tr": tr, "p": p or EXTRA_PICS.get(sq, ""), "a": audio(uid, sq), "k": tm(sq), "m": MEMO.get(sq)} for sq, tr, p in words]})
 stories = []
-for s in STORIES + STORIES2 + STORIES3:
+for s in STORIES + STORIES2 + STORIES3 + STORIES4:
     if "src" in s: used_videos.add(s["src"][0])
-    stories.append({"id": s["id"], "t": s["t"], "after": s["after"], "lv": "A2" if s in STORIES3 else "A1",
+    stories.append({"id": s["id"], "t": s["t"], "after": s["after"], "lv": s.get("lv") or ("A2" if s in STORIES3 else "A1"),
                     "cover": s.get("cover") or STORY_LOOK.get(s["id"], "📖"),
                     "lines": [{"who": who, "av": AVATARS.get(who, ""), "f": who in FEMALE, "sq": sq, "tr": tr, "a": audio("s-" + s["id"], sq), "k": tm(sq)} for who, sq, tr in s["lines"]],
                     "q": [{"q": q, "o": o, "c": c} for q, o, c in s["q"]]})
@@ -129,6 +137,10 @@ roles = [{"id": r["id"], "t": r["t"], "cover": r["cover"], "npc": r["npc"], "av"
           "turns": [{"sq": sq, "tr": tr, "a": audio("roller", sq), "k": tm(sq),
                      "o": [{"sq": osq, "tr": otr, "ok": bool(ok), "fb": fb, "a": audio("roller", osq), "k": tm(osq)} for osq, otr, ok, fb in opts]}
                     for sq, tr, opts in r["turns"]]} for r in ROLES]
+# Grammar practice: the full correct sentence gets audio
+def filled(x, o): return re.sub(r"\s*\([^)]*\)", "", x.replace("___", o)).replace(" .", ".").strip()
+gram = [{"id": gid, "t": gt, "items": [dict(s=x, o=o, c=c, tr=tr, why=why, **{"full": filled(x, o[c])}, a=audio("gramer", filled(x, o[c])), k=tm(filled(x, o[c])))
+         for x, o, c, tr, why in items]} for gid, gt, items in GRAM]
 # Verb conjugator: one clip per tense row (all six persons), word timings let each form light up
 conj = {"pron": PRON, "tenses": TENSES, "verbs": []}
 by = {}
@@ -136,6 +148,38 @@ for v, t, text, full in verb_rows():
     by.setdefault(v, {})[t] = {"f": full, "a": audio("fiiller", text), "k": tm(text)}
 for v, tr, _ in VERBS:
     conj["verbs"].append({"v": v, "tr": tr, "t": by[v]})
+
+# Frequency list (OpenSubtitles Albanian, hermitdave/FrequencyWords, CC BY-SA 4.0): top 2000 forms, for the coverage meter
+FREQF = os.path.join(HERE, "freq_sq_2000.txt")
+FREQ = [l.split()[0] for l in open(FREQF)] if os.path.exists(FREQF) else []
+
+# Minimal pairs in two more voices (Dardan, Sara) so ear training hears four talkers
+pair_texts = [x["sq"] for p in pairs for pr in p["pairs"] for x in pr]
+json.dump(pair_texts, open(os.path.join(HERE, ".pairs.json"), "w"), ensure_ascii=False)
+for v in ("dardan", "if_sara"):
+    d_ = os.path.join(HERE, ".clips-kokoro-" + v); out = {}
+    for t in pair_texts:
+        k = hashlib.md5(t.encode()).hexdigest()[:10]; f = os.path.join(d_, k + ".mp3")
+        if os.path.exists(f): out[k] = base64.b64encode(open(f, "rb").read()).decode()
+    if out:
+        os.makedirs(os.path.join(OUT, "packsv", v), exist_ok=True)
+        json.dump(out, open(os.path.join(OUT, "packsv", v, "ciftler.json"), "w"), separators=(",", ":"))
+
+# Sheet for a native speaker to check every sentence in the course
+with open(os.path.join(OUT, "..", "..", "notlar", "icerik-kontrol.csv"), "w", newline="") as f:
+    wr = csv.writer(f); wr.writerow(["Bölüm", "Arnavutça", "Türkçe", "Doğru mu? (E/H)", "Düzeltme / not"])
+    for u in units:
+        for w in u["w"]: wr.writerow(["Ünite: " + u["t"], w["sq"], w["tr"], "", ""])
+    for s_ in stories:
+        for l in s_["lines"]: wr.writerow(["Hikâye: " + s_["t"], l["sq"], l["tr"], "", ""])
+    for r in roles:
+        for t in r["turns"]:
+            wr.writerow(["Konuşma: " + r["t"], t["sq"], t["tr"], "", ""])
+            for o in t["o"]: wr.writerow(["Konuşma: " + r["t"] + (" (doğru cevap)" if o["ok"] else " (yanlış seçenek)"), o["sq"], o["tr"], "", ""])
+    for g in gram:
+        for it in g["items"]: wr.writerow(["Gramer: " + g["t"], it["full"], it["tr"], "", ""])
+    for v in conj["verbs"]:
+        for t, row in v["t"].items(): wr.writerow(["Fiil: " + v["v"] + " (" + t + ")", ", ".join(row["f"]), v["tr"], "", ""])
 
 # Illustrations: Twemoji SVGs (graphics CC BY 4.0, Twitter, Inc. and contributors) for every emoji the course uses
 TWEMOJI = os.environ.get("TWEMOJI_DIR", "/tmp/claude-0/twemoji/package")
@@ -163,7 +207,8 @@ for u in units:
         if w["p"] and not w["p"].startswith(("#", "n:", "cal:", "sym:")): wanted.update(emoji_list(w["p"]))
 for s_ in stories: wanted.update(emoji_list(s_["cover"]))
 for r in roles: wanted.update(emoji_list(r["cover"] + r["av"]))
-wanted.update(emoji_list("🪞🤝📜💡⚠️🏰🏛️🏟️🧱🪟📚🇦🇱🪨🏖️🔥"))
+wanted.update(emoji_list("🚶🫴🍽️🥤😴🗣️👀👂✍️📖🏃🏊🎤😂😢🚪🔒🤲🛍️🏷️💼🧠⏳❓💡🤔🤝🏁✅💭⏰🚿👕💇⚽🏆😞✋🪑"))
+wanted.update(emoji_list("🗺️✏️🧠📈🎧🤸🎯🏛️✍️🔁🕌🌉⛰️⛏️🇽🇰🎙️📒🪞🤝📜💡⚠️🏰🏛️🏟️🧱🪟📚🇦🇱🪨🏖️🔥"))
 for e in sorted(wanted):
     svg = twemoji(e)
     if svg: icons[e] = svg
@@ -177,7 +222,7 @@ os.makedirs(os.path.join(OUT, "packs2"), exist_ok=True)
 for name, d in packs2.items():
     json.dump(d, open(os.path.join(OUT, "packs2", name + ".json"), "w"), separators=(",", ":"))
 
-json.dump({"units": units, "stories": stories, "alpha": alpha, "gloss": gloss, "rev": rev, "pairs": pairs, "extra": extra, "roles": roles, "conj": conj}, open(os.path.join(OUT, "data.json"), "w"), ensure_ascii=False, separators=(",", ":"))
+json.dump({"units": units, "stories": stories, "alpha": alpha, "gloss": gloss, "rev": rev, "pairs": pairs, "extra": extra, "roles": roles, "conj": conj, "gram": gram, "freq": FREQ}, open(os.path.join(OUT, "data.json"), "w"), ensure_ascii=False, separators=(",", ":"))
 json.dump(list(dict.fromkeys(SAY)), open(os.path.join(HERE, ".say.json"), "w"), ensure_ascii=False)
 print("voice clips", len(os.listdir(VOICE_DIR)) if os.path.isdir(VOICE_DIR) else 0, "units", len(units), "words", sum(len(u["w"]) for u in units), "stories", len(stories), "packs", len(packs),
       "clips", sum(len(p) for p in packs.values()))

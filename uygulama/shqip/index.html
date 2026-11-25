@@ -495,6 +495,55 @@ nav.bottom button { font-size: .68rem; }
 .ropt { flex-direction: column; align-items: flex-start; text-align: left; gap: 2px; } .ropt .rsq { font-weight: 600; }
 .rfb { display: flex; gap: 10px; align-items: center; padding: 8px 12px; border-radius: 12px; background: var(--accent-soft); font-size: .92rem; }
 .trbtn[aria-pressed="true"] { border-color: var(--blue); color: var(--blue); }
+
+.why { font-size: .92rem; line-height: 1.5; padding: 8px 12px; border-radius: 12px; background: var(--surface); border: 1px dashed var(--line); color: var(--fg); }
+.why .gl { display: inline-flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; } .why .gl span { display: inline-flex; flex-direction: column; align-items: center; padding: 2px 6px; border-radius: 8px; background: var(--bg); }
+.why .gl small { color: var(--muted); font-size: .72rem; }
+.gesture { display: flex; gap: 12px; align-items: center; padding: 10px 14px; border-radius: 16px; background: color-mix(in srgb, var(--good) 10%, var(--surface)); border: 2px solid color-mix(in srgb, var(--good) 35%, var(--line)); }
+.gesture .gi .tw { width: 40px; height: 40px; animation: act 1.2s ease-in-out infinite; } .gesture div { display: flex; flex-direction: column; gap: 2px; } .gesture b { display: flex; gap: 6px; align-items: center; }
+@keyframes act { 0%, 100% { transform: translateY(0) rotate(0); } 30% { transform: translateY(-6px) rotate(-8deg); } 60% { transform: translateY(0) rotate(8deg); } }
+.own { display: flex; flex-wrap: wrap; gap: 8px; } .own .memo { flex-basis: 100%; }
+.hookbox { display: flex; gap: 8px; align-items: flex-end; flex-basis: 100%; } .hookbox textarea { flex: 1; min-width: 0; border-radius: 12px; border: 2px solid var(--line); padding: 8px 10px; font: inherit; background: var(--bg); color: var(--fg); }
+.pic.own img { width: 100%; height: 100%; object-fit: contain; border-radius: 12px; background: #fff; }
+.draw canvas { width: 100%; max-width: 360px; aspect-ratio: 1; align-self: center; border-radius: 16px; border: 2px solid var(--line); touch-action: none; background: #fff; }
+.draw .row { display: flex; gap: 8px; align-items: center; justify-content: center; }
+.pen { width: 30px; height: 30px; border-radius: 50%; border: 3px solid transparent; cursor: pointer; } .pen.on { border-color: var(--fg); }
+.scene2 { position: relative; width: 100%; border-radius: 18px; overflow: hidden; border: 2px solid var(--line); background: var(--surface); }
+.scene2 svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hs { position: absolute; transform: translate(-50%, -50%); border: 0; background: none; padding: 0; cursor: pointer; display: flex; flex-direction: column; align-items: center; z-index: 1; }
+.hs .hi { width: clamp(26px, 9vw, 40px); height: clamp(26px, 9vw, 40px); display: grid; place-items: center; border-radius: 12px; transition: transform .15s; }
+.hs .hi .tw, .hs .hi img { width: 100%; height: 100%; object-fit: contain; } .hs:hover .hi { transform: scale(1.12); }
+.hs .lb { position: absolute; top: 100%; white-space: nowrap; font-size: .74rem; font-weight: 700; padding: 1px 6px; border-radius: 99px; background: var(--fg); color: var(--bg); margin-top: 2px; z-index: 2; }
+.hs.found .hi { background: color-mix(in srgb, var(--good) 30%, transparent); } .hs.nope .hi, .hs.nope .dot { animation: shake .4s; background: color-mix(in srgb, var(--accent) 35%, transparent); }
+.hs.now .hi, .hs.now .dot { outline: 3px solid var(--gold); outline-offset: 2px; animation: jpulse 1.4s infinite; }
+.dots .hs .dot { width: 16px; height: 16px; border-radius: 50%; background: var(--blue); border: 3px solid #fff; box-shadow: 0 0 0 2px var(--blue); display: block; }
+.dots .hs.found .dot { background: var(--good); box-shadow: 0 0 0 2px var(--good); }
+.scene-q { display: flex; gap: 10px; align-items: center; justify-content: center; } .scene-q b { font-family: var(--f-display); font-size: 1.4rem; }
+.modes { align-self: center; } .walk { display: flex; flex-direction: column; gap: 8px; }
+.lbank { display: flex; flex-direction: column; gap: 12px; }
+.lline { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; }
+.slot { width: 30px; height: 40px; border-bottom: 3px solid var(--line); display: grid; place-items: center; font-family: var(--f-display); font-weight: 700; font-size: 1.35rem; }
+.slot.on { border-color: var(--blue); } .slot.good { color: var(--good); border-color: var(--good); } .slot.bad { color: var(--accent); border-color: var(--accent); }
+.ltiles { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.ltile { min-width: 42px; height: 46px; border-radius: 12px; border: 2px solid var(--line); border-bottom-width: 4px; background: var(--surface); color: var(--fg); font: 700 1.2rem var(--f-display); cursor: pointer; }
+.ltile:disabled { opacity: .25; cursor: default; }
+.lbank .row { display: flex; gap: 8px; justify-content: center; align-items: center; flex-wrap: wrap; }
+.gchips { display: flex; flex-wrap: wrap; gap: 6px; }
+.gq { text-align: center; font-family: var(--f-display); font-size: 1.4rem; font-weight: 700; line-height: 1.5; padding: 14px; border-radius: 18px; border: 2px solid var(--line); background: var(--surface); }
+.tline svg { width: 100%; height: auto; display: block; }
+.cov { display: flex; flex-direction: column; gap: 10px; } .cov .gbar { position: relative; }
+.checks { display: flex; gap: 8px; } .checks div { display: flex; flex-direction: column; align-items: center; padding: 6px 10px; border-radius: 12px; background: var(--bg); } .checks small { color: var(--muted); }
+.cando { display: flex; flex-direction: column; gap: 6px; }
+.cd { display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: center; text-align: left; padding: 8px 10px; border-radius: 12px; border: 2px solid var(--line); background: var(--bg); color: var(--fg); cursor: pointer; font: inherit; }
+.cd .cv { font-size: .78rem; font-weight: 700; color: var(--muted); } .cd.v1 { border-color: var(--gold); } .cd.v1 .cv { color: #a86f00; } .cd.v2 { border-color: var(--good); background: color-mix(in srgb, var(--good) 10%, var(--bg)); } .cd.v2 .cv { color: var(--good); }
+.radio-card { width: 100%; margin-bottom: 12px; }
+.rcap { min-height: 220px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 8px; padding: 20px; border-radius: 22px; background: var(--surface); border: 2px solid var(--line); }
+.rcap .rst { font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 700; } .rcap .rwho { font-weight: 700; color: var(--blue); }
+.rcap .rsq { font-family: var(--f-display); font-size: 1.6rem; font-weight: 700; line-height: 1.4; } .rcap .rtr { color: var(--muted); font-size: 1.05rem; }
+.rctl { display: flex; gap: 14px; justify-content: center; align-items: center; }
+.free { align-self: flex-start; margin-top: 4px; }
+.rfb.ok { background: color-mix(in srgb, var(--good) 15%, var(--surface)); }
+.g-m::before { content: "■"; font-size: .6em; vertical-align: .25em; margin-right: 2px; } .g-f::before { content: "●"; font-size: .6em; vertical-align: .25em; margin-right: 2px; }
 </style>
 
 <div class="app" id="app"><p class="loading">Yükleniyor…</p></div>
@@ -544,7 +593,7 @@ const S = {
 };
 const today = () => new Date().toISOString().slice(0, 10);
 let P = S.get("shq-progress", { done: {}, xp: 0, streak: 0, last: "", day: "", dayXp: 0, seen: {} });
-P.srs = P.srs || {}; P.stories = P.stories || {}; P.tipsSeen = P.tipsSeen || {}; P.nb = P.nb || {}; P.roles = P.roles || {}; P.cap = P.cap || "after";
+P.srs = P.srs || {}; P.stories = P.stories || {}; P.tipsSeen = P.tipsSeen || {}; P.nb = P.nb || {}; P.roles = P.roles || {}; P.cap = P.cap || "after"; P.img = P.img || {}; P.hook = P.hook || {}; P.cando = P.cando || {}; P.checks = P.checks || []; P.scene = P.scene || {};
 if (P.day !== today()) { P.day = today(); P.dayXp = 0; }
 /* Spaced repetition: FSRS-style memory model (stability S in days, difficulty D 1..10).
    Recall probability R(t) = (1 + t / (9 S))^-1, so the next review at t = S keeps R ≈ 90%. Default FSRS-4.5 weights. */
@@ -552,20 +601,21 @@ const FW = [0.4, 0.6, 2.4, 5.8, 4.93, 0.94, 0.86, 0.01, 1.49, 0.14, 0.94, 2.18, 
 const dayNum = (d = new Date()) => Math.floor(d.getTime() / 864e5);
 const clampD = d => Math.min(10, Math.max(1, d));
 const recall = (r, t = dayNum()) => r && r.s ? Math.pow(1 + Math.max(0, t - r.last) / (9 * r.s), -1) : 0;
-function srsUpdate(w, ok) {
-  const t = dayNum(), G = ok ? 3 : 1;
+function srsUpdate(w, ok, grade) {
+  const t = dayNum(), G = ok ? (grade || 3) : 1;
   let r = P.srs[w.sq];
   if (r && r.b !== undefined && r.s === undefined) r = null;          // migrate old Leitner entries
   if (!r || !r.s) {
     r = { s: FW[G - 1], d: clampD(FW[4] - (G - 3) * FW[5]), last: t, reps: 1, lapses: ok ? 0 : 1 };
   } else {
     const R = recall(r, t);
-    if (ok) r.s = r.s * (Math.exp(FW[8]) * (11 - r.d) * Math.pow(r.s, -FW[9]) * (Math.exp(FW[10] * (1 - R)) - 1) + 1);
+    if (ok) r.s = r.s * (Math.exp(FW[8]) * (11 - r.d) * Math.pow(r.s, -FW[9]) * (Math.exp(FW[10] * (1 - R)) - 1) * (G === 2 ? FW[15] : G === 4 ? FW[16] : 1) + 1);
     else { r.s = Math.min(r.s, FW[11] * Math.pow(r.d, -FW[12]) * (Math.pow(r.s + 1, FW[13]) - 1) * Math.exp(FW[14] * (1 - R))); r.lapses = (r.lapses || 0) + 1; }
     const d2 = r.d - FW[6] * (G - 3);
     r.d = clampD(FW[7] * FW[4] + (1 - FW[7]) * d2);
     r.last = t; r.reps = (r.reps || 0) + 1;
   }
+  if (ok && G >= 3) r.pr = (r.pr || 0) + 1;          // successful productions (recall), tracked apart from recognition
   r.due = t + Math.max(1, Math.round(r.s));
   P.srs[w.sq] = r; logDay(0); save();
 }
@@ -602,16 +652,16 @@ const PACKS = {}, PACK_LOADING = {};
 /* Two talkers: packs/ = main voice (Piper "Edon"), packs2/ = second voice (MMS). Hearing more than one voice
    is what makes perceptual training work (high-variability phonetic training). */
 function loadPack(name, alt = false) {
-  const id = (alt ? "2:" : "") + name, dir = alt ? "packs2/" : "packs/";
+  const id = (alt ? (alt === true ? "2" : alt) + ":" : "") + name, dir = alt === true ? "packs2/" : alt ? "packsv/" + alt + "/" : "packs/";
   if (PACKS[id]) return Promise.resolve(PACKS[id]);
   return PACK_LOADING[id] = PACK_LOADING[id] || fetch(dir + name + ".json").then(r => r.json()).then(d => PACKS[id] = d).catch(() => { delete PACK_LOADING[id]; return {}; });
 }
 function preload(items) { new Set(items.filter(Boolean).map(a => a.split("#")[0])).forEach(n => { loadPack(n); if (P.vary !== false) loadPack(n, true); }); }
-function clipSrc(a, alt = false) { const [p, k] = a.split("#"), d = PACKS[(alt ? "2:" : "") + p]; return d && d[k] ? "data:audio/mpeg;base64," + d[k] : null; }
+function clipSrc(a, alt = false) { const [p, k] = a.split("#"), d = PACKS[(alt ? (alt === true ? "2" : alt) + ":" : "") + p]; return d && d[k] ? "data:audio/mpeg;base64," + d[k] : null; }
 const RATE = () => P.speed || 1;
 function playClip(a, slow = false, alt = false) {
   if (curAudio) curAudio.pause();
-  const go = src => { if (!src) return null; try { curAudio = new Audio(src); curAudio.playbackRate = (slow ? .7 : 1) * RATE(); curAudio.play().catch(() => {}); return curAudio; } catch { return null; } };
+  const go = src => { if (!src) return null; try { const au = curAudio = new Audio(src); au.playbackRate = (slow ? .7 : 1) * RATE(); au.addEventListener("ended", () => { P.lis = (P.lis || 0) + (au.duration || 0); }, { once: true }); au.play().catch(() => {}); return curAudio; } catch { return null; } };
   const src = clipSrc(a, alt);
   if (src) return Promise.resolve(go(src));
   return loadPack(a.split("#")[0], alt).then(() => go(clipSrc(a, alt) || clipSrc(a)));
@@ -677,12 +727,12 @@ function picMini(p) {
 const unitOf = w => UNITS.find(u => u.id === w.u) || { hue: 350, ic: "📘" };
 
 /* ---------- Course structure ---------- */
-let UNITS = [], LESSONS = [], STORIES = [], ALPHA = [], GLOSS = {}, REV = {}, PAIRS = [], ICONS = {}, EXTRA = [], ROLES = [], CONJ = null;
+let UNITS = [], LESSONS = [], STORIES = [], ALPHA = [], GLOSS = {}, REV = {}, PAIRS = [], ICONS = {}, EXTRA = [], ROLES = [], CONJ = null, GRAM = [], FREQ = [];
 let TAB = "learn";
 const app = document.getElementById("app");
 Promise.all([fetch("data.json").then(r => r.json()), fetch("icons.json").then(r => r.json()).catch(() => ({}))]).then(([d, ic]) => {
   ICONS = ic;
-  UNITS = d.units; STORIES = d.stories; ALPHA = d.alpha; PAIRS = d.pairs || []; EXTRA = d.extra || []; GLOSS = d.gloss; REV = d.rev; ROLES = d.roles || []; CONJ = d.conj || null;
+  UNITS = d.units; STORIES = d.stories; ALPHA = d.alpha; PAIRS = d.pairs || []; EXTRA = d.extra || []; GLOSS = d.gloss; REV = d.rev; ROLES = d.roles || []; CONJ = d.conj || null; GRAM = d.gram || []; FREQ = d.freq || [];
   UNITS.forEach((u, ui) => {
     u.w.forEach(w => w.u = u.id);
     const n = Math.ceil(u.w.length / 5), size = Math.ceil(u.w.length / n);
@@ -763,12 +813,13 @@ function learnTab(view) {
       <div style="flex:1;min-width:0"><div class="k">Ünite ${ui + 1} <span class="lvl ${u.lv === "A2" ? "a2" : ""}">${u.lv || "A1"}</span>${u.kos ? ` <span class="lvl kos">her zaman açık</span>` : ""}</div><h2>${esc(u.t)}</h2></div>
       <div class="peek">${doneCount} / ${u.lessons.length} ders<br>${u.w.length} kelime</div></div>
       <div class="unit-tools"><button class="chip tipbtn" aria-expanded="false">${I.bulb}Dil notları</button>
-      <span class="chip words">${u.w.slice(0, 6).map(w => picMini(w.p)).join("")}</span>${unitLocked && ui > 0 ? `<button class="chip jumpbtn" type="button">${I.lock}Teste gir, atla</button>` : ""}</div>
+      <span class="chip words">${u.w.slice(0, 6).map(w => picMini(w.p)).join("")}</span>${SCENEMAP[u.id] && !unitLocked ? `<button class="chip scenebtn" type="button">${icon("🗺️")}Sahne</button>` : ""}${unitLocked && ui > 0 ? `<button class="chip jumpbtn" type="button">${I.lock}Teste gir, atla</button>` : ""}</div>
       <div class="tipbox" hidden>${u.tips.map(t => `<div>${t}</div>`).join("")}</div>
       <div class="path"></div></section>`);
     const tb = sec.querySelector(".tipbtn"), box = sec.querySelector(".tipbox");
     tb.onclick = () => { box.hidden = !box.hidden; tb.setAttribute("aria-expanded", String(!box.hidden)); };
     const jbt = sec.querySelector(".jumpbtn"); if (jbt) jbt.onclick = () => jumpTest(ui);
+    const scb = sec.querySelector(".scenebtn"); if (scb) scb.onclick = () => openScene(u);
     const path = sec.querySelector(".path");
     u.lessons.forEach((L, li) => {
       const idx = LESSONS.indexOf(L), done = isDone(L), locked = idx > cur && !u.kos, current = idx === cur;
@@ -790,7 +841,7 @@ function learnTab(view) {
     }
     view.append(sec);
   });
-  view.append($(`<p class="foot">Her gün 10 dakika: yeni ders, ardından tekrar sekmesi. Sesler Arnavutça için eğitilmiş açık kaynak Kokoro modeliyle üretildi: erkek sesi Agon, kadın sesi Dora. Resimler: Twemoji (CC BY 4.0).</p>`));
+  view.append($(`<p class="foot">Her gün 10 dakika: yeni ders, ardından tekrar sekmesi. Sık kelime üniteleri, Arnavutça film ve dizi altyazılarından çıkarılmış sıklık listesine (FrequencyWords, CC BY-SA) dayanır. Sesler Arnavutça için eğitilmiş açık kaynak Kokoro modeliyle üretildi: erkek sesi Agon, kadın sesi Dora. Resimler: Twemoji (CC BY 4.0).</p>`));
   const curNode = view.querySelector(".node.current");
   if (curNode && cur > 0) setTimeout(() => curNode.scrollIntoView({ block: "center" }), 0);
 }
@@ -807,6 +858,8 @@ function reviewTab(view) {
   p.querySelector(".btn").onclick = () => startReview(due);
   view.append(p);
   if (learned) view.append(statsPanel());
+  view.append(checkPanel());
+  view.append(candoPanel());
   view.append(notebookPanel());
   if (!learned) view.append($(`<p class="lead" style="margin-top:14px">Henüz tekrar edilecek kelime yok. Öğren sekmesinden bir ders bitirince kelimeler buraya gelir.</p>`));
   else if (!due.length) {
@@ -841,6 +894,8 @@ function storiesTab(view) {
     view.append(rl);
     view.append($(`<h2 class="section-h">Okuma ve dinleme</h2>`));
   }
+  const rb = $(`<button class="story-card radio-card"><span class="ic cover">${icon("🎧")}</span><span><span class="t">Dinleme modu</span><br><span class="s">Açtığın hikâyeler art arda, altyazılı. Yürürken, yolda: kulağın Arnavutçaya alışsın.</span></span></button>`);
+  rb.onclick = radio; view.append(rb);
   const list = $(`<div class="story-list"></div>`);
   STORIES.forEach(s => {
     const unit = UNITS.find(u => u.id === s.after), ok = unitDone(s.after);
@@ -936,11 +991,14 @@ function storyQuiz(s, qi, right) {
 let LS = null;
 /* Lesson flow (research-based): introduce in context → recognise by ear → recall/build → produce → spaced review */
 const multi = w => w.sq.replace(/[?!.,…]/g, "").trim().includes(" ");
-function recallKind(w) { return multi(w) && w.sq.split(" ").length <= 7 ? "build" : "toSq"; }
+const spellable = w => !multi(w) && w.sq.replace(/[?!.,…]/g, "").length <= 13;
+function recallKind(w) { return multi(w) && w.sq.split(" ").length <= 7 ? "build" : spellable(w) && Math.random() < .6 ? "spell" : "toSq"; }
 function typesFor(w, review = false) {
   // used by review sessions: retrieval-heavy, production-leaning
-  if (!w.a) return ["toSq", "toTr"];        // notebook word without audio
-  const t = ["listen", recallKind(w), recallKind(w), "dictate"];
+  if (!w.a) return spellable(w) ? ["toSq", "toTr", "spell"] : ["toSq", "toTr"];        // notebook word without audio
+  const r = P.srs[w.sq], strong = r && r.s >= 3;
+  const prod = multi(w) && w.sq.split(" ").length <= 7 ? "build" : spellable(w) ? "spell" : "toSq";
+  const t = strong ? [prod, prod, prod, "dictate", "listen"] : ["listen", prod, recallKind(w), "dictate"];
   if (fillable(w)) t.push("fill");
   if (review) t.push("speak");
   return t;
@@ -954,12 +1012,17 @@ function startLesson(L) {
   const steps = [];
   if (L.li === 0 && !P.tipsSeen[L.unit.id]) steps.push({ k: "tip", u: L.unit });
   // 1. introduce each new item, immediately followed by hearing it again (recognition)
+  let held = null;
   words.forEach(w => {
     if (!practice && !P.seen[w.sq]) steps.push({ k: "intro", w });
-    steps.push({ k: "listen", w });
+    if (held) steps.push(held);
+    held = { k: "listen", w };
   });
-  // 2. consolidate the set
+  if (held) steps.push(held);
+  // 2. consolidate the set; where the unit has a picture scene, find the new words in it (place + picture + sound)
   if (words.length >= 3) steps.push({ k: "match", ws: words.slice(0, 5) });
+  const sw = SCENEMAP[L.unit.id] ? words.filter(w => SCENEMAP[L.unit.id].items.some(it => it[0] === w.sq)) : [];
+  if (sw.length >= 2) steps.push({ k: "sceneFind", ws: sw.slice(0, 4), u: L.unit });
   // 3. recall: Turkish → Albanian (build the sentence or choose the word), fill the gap where possible
   shuffle(words).forEach(w => steps.push({ k: recallKind(w), w }));
   const gap = words.filter(fillable);
@@ -983,13 +1046,14 @@ function distractors(w, field, n = 3) {
   return pick(pool, n);
 }
 
+const heartsOn = () => !!(P.hearts || (LS && LS.jump !== undefined));
 function lessonShell() {
   app.replaceChildren();
   const done = LS.i, total = LS.steps.length;
   const el = $(`<div class="lesson">
     <div class="l-top"><button class="x" aria-label="Dersten çık">${I.x}</button>
       <div class="l-prog" role="progressbar" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${done}"><i style="width:${Math.round(done / total * 100)}%"></i></div>
-      <div class="hearts" title="Can">${I.heart}${LS.hearts}</div></div>
+      ${heartsOn() ? `<div class="hearts" title="Can">${I.heart}${LS.hearts}</div>` : ""}</div>
     <div class="l-body"></div>
     <div class="sheet"><button class="btn" disabled>Kontrol et</button></div></div>`);
   el.querySelector(".x").onclick = () => { if (confirmQuit(el)) home(LS.review ? "review" : "learn"); };
@@ -1017,7 +1081,7 @@ function renderStep() {
   }
   const st = LS.steps[LS.i];
   const ui = lessonShell();
-  ({ intro, listen, toSq, toTr, match, build, type, speak, tip, fill, dictate })[st.k](st, ui);
+  ({ intro, listen, toSq, toTr, match, build, type, speak, tip, fill, dictate, spell, sceneFind })[st.k](st, ui);
 }
 
 /* Bottom-sheet result + continue */
@@ -1030,7 +1094,9 @@ function resolve(ui, ok, correctText, st) {
     <div><b>${ok ? praise : "Doğru cevap:"}</b>${ok ? (correctText ? `<span>${esc(correctText)}</span>` : "") : `<span>${esc(correctText)}</span>`}</div></div>`));
   const b = $(`<button class="btn ${ok ? "good" : "bad"}">Devam</button>`);
   ui.sheet.append(b); b.focus();
-  if (st && st.w) srsUpdate(st.w, ok);
+  const PROD = ["spell", "build", "fill", "type"];
+  if (st && st.w) srsUpdate(st.w, ok, PROD.includes(st.k) && !st.hinted ? 3 : 2);
+  if (st && st.w) (LS.log = LS.log || []).push({ sq: st.w.sq, u: st.w.u, ok });
   if (st && st.w && ["listen", "dictate"].includes(st.k) && P.cap !== "off" && !(P.cap === "always" && st.k === "listen")) {
     const rv = $(`<div class="reveal pop"><div class="rk">${I.ear} Duyduğun</div><div class="rsq">${kara(st.w)}</div><div class="rtr">${esc(st.w.tr)}</div></div>`);
     rv.onclick = e => { if (!e.target.closest(".hw")) say(st.w); };
@@ -1039,13 +1105,15 @@ function resolve(ui, ok, correctText, st) {
   if (ok) { LS.right++; sfx.ok(); }
   else {
     if (st && st.w && st.w.m) ui.sheet.querySelector(".fb").insertAdjacentHTML("afterend", memoBox(st.w.m, true));
-    sfx.no(); LS.hearts--; ui.root.querySelector(".hearts").innerHTML = I.heart + LS.hearts;
+    const why = explain(st);
+    if (why) ui.sheet.querySelector(".fb").insertAdjacentHTML("afterend", `<div class="why">${why}</div>`);
+    sfx.no(); if (heartsOn()) { LS.hearts--; ui.root.querySelector(".hearts").innerHTML = I.heart + LS.hearts; }
     ui.body.classList.add("shake");
     if (st && st.k !== "match") LS.redo.push({ ...st });
   }
   if (st && st.w) setTimeout(() => say(st.w), ok ? 250 : 400);
   b.onclick = () => {
-    if (LS.hearts <= 0) return finish(false);
+    if (heartsOn() && LS.hearts <= 0) return finish(false);
     LS.i++; renderStep();
   };
 }
@@ -1067,10 +1135,21 @@ function intro(st, ui) {
   const w = st.w;
   const ex = findExample(w);
   ui.body.append($(`<div class="tag new">${multi(w) ? "Yeni kalıp" : "Yeni kelime"}</div>`));
-  const card = $(`<div class="intro pop" style="--h:${unitOf(w).hue}">${pic(w.p)}<div class="sq">${kara(w)}</div><div class="tr">${esc(w.tr)}</div></div>`);
+  const card = $(`<div class="intro pop" style="--h:${unitOf(w).hue}">${picW(w)}<div class="sq">${kara(w)}</div><div class="tr">${esc(w.tr)}</div></div>`);
   const sp = speakerRow(w); sp.style.justifyContent = "center"; card.append(sp);
   ui.body.append(card);
+  const g = GEST[w.sq.toLowerCase()];
+  if (g) ui.body.append($(`<div class="gesture"><span class="gi">${icon(g[0])}</span><div><b>${icon("🤸")} Hareketle öğren</b><span>${esc(g[1])} ve aynı anda yüksek sesle <b>${esc(w.sq)}</b> de. Hareket, fiili bedenine de kaydeder.</span></div></div>`));
   if (w.m) ui.body.append($(memoBox(w.m)));
+  const own = $(`<div class="own"><button class="chip" type="button" data-a="draw">${icon("✏️")} ${P.img[w.sq] ? "Resmini değiştir" : "Kendi resmini çiz"}</button><button class="chip" type="button" data-a="hook">${icon("💡")} ${P.hook[w.sq] ? "Hikâyeni düzenle" : "Kendi hafıza hikâyeni yaz"}</button></div>`);
+  if (P.hook[w.sq]) own.prepend($(`<div class="memo memo-hk sm"><div class="memo-k">${icon("💡")} Senin hikâyen</div><div class="memo-t">${esc(P.hook[w.sq])}</div></div>`));
+  own.querySelector('[data-a="draw"]').onclick = () => openDraw(w, () => { card.querySelector(".pic") ? card.querySelector(".pic").outerHTML = picW(w) : card.prepend($(picW(w))); });
+  own.querySelector('[data-a="hook"]').onclick = e => {
+    const ta = $(`<div class="hookbox"><textarea rows="2" placeholder="Örn: “mace” = kedi → kedi koltukta maç izliyor">${esc(P.hook[w.sq] || "")}</textarea><button class="chip" type="button">Kaydet</button></div>`);
+    ta.querySelector("button").onclick = () => { const v = ta.querySelector("textarea").value.trim(); if (v) P.hook[w.sq] = v; else delete P.hook[w.sq]; save(); ta.replaceWith($(`<div class="memo memo-hk sm"><div class="memo-k">${icon("💡")} Senin hikâyen</div><div class="memo-t">${esc(v)}</div></div>`)); };
+    e.currentTarget.replaceWith(ta); ta.querySelector("textarea").focus();
+  };
+  ui.body.append(own);
   if (ex) {
     const exr = $(`<div class="example"><div class="k">Cümlede</div><div class="row"><button class="speaker sm" aria-label="Cümleyi dinle">${I.speaker}</button>
       <div><div class="s">${kara(ex)}</div><div class="t">${esc(ex.tr)}</div></div></div></div>`);
@@ -1100,7 +1179,7 @@ function listen(st, ui) {
   ui.body.append(list);
   ui.btn.onclick = () => {
     list.querySelectorAll(".opt").forEach((b, i) => { b.disabled = true; if (opts[i] === w) b.classList.add("ok"); else if (opts[i] === sel) b.classList.add("no"); });
-    resolve(ui, sel === w, w.sq + " = " + w.tr, st);
+    st.pick = sel; resolve(ui, sel === w, w.sq + " = " + w.tr, st);
   };
   setTimeout(() => sayVar(w), 250);
 }
@@ -1110,7 +1189,7 @@ function toSq(st, ui) {
   const w = st.w;
   const opts = shuffle([w, ...distractors(w, "sq")]);
   ui.body.append($(`<div class="tag">Arnavutçası hangisi?</div>`));
-  ui.body.append($(`<div class="speak-row">${w.p ? pic(w.p) : eagle(64)}<div class="bubble-say">${hint(w.tr, "tr")}</div></div>`));
+  ui.body.append($(`<div class="speak-row">${w.p || P.img[w.sq] ? picW(w) : eagle(64)}<div class="bubble-say">${hint(w.tr, "tr")}</div></div>`));
   const list = $(`<div class="list"></div>`); let sel = null;
   opts.forEach((o, i) => {
     const b = $(`<button class="opt row"><span class="num-k">${i + 1}</span><span>${esc(o.sq)}</span></button>`);
@@ -1120,7 +1199,7 @@ function toSq(st, ui) {
   ui.body.append(list);
   ui.btn.onclick = () => {
     list.querySelectorAll(".opt").forEach((b, i) => { b.disabled = true; if (opts[i] === w) b.classList.add("ok"); else if (opts[i] === sel) b.classList.add("no"); });
-    resolve(ui, sel === w, w.sq, st);
+    st.pick = sel; resolve(ui, sel === w, w.sq, st);
   };
 }
 
@@ -1141,7 +1220,7 @@ function toTr(st, ui) {
   ui.body.append(g);
   ui.btn.onclick = () => {
     g.querySelectorAll(".opt").forEach((b, i) => { b.disabled = true; if (opts[i] === w) b.classList.add("ok"); else if (opts[i] === sel) b.classList.add("no"); });
-    resolve(ui, sel === w, w.tr, st);
+    st.pick = sel; resolve(ui, sel === w, w.tr, st);
   };
   setTimeout(() => say(w), 250);
 }
@@ -1198,7 +1277,7 @@ function build(st, ui, byEar = false) {
   } else {
     ui.body.append($(`<div class="tag">Cümleyi kur</div>`));
     if (target.length >= 3) ui.body.append($(`<button class="mirror-tip" type="button">${icon("🪞")} Ayna ipucu</button>`));
-    ui.body.append($(`<div class="speak-row">${w.p ? pic(w.p) : eagle(64)}<div class="bubble-say">${hint(w.tr, "tr")}</div></div>`));
+    ui.body.append($(`<div class="speak-row">${w.p || P.img[w.sq] ? picW(w) : eagle(64)}<div class="bubble-say">${hint(w.tr, "tr")}</div></div>`));
   }
   const line = $(`<div class="answer-line" aria-label="Cevabın"></div>`);
   const bank = $(`<div class="bank"></div>`);
@@ -1243,7 +1322,7 @@ function dictate(st, ui) {
   ui.body.append(g);
   ui.btn.onclick = () => {
     g.querySelectorAll(".opt").forEach((b, i) => { b.disabled = true; if (opts[i] === w) b.classList.add("ok"); else if (opts[i] === sel) b.classList.add("no"); });
-    resolve(ui, sel === w, w.sq + " = " + w.tr, st);
+    st.pick = sel; resolve(ui, sel === w, w.sq + " = " + w.tr, st);
   };
   setTimeout(() => sayVar(w), 250);
 }
@@ -1278,13 +1357,13 @@ function speak(st, ui) {
   const w = st.w;
   ui.body.append($(`<div class="tag">Gölgeleme · sesli tekrar et</div>`));
   ui.body.append($(`<h2 class="prompt">Dinle ve aynı şekilde yüksek sesle söyle</h2>`));
-  const card = $(`<div class="intro">${pic(w.p, true)}<div class="sq">${kara(w)}</div><div class="tr">${esc(w.tr)}</div></div>`);
+  const card = $(`<div class="intro">${picW(w, true)}<div class="sq">${kara(w)}</div><div class="tr">${esc(w.tr)}</div></div>`);
   const sp = speakerRow(w); sp.style.justifyContent = "center"; card.append(sp);
   ui.body.append(card);
   ui.body.append($(`<div class="shadow-steps"><div>1. Dinle, vurguya ve ë, rr, q gibi seslere dikkat et.</div><div>2. Hemen ardından aynı hızda sen söyle.</div><div>3. Bir kez de yavaş dinleyip tekrar söyle.</div></div>`));
   ui.body.append(recorder(w));
   ui.btn.disabled = false; ui.btn.textContent = "Söyledim";
-  ui.btn.onclick = () => { LS.right++; LS.tries++; srsUpdate(w, true); sfx.ok(); LS.i++; renderStep(); };
+  ui.btn.onclick = () => { LS.right++; LS.tries++; srsUpdate(w, true, 2); sfx.ok(); LS.i++; renderStep(); };
   setTimeout(() => say(w), 250);
 }
 /* -- Grammar tip card -- */
@@ -1364,7 +1443,7 @@ function fill(st, ui) {
   const opts = shuffle([gap.t, ...pick(pool, 2)]);
   ui.body.append($(`<div class="tag">Boşluğu doldur</div>`));
   const shown = toks.map((t, i) => i === gap.i ? `<span class="gap" id="gap">${"&nbsp;".repeat(8)}</span>${esc(t.slice(gap.t.length))}` : hint(t, "sq")).join(" ");
-  const row = $(`<div class="speak-row">${w.p ? pic(w.p) : eagle(64)}<div class="bubble-say">${shown}<div class="sub-tr">${esc(w.tr)}</div></div></div>`);
+  const row = $(`<div class="speak-row">${w.p || P.img[w.sq] ? picW(w) : eagle(64)}<div class="bubble-say">${shown}<div class="sub-tr">${esc(w.tr)}</div></div></div>`);
   ui.body.append(row);
   const list = $(`<div class="list"></div>`); let sel = null;
   opts.forEach(o => {
@@ -1392,6 +1471,10 @@ function openSettings() {
       <div class="seg" role="group" id="cap">${[["always", "Hep"], ["after", "Cevaptan sonra"], ["off", "Kapalı"]].map(([v, l]) => `<button data-v="${v}" aria-pressed="${P.cap === v}">${l}</button>`).join("")}</div></div>
     ${LN() ? `<div class="set-row"><div><b>Günlük hatırlatma</b><div class="sub">Her gün seçtiğin saatte bildirim</div></div>
       <div style="display:flex;gap:8px;align-items:center"><input type="time" id="rem-t" value="${(P.rem && P.rem.t) || "20:00"}"><label class="switch"><input type="checkbox" id="rem" ${P.rem && P.rem.on ? "checked" : ""}><span></span></label></div></div>` : ""}
+    <div class="set-row"><div><b>Can sistemi</b><div class="sub">Kapalıyken hatalar dersi bitirmez; yanlışlar sonda tekrar sorulur. Hata yapmak öğrenmenin parçası.</div></div>
+      <label class="switch"><input type="checkbox" id="hearts" ${P.hearts ? "checked" : ""}><span></span></label></div>
+    <div class="set-row"><div><b>Yedek</b><div class="sub">İlerlemen sadece bu cihazda. Yedeği kopyalayıp bir yere kaydet; yeni cihazda yapıştırıp geri yükle.</div></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button class="chip" id="bk-copy">Kopyala</button><button class="chip" id="bk-load">Geri yükle</button></div></div>
     <div class="set-row"><div><b>Seviye testi</b><div class="sub">Biraz Arnavutça biliyorsan, test çöz ve ileri ünitelere atla</div></div><button class="chip" id="place">Teste başla</button></div>
     <button class="btn" id="close-set">Tamam</button></div></div>`);
   const spd = ov.querySelector(".seg:not(#cap)");
@@ -1399,6 +1482,13 @@ function openSettings() {
   ov.querySelector("#vary").onchange = e => { P.vary = e.target.checked; save(); };
   ov.querySelectorAll("#cap button").forEach(b => b.onclick = () => { P.cap = b.dataset.v; save(); ov.querySelectorAll("#cap button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); });
   ov.querySelector("#place").onclick = () => { ov.remove(); placementTest(); };
+  ov.querySelector("#hearts").onchange = e => { P.hearts = e.target.checked; save(); };
+  const dump = () => { const { img, ...rest } = P; return btoa(unescape(encodeURIComponent(JSON.stringify({ v: 1, P: rest })))); };
+  ov.querySelector("#bk-copy").onclick = e => { const t = dump(); (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => e.target.textContent = "Kopyalandı ✓").catch(() => { prompt("Bu metni kopyala ve sakla:", t); }); };
+  ov.querySelector("#bk-load").onclick = () => {
+    const t = prompt("Yedek metnini buraya yapıştır (mevcut ilerlemenin yerine geçer):"); if (!t) return;
+    try { const o = JSON.parse(decodeURIComponent(escape(atob(t.trim())))); if (!o.P || !o.P.srs) throw 0; P = Object.assign({ img: P.img }, o.P); save(); location.reload(); } catch { alert("Bu yedek okunamadı."); }
+  };
   const remOn = ov.querySelector("#rem"), remT = ov.querySelector("#rem-t");
   if (remOn) { const upd = () => { P.rem = { on: remOn.checked, t: remT.value || "20:00" }; save(); scheduleReminder(); }; remOn.onchange = upd; remT.onchange = upd; }
   ov.querySelector("#close-set").onclick = () => ov.remove();
@@ -1445,12 +1535,12 @@ function pairDrill(contrasts) {
   const trials = [];
   for (let i = 0; i < 12; i++) {
     const c = pickOne(contrasts), pr = pickOne(c.pairs), k = Math.random() < .5 ? 0 : 1;
-    trials.push({ c, pr: Math.random() < .5 ? pr : [pr[1], pr[0]], target: null, k, alt: Math.random() < .5, rate: pickOne([.9, 1, 1.1]) });
+    trials.push({ c, pr: Math.random() < .5 ? pr : [pr[1], pr[0]], target: null, k, alt: P.vary !== false ? pickOne([false, true, "dardan", "if_sara"]) : false, rate: pickOne([.9, 1, 1.1]) });
   }
   trials.forEach(t => t.target = t.pr[t.k]);
-  preload(contrasts.flatMap(c => c.pairs.flat().map(x => x.a)));
+  preload(contrasts.flatMap(c => c.pairs.flat().map(x => x.a))); loadPack("ciftler", "dardan"); loadPack("ciftler", "if_sara");
   let i = 0, right = 0;
-  const play = t => { if (curAudio) curAudio.pause(); playClip(t.target.a, false, t.alt && P.vary !== false).then(au => { if (au) au.playbackRate = t.rate * RATE(); }); };
+  const play = t => { if (curAudio) curAudio.pause(); playClip(t.target.a, false, t.alt).then(au => { if (au) au.playbackRate = t.rate * RATE(); }); };
   const step = () => {
     if (i >= trials.length) {
       const xp = 5; P.xp += xp; P.dayXp += xp; logDay(xp); bumpStreak(); save(); sfx.win();
@@ -1504,6 +1594,7 @@ function grammarTab(view) {
   view.append($(`<h2 class="section-h">Gramer</h2>`));
   view.append($(`<p class="lead">Renkler cinsiyeti gösterir: <span class="g-m">eril</span> kelimeler mavi, <span class="g-f">dişil</span> kelimeler kırmızı. Renkle eşleştirmek cinsiyeti hatırlamayı kolaylaştırır. Arnavutça kelimelere dokununca dinleyebilirsin.</p>`));
   mirrorSection(view);
+  gramSection(view);
   const sec = (title, body, note = "") => view.append($(`<details class="gsec"><summary>${title}</summary><div class="gbody">${body}${note ? `<div class="tipbox"><div>${note}</div></div>` : ""}</div></details>`));
   const tbl = (head, rows) => `<div class="gtable-wrap"><table class="gtable"><thead><tr>${head.map(h => `<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
   sec("1 · Cinsiyet ve belirli isim", tbl(["Belirsiz", "Belirli", "Türkçe"], [
@@ -1586,6 +1677,7 @@ function statsPanel() {
     <div style="display:flex;gap:16px;align-items:center"><div class="big-num" style="color:var(--good)">${avgR}%</div><div><b>ortalama hatırlama olasılığı</b><div class="sub">FSRS hafıza modeline göre, şu an</div></div></div>
     <div><b style="font-size:.9rem">Hafıza gücü (kelime kaç gün akılda kalır)</b>
       <div class="strength">${buckets.map(([l], i) => `<div class="sb"><span class="sv">${counts[i]}</span><span class="sbar" style="height:${Math.round(counts[i] / max * 70) + 4}px;background:hsl(${120 * i / 4} 60% 45%)"></span><span class="sl">${l}</span></div>`).join("")}</div></div>
+    ${coverageHTML()}
     <div><b style="font-size:.9rem">Son 5 hafta</b><div class="cal35">${days.map(([d, v]) => `<i title="${d}: ${v} XP" style="opacity:${v ? Math.min(1, .3 + v / 40) : 1};background:${v ? "var(--good)" : "var(--surface-2)"}"></i>`).join("")}</div></div>
   </div>`);
 }
@@ -1784,10 +1876,11 @@ const MIRROR = [
   { tr: [["güzel", 0], ["kız", 1]], sq: [["vajzë", 1], ["e bukur", 0]], say: "vajzë e bukur", note: "Sıfat ismin <b>arkasına</b> geçer ve önüne i/e alır." },
   { tr: [["sen", 0], ["-inle", 1]], sq: [["me", 1], ["ty", 0]], say: "me ty", note: "“-le/-la” eki → <b>me</b> edatı, öne." },
   { tr: [["İyi", 0], ["mi", 1], ["-sin?", 2]], sq: [["A", 1], ["je", 2], ["mirë?", 0]], say: "A je mirë?", note: "Soru eki “mi” cümlenin başına <b>A</b> olarak geçer." },
+  { tr: [["oğlan", 0], ["-ı", 1]], sq: [["djal", 0], ["-in", 1]], say: "", note: "<b>Ayna kırılıyor:</b> hal ekleri (-ı, -a, -ın) iki dilde de kelimenin <b>sonuna</b> eklenir. Ters çevirme ipucu burada işe yaramaz." },
 ];
 function mirrorSection(view) {
   const box = $(`<details class="gsec" open><summary>${icon("🪞")} Tersten düşün: Arnavutça, Türkçenin aynası</summary><div class="gbody">
-    <p class="sub" style="margin:0">Türkçe ekleri kelimenin <b>sonuna</b> ekler ve fiili <b>sona</b> koyar. Arnavutça ise aynı bilgiyi küçük kelimelerle <b>öne</b> koyar. Çoğu cümleyi Türkçeden <b>sondan başa</b> çevirince Arnavutça sırayı bulursun. Aynı renkler aynı anlamdır; “Türkçe sırasıyla göster”e basıp kelimelerin nasıl yer değiştirdiğini izle.</p>
+    <p class="sub" style="margin:0">Türkçe ekleri kelimenin <b>sonuna</b> ekler ve fiili <b>sona</b> koyar. Arnavutça ise aynı bilgiyi küçük kelimelerle <b>öne</b> koyar. Birçok kalıbı Türkçeden <b>sondan başa</b> çevirince Arnavutça sırayı bulursun. Bu bir <b>ipucu</b>, kural değil: haller gibi bazı yerlerde iki dil de eki sona koyar (en alttaki “ayna kırılıyor” örneğine bak). Aynı renkler aynı anlamdır; “Türkçe sırasıyla göster”e basıp kelimelerin nasıl yer değiştirdiğini izle.</p>
     <div class="mirrors"></div></div></details>`);
   const list = box.querySelector(".mirrors");
   MIRROR.forEach(m => {
@@ -1806,7 +1899,7 @@ function mirrorSection(view) {
       chips.forEach((c, i) => { const last = c.getBoundingClientRect(), dx = first[i].left - last.left; c.animate([{ transform: `translateX(${dx}px)` }, { transform: "none" }], { duration: 450, easing: "cubic-bezier(.2,.8,.2,1)" }); });
       e.currentTarget.textContent = flipped ? "Arnavutça sırasına dön" : "Türkçe sırasıyla göster";
     };
-    card.querySelector(".msay").onclick = () => playTTSFallback(m.say);
+    if (m.say) card.querySelector(".msay").onclick = () => playTTSFallback(m.say); else card.querySelector(".msay").remove();
     list.append(card);
   });
   view.append(box);
@@ -1819,13 +1912,18 @@ function conjSection(view) {
   let vi = 0, ti = 0;
   const box = $(`<details class="gsec conj" open><summary>${icon("🔁")} Fiil çekim tablosu · ${CONJ.verbs.length} fiil</summary><div class="gbody">
     <p class="sub" style="margin:0">Bir fiil ve zaman seç, dinle: söylenen her biçim sırayla yanar. Düzensiz fiiller (jam, kam, vij, shoh, them, jap…) en sık kullanılanlardır; onları ezberlemek kazançtır.</p>
-    <div class="verbs"></div><div class="seg tenses" role="group"></div><div class="ctable"></div>
+    <div class="verbs"></div><div class="seg tenses" role="group"></div><div class="tline"></div><div class="ctable"></div>
     <div class="row"><button class="chip cplay" type="button">${I.play}Dinle</button><button class="chip cdrill" type="button">${I.repeat}Fiil antrenmanı (10 soru)</button></div></div></details>`);
   const vs = box.querySelector(".verbs"), ts = box.querySelector(".tenses"), tb = box.querySelector(".ctable");
   CONJ.verbs.forEach((v, i) => { const b = $(`<button class="vchip" type="button" aria-pressed="${i === 0}"><b>${esc(v.v)}</b><small>${esc(v.tr)}</small></button>`); b.onclick = () => { vi = i; vs.querySelectorAll(".vchip").forEach((x, k) => x.setAttribute("aria-pressed", String(k === i))); draw(); }; vs.append(b); });
   CONJ.tenses.forEach(([k, l], i) => { const b = $(`<button type="button" aria-pressed="${i === 0}">${esc(l)}</button>`); b.onclick = () => { ti = i; ts.querySelectorAll("button").forEach((x, j) => x.setAttribute("aria-pressed", String(j === i))); draw(); }; ts.append(b); });
   const cur = () => { const r = CONJ.verbs[vi].t[CONJ.tenses[ti][0]]; return { sq: r.f.join(", "), a: r.a, k: r.k, f: r.f }; };
+  const TL = { pr: [210, 0, "şimdi / her zaman"], ao: [80, 0, "bitti, tek sefer"], im: [40, 110, "sürüyordu / alışkanlıktı"], fu: [270, 0, "ileride"] };
+  const tline = () => { const [x, wd, l] = TL[CONJ.tenses[ti][0]]; box.querySelector(".tline").innerHTML = `<svg viewBox="0 0 320 54" role="img" aria-label="Zaman çizgisi: ${l}"><path d="M10 28H310" stroke="var(--line)" stroke-width="4" stroke-linecap="round"/><path d="M300 20l10 8-10 8" fill="none" stroke="var(--line)" stroke-width="4"/>
+    <line x1="210" y1="16" x2="210" y2="40" stroke="var(--muted)" stroke-width="2" stroke-dasharray="3 3"/><text x="210" y="52" font-size="10" text-anchor="middle" fill="var(--muted)">şimdi</text>
+    ${wd ? `<rect x="${x}" y="21" width="${wd}" height="14" rx="7" fill="var(--blue)"/>` : `<circle cx="${x}" cy="28" r="9" fill="var(--blue)"/>`}<text x="${x + wd / 2}" y="12" font-size="11" font-weight="700" text-anchor="middle" fill="var(--blue)">${l}</text></svg>`; };
   const draw = () => {
+    tline();
     const w = cur(), lab = ["unë · ben", "ti · sen", "ai / ajo · o", "ne · biz", "ju · siz", "ata / ato · onlar"];
     tb.innerHTML = `<div class="kara ckara" data-sq="${esc(w.sq)}">${w.f.map((x, i) => { const ws = x.split(" "); return `<div class="crow"><span class="cp kw">${esc(ws[0])}</span><span class="cf">${ws.slice(1).map((y, j) => `<span class="kw">${esc(y)}${j === ws.length - 2 && i < 5 ? "<i>,</i>" : ""}</span>`).join(" ")}</span><span class="cl">${lab[i].split(" · ")[1]}</span></div>`; }).join("")}</div>`;
     loadPack("fiiller");
@@ -1913,6 +2011,24 @@ function openRole(r) {
       };
       list.append(b);
     });
+    const fr = $(`<button class="chip free" type="button">${icon("✍️")} Kendi cevabımı yazayım</button>`);
+    fr.onclick = () => {
+      const good = t.o.find(o => o.ok);
+      const box = $(`<div class="hookbox"><textarea rows="2" lang="sq" autocapitalize="off" placeholder="Arnavutça cevabını yaz…"></textarea><button class="chip" type="button">Gönder</button></div>`);
+      fr.replaceWith(box); box.querySelector("textarea").focus();
+      box.querySelector("button").onclick = () => {
+        const v = box.querySelector("textarea").value.trim(); if (!v) return;
+        bubble("Sen", { sq: v, tr: "" }, true).querySelector(".speaker").remove();
+        const same = norm(v) === norm(good.sq);
+        box.replaceWith($(`<div class="rfb pop ${same ? "ok" : ""}"><span>${same ? "Birebir doğru!" : "Örnek cevap:"} <b>${esc(good.sq)}</b> <small>${esc(good.tr)}</small></span></div>`));
+        const row = $(`<div class="grid2"><button class="btn ghost">Benimki de uygun</button><button class="btn ghost">Seçeneklere dön</button></div>`);
+        if (same) row.children[1].remove();
+        row.children[0].onclick = () => { sfx.ok(); if (!missed) first++; row.remove(); bubble("Sen", good, true); ti++; after(say(good, false, !r.f), turn); };
+        if (row.children[1]) row.children[1].onclick = () => { missed = true; row.remove(); };
+        sheet.append(row);
+      };
+    };
+    sheet.append(fr);
   };
   const end = () => {
     const stars = first === r.turns.length ? 3 : first >= r.turns.length - 2 ? 2 : 1;
@@ -2012,6 +2128,320 @@ async function scheduleReminder() {
   } catch {}
 }
 
+
+/* ---------- Picture helper: the learner's own drawing replaces the icon ---------- */
+function picW(w, big = false) {
+  if (w && P.img[w.sq]) return `<span class="pic ill own ${big ? "big" : ""}"><img alt="Senin çizimin" src="${P.img[w.sq]}"></span>`;
+  return pic(w && w.p, big);
+}
+function openDraw(w, done) {
+  const ov = $(`<div class="overlay" role="dialog" aria-label="Resim çiz"><div class="sheet-card draw">
+    <h2 class="section-h" style="margin-top:0">${esc(w.sq)} <small style="color:var(--muted);font-weight:500">= ${esc(w.tr)}</small></h2>
+    <p class="sub" style="margin:0">Kendi çizdiğin resim, hazır resimden daha iyi hatırlanır. Mükemmel olması gerekmez; seni güldüren, tuhaf bir çizim en iyisidir.</p>
+    <canvas width="480" height="480" aria-label="Çizim alanı"></canvas>
+    <div class="row">${["#2a2122", "#c8162f", "#2e7bd6", "#3a9a46", "#f2a516"].map((c, i) => `<button class="pen ${i ? "" : "on"}" style="background:${c}" data-c="${c}" aria-label="Renk"></button>`).join("")}<button class="chip clr" type="button">Temizle</button></div>
+    <div class="grid2"><button class="btn ghost cancel">Vazgeç</button><button class="btn good ok">Kaydet</button></div></div></div>`);
+  const c = ov.querySelector("canvas"), x = c.getContext("2d"); let col = "#2a2122", drawing = false, used = false;
+  x.fillStyle = "#fff"; x.fillRect(0, 0, 480, 480); x.lineCap = x.lineJoin = "round"; x.lineWidth = 10;
+  const pos = e => { const r = c.getBoundingClientRect(); return [(e.clientX - r.left) * 480 / r.width, (e.clientY - r.top) * 480 / r.height]; };
+  c.onpointerdown = e => { drawing = used = true; c.setPointerCapture(e.pointerId); x.strokeStyle = col; x.beginPath(); x.moveTo(...pos(e)); x.lineTo(...pos(e)); x.stroke(); };
+  c.onpointermove = e => { if (!drawing) return; x.lineTo(...pos(e)); x.stroke(); };
+  c.onpointerup = c.onpointercancel = () => drawing = false;
+  ov.querySelectorAll(".pen").forEach(b => b.onclick = () => { col = b.dataset.c; ov.querySelectorAll(".pen").forEach(q => q.classList.toggle("on", q === b)); });
+  ov.querySelector(".clr").onclick = () => { x.fillStyle = "#fff"; x.fillRect(0, 0, 480, 480); used = false; };
+  ov.querySelector(".cancel").onclick = () => ov.remove();
+  ov.querySelector(".ok").onclick = () => {
+    if (used) { const s2 = document.createElement("canvas"); s2.width = s2.height = 160; s2.getContext("2d").drawImage(c, 0, 0, 160, 160); P.img[w.sq] = s2.toDataURL("image/png"); }
+    else delete P.img[w.sq];
+    try { save(); } catch { delete P.img[w.sq]; alert("Cihazda yer kalmadı, çizim kaydedilemedi."); }
+    ov.remove(); done && done();
+  };
+  document.body.append(ov);
+}
+
+/* ---------- Verbs you act out (embodied learning) ---------- */
+const GEST = {
+  "shkoj": ["🚶", "Yerinde birkaç adım yürü"], "vij": ["🫴", "Eliyle “gel” işareti yap"], "ha": ["🍽️", "Kaşığı ağzına götürür gibi yap"], "pi": ["🥤", "Bardağı ağzına götür"],
+  "fle": ["😴", "Başını iki elinin üstüne yasla"], "flas": ["🗣️", "Elini ağzından ileri doğru aç"], "shoh": ["👀", "Elini gözüne siper et, uzağa bak"], "dëgjoj": ["👂", "Elini kulağının arkasına koy"],
+  "shkruaj": ["✍️", "Havaya bir şey yaz"], "lexoj": ["📖", "Ellerinle bir kitap aç"], "vrapoj": ["🏃", "Yerinde koş"], "notoj": ["🏊", "Kollarınla kulaç at"],
+  "këndoj": ["🎤", "Mikrofon tutar gibi yap, bir nota söyle"], "qesh": ["😂", "Gül"], "qaj": ["😢", "Parmağınla gözyaşını sil"], "eci": ["🚶", "Yavaşça yürü"],
+  "hap": ["🚪", "Bir kapıyı aç"], "mbyll": ["🔒", "Kapıyı kapat"], "jap": ["🤲", "Birine bir şey uzat"], "marr": ["🫴", "Bir şeyi al, kendine çek"],
+  "blej": ["🛍️", "Para uzatır gibi yap"], "shes": ["🏷️", "Bir şeyi gösterip fiyat söyle"], "punoj": ["💼", "Klavyede yazar gibi yap"], "mësoj": ["🧠", "Parmağını şakağına koy"],
+  "pres": ["⏳", "Kollarını kavuştur, ayağını vur"], "pyes": ["❓", "Elini kaldır, soru sor"], "gjej": ["💡", "Yerden bir şey bulup kaldır"], "harroj": ["🤔", "Alnına vur: unuttum!"],
+  "ndihmoj": ["🤝", "Birine elini uzat"], "filloj": ["🏁", "Bir bayrak indir: başla!"], "mbaroj": ["✅", "Ellerini birbirine sil: bitti"], "mendoj": ["💭", "Çeneni tut, düşün"],
+  "zgjohem": ["⏰", "Gerin, esne, gözlerini aç"], "lahem": ["🚿", "Yüzünü yıka"], "vishem": ["👕", "Tişört giyer gibi yap"], "krihem": ["💇", "Saçını tara"],
+  "luaj": ["⚽", "Topa vur"], "fitoj": ["🏆", "Kollarını kaldır: kazandım!"], "humbas": ["😞", "Omuzlarını düşür"], "kujtoj": ["🧠", "Gözlerini kapat, hatırla"],
+  "Shiko!": ["👀", "Bir yeri işaret et"], "Dëgjo!": ["👂", "Elini kulağına götür"], "Eja!": ["🫴", "“Gel” işareti yap"], "Prit!": ["✋", "Avucunu öne uzat: dur"], "Ulu!": ["🪑", "Otur"],
+};
+
+/* ---------- Picture scenes + memory palace ---------- */
+const SCN = (w, h, body) => ({ vb: [w, h], bg: body });
+const SCENEMAP = {
+  ev: { ...SCN(320, 220, `<rect width="320" height="220" fill="#cfe8f7"/><rect y="196" width="320" height="24" fill="#8fc46a"/><path d="M30 72L160 14 290 72Z" fill="#c8162f"/><rect x="38" y="72" width="244" height="124" fill="#f6efe6" stroke="#8a5a36" stroke-width="3"/><path d="M38 132H282" stroke="#8a5a36" stroke-width="4"/><path d="M190 132v64" stroke="#d9cbb8" stroke-width="2"/><path d="M110 72v60" stroke="#d9cbb8" stroke-width="2"/><path d="M215 72v60" stroke="#d9cbb8" stroke-width="2"/><rect x="250" y="140" width="26" height="22" fill="#e6dccd"/><circle cx="20" cy="185" r="2" fill="#f2a516"/>`),
+    items: [["kopsht", 7, 82], ["derë", 50, 80], ["divan", 22, 82], ["televizor", 34, 70], ["tavolinë", 66, 84], ["karrige", 77, 84], ["kuzhinë", 89, 72], ["banjo", 85, 47], ["kompjuter", 62, 47], ["dritare", 42, 45], ["jastëk", 22, 47], ["çati", 50, 22]] },
+  ushqim: { ...SCN(320, 220, `<rect width="320" height="220" fill="#fdf3e3"/><rect y="56" width="232" height="6" fill="#8a5a36"/><rect x="248" y="40" width="64" height="170" rx="8" fill="#e8f1f6" stroke="#9fb7c4" stroke-width="3"/><path d="M248 110h64" stroke="#9fb7c4" stroke-width="3"/><rect x="0" y="146" width="236" height="14" fill="#8a5a36"/><rect x="0" y="160" width="236" height="60" fill="#c9a77c"/><ellipse cx="120" cy="200" rx="110" ry="12" fill="#b08a5f"/>`),
+    items: [["kripë", 8, 20], ["piper", 20, 20], ["vaj", 32, 20], ["mjaltë", 44, 20], ["oriz", 56, 20], ["makarona", 68, 20], ["mish", 89, 34], ["pulë", 89, 46], ["djathë", 89, 63], ["kos", 89, 76], ["vezë", 70, 60], ["hudhër", 58, 60], ["qepë", 46, 60], ["patate", 34, 60], ["kastravec", 22, 60], ["domate", 10, 60], ["sallatë", 22, 83], ["byrek", 47, 83]] },
+  qyteti: { ...SCN(320, 220, `<rect width="320" height="220" fill="#d9ecf7"/><g fill="#c9b8a6"><rect x="6" y="56" width="40" height="64"/><rect x="52" y="44" width="40" height="76"/><rect x="98" y="50" width="40" height="70"/><rect x="144" y="38" width="40" height="82"/><rect x="190" y="52" width="40" height="68"/><rect x="236" y="46" width="40" height="74"/><rect x="282" y="58" width="36" height="62"/></g><rect y="120" width="320" height="10" fill="#bbb"/><rect y="150" width="320" height="26" fill="#777"/><path d="M0 163h320" stroke="#fff" stroke-width="3" stroke-dasharray="14 10"/><rect y="176" width="320" height="44" fill="#a5c48f"/><path d="M250 176q30-30 70-20v64h-70z" fill="#8fb86f"/>`),
+    items: [["fshat", 88, 86], ["rrugë", 30, 74], ["shesh", 50, 62], ["kishë", 8, 40], ["bankë", 22, 38], ["muze", 37, 40], ["hotel", 51, 34], ["xhami", 66, 38], ["restorant", 80, 40], ["farmaci", 94, 44], ["park", 12, 90], ["postë", 40, 90], ["stacion", 64, 90], ["aeroport", 84, 12]] },
+  natyra: { ...SCN(320, 220, `<rect width="320" height="220" fill="#bfdcf2"/><path d="M0 120L70 60 130 110 190 50 260 110 320 80V220H0z" fill="#8fa37a"/><path d="M0 150Q160 120 320 150V220H0z" fill="#a5c48f"/><path d="M240 170q40-18 80-6v56h-80z" fill="#5aa0d0"/>`),
+    items: [["stuhi", 16, 12], ["yll", 62, 8], ["hënë", 82, 12], ["mjegull", 50, 32], ["kodër", 30, 40], ["pyll", 10, 56], ["pemë", 44, 60], ["fushë", 66, 64], ["lule", 24, 80], ["bar", 46, 84], ["gur", 64, 86], ["ishull", 86, 80], ["akull", 94, 94]] },
+  hayvan: { ...SCN(320, 220, `<rect width="320" height="220" fill="#cfe8f7"/><path d="M0 110Q160 90 320 110V220H0z" fill="#a5c48f"/><rect x="18" y="56" width="8" height="70" fill="#8a5a36"/><circle cx="22" cy="54" r="28" fill="#5f9e4f"/><path d="M90 140h140M90 156h140" stroke="#c9a77c" stroke-width="4"/><g stroke="#c9a77c" stroke-width="4"><path d="M96 132v32M136 132v32M176 132v32M216 132v32"/></g><ellipse cx="275" cy="190" rx="44" ry="18" fill="#5aa0d0"/>`),
+    items: [["shqiponjë", 82, 10], ["pëllumb", 55, 14], ["bilbil", 8, 18], ["flutur", 34, 30], ["ujk", 6, 54], ["mace", 30, 60], ["lopë", 54, 50], ["kalë", 76, 52], ["dele", 44, 72], ["pulë", 22, 84], ["qen", 56, 86], ["lepur", 72, 76], ["gjarpër", 38, 94], ["bretkosë", 80, 88], ["peshk", 92, 86]] },
+  meyve: { ...SCN(320, 220, `<rect width="320" height="220" fill="#f3f7ea"/><path d="M10 10h300l-14 30H24z" fill="#c8162f"/><path d="M40 10h30l-6 30H32zM100 10h30l-2 30h-30zM160 10h30l2 30h-30zM220 10h30l6 30h-30z" fill="#fff"/><g fill="#c9a77c" stroke="#8a5a36" stroke-width="2"><rect x="14" y="70" width="292" height="30"/><rect x="14" y="118" width="292" height="30"/><rect x="60" y="166" width="200" height="30"/></g>`),
+    items: [["mollë", 12, 34], ["dardhë", 26, 34], ["qershi", 40, 34], ["banane", 54, 34], ["limon", 68, 34], ["luleshtrydhe", 84, 34], ["portokall", 14, 56], ["rrush", 28, 56], ["shalqi", 46, 56], ["pjepër", 64, 56], ["kajsi", 82, 56], ["arrë", 36, 78], ["ulli", 62, 78]] },
+  okul: { ...SCN(320, 220, `<rect width="320" height="220" fill="#eef1f6"/><rect x="70" y="16" width="180" height="70" rx="4" fill="#2f5d50" stroke="#8a5a36" stroke-width="5"/><text x="120" y="60" font-size="20" fill="#fff" font-family="Fredoka,sans-serif">a  b  c</text><rect y="160" width="320" height="60" fill="#c9a77c"/><rect x="100" y="150" width="200" height="16" rx="3" fill="#8a5a36"/>`),
+    items: [["shkronjë", 72, 24], ["mësuese", 14, 50], ["nxënës", 84, 56], ["libër", 40, 66], ["fletore", 52, 66], ["laps", 63, 66], ["letër", 75, 66]] },
+  trupi: { vb: [320, 320], dots: true, bg: `<rect width="320" height="320" fill="#f4eee6"/><g fill="#f3c9a8" stroke="#c99b7a" stroke-width="2"><path d="M124 112h72l14 100h-22l-4 96h-22l-2-80-2 80h-22l-4-96h-22z"/><path d="M124 116l-40 100 14 6 36-80zM196 116l40 100-14 6-36-80z"/><rect x="150" y="88" width="20" height="24"/><circle cx="160" cy="56" r="36"/></g><path d="M124 46q36-36 72 0q-6-22-36-24q-30 2-36 24z" fill="#5a3a22"/><circle cx="147" cy="52" r="3.5" fill="#2a2122"/><circle cx="173" cy="52" r="3.5" fill="#2a2122"/><path d="M160 56v8" stroke="#c99b7a" stroke-width="3"/><path d="M150 76q10 6 20 0" stroke="#b84a56" stroke-width="3" fill="none"/>`,
+    items: [["flokë", 50, 8], ["sy", 46, 16], ["vesh", 61, 18], ["hundë", 50, 20], ["gojë", 50, 24], ["qafë", 50, 31], ["krah", 33, 50], ["dorë", 27, 69], ["gisht", 25, 74], ["zemër", 54, 42], ["bark", 50, 57], ["këmbë", 43, 82]] },
+};
+function sceneEl(u, opts = {}) {
+  const S = SCENEMAP[u.id], [W, H] = S.vb, byS = Object.fromEntries(u.w.map(w => [w.sq, w]));
+  const items = S.items.filter(it => byS[it[0]]);
+  const el = $(`<div class="scene2 ${S.dots ? "dots" : ""}" style="aspect-ratio:${W}/${H}"><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">${S.bg}
+    ${opts.route ? `<polyline class="route" points="${items.map(it => it[1] * W / 100 + "," + it[2] * H / 100).join(" ")}" fill="none" stroke="var(--gold)" stroke-width="3" stroke-dasharray="6 6" stroke-linecap="round"/>` : ""}</svg></div>`);
+  const btns = items.map((it, i) => {
+    const w = byS[it[0]];
+    const b = $(`<button class="hs" type="button" style="left:${it[1]}%;top:${it[2]}%" aria-label="${opts.labels ? esc(w.sq) : "Nesne " + (i + 1)}">${S.dots ? `<span class="dot"></span>` : `<span class="hi">${P.img[w.sq] ? `<img src="${P.img[w.sq]}" alt="">` : icons(w.p)}</span>`}<span class="lb" ${opts.labels ? "" : "hidden"}>${esc(w.sq)}</span></button>`);
+    b.w = w; el.append(b); return b;
+  });
+  return { el, btns, items: items.map(it => byS[it[0]]) };
+}
+/* lesson step: find the new words in the unit's scene */
+function sceneFind(st, ui) {
+  const sc = sceneEl(st.u), queue = shuffle(st.ws); let k = 0, miss = 0;
+  ui.body.append($(`<div class="tag">${icon("🗺️")} Sahnede bul</div>`));
+  const pr = $(`<div class="scene-q"><button class="speaker sm" aria-label="Dinle">${I.speaker}</button><b></b><span class="sub"></span></div>`);
+  ui.body.append(pr, sc.el);
+  const ask = () => { const w = queue[k]; pr.querySelector("b").textContent = w.sq; pr.querySelector(".sub").textContent = `${k + 1} / ${queue.length} · nerede?`; pr.querySelector(".speaker").onclick = () => say(w); say(w); };
+  sc.btns.forEach(b => b.onclick = () => {
+    if (k >= queue.length) return;
+    const w = queue[k];
+    if (b.w === w) { sfx.tap(); b.classList.add("found"); b.querySelector(".lb").hidden = false; k++; if (k < queue.length) setTimeout(ask, 400); else { ui.btn.disabled = false; ui.btn.textContent = "Devam"; ui.btn.className = "btn good"; ui.btn.onclick = () => { LS.tries++; if (!miss) LS.right++; queue.forEach(x => srsUpdate(x, true, 2)); P.scene[st.u.id] = 1; save(); sfx.ok(); LS.i++; renderStep(); }; } }
+    else { miss++; sfx.no(); b.classList.add("nope"); b.querySelector(".lb").hidden = false; setTimeout(() => { b.classList.remove("nope"); if (!b.classList.contains("found")) b.querySelector(".lb").hidden = true; }, 1100); }
+  });
+  ask();
+}
+/* scene explorer: explore, find, and walk the memory-palace route producing each word */
+function openScene(u, mode = "explore") {
+  if (curAudio) curAudio.pause();
+  preload(u.w.map(w => w.a));
+  app.replaceChildren();
+  const el = $(`<div class="lesson"><div class="l-top"><button class="x" aria-label="Kapat">${I.x}</button><div style="flex:1;font-family:var(--f-display);font-weight:700;font-size:1.15rem">${icons(u.ic)} ${esc(u.t)}</div></div>
+    <div class="l-body"><div class="seg modes" role="group"><button data-m="explore">Keşfet</button><button data-m="find">Bul</button><button data-m="walk">Hafıza sarayı</button></div><div class="sbody"></div></div>
+    <div class="sheet"></div></div>`);
+  el.querySelector(".x").onclick = () => { if (curAudio) curAudio.pause(); home("learn"); };
+  el.querySelectorAll(".modes button").forEach(b => { b.setAttribute("aria-pressed", String(b.dataset.m === mode)); b.onclick = () => openScene(u, b.dataset.m); });
+  const body = el.querySelector(".sbody"), sheet = el.querySelector(".sheet");
+  app.append(el);
+  if (mode === "explore") {
+    const sc = sceneEl(u); const seen = new Set();
+    body.append($(`<p class="sub" style="margin:0">Her nesneye dokun: adını duy ve gör. Kelimeler sahnede hep aynı yerde durur; beynin onları yerleriyle birlikte saklar.</p>`), sc.el);
+    const cnt = $(`<div class="sub" style="text-align:center"></div>`); body.append(cnt);
+    const upd = () => cnt.textContent = `${seen.size} / ${sc.btns.length} keşfedildi`; upd();
+    sc.btns.forEach(b => b.onclick = () => { seen.add(b.w.sq); b.querySelector(".lb").hidden = false; b.classList.add("found"); say(b.w); upd(); });
+    sheet.append($(`<button class="btn">Bul oyununa geç</button>`)); sheet.querySelector(".btn").onclick = () => openScene(u, "find");
+  } else if (mode === "find") {
+    const sc = sceneEl(u), queue = shuffle(sc.items); let k = 0, right = 0, miss = false;
+    const pr = $(`<div class="scene-q"><button class="speaker sm" aria-label="Dinle">${I.speaker}</button><b></b><span class="sub"></span></div>`);
+    body.append(pr, sc.el);
+    const ask = () => { if (k >= queue.length) return done(); const w = queue[k]; miss = false; pr.querySelector("b").textContent = w.sq; pr.querySelector(".sub").textContent = `${k + 1} / ${queue.length}`; pr.querySelector(".speaker").onclick = () => say(w); say(w); };
+    const done = () => { sheet.className = "sheet ok"; sheet.innerHTML = `<div class="fb pop"><div class="ic">${icon("🗺️")}</div><div><b>${right} / ${queue.length} ilk denemede</b><span>Şimdi hafıza sarayında kelimeleri kendin söyle.</span></div></div>`; const nb = $(`<button class="btn good">Hafıza sarayına geç</button>`); nb.onclick = () => openScene(u, "walk"); sheet.append(nb); };
+    sc.btns.forEach(b => b.onclick = () => {
+      const w = queue[k]; if (!w) return;
+      if (b.w === w) { sfx.tap(); if (!miss) right++; b.classList.add("found"); b.querySelector(".lb").hidden = false; k++; setTimeout(ask, 450); }
+      else { miss = true; sfx.no(); b.classList.add("nope"); b.querySelector(".lb").hidden = false; setTimeout(() => { b.classList.remove("nope"); if (!b.classList.contains("found")) b.querySelector(".lb").hidden = true; }, 1100); }
+    });
+    ask();
+  } else {
+    const sc = sceneEl(u, { route: true }); let k = 0, right = 0;
+    body.append($(`<p class="sub" style="margin:0">Hafıza sarayı: sarı yolu baştan sona yürü. Her durakta nesnenin adını <b>kendin</b> yaz. Yolu birkaç kez yürüyünce kelimeleri sırasıyla gözünü kapatıp sayabilirsin.</p>`), sc.el);
+    const host = $(`<div class="walk"></div>`); body.append(host);
+    const stop = () => {
+      sc.btns.forEach((b, i) => b.classList.toggle("now", i === k));
+      if (k >= sc.btns.length) {
+        P.scene[u.id] = Math.max(P.scene[u.id] || 0, 2); save();
+        const xp = 5; P.xp += xp; P.dayXp += xp; logDay(xp); bumpStreak(); save(); sfx.win();
+        host.innerHTML = ""; sheet.className = "sheet ok";
+        sheet.innerHTML = `<div class="fb pop"><div class="ic">${icon("🏛️")}</div><div><b>Yol tamam: ${right} / ${sc.btns.length} · +${xp} XP</b><span>Gözlerini kapat ve yolu kafanda yürü: kapıdan başlayıp her durağı Arnavutça say.</span></div></div>`;
+        const nb = $(`<button class="btn good">Devam</button>`); nb.onclick = () => home("learn"); sheet.append(nb); celebrate(el.querySelector(".l-body"), xp, false); return;
+      }
+      const b = sc.btns[k], w = b.w; b.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      host.innerHTML = `<div class="sub" style="text-align:center">Durak ${k + 1} / ${sc.btns.length}${sc.items.length && !SCENEMAP[u.id].dots ? "" : ": işaretli yer"}</div>`;
+      host.append(letterBank(w.sq, ok => {
+        srsUpdate(w, ok, 3); if (ok) right++;
+        b.querySelector(".lb").hidden = false; b.classList.add(ok ? "found" : "nope"); say(w);
+        setTimeout(() => { k++; stop(); }, ok ? 900 : 1800);
+      }));
+    };
+    stop();
+  }
+}
+
+/* ---------- Production with a letter bank (no blank page, but you build the word yourself) ---------- */
+function letterBank(target, done, opts = {}) {
+  const word = target.replace(/[?!.,…]/g, "").trim(), letters = [...word.toLowerCase()].filter(c => c !== " ");
+  const extra = pick([..."aeiouëbcçdfghjklmnpqrstvz"].filter(c => !letters.includes(c)), letters.length > 8 ? 2 : 4);
+  const tiles = shuffle([...letters, ...extra]);
+  const el = $(`<div class="lbank"><div class="lline" aria-label="Cevabın">${letters.map(() => `<span class="slot"></span>`).join("")}</div><div class="ltiles"></div>
+    <div class="row"><button class="chip undo" type="button">⌫ Sil</button><button class="chip hintb" type="button">${I.bulb} İpucu</button><button class="btn sm okb" type="button" disabled>Kontrol et</button></div></div>`);
+  const slots = [...el.querySelectorAll(".slot")], box = el.querySelector(".ltiles"), chosen = [];
+  let hinted = false, over = false;
+  const refresh = () => { slots.forEach((s2, i) => { s2.textContent = chosen[i] ? chosen[i].c : ""; s2.classList.toggle("on", !!chosen[i]); }); el.querySelector(".okb").disabled = chosen.length !== letters.length; };
+  const btns = tiles.map(c => { const b = $(`<button class="ltile" type="button">${esc(c)}</button>`); b.onclick = () => { if (over || b.disabled || chosen.length >= letters.length) return; sfx.tap(); b.disabled = true; chosen.push({ c, b }); refresh(); }; box.append(b); return { c, b }; });
+  el.querySelector(".undo").onclick = () => { const x = chosen.pop(); if (x) { x.b.disabled = false; refresh(); } };
+  el.querySelector(".hintb").onclick = () => {
+    hinted = true; opts.onHint && opts.onHint();
+    while (chosen.length && chosen.some((x, i) => x.c !== letters[i])) { const x = chosen.pop(); x.b.disabled = false; }
+    const need = letters[chosen.length], t = btns.find(x => x.c === need && !x.b.disabled); if (t) t.b.click();
+  };
+  const onKey = e => { if (!document.body.contains(el)) return document.removeEventListener("keydown", onKey); if (e.key === "Backspace") { el.querySelector(".undo").click(); return; } if (e.key === "Enter") { el.querySelector(".okb").click(); return; } const t = btns.find(x => x.c === e.key.toLowerCase() && !x.b.disabled); if (t) t.b.click(); };
+  document.addEventListener("keydown", onKey);
+  el.querySelector(".okb").onclick = () => {
+    if (over || chosen.length !== letters.length) return; over = true;
+    const ok = chosen.map(x => x.c).join("") === letters.join("");
+    slots.forEach((s2, i) => s2.classList.add(chosen[i].c === letters[i] ? "good" : "bad"));
+    el.querySelectorAll("button").forEach(b => b.disabled = true);
+    done(ok, hinted);
+  };
+  return el;
+}
+function spell(st, ui) {
+  const w = st.w;
+  ui.body.append($(`<div class="tag">Kendin yaz · üretme</div>`));
+  ui.body.append($(`<div class="speak-row">${w.p || P.img[w.sq] ? picW(w) : eagle(64)}<div class="bubble-say">${hint(w.tr, "tr")}</div></div>`));
+  ui.body.append($(`<p class="sub" style="margin:0">Arnavutçasını harflerden kur. Seçmek yerine hatırlamak, kelimeyi çok daha kalıcı yapar.</p>`));
+  ui.btn.hidden = true;
+  ui.body.append(letterBank(w.sq, ok => { ui.btn.hidden = false; resolve(ui, ok, w.sq + " = " + w.tr, st); }, { onHint: () => st.hinted = true }));
+}
+
+/* ---------- Explanatory feedback: what was wrong, not only what is right ---------- */
+function explain(st) {
+  if (!st || !st.w) return "";
+  const w = st.w, out = [];
+  if (st.pick && st.pick !== w) out.push(`Senin seçtiğin <b>${esc(st.pick.sq)}</b> = ${esc(st.pick.tr)}.`);
+  if (["build", "dictate"].includes(st.k) && multi(w)) {
+    out.push(`Kelime kelime: <span class="gl">${w.sq.split(" ").map(x => { const k2 = x.toLowerCase().replace(/[?!.,…]/g, ""); const g = GLOSS[k2] || GLOSS[k2.replace(/^(i|e|të) /, "")]; return `<span><b>${esc(x)}</b><small>${g ? esc(g.split(";")[0]) : "·"}</small></span>`; }).join("")}</span>`);
+    if (/\b(i|e|të) [a-zëç]+/i.test(w.sq)) out.push(`Sıfatın önündeki küçük kelime ismin cinsine uyar: <b>i</b> eril, <b>e</b> dişil, <b>të</b> çoğul.`);
+    if (/\b(më|të|e|i|na|ju) (pëlqen|dua|di|jap|ndihmo|falënderoj|shoh)/i.test(w.sq)) out.push(`Kısa zamir (më, të, e, i…) fiilin <b>önüne</b> gelir.`);
+  }
+  if (st.k === "spell") out.push(`Yazılışa dikkat: Arnavutça her harfi okur; <b>ë</b>, <b>ç</b> ve çift harfler (sh, xh, gj, rr) ayrı seslerdir.`);
+  return out.join("<br>");
+}
+
+/* ---------- Grammar practice with explanations ---------- */
+function gramSection(view) {
+  if (!GRAM.length) return;
+  const box = $(`<details class="gsec" open><summary>${icon("🎯")} Gramer antrenmanı · açıklamalı</summary><div class="gbody">
+    <p class="sub" style="margin:0">Her sorudan sonra <b>neden</b> öyle olduğunu görürsün. Kuralı açıklayan geri bildirim, sadece doğru cevabı göstermekten daha çok öğretir.</p>
+    <div class="gchips"></div></div></details>`);
+  const ch = box.querySelector(".gchips");
+  const mix = $(`<button class="chip" type="button">${I.repeat}Karışık</button>`); mix.onclick = () => gramDrill(shuffle(GRAM.flatMap(g => g.items.map(it => ({ ...it, gt: g.t })))).slice(0, 10), "Karışık"); ch.append(mix);
+  GRAM.forEach(g => { const b = $(`<button class="chip" type="button">${esc(g.t)}</button>`); b.onclick = () => gramDrill(shuffle(g.items.map(it => ({ ...it, gt: g.t }))), g.t); ch.append(b); });
+  view.append(box);
+}
+function gramDrill(items, title) {
+  loadPack("gramer"); let i = 0, right = 0;
+  const step = () => {
+    if (i >= items.length) {
+      const xp = 5; P.xp += xp; P.dayXp += xp; logDay(xp); bumpStreak(); save(); sfx.win(); app.replaceChildren();
+      const el = $(`<div class="lesson"><div class="end"><div class="pop">${eagle(130)}</div><h2>${esc(title)}</h2><p style="margin:0;color:var(--muted)">${right} / ${items.length} doğru · +${xp} XP</p></div><div class="sheet"><button class="btn good">Devam</button></div></div>`);
+      el.querySelector(".btn").onclick = () => home("grammar"); app.append(el); celebrate(el.querySelector(".end"), xp, false); return;
+    }
+    const it = items[i], order = shuffle(it.o.map((o, k) => ({ o, k }))); let sel = null;
+    app.replaceChildren();
+    const el = $(`<div class="lesson"><div class="l-top"><button class="x" aria-label="Kapat">${I.x}</button><div class="l-prog"><i style="width:${Math.round(i / items.length * 100)}%"></i></div></div>
+      <div class="l-body"><div class="tag">${esc(it.gt)}</div><div class="gq">${esc(it.s).replace("___", `<span class="gap" id="gap">&nbsp;&nbsp;&nbsp;&nbsp;</span>`)}</div><div class="sub" style="text-align:center">${esc(it.tr)}</div><div class="grid2"></div></div>
+      <div class="sheet"><button class="btn" disabled>Kontrol et</button></div></div>`);
+    el.querySelector(".x").onclick = () => home("grammar");
+    const g = el.querySelector(".grid2"), btn = el.querySelector(".sheet .btn"), sheet = el.querySelector(".sheet");
+    order.forEach(({ o, k }) => { const b = $(`<button class="opt">${esc(o)}</button>`); b.onclick = () => { g.querySelectorAll(".opt").forEach(x => x.classList.remove("sel")); b.classList.add("sel"); sel = k; btn.disabled = false; el.querySelector("#gap").textContent = o; }; g.append(b); });
+    btn.onclick = () => {
+      const ok = sel === it.c; if (ok) right++; else items.push(it);
+      g.querySelectorAll(".opt").forEach((b, j) => { b.disabled = true; if (order[j].k === it.c) b.classList.add("ok"); else if (order[j].k === sel) b.classList.add("no"); });
+      ok ? sfx.ok() : sfx.no(); sheet.className = "sheet " + (ok ? "ok" : "no");
+      sheet.innerHTML = `<div class="fb pop"><div class="ic">${ok ? `<span style="color:var(--good)">${I.check}</span>` : eagle(44, "sad")}</div><div><b>${ok ? "Doğru!" : "Doğrusu:"}</b><span>${esc(it.full)}</span></div></div><div class="why">${it.why}</div>`;
+      say({ sq: it.full, a: it.a, k: it.k });
+      const nb = $(`<button class="btn ${ok ? "good" : "bad"}">Devam</button>`); sheet.append(nb); nb.focus(); nb.onclick = () => { i++; step(); };
+    };
+    app.append(el);
+  };
+  step();
+}
+
+/* ---------- Measuring learning: coverage, listening time, memory checks, can-do ---------- */
+function coverageHTML() {
+  if (!FREQ.length) return "";
+  const tok = t => t.toLowerCase().match(/[a-zëç]+/g) || [];
+  const know = new Set(Object.keys(P.srs).filter(k => P.srs[k].s > 0).flatMap(tok));
+  const course = new Set(allWords().flatMap(w => tok(w.sq)).concat(STORIES.flatMap(s => s.lines.flatMap(l => tok(l.sq)))));
+  const top = FREQ.slice(0, 1000), pc = Math.round(top.filter(x => know.has(x)).length / 10), cc = Math.round(top.filter(x => course.has(x)).length / 10);
+  const mins = Math.round((P.lis || 0) / 60);
+  return `<div class="cov"><div><b style="font-size:.9rem">En sık 1000 kelime</b><div class="sub">Arnavutça konuşmaların büyük kısmı bu kelimelerle. Sen: <b>%${pc}</b> · Kursun tamamı: %${cc}</div><div class="gbar"><i style="width:${cc}%;background:var(--surface-2)"></i><i style="width:${pc}%;position:absolute;left:0;top:0;bottom:0"></i></div></div>
+    <div><b style="font-size:.9rem">Dinleme</b><div class="sub">Toplam <b>${mins} dk</b> Arnavutça dinledin. Araştırmalar yüzlerce saatlik anlaşılır girdi öneriyor: Dinleme modu bunun için.</div></div></div>`;
+}
+function checkPanel() {
+  const t = dayNum(), elig = allWords().filter(w => { const r = P.srs[w.sq]; return r && r.s > 0 && r.last <= t - 7; });
+  const last = P.checks.slice(-4);
+  const sc = P.checks.reduce((a, c) => (a[0] += c.sn || 0, a[1] += c.sok || 0, a[2] += (c.n - (c.sn || 0)), a[3] += (c.ok - (c.sok || 0)), a), [0, 0, 0, 0]);
+  const box = $(`<div class="panel" style="margin-top:14px"><div style="display:flex;gap:12px;align-items:center">${icon("🧠")}<div><b>Hafıza kontrolü</b><div class="sub">En az bir haftadır görmediğin 15 kelime, ipucusuz ve yazarak. Gerçekten ne kadar kaldığını ölçer.</div></div></div>
+    ${last.length ? `<div class="checks">${last.map(c => `<div><b>%${Math.round(c.ok / c.n * 100)}</b><small>${c.d.slice(5)}</small></div>`).join("")}</div>` : ""}
+    ${sc[0] >= 5 && sc[2] >= 5 ? `<div class="sub">Sahneyle öğrendiğin kelimeler: <b>%${Math.round(sc[1] / sc[0] * 100)}</b> · diğerleri: <b>%${Math.round(sc[3] / sc[2] * 100)}</b> hatırlandı. Görsel hafıza sende işe yarıyor mu, bu karşılaştırma söyler.</div>` : ""}
+    <button class="btn ghost" ${elig.length >= 8 ? "" : "disabled"}>${elig.length >= 8 ? "Kontrolü başlat" : "Bir hafta sonra açılır (" + elig.length + " / 8 kelime hazır)"}</button></div>`);
+  box.querySelector(".btn").onclick = () => {
+    const ws = pick(elig, 15);
+    const steps = ws.map(w => ({ k: multi(w) && w.sq.split(" ").length <= 7 ? "build" : spellable(w) ? "spell" : "toSq", w, noHint: true }));
+    preload(ws.map(w => w.a));
+    LS = { L: null, review: true, check: true, steps, i: 0, hearts: 5, total: steps.length, right: 0, tries: 0, t0: Date.now(), practice: true, redo: [], log: [] };
+    renderStep();
+  };
+  return box;
+}
+const CANDO = [
+  ["A1", "Kendimi tanıtabilirim (ad, nereli, yaş, iş)"], ["A1", "Selamlaşıp vedalaşabilirim"], ["A1", "Sayıları, günleri ve saati anlayabilirim"], ["A1", "Kafede bir şey sipariş edebilirim"],
+  ["A1", "Ailemi kısaca anlatabilirim"], ["A1", "Fiyat sorup cevabı anlayabilirim"], ["A1", "Yavaş sorulan basit soruları anlayabilirim"], ["A1", "Kısa, basit notları okuyabilirim"],
+  ["A2", "Günlük rutinimi anlatabilirim"], ["A2", "Yol sorup tarifi anlayabilirim"], ["A2", "Otelde giriş yapıp soru sorabilirim"], ["A2", "Doktora şikâyetimi anlatabilirim"],
+  ["A2", "Geçmişte yaptığım bir şeyi anlatabilirim"], ["A2", "Planlarımı anlatabilirim"], ["A2", "Telefonda buluşma ayarlayabilirim"], ["A2", "Kısa bir hikâyenin ana fikrini anlayabilirim"],
+];
+function candoPanel() {
+  const st = ["Henüz değil", "Zorlanarak", "Rahatça"];
+  const done = CANDO.filter((c, i) => (P.cando[i] || {}).v === 2).length;
+  const box = $(`<details class="gsec"><summary>${icon("📈")} Neler yapabiliyorum? · ${done} / ${CANDO.length}</summary><div class="gbody">
+    <p class="sub" style="margin:0">Avrupa Dil Çerçevesi (CEFR) hedefleri. Arada bir dürüstçe işaretle: ilerlemen ders sayısıyla değil, gerçek hayatta yapabildiklerinle ölçülür.</p>
+    <div class="cando">${CANDO.map(([lv, t], i) => { const v = (P.cando[i] || {}).v || 0; return `<button class="cd v${v}" data-i="${i}" type="button"><span class="lvl ${lv === "A2" ? "a2" : ""}">${lv}</span><span class="ct">${esc(t)}</span><span class="cv">${st[v]}</span></button>`; }).join("")}</div></div></details>`);
+  box.querySelectorAll(".cd").forEach(b => b.onclick = () => { const i = +b.dataset.i, v = (((P.cando[i] || {}).v || 0) + 1) % 3; P.cando[i] = { v, d: today() }; save(); b.className = "cd v" + v; b.querySelector(".cv").textContent = st[v]; });
+  return box;
+}
+
+/* ---------- Continuous listening (extensive input) ---------- */
+function radio() {
+  const open = STORIES.filter(s => unitDone(s.after));
+  const src = (open.length ? open : STORIES.slice(0, 2));
+  const lines = src.flatMap(s => s.lines.map(l => ({ ...l, st: s.t })));
+  preload(lines.map(l => l.a)); src.forEach(s => loadPack("s-" + s.id, true));
+  if (curAudio) curAudio.pause();
+  app.replaceChildren();
+  const el = $(`<div class="lesson radio"><div class="l-top"><button class="x" aria-label="Kapat">${I.x}</button><div style="flex:1;font-family:var(--f-display);font-weight:700">${icon("🎧")} Dinleme modu</div><button class="chip trbtn" type="button" aria-pressed="true">Çeviri</button></div>
+    <div class="l-body"><div class="rcap"><div class="rst"></div><div class="rwho"></div><div class="rsq"></div><div class="rtr"></div></div>
+      <div class="rctl"><button class="chip prev" type="button">⏮</button><button class="speaker play" aria-label="Oynat / durdur">${I.play}</button><button class="chip next" type="button">⏭</button></div>
+      <div class="sub" style="text-align:center"><span class="pos"></span> · ${src.length} hikâye</div></div></div>`);
+  let i = 0, playing = true, run = 0, showTr = true;
+  const cap = el.querySelector(".rcap");
+  const show = () => { const l = lines[i]; cap.querySelector(".rst").textContent = l.st; cap.querySelector(".rwho").textContent = l.who || ""; cap.querySelector(".rsq").innerHTML = kara(l); cap.querySelector(".rtr").textContent = l.tr; cap.querySelector(".rtr").hidden = !showTr; el.querySelector(".pos").textContent = `${i + 1} / ${lines.length}`; };
+  const go = () => {
+    const my = ++run; show(); if (!playing) return;
+    Promise.resolve(say(lines[i], false, lines[i].f)).then(au => {
+      const nx = () => { if (my !== run || !playing) return; i = (i + 1) % lines.length; setTimeout(() => my === run && go(), 700); };
+      if (!au) return nx(); au.addEventListener("ended", nx, { once: true }); au.addEventListener("error", nx, { once: true });
+    });
+  };
+  el.querySelector(".x").onclick = () => { run++; if (curAudio) curAudio.pause(); home("stories"); };
+  el.querySelector(".play").onclick = e => { playing = !playing; e.currentTarget.innerHTML = playing ? I.play : I.speaker; if (playing) go(); else { run++; if (curAudio) curAudio.pause(); } };
+  el.querySelector(".prev").onclick = () => { i = (i - 1 + lines.length) % lines.length; go(); };
+  el.querySelector(".next").onclick = () => { i = (i + 1) % lines.length; go(); };
+  el.querySelector(".trbtn").onclick = e => { showTr = !showTr; e.currentTarget.setAttribute("aria-pressed", String(showTr)); show(); };
+  app.append(el); go();
+}
+
 /* ---------- Finish ---------- */
 function finish(passed) {
   app.replaceChildren();
@@ -2020,17 +2450,18 @@ function finish(passed) {
   let xp = 0;
   if (passed) {
     xp = LS.review ? 5 : LS.practice ? 5 : 10;
-    if (LS.hearts === 5) xp += 5;
+    if (LS.tries && LS.right === LS.tries) xp += 5;
     var goalHit = P.dayXp < GOAL && P.dayXp + xp >= GOAL;
     P.xp += xp; P.dayXp += xp; logDay(xp);
     if (LS.L) P.done[LS.L.id] = 1;
+    if (LS.check) { const lg = LS.log || [], scn = lg.filter(x => SCENEMAP[x.u]); P.checks.push({ d: today(), n: lg.length, ok: lg.filter(x => x.ok).length, sn: scn.length, sok: scn.filter(x => x.ok).length }); save(); }
     if (LS.jump !== undefined) UNITS.slice(0, LS.jump).forEach(u => u.lessons.forEach(L => P.done[L.id] = 1));
     bumpStreak(); save(); sfx.win();
   }
-  const where = LS.jump !== undefined ? (passed ? `${LS.jump} ünite açıldı. Ünite ${LS.jump + 1}'den devam!` : "") : LS.review ? "Tekrar oturumu" : esc(LS.L.unit.t) + " · ders " + (LS.L.li + 1);
+  const where = LS.check ? `Hafıza kontrolü: ${LS.right} / ${LS.tries} hatırlandı` : LS.jump !== undefined ? (passed ? `${LS.jump} ünite açıldı. Ünite ${LS.jump + 1}'den devam!` : "") : LS.review ? "Tekrar oturumu" : esc(LS.L.unit.t) + " · ders " + (LS.L.li + 1);
   const el = $(`<div class="lesson"><div class="end">
     <div class="pop">${eagle(140, passed ? "happy" : "sad")}</div>
-    <h2 class="${passed ? "" : "fail"}">${passed ? (LS.jump !== undefined ? "Test geçildi!" : LS.hearts === 5 ? "Kusursuz!" : LS.review ? "Tekrar tamamlandı!" : "Ders tamamlandı!") : "Canların bitti"}</h2>
+    <h2 class="${passed ? "" : "fail"}">${passed ? (LS.jump !== undefined ? "Test geçildi!" : LS.tries && LS.right === LS.tries ? "Kusursuz!" : LS.review ? "Tekrar tamamlandı!" : "Ders tamamlandı!") : "Canların bitti"}</h2>
     <p style="margin:0;color:var(--muted)">${passed ? where + (P.streak > 1 ? " · " + P.streak + " günlük seri" : "") : "Sorun değil, tekrar dene. Yanlışlar en iyi öğretmendir."}</p>
     <div class="end-stats">
       <div class="es x"><div class="h">XP</div><div class="v">+${xp}</div></div>

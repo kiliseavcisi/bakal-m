@@ -13,4 +13,5 @@ page = head + page.slice(0, i) + "</head>\n<body>\n" + page.slice(i) + "\n</body
 fs.writeFileSync(path.join(out, "index.html"), page);
 for (const f of ["data.json", "icons.json"]) fs.copyFileSync(path.join(src, f), path.join(out, f));
 for (const d of ["packs", "packs2"]) for (const f of fs.readdirSync(path.join(src, d))) fs.copyFileSync(path.join(src, d, f), path.join(out, d, f));
+fs.cpSync(path.join(src, "packsv"), path.join(out, "packsv"), { recursive: true });
 console.log("www ready:", fs.readdirSync(path.join(out, "packs")).length, "packs");

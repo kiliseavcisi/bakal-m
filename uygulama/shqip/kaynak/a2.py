@@ -123,5 +123,6 @@ UNITS3 = [
   ["Prishtina", "Priştine (başkent)", "🏙️"], ["Prizreni", "Prizren", "🕌"]],
   ["Kosova'da <b>Gegçe</b> (kuzey lehçesi) konuşulur. Standart yazı dili Toskça'ya dayanır; okulda ve resmî dilde standart kullanılır, günlük konuşmada Gegçe.",
    "Gegçede kelime sonundaki <b>ë</b> çoğu zaman düşer (<i>shumë → shum</i>), “-r-” yerine bazen “-n-” gelir (<i>vëlla → vlla</i>), ve mastar vardır: <b>me</b> + fiil (<i>me shku</i> = gitmek). Gelecek zaman <b>kam me</b> + fiil: <i>kam me shku</i>.",
-   "Türkiye'deki Arnavutların büyük kısmının kökeni Kosova ve Makedonya'dır; ailende duyduğun Arnavutça büyük ihtimalle Gegçedir."]),
+   "Türkiye'deki Arnavutların büyük kısmının kökeni Kosova ve Makedonya'dır; ailende duyduğun Arnavutça büyük ihtimalle Gegçedir.",
+   "<b>Dürüst not:</b> Bu ünitedeki sesler yapay zekâ sesidir ve standart telaffuza yakındır; <b>â</b> gibi genizden sesleri tam veremez. Yazılışları öğren, gerçek Kosova tonlamasını Kosovalı birinden ya da Kosova dizilerinden dinle."]),
 ]
