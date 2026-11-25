@@ -11,7 +11,7 @@ UNITS = [
   ["Nga je?","Nerelisin?",""],["Jam nga Turqia","Türkiye'denim","🇹🇷"],["Sa vjeç je?","Kaç yaşındasın?",""],["Unë jam student","Ben öğrenciyim","🎓"]]),
  ("zamir","Ben, sen, o",[
   ["unë","ben","🙋"],["ti","sen","👉"],["ai","o (erkek)","👨"],["ajo","o (kadın)","👩"],["ne","biz","👥"],["ju","siz",""],
-  ["ata","onlar",""],["unë jam","ben -im",""],["ti je","sen -sin",""],["ai është","o -dir",""],["ne jemi","biz -iz",""],["ata janë","onlar -dır",""]]),
+  ["ata","onlar",""],["Unë jam mirë.","İyiyim.","🙂"],["Ti je i lodhur.","Yorgunsun.","😩"],["Ai është mjek.","O doktor.","👨‍⚕️"],["Ne jemi shokë.","Biz arkadaşız.","🤝"],["Ata janë në shtëpi.","Onlar evde.","🏠"]]),
  ("aile","Aile",[
   ["familje","aile","👨‍👩‍👧‍👦"],["nënë","anne","👩"],["baba","baba","👨"],["vëlla","erkek kardeş","👦"],["motër","kız kardeş","👧"],
   ["gjysh","dede","👴"],["gjyshe","nine","👵"],["fëmijë","çocuk","🧒"],["djalë","oğlan","👦"],["vajzë","kız","👧"],

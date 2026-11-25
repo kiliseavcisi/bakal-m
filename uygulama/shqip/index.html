@@ -630,6 +630,26 @@ a.btn { text-decoration: none; display: flex; align-items: center; justify-conte
 .mc2.up .back { transform: rotateY(180deg); } .mc2.up .front { transform: rotateY(360deg); }
 .mc2.got .front { border-color: var(--good); background: color-mix(in srgb, var(--good) 14%, var(--surface)); }
 .mc2 .mp .tw, .mc2 .mp img { width: 56px; height: 56px; } .mc2 .ms { font: 700 1.05rem var(--f-display); } .mc2 .mt { font-size: .85rem; color: var(--muted); } .mc2 .mp .tt { font: 700 1rem var(--f-display); }
+
+.cpanel { position: relative; width: 100%; aspect-ratio: 16/10; border-radius: 18px; overflow: hidden; border: 3px solid var(--fg); background: #f6efe6; box-shadow: 4px 4px 0 var(--fg); }
+.cpanel.sm { max-width: 320px; margin: 0 auto 6px; }
+.cpanel .pbg { position: absolute; inset: 0; width: 100%; height: 100%; } .cpanel .pbg.plain { background: linear-gradient(160deg, hsl(var(--h, 200) 60% 92%), hsl(var(--h, 200) 45% 80%)); }
+.cpanel .pchar { position: absolute; left: 4%; bottom: -4%; width: 34%; } .cpanel .pchar svg { width: 100%; height: auto; display: block; }
+.cpanel .pprop { position: absolute; left: 40%; bottom: 10%; width: 14%; } .cpanel .pprop .tw { width: 100%; height: auto; }
+.cpanel .pbub { position: absolute; right: 4%; top: 8%; max-width: 58%; background: #fff; color: #2a2122; border: 3px solid #2a2122; border-radius: 18px; padding: 8px 12px; font: 700 clamp(.95rem, 4.2vw, 1.25rem) var(--f-display); line-height: 1.35; }
+.cpanel .pbub::after { content: ""; position: absolute; left: -16px; bottom: 14px; border: 9px solid transparent; border-right: 12px solid #2a2122; }
+.cbk { border-radius: 6px; padding: 0 3px; } .cbk.k1 { background: #ffd9de; color: #b3122a; } .cbk.k0 { color: #1f5fae; } .cbk.k2 { color: #2b7a36; } .cbk.k3 { color: #a86f00; }
+.teach { display: flex; flex-direction: column; gap: 12px; } .trule { font-size: 1rem; line-height: 1.55; padding: 12px 14px; border-radius: 14px; background: var(--gold-soft); }
+.tex { display: flex; flex-direction: column; gap: 10px; } .ttr { text-align: center; color: var(--muted); font-size: 1.05rem; }
+.blk { display: flex; flex-direction: column; gap: 6px; align-items: center; padding: 10px; border-radius: 14px; background: var(--surface); border: 2px solid var(--line); }
+.brow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: center; } .brow .bl { font-size: .7rem; font-weight: 700; color: var(--muted); width: 22px; }
+.barrow { color: var(--muted); font-weight: 700; } .tnav { display: flex; gap: 8px; justify-content: space-between; align-items: center; }
+.gopts .opt { font-family: var(--f-display); font-weight: 700; font-size: 1.1rem; }
+.nb { display: flex; flex-direction: column; gap: 10px; align-items: stretch; } .nbig { text-align: center; font: 800 3.2rem var(--f-display); color: var(--accent); line-height: 1; }
+.nparts { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; min-height: 64px; } .np { display: flex; flex-direction: column; align-items: center; gap: 4px; } .np small { color: var(--muted); font-size: .75rem; }
+.nb input[type=range] { width: 100%; accent-color: var(--accent); } .nquiz { padding: 10px 12px; border-radius: 14px; background: var(--surface); border: 2px dashed var(--line); } .nquiz .nq { font: 800 1.4rem var(--f-display); color: var(--blue); }
+.nqo { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.pats { display: flex; flex-direction: column; gap: 8px; }
 </style>
 
 <div class="app" id="app"><p class="loading">Yükleniyor…</p></div>
@@ -813,12 +833,12 @@ function picMini(p) {
 const unitOf = w => UNITS.find(u => u.id === w.u) || { hue: 350, ic: "📘" };
 
 /* ---------- Course structure ---------- */
-let UNITS = [], LESSONS = [], STORIES = [], ALPHA = [], GLOSS = {}, REV = {}, PAIRS = [], ICONS = {}, EXTRA = [], ROLES = [], CONJ = null, GRAM = [], FREQ = [], MODS = [];
+let UNITS = [], LESSONS = [], STORIES = [], ALPHA = [], GLOSS = {}, REV = {}, PAIRS = [], ICONS = {}, EXTRA = [], ROLES = [], CONJ = null, GRAM = [], FREQ = [], MODS = [], PATS = [], NUMS = [];
 let TAB = "learn";
 const app = document.getElementById("app");
 Promise.all([fetch("data.json").then(r => r.json()), fetch("icons.json").then(r => r.json()).catch(() => ({}))]).then(([d, ic]) => {
   ICONS = ic;
-  UNITS = d.units; STORIES = d.stories; ALPHA = d.alpha; PAIRS = d.pairs || []; EXTRA = d.extra || []; GLOSS = d.gloss; REV = d.rev; ROLES = d.roles || []; CONJ = d.conj || null; GRAM = d.gram || []; FREQ = d.freq || []; MODS = d.mods || []; GOAL = ({ 5: 15, 10: 20, 15: 30, 20: 40 })[(P.profile || {}).min] || 30;
+  UNITS = d.units; STORIES = d.stories; ALPHA = d.alpha; PAIRS = d.pairs || []; EXTRA = d.extra || []; GLOSS = d.gloss; REV = d.rev; ROLES = d.roles || []; CONJ = d.conj || null; GRAM = d.gram || []; FREQ = d.freq || []; MODS = d.mods || []; PATS = d.pats || []; NUMS = d.nums || []; GOAL = ({ 5: 15, 10: 20, 15: 30, 20: 40 })[(P.profile || {}).min] || 30;
   UNITS.forEach((u, ui) => {
     u.w.forEach(w => w.u = u.id);
     const n = Math.ceil(u.w.length / 5), size = Math.ceil(u.w.length / n);
@@ -910,14 +930,15 @@ function learnTab(view) {
       <div style="flex:1;min-width:0"><div class="k">Ünite ${ui + 1} <span class="lvl ${u.lv === "A2" ? "a2" : ""}">${u.lv || "A1"}</span>${u.kos ? ` <span class="lvl kos">her zaman açık</span>` : ""}</div><h2>${esc(u.t)}</h2></div>
       <div class="peek">${doneCount} / ${u.lessons.length} ders<br>${u.w.length} kelime</div></div>
       <div class="unit-tools"><button class="chip tipbtn" aria-expanded="false">${I.bulb}Dil notları</button>
-      <span class="chip words">${u.w.slice(0, 6).map(w => picMini(w.p)).join("")}</span>${!unitLocked && SCENEMAP[u.id] ? `<button class="chip scenebtn" type="button">${icon("🗺️")}Sahne</button>` : ""}${!unitLocked ? `<button class="chip puzbtn" type="button">${icon("🧩")}Bulmaca</button>` : ""}${unitLocked && ui > 0 ? `<button class="chip jumpbtn" type="button">${I.lock}Teste gir, atla</button>` : ""}</div>
+      <span class="chip words">${u.w.slice(0, 6).map(w => picMini(w.p)).join("")}</span>${!unitLocked && SCENEMAP[u.id] ? `<button class="chip scenebtn" type="button">${icon("🗺️")}Sahne</button>` : ""}${!unitLocked && u.w.filter(XW_OK).length >= 3 ? `<button class="chip puzbtn" type="button">${icon("🧩")}Bulmaca</button>` : ""}${PATS.some(x => x.unit === u.id) ? `<button class="chip patbtn" type="button">${icon("💡")}Kuralı gör</button>` : ""}${unitLocked && ui > 0 ? `<button class="chip jumpbtn" type="button">${I.lock}Teste gir, atla</button>` : ""}</div>
       <div class="tipbox" hidden>${u.tips.map(t => `<div>${t}</div>`).join("")}</div>
       <div class="path"></div></section>`);
     const tb = sec.querySelector(".tipbtn"), box = sec.querySelector(".tipbox");
     tb.onclick = () => { box.hidden = !box.hidden; tb.setAttribute("aria-expanded", String(!box.hidden)); };
     const jbt = sec.querySelector(".jumpbtn"); if (jbt) jbt.onclick = () => jumpTest(ui);
     const scb = sec.querySelector(".scenebtn"); if (scb) scb.onclick = () => openScene(u);
-    const pzb = sec.querySelector(".puzbtn"); if (pzb) pzb.onclick = () => openPuzzles(u);
+    const pzb = sec.querySelector(".puzbtn"); if (pzb) pzb.onclick = () => openPuzzles(u, "cross");
+    const ptb = sec.querySelector(".patbtn"); if (ptb) ptb.onclick = () => openPattern(PATS.find(x => x.unit === u.id));
     const path = sec.querySelector(".path");
     u.lessons.forEach((L, li) => {
       const idx = LESSONS.indexOf(L), done = isDone(L), locked = idx > cur && !u.kos && !done, current = idx === cur;
@@ -1119,7 +1140,9 @@ function startLesson(L) {
   const dueOld = dueWords().filter(w => prev.includes(w));
   const review = (dueOld.length ? shuffle(dueOld) : shuffle(prev)).slice(0, Math.min(3, prev.length));
   const steps = [];
-  if (L.li === 0 && !P.tipsSeen[L.unit.id]) steps.push({ k: "tip", u: L.unit });
+  const pat = PATS.find(x => x.unit === L.unit.id);
+  if (pat && L.li === 0 && !practice) steps.push({ k: "teach", p: pat });
+  else if (L.li === 0 && !P.tipsSeen[L.unit.id]) steps.push({ k: "tip", u: L.unit });
   // 1. introduce each new item, immediately followed by hearing it again (recognition)
   let held = null;
   words.forEach(w => {
@@ -1130,9 +1153,8 @@ function startLesson(L) {
   if (held) steps.push(held);
   // 2. consolidate the set; where the unit has a picture scene, find the new words in it (place + picture + sound)
   if (words.length >= 3) steps.push({ k: "match", ws: words.slice(0, 5) });
-  const sw = SCENEMAP[L.unit.id] ? words.filter(w => SCENEMAP[L.unit.id].items.some(it => it[0] === w.sq)) : [];
-  if (sw.length >= 2) steps.push({ k: "sceneFind", ws: sw.slice(0, 4), u: L.unit });
-  else if (words.length >= 3) steps.push({ k: "pairs", ws: words.slice(0, 4) });
+  // the unit's grammar pattern: practised in full sentences with a targeted gap (2–3 per lesson, rotating)
+  if (pat) { const ds = pat.drills, n = L.li === 0 ? 3 : 2; for (let i = 0; i < n; i++) steps.push({ k: "gap", d: ds[(L.li * 2 + i) % ds.length], p: pat }); }
   // 3. recall: Turkish → Albanian (build the sentence or choose the word), fill the gap where possible
   shuffle(words).forEach(w => steps.push({ k: recallKind(w), w }));
   const gap = words.filter(fillable);
@@ -1191,7 +1213,7 @@ function renderStep() {
   }
   const st = LS.steps[LS.i];
   const ui = lessonShell();
-  ({ intro, listen, toSq, toTr, match, build, type, speak, tip, fill, dictate, spell, sceneFind, pairs })[st.k](st, ui);
+  ({ intro, listen, toSq, toTr, match, build, type, speak, tip, fill, dictate, spell, sceneFind, pairs, teach, gap })[st.k](st, ui);
 }
 
 /* Bottom-sheet result + continue */
@@ -1247,7 +1269,7 @@ function intro(st, ui) {
   const w = st.w;
   const ex = findExample(w);
   ui.body.append($(`<div class="tag new">${multi(w) ? "Yeni kalıp" : "Yeni kelime"}</div>`));
-  const card = $(`<div class="intro pop" style="--h:${unitOf(w).hue}">${picW(w)}<div class="sq">${kara(w)}</div><div class="tr">${esc(w.tr)}</div></div>`);
+  const card = $(`<div class="intro pop" style="--h:${unitOf(w).hue}">${multi(w) && !P.img[w.sq] ? comicPanel({ who: castFor(w.sq), mood: moodOf(w.p), scene: null, sq: w.sq, ic: w.p }, true) : picW(w)}<div class="sq">${kara(w)}</div><div class="tr">${esc(w.tr)}</div></div>`);
   const sp = speakerRow(w); sp.style.justifyContent = "center"; card.append(sp);
   ui.body.append(card);
   const fam = formFamily(w);
@@ -1712,6 +1734,7 @@ const G = (w, g) => `<span class="g-${g}">${w}</span>`;
 function grammarTab(view) {
   view.append($(`<h2 class="section-h">Gramer</h2>`));
   view.append($(`<p class="lead">Renkler cinsiyeti gösterir: <span class="g-m">eril</span> kelimeler mavi, <span class="g-f">dişil</span> kelimeler kırmızı. Renkle eşleştirmek cinsiyeti hatırlamayı kolaylaştırır. Arnavutça kelimelere dokununca dinleyebilirsin.</p>`));
+  patternSection(view);
   mirrorSection(view);
   animSection(view);
   gramSection(view);
@@ -1855,7 +1878,7 @@ const PEOPLE = {
   "Unë": { g: "m", hair: "#2a2122", top: "#5a6a7a" }, "Lypësi": { g: "o", hair: "#bbbbbb", top: "#7a6a55", beard: 1 }, "Talesi": { g: "o", hair: "#eeeeee", top: "#f4f0e6", beard: 1 },
   "Shitësi": { g: "m", hair: "#2a2122", top: "#c8162f", apron: 1, mus: 1 }, "Recepsionisti": { g: "m", hair: "#2a2122", top: "#244aa5" }, "Mjeku": { g: "m", hair: "#5a3a22", top: "#ffffff", coat: 1, glasses: 1 }, "Pacienti": { g: "m", hair: "#3a2a20", top: "#9bb7d4" },
 };
-function personSVG(o) {
+function personSVG(o, mood) {
   const skin = "#f3c9a8", kid = o.g === "k", s = kid ? .82 : 1;
   const longHair = o.g === "f" ? `<path d="M20 50c-2 30 6 52 30 52s32-22 30-52z" fill="${o.hair}"/>` : "";
   const hairTop = o.g === "f" ? `<path d="M24 44c0-20 12-30 26-30s26 10 26 30c-4-12-14-16-26-16s-22 4-26 16z" fill="${o.hair}"/>`
@@ -1869,7 +1892,7 @@ function personSVG(o) {
     ${o.glasses ? `<g fill="none" stroke="#2a2122" stroke-width="2"><circle cx="41" cy="46" r="7"/><circle cx="59" cy="46" r="7"/><path d="M48 46h4"/></g>` : ""}
     ${o.beard ? `<path d="M30 52c2 22 38 22 40 0-6 8-34 8-40 0z" fill="${o.hair}"/>` : ""}${o.mus ? `<path d="M40 55q10-6 20 0" stroke="#2a2122" stroke-width="4" fill="none" stroke-linecap="round"/>` : ""}
     <path class="mouth" d="M42 57q8 6 16 0" stroke="#2a2122" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-    ${o.g === "f" ? `<circle cx="34" cy="53" r="4" fill="#f4a3a8" opacity=".7"/><circle cx="66" cy="53" r="4" fill="#f4a3a8" opacity=".7"/>` : ""}</g></svg>`;
+    ${o.g === "f" ? `<circle cx="34" cy="53" r="4" fill="#f4a3a8" opacity=".7"/><circle cx="66" cy="53" r="4" fill="#f4a3a8" opacity=".7"/>` : ""}${MOOD[mood] || ""}</g></svg>`.replace(mood && MOUTH[mood] ? 'd="M42 57q8 6 16 0"' : "@@", mood && MOUTH[mood] ? `d="${MOUTH[mood]}"` : "@@");
 }
 const SCENES = {
   klasa: `<rect width="320" height="200" fill="#e9eef5"/><rect x="60" y="22" width="200" height="80" rx="4" fill="#2f5d50" stroke="#8a5a36" stroke-width="5"/><text x="160" y="58" text-anchor="middle" font-size="18" fill="#fff" font-family="Fredoka,sans-serif">4 + 3 = ?</text><text x="160" y="84" text-anchor="middle" font-size="12" fill="#cfe" font-family="Fredoka,sans-serif">Mirëmëngjes!</text><rect y="150" width="320" height="50" fill="#c9a77c"/>`,
@@ -3208,7 +3231,7 @@ function openPuzzles(u, mode) {
   mode = mode || (canX ? "cross" : "mem");
   app.replaceChildren();
   const el = $(`<div class="lesson"><div class="l-top"><button class="x" aria-label="Kapat">${I.x}</button><div style="flex:1;font-family:var(--f-display);font-weight:700;font-size:1.1rem">${icons(u.ic)} ${esc(u.t)}</div></div>
-    <div class="l-body"><div class="seg modes" role="group">${canX ? `<button data-m="cross">Çengel bulmaca</button>` : ""}<button data-m="mem">Hafıza kartları</button></div><div class="pbody"></div></div><div class="sheet"></div></div>`);
+    <div class="l-body"><div class="seg modes" role="group"><button data-m="cross">Çengel bulmaca</button></div><div class="pbody"></div></div><div class="sheet"></div></div>`);
   el.querySelector(".x").onclick = () => { if (curAudio) curAudio.pause(); home("learn"); };
   el.querySelectorAll(".modes button").forEach(b => { b.setAttribute("aria-pressed", String(b.dataset.m === mode)); b.onclick = () => openPuzzles(u, b.dataset.m); });
   app.append(el);
@@ -3219,6 +3242,144 @@ function openPuzzles(u, mode) {
     row.children[0].onclick = () => openPuzzles(u, mode); row.children[1].onclick = () => home("learn"); sheet.append(row); celebrate(el.querySelector(".l-body"), xp, false); };
   if (mode === "cross") crossword(body, u, (n, hints) => win(`Bulmaca çözüldü: ${n} kelime`, hints ? `${hints} ipucu kullandın. Bir dahaki sefere ipucusuz dene!` : "İpucusuz! Bu kelimeler artık uzun süre aklında."));
   else memoryCards(body, pick(u.w.filter(w => w.a), 6), (moves, n) => win(`${n} çift, ${moves} hamle`, moves <= n + 3 ? "Harika hafıza!" : "Tekrar oyna: hamle sayını düşür."));
+}
+
+
+/* ---------- Expressions for the cast ---------- */
+const MOUTH = { happy: "M40 55q10 11 20 0", sad: "M42 61q8 -6 16 0", tired: "M43 59h14", surprised: "M46 58a4 5 0 1 0 8 0a4 5 0 1 0 -8 0" };
+const MOOD = {
+  tired: `<path d="M35 43h12M53 43h12" stroke="#c99b7a" stroke-width="4" stroke-linecap="round"/><path d="M74 30q4 6 0 9q-4 -3 0 -9z" fill="#7cc4f2"/>`,
+  sad: `<path d="M35 38l10 3M65 38l-10 3" stroke="#2a2122" stroke-width="2.5" stroke-linecap="round"/>`,
+  surprised: `<path d="M34 36q7 -5 13 0M53 36q7 -5 13 0" stroke="#2a2122" stroke-width="2.5" fill="none" stroke-linecap="round"/>`,
+  happy: `<path d="M35 39q6 -3 11 0M54 39q6 -3 11 0" stroke="#2a2122" stroke-width="2" fill="none" stroke-linecap="round"/>`,
+};
+const CAST = ["Ana", "Artani", "Nëna", "Mësuesja", "Arbeni", "Dritani", "Shitësi", "Kamerieri"];
+const castFor = t => CAST[[...t].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7) % CAST.length];
+const moodOf = p => /😩|😴|🥱|🤒|🤕|😮‍💨|😓/.test(p || "") ? "tired" : /😢|😞|😔|☹️|😟|🙅/.test(p || "") ? "sad" : /😮|😲|😱|🤯|❓|❔/.test(p || "") ? "surprised" : /🙂|😊|😄|😀|🥳|😍|🤗|👍|🎉/.test(p || "") ? "happy" : "neutral";
+
+/* ---------- Comic panel: a person in a place says the sentence ---------- */
+function comicPanel(ex, small = false) {
+  const bubble = ex.sqb ? ex.sqb.map(([t, c]) => `<span class="cbk k${c}">${esc(t)}</span>`).join(" ") : esc(ex.sq);
+  const bg = ex.scene && SCENES[ex.scene] ? `<svg class="pbg" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice">${SCENES[ex.scene]}</svg>` : `<div class="pbg plain"></div>`;
+  return `<div class="cpanel ${small ? "sm" : ""}">${bg}${ex.ic && !ex.scene && moodOf(ex.ic) === "neutral" && !/^(n:|cal:|sym:|#)/.test(ex.ic) ? `<span class="pprop">${icons(ex.ic)}</span>` : ""}
+    <div class="pchar">${personSVG(PEOPLE[ex.who] || { g: "m", hair: "#2a2122", top: "#5a6a7a" }, ex.mood)}</div>
+    <div class="pbub">${bubble}</div></div>`;
+}
+
+/* ---------- Teach step: rule → three examples (panel + colour blocks that fly from Turkish to Albanian) → try ---------- */
+function blocksRow(ex) {
+  const el = $(`<div class="blk"><div class="brow tr"><span class="bl">TR</span>${ex.trb.map(([t, c]) => `<span class="mc c${c}" data-c="${c}">${esc(t)}</span>`).join("")}</div>
+    <div class="barrow">↓</div><div class="brow sq"><span class="bl">SQ</span>${ex.sqb.map(([t, c]) => `<span class="mc c${c}" data-c="${c}">${esc(t)}</span>`).join("")}</div></div>`);
+  el.play = () => {
+    const trs = [...el.querySelectorAll(".brow.tr .mc")], sqs = [...el.querySelectorAll(".brow.sq .mc")];
+    sqs.forEach((b, i) => {
+      const src = trs.find(t => t.dataset.c === b.dataset.c), to = b.getBoundingClientRect();
+      if (!src) return b.animate([{ opacity: 0, transform: "scale(.5)" }, { opacity: 1, transform: "none" }], { duration: 500, delay: 300 + i * 250, fill: "backwards" });
+      const fr = src.getBoundingClientRect();
+      b.animate([{ transform: `translate(${fr.left - to.left}px,${fr.top - to.top}px)`, opacity: .6 }, { transform: "none", opacity: 1 }], { duration: 800, delay: 300 + i * 250, easing: "cubic-bezier(.2,.8,.2,1)", fill: "backwards" });
+      src.animate([{ boxShadow: "0 0 0 0 rgba(0,0,0,0)" }, { boxShadow: "0 0 0 4px var(--gold)" }, { boxShadow: "0 0 0 0 rgba(0,0,0,0)" }], { duration: 700, delay: 300 + i * 250 });
+    });
+  };
+  return el;
+}
+function teachView(host, p, onEnd) {
+  let i = 0;
+  const pre = PATS.length && p.ex.map(e => e.a);
+  preload(pre || []);
+  const box = $(`<div class="teach"><div class="tag new">${icon("💡")} Önce anla</div><h2 class="prompt">${esc(p.t)}</h2><div class="trule">${p.rule}</div><div class="tex"></div>
+    <div class="row tnav"><button class="chip replay" type="button">${I.play}Tekrar oynat</button><button class="btn sm next" type="button">Sonraki örnek</button></div></div>`);
+  const tex = box.querySelector(".tex");
+  const show = () => {
+    const ex = p.ex[i]; tex.innerHTML = "";
+    tex.append($(comicPanel(ex)), $(`<div class="ttr">${esc(ex.tr)}</div>`));
+    const br = blocksRow(ex); tex.append(br);
+    box.querySelector(".tag").innerHTML = `${icon("💡")} Önce anla · örnek ${i + 1} / ${p.ex.length}`;
+    const go = () => { br.play(); setTimeout(() => say(ex), 250); };
+    box.querySelector(".replay").onclick = go; setTimeout(go, 200);
+    box.querySelector(".next").textContent = i < p.ex.length - 1 ? "Sonraki örnek" : (p.builder ? "Sayı kurucuya geç" : "Şimdi sen dene");
+  };
+  box.querySelector(".next").onclick = () => {
+    if (i < p.ex.length - 1) { i++; show(); return; }
+    if (p.builder && !box.querySelector(".nb")) { tex.innerHTML = ""; numberBuilder(tex); box.querySelector(".replay").style.display = "none"; box.querySelector(".next").textContent = "Şimdi sen dene"; return; }
+    onEnd();
+  };
+  host.append(box); show();
+}
+function teach(st, ui) {
+  ui.btn.hidden = true;
+  teachView(ui.body, st.p, () => { P.tipsSeen[st.p.unit] = 1; save(); LS.i++; renderStep(); });
+}
+function openPattern(p) {
+  if (!p) return; if (curAudio) curAudio.pause(); app.replaceChildren();
+  const el = $(`<div class="lesson"><div class="l-top"><button class="x" aria-label="Kapat">${I.x}</button><div style="flex:1;font-family:var(--f-display);font-weight:700">${icon("💡")} Kural</div></div><div class="l-body"></div><div class="sheet"></div></div>`);
+  el.querySelector(".x").onclick = () => home(TAB);
+  app.append(el);
+  teachView(el.querySelector(".l-body"), p, () => {
+    const steps = shuffle(p.drills).map(d => ({ k: "gap", d, p }));
+    LS = { L: null, review: true, steps, i: 0, hearts: 5, total: steps.length, right: 0, tries: 0, t0: Date.now(), practice: true, redo: [] };
+    renderStep();
+  });
+}
+/* Gap step: the grammar point in a full sentence, options only for that point, explanation after */
+function gap(st, ui) {
+  const d = st.d, w = { sq: d.full, tr: d.tr, a: d.a, k: d.k, u: st.p.unit };
+  st.w = w;
+  ui.body.append($(`<div class="tag">${icon("✏️")} Boşluğu doldur · ${esc(st.p.t)}</div>`));
+  const q = $(`<div class="gq">${esc(d.s).replace("___", `<span class="gap" id="gap">&nbsp;&nbsp;&nbsp;&nbsp;</span>`)}</div>`);
+  ui.body.append(q, $(`<div class="sub" style="text-align:center">${esc(d.tr)}</div>`));
+  const order = shuffle(d.o.map((o, k) => ({ o, k }))), g = $(`<div class="grid3 gopts"></div>`); let sel = null;
+  order.forEach(({ o, k }) => { const b = $(`<button class="opt">${esc(o)}</button>`); b.onclick = () => { g.querySelectorAll(".opt").forEach(x => x.classList.remove("sel")); b.classList.add("sel"); sel = k; q.querySelector("#gap").textContent = o; ui.btn.disabled = false; }; g.append(b); });
+  ui.body.append(g);
+  ui.btn.onclick = () => {
+    const ok = sel === 0; skill("g", ok);
+    g.querySelectorAll(".opt").forEach((b, j) => { b.disabled = true; if (order[j].k === 0) b.classList.add("ok"); else if (order[j].k === sel) b.classList.add("no"); });
+    resolve(ui, ok, d.full, st);
+    ui.sheet.querySelector(".fb").insertAdjacentHTML("afterend", `<div class="why">${icon("💡")} ${d.why}</div>`);
+  };
+}
+
+/* ---------- Number builder: see the system, then build numbers yourself ---------- */
+function numParts(n) {
+  const U = ["", "një", "dy", "tre", "katër", "pesë", "gjashtë", "shtatë", "tetë", "nëntë"], T = { 1: "dhjetë", 2: "njëzet", 3: "tridhjetë", 4: "dyzet", 5: "pesëdhjetë", 6: "gjashtëdhjetë", 7: "shtatëdhjetë", 8: "tetëdhjetë", 9: "nëntëdhjetë" };
+  const TN = { 2: "yirmi", 3: "üç-on (otuz)", 4: "iki-yirmi (kırk)", 5: "beş-on (elli)", 6: "altı-on (altmış)", 7: "yedi-on (yetmiş)", 8: "sekiz-on (seksen)", 9: "dokuz-on (doksan)" };
+  if (n === 100) return [["njëqind", 0, "yüz"]];
+  if (n === 0) return [["zero", 0, "sıfır"]];
+  if (n < 10) return [[U[n], 2, "birler"]];
+  if (n === 10) return [["dhjetë", 0, "on"]];
+  if (n < 20) return [[U[n - 10], 2, "birler"], ["mbëdhjetë", 1, "“on üstü”"]];
+  const t = Math.floor(n / 10), u = n % 10;
+  return u ? [[T[t], 0, TN[t]], ["e", 1, "ve"], [U[u], 2, "birler"]] : [[T[t], 0, TN[t]]];
+}
+function numberBuilder(host) {
+  const box = $(`<div class="nb"><div class="tag">${icon("🔢")} Sayı kurucu</div><div class="nbig">21</div><div class="nparts"></div>
+    <input type="range" min="0" max="100" value="21" aria-label="Sayı seç"><div class="row" style="justify-content:center;gap:8px"><button class="chip m1" type="button">−1</button><button class="chip p1" type="button">+1</button><button class="chip pl" type="button">${I.play}Dinle</button></div>
+    <div class="nquiz"><b>Sen kur:</b> <span class="nq"></span><div class="nqo"></div></div></div>`);
+  const rng = box.querySelector("input"), big = box.querySelector(".nbig"), parts = box.querySelector(".nparts");
+  preload(NUMS.map(x => x.a));
+  const show = (n, speak) => { big.textContent = n; parts.innerHTML = numParts(n).map(([t, c, h]) => `<span class="np"><span class="mc c${c}">${esc(t)}</span><small>${esc(h)}</small></span>`).join(""); if (speak) { const x = NUMS[n]; if (x) say(x); } };
+  rng.oninput = () => show(+rng.value, false); rng.onchange = () => show(+rng.value, true);
+  box.querySelector(".m1").onclick = () => { rng.value = Math.max(0, +rng.value - 1); show(+rng.value, true); };
+  box.querySelector(".p1").onclick = () => { rng.value = Math.min(100, +rng.value + 1); show(+rng.value, true); };
+  box.querySelector(".pl").onclick = () => show(+rng.value, true);
+  const quiz = () => {
+    const n = 21 + Math.floor(Math.random() * 79); if (n % 10 === 0) return quiz();
+    box.querySelector(".nq").textContent = n;
+    const right = NUMS[n].sq, alts = new Set([right]);
+    const t = Math.floor(n / 10), u = n % 10;
+    [NUMS[(t === 4 ? 2 : 4) * 10 + u], NUMS[t * 10 + ((u % 9) + 1)], NUMS[10 + u]].forEach(x => x && alts.add(x.sq));
+    const o = box.querySelector(".nqo"); o.innerHTML = "";
+    shuffle([...alts].slice(0, 3)).forEach(a => { const b = $(`<button class="chip" type="button">${esc(a)}</button>`); b.onclick = () => { const ok = a === right; ok ? sfx.ok() : sfx.no(); skill("g", ok); b.classList.add(ok ? "okc" : "noc"); rng.value = n; show(n, true); if (ok) setTimeout(quiz, 1500); }; o.append(b); });
+  };
+  host.append(box); show(21, false); quiz();
+}
+
+/* ---------- Grammar tab: every pattern lesson, openable any time ---------- */
+function patternSection(view) {
+  if (!PATS.length) return;
+  const box = $(`<details class="gsec" open><summary>${icon("💡")} Kurallar: önce anla, sonra dene · ${PATS.length} konu</summary><div class="gbody"><p class="sub" style="margin:0">Her kural resimli örneklerle anlatılır: aynı renk aynı anlam. Türkçedeki ekin Arnavutçada nereye gittiğini izle, sonra boşluk doldurarak dene.</p><div class="pats"></div></div></details>`);
+  const list = box.querySelector(".pats");
+  PATS.forEach(p => { const u = UNITS.find(x => x.id === p.unit); const b = $(`<button class="story-card" type="button"><span class="ic cover">${u ? icons(u.ic) : icon("💡")}</span><span><span class="t">${esc(p.t)}</span><br><span class="s">${u ? esc(u.t) : ""}</span></span></button>`); b.onclick = () => openPattern(p); list.append(b); });
+  view.append(box);
 }
 
 /* ---------- Finish ---------- */

@@ -28,6 +28,7 @@ except ImportError:
 from stories4 import STORIES4
 from gram import GRAM
 import csv, re
+from patterns import PATTERNS, NUMBERS
 from verbs import VERBS, TENSES, PRON, rows as verb_rows
 
 OUT = os.path.dirname(HERE)
@@ -204,6 +205,15 @@ roles = [{"id": r["id"], "t": r["t"], "cover": r["cover"], "npc": r["npc"], "av"
 def filled(x, o): return re.sub(r"\s*\([^)]*\)", "", x.replace("___", o)).replace(" .", ".").strip()
 gram = [{"id": gid, "t": gt, "items": [dict(s=x, o=o, c=c, tr=tr, why=why, **{"full": filled(x, o[c])}, a=audio("gramer", filled(x, o[c])), k=tm(filled(x, o[c])))
          for x, o, c, tr, why in items]} for gid, gt, items in GRAM]
+# Teach-first pattern lessons (rule + illustrated colour-block examples + targeted gap drills)
+pats = []
+for P_ in PATTERNS:
+    exs = [{"who": who, "mood": mood, "scene": sc, "trb": trb, "sqb": sqb, "sq": sq, "tr": tr, "a": audio("kalip", sq), "k": tm(sq)}
+           for who, mood, sc, trb, sqb, sq, tr in P_["ex"]]
+    drills = [dict(s=x, o=o, c=0, tr=tr, why=why, full=filled(x, o[0]), a=audio("kalip", filled(x, o[0])), k=tm(filled(x, o[0])))
+              for x, o, tr, why in P_["drills"]]
+    pats.append({"id": P_["id"], "unit": P_["unit"], "t": P_["t"], "rule": P_["rule"], "ex": exs, "drills": drills, "builder": P_.get("builder", False)})
+nums = [{"n": n, "sq": t, "a": audio("numra", t), "k": tm(t)} for n, t in NUMBERS]
 # Verb conjugator: one clip per tense row (all six persons), word timings let each form light up
 conj = {"pron": PRON, "tenses": TENSES, "verbs": []}
 by = {}
@@ -271,7 +281,7 @@ for u in units:
 for s_ in stories: wanted.update(emoji_list(s_["cover"]))
 for r in roles: wanted.update(emoji_list(r["cover"] + r["av"]))
 wanted.update(emoji_list("🚶🫴🍽️🥤😴🗣️👀👂✍️📖🏃🏊🎤😂😢🚪🔒🤲🛍️🏷️💼🧠⏳❓💡🤔🤝🏁✅💭⏰🚿👕💇⚽🏆😞✋🪑"))
-wanted.update(emoji_list("🃏🧩📊📋🪧💬🚌🌦️🧾📰💌🇹🇷🎞️❤️😴🔀✍️🗣️🎯⏱️🧠🔁🎧👉📆👪🔗💪🧩📖😮💭🕌🎤📓🎵🧬🏅⚡🧭🎞️👄🎬📝▶️🎶🧥🎼🪕😄😂🧸📰🚪⛲🌳🪑🏮🌉🗿🌾🏛️🗼🏰🚩⚓🛶⛵🐟🪝🧺🏠🌴⛪🌅🏡🐄🌻🪵🛖🐓🌲🍯🌄🦅🕌🧿🍵🧶⚖️🪔🏺🧵🥁🪞🕰️🗝️👨‍👩‍👧✈️💼✨🌱🌿👂⏱️🎯🎙️🗣️"))
+wanted.update(emoji_list("🔢✏️💡🃏🧩📊📋🪧💬🚌🌦️🧾📰💌🇹🇷🎞️❤️😴🔀✍️🗣️🎯⏱️🧠🔁🎧👉📆👪🔗💪🧩📖😮💭🕌🎤📓🎵🧬🏅⚡🧭🎞️👄🎬📝▶️🎶🧥🎼🪕😄😂🧸📰🚪⛲🌳🪑🏮🌉🗿🌾🏛️🗼🏰🚩⚓🛶⛵🐟🪝🧺🏠🌴⛪🌅🏡🐄🌻🪵🛖🐓🌲🍯🌄🦅🕌🧿🍵🧶⚖️🪔🏺🧵🥁🪞🕰️🗝️👨‍👩‍👧✈️💼✨🌱🌿👂⏱️🎯🎙️🗣️"))
 wanted.update(emoji_list("🗺️✏️🧠📈🎧🤸🎯🏛️✍️🔁🕌🌉⛰️⛏️🇽🇰🎙️📒🪞🤝📜💡⚠️🏰🏛️🏟️🧱🪟📚🇦🇱🪨🏖️🔥"))
 for e in sorted(wanted):
     svg = twemoji(e)
@@ -286,7 +296,7 @@ os.makedirs(os.path.join(OUT, "packs2"), exist_ok=True)
 for name, d in packs2.items():
     json.dump(d, open(os.path.join(OUT, "packs2", name + ".json"), "w"), separators=(",", ":"))
 
-json.dump({"units": units, "stories": stories, "alpha": alpha, "gloss": gloss, "rev": rev, "pairs": pairs, "extra": extra, "roles": roles, "conj": conj, "gram": gram, "freq": FREQ, "mods": mods}, open(os.path.join(OUT, "data.json"), "w"), ensure_ascii=False, separators=(",", ":"))
+json.dump({"units": units, "stories": stories, "alpha": alpha, "gloss": gloss, "rev": rev, "pairs": pairs, "extra": extra, "roles": roles, "conj": conj, "gram": gram, "freq": FREQ, "mods": mods, "pats": pats, "nums": nums}, open(os.path.join(OUT, "data.json"), "w"), ensure_ascii=False, separators=(",", ":"))
 json.dump(list(dict.fromkeys(SAY)), open(os.path.join(HERE, ".say.json"), "w"), ensure_ascii=False)
 print("voice clips", len(os.listdir(VOICE_DIR)) if os.path.isdir(VOICE_DIR) else 0, "units", len(units), "words", sum(len(u["w"]) for u in units), "stories", len(stories), "packs", len(packs),
       "clips", sum(len(p) for p in packs.values()))

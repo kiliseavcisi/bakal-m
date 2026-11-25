@@ -48,7 +48,7 @@ UNITS2 = [
   ["Kur vjen?","Ne zaman geliyorsun?",""],["Pse qan?","Neden ağlıyorsun?","😢"],["Çfarë do?","Ne istiyorsun?",""]],
   ["Soru kelimesi başa gelir, fiil hemen arkasından: <i>Ku jeton?</i>", "Evet/hayır sorusunda başa <b>A</b> konur: <i>A je mirë?</i>"]),
  ("lidhezat", "Bağlaçlar", "sJsuXptRoos", "Sezon 2 · Ders 22 · Bağlaçlar", [
-  ["dhe","ve",""],["ose","veya",""],["por","ama",""],["sepse","çünkü",""],["nëse","eğer",""],["që","ki",""],["kur","-dığında",""],
+  ["dhe","ve",""],["ose","veya",""],["por","ama",""],["sepse","çünkü",""],["nëse","eğer",""],["që","ki",""],["Kur vjen, më telefono.","Geldiğinde beni ara.","📞"],
   ["edhe","de / da",""],["prandaj","bu yüzden",""],["pastaj","sonra",""],["Dua çaj ose kafe","Çay veya kahve istiyorum","☕"],
   ["Jam i lodhur, por i lumtur","Yorgunum ama mutluyum",""],["Nuk vij sepse jam i sëmurë","Gelmiyorum çünkü hastayım",""]],
   ["<b>edhe</b> \"de/da\" demektir: <i>Edhe unë</i> = ben de.", "<b>sepse</b> sebep, <b>prandaj</b> sonuç bildirir."]),

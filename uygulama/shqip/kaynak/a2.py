@@ -114,7 +114,7 @@ UNITS3 = [
   ["Urime!", "Tebrikler!", "🎉"], ["Gëzuar festat!", "İyi bayramlar!", "🎊"], ["Mirë se vini!", "Hoş geldiniz!", "🏠"], ["Mirë se ju gjej!", "Hoş bulduk!", "😊"]],
   ["<b>Besa</b>: verilen söze mutlak sadakat; Arnavut kültürünün en önemli değerlerinden.", "Arnavutluk'un bağımsızlık günü 28 Kasım (1912), Kosova'nınki 17 Şubat (2008)."]),
  ("kosova", "Kosova Arnavutçası", "", "", [
-  ["jom", "-im (standart: jam)", "🙋"], ["âsht", "-dir (standart: është)", "👉"], ["nji", "bir (standart: një)", "n:1"], ["shpi", "ev (standart: shtëpi)", "🏠"],
+  ["Unë jom mirë.", "İyiyim. (Gegçe jom = standart jam)", "🙋"], ["Ai âsht këtu.", "O burada. (Gegçe âsht = standart është)", "👉"], ["nji", "bir (standart: një)", "n:1"], ["shpi", "ev (standart: shtëpi)", "🏠"],
   ["nana", "anne (standart: nëna)", "👩"], ["tamël", "süt (standart: qumësht)", "🥛"], ["çun", "oğlan (standart: djalë)", "👦"], ["çikë", "kız (standart: vajzë)", "👧"],
   ["tash", "şimdi (standart: tani)", "⏱️"], ["qysh", "nasıl (standart: si)", "❓"], ["çka", "ne (standart: çfarë)", "❔"], ["du", "istiyorum (standart: dua)", "🙏"],
   ["shum", "çok (standart: shumë)", "➕"], ["fmi", "çocuk (standart: fëmijë)", "🧒"], ["vlla", "erkek kardeş (standart: vëlla)", "👦"],

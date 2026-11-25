@@ -21,7 +21,7 @@ UNITS_N = [
    "Belirli çoğul (o kitaplar): <b>-t</b> ya da <b>-të</b>: <i>librat, vajzat, shtëpitë</i>."]),
  ("krahasim", "Karşılaştırma: daha, en", "", "", [
   ["më i madh", "daha büyük", "🐘"], ["më i vogël", "daha küçük", "🐭"], ["më mirë", "daha iyi", "👍"], ["më shumë", "daha çok", "➕"], ["më pak", "daha az", "➖"],
-  ["më i lirë", "daha ucuz", "🏷️"], ["më i shtrenjtë", "daha pahalı", "💸"], ["më shpejt", "daha hızlı", "⚡"], ["se", "-den / -dan (karşılaştırmada)", "sym:>"],
+  ["më i lirë", "daha ucuz", "🏷️"], ["më i shtrenjtë", "daha pahalı", "💸"], ["më shpejt", "daha hızlı", "⚡"], ["Jam më i gjatë se ti.", "Senden daha uzunum.", "📏"],
   ["më i miri", "en iyisi", "🏆"], ["më e bukura", "en güzeli (dişil)", "🌸"], ["Ana është më e gjatë se Artani.", "Ana, Artan'dan daha uzun.", "📏"],
   ["Tirana është më e madhe se Durrësi.", "Tiran, Draç'tan daha büyük.", "🏙️"], ["Sot është më ftohtë se dje.", "Bugün dünden daha soğuk.", "🥶"],
   ["Ky është libri më i mirë.", "Bu en iyi kitap.", "📕"], ["Je si vëllai yt.", "Kardeşin gibisin.", "👬"]],
