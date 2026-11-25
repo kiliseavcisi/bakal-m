@@ -41,6 +41,15 @@ def clip(text):
 GEMINI = os.path.join(HERE, ".clips-gemini")
 VOICE_DIR = os.path.join(HERE, os.environ.get("VOICE_DIR", ".clips-kokoro-agon"))      # main voice: Kokoro shqip "Agon" (male)
 ALT_DIR = os.path.join(HERE, os.environ.get("ALT_DIR", ".clips-kokoro-pf_dora"))       # second voice: Kokoro shqip + "Dora" style (female)
+def tm(text):
+    """word timings [[start, end], ...] for the main and the second voice (karaoke highlighting)"""
+    key = hashlib.md5(text.encode()).hexdigest()[:10]
+    out = []
+    for d in (VOICE_DIR, ALT_DIR):
+        f = os.path.join(d, key + ".json")
+        out.append(json.load(open(f)) if os.path.exists(f) else None)
+    return out
+
 def audio(pack, text):
     key = hashlib.md5(text.encode()).hexdigest()[:10]
     chosen = os.path.join(VOICE_DIR, key + ".mp3")
@@ -56,18 +65,18 @@ for uid, title, words in UNITS:
     vid, vtitle, tips = UNIT_INFO[uid]; used_videos.add(vid)
     units.append({"id": uid, "t": title, "season": 1, "tips": tips,
                   "ic": UNIT_LOOK[uid][0], "hue": UNIT_LOOK[uid][1],
-                  "w": [{"sq": sq, "tr": tr, "p": p or EXTRA_PICS.get(sq, ""), "a": audio(uid, sq)} for sq, tr, p in words]})
+                  "w": [{"sq": sq, "tr": tr, "p": p or EXTRA_PICS.get(sq, ""), "a": audio(uid, sq), "k": tm(sq)} for sq, tr, p in words]})
 for uid, title, vid, vtitle, words, tips in UNITS2:
     used_videos.add(vid)
     units.append({"id": uid, "t": title, "season": 2, "tips": tips,
                   "ic": UNIT_LOOK[uid][0], "hue": UNIT_LOOK[uid][1],
-                  "w": [{"sq": sq, "tr": tr, "p": p or EXTRA_PICS.get(sq, ""), "a": audio(uid, sq)} for sq, tr, p in words]})
+                  "w": [{"sq": sq, "tr": tr, "p": p or EXTRA_PICS.get(sq, ""), "a": audio(uid, sq), "k": tm(sq)} for sq, tr, p in words]})
 stories = []
 for s in STORIES + STORIES2:
     used_videos.add(s["src"][0])
     stories.append({"id": s["id"], "t": s["t"], "after": s["after"],
                     "cover": STORY_LOOK.get(s["id"], "📖"),
-                    "lines": [{"who": who, "av": AVATARS.get(who, ""), "f": who in FEMALE, "sq": sq, "tr": tr, "a": audio("s-" + s["id"], sq)} for who, sq, tr in s["lines"]],
+                    "lines": [{"who": who, "av": AVATARS.get(who, ""), "f": who in FEMALE, "sq": sq, "tr": tr, "a": audio("s-" + s["id"], sq), "k": tm(sq)} for who, sq, tr in s["lines"]],
                     "q": [{"q": q, "o": o, "c": c} for q, o, c in s["q"]]})
 alpha = [{"l": l, "say": say, "hint": hint, "ex": ex, "tr": tr, "d": bool(d), "a": audio("alfabe", ex)} for l, say, hint, ex, tr, d in ALPHA]
 used_videos.add("QxxBvnhw3AA")
@@ -100,6 +109,38 @@ pairs = [{"id": pid, "t": lbl, "tip": tip, "pairs": [[{"sq": a, "tr": at, "a": a
 os.makedirs(os.path.join(OUT, "packs2"), exist_ok=True)
 for name, d in packs2.items():
     json.dump(d, open(os.path.join(OUT, "packs2", name + ".json"), "w"), separators=(",", ":"))
+# Illustrations: Twemoji SVGs (graphics CC BY 4.0, Twitter, Inc. and contributors) for every emoji the course uses
+TWEMOJI = os.environ.get("TWEMOJI_DIR", "/tmp/claude-0/twemoji/package")
+def emoji_list(txt):
+    out, cur = [], ""
+    for ch in txt:
+        if cur and (ch in "\u200d\ufe0f" or 0x1F3FB <= ord(ch) <= 0x1F3FF or cur.endswith("\u200d") or (0x1F1E6 <= ord(ch) <= 0x1F1FF and len(cur) == 1 and 0x1F1E6 <= ord(cur) <= 0x1F1FF)):
+            cur += ch
+        else:
+            if cur: out.append(cur)
+            cur = ch
+    if cur: out.append(cur)
+    return [e for e in out if not e.isspace()]
+def twemoji(e):
+    cps = [f"{ord(c):x}" for c in e]
+    for name in ("-".join(cps), "-".join(c for c in cps if c != "fe0f")):
+        f = os.path.join(TWEMOJI, name + ".svg")
+        if os.path.exists(f): return open(f).read()
+    return None
+icons, missing = {}, []
+wanted = set()
+for u in units:
+    wanted.update(emoji_list(u["ic"]))
+    for w in u["w"]:
+        if w["p"] and not w["p"].startswith(("#", "n:", "cal:", "sym:")): wanted.update(emoji_list(w["p"]))
+for s_ in stories: wanted.update(emoji_list(s_["cover"]))
+for e in sorted(wanted):
+    svg = twemoji(e)
+    if svg: icons[e] = svg
+    else: missing.append(e)
+json.dump(icons, open(os.path.join(OUT, "icons.json"), "w"), ensure_ascii=False, separators=(",", ":"))
+print("icons", len(icons), "missing", missing)
+
 for name, d in packs.items():
     json.dump(d, open(os.path.join(OUT, "packs", name + ".json"), "w"), separators=(",", ":"))
 json.dump({"units": units, "stories": stories, "alpha": alpha, "gloss": gloss, "rev": rev, "pairs": pairs}, open(os.path.join(OUT, "data.json"), "w"), ensure_ascii=False, separators=(",", ":"))

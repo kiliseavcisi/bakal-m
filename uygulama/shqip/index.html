@@ -357,6 +357,71 @@ nav.bottom button { font-size: .72rem; }
 .cal35 { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 8px; max-width: 260px; }
 .cal35 i { aspect-ratio: 1; border-radius: 5px; display: block; }
 nav.bottom button { font-size: .68rem; }
+
+/* illustrations */
+.tw { width: 1em; height: 1em; vertical-align: -0.12em; display: inline-block; }
+.pic.ill { width: 84px; height: 84px; border-radius: 50%; background: hsl(var(--h, 350) 80% 93%); font-size: 52px; display: grid; place-items: center; }
+.pic.big.ill { width: 130px; height: 130px; font-size: 80px; }
+.pic.ill .tw + .tw { margin-left: -.15em; }
+.mini-i .tw { width: 1.1em; height: 1.1em; }
+.u-ic .tw { width: 40px; height: 40px; }
+.n-ic .tw { width: 36px; height: 36px; }
+.story-card .ic.cover .tw { width: 22px; height: 22px; }
+.opt .pic.ill { width: 72px; height: 72px; font-size: 44px; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .pic.ill { background: hsl(var(--h, 350) 25% 22%); } }
+:root[data-theme="dark"] .pic.ill { background: hsl(var(--h, 350) 25% 22%); }
+/* karaoke */
+.kara .kw { border-radius: 6px; padding: 0 2px; transition: background .1s, color .1s; }
+.kara .kw.on { background: var(--gold); color: #2a2122; box-shadow: 0 0 0 2px var(--gold); }
+.kara .kw.done { color: var(--blue); }
+.kara.speaking { text-decoration: underline 3px var(--gold); text-underline-offset: 4px; }
+/* journey */
+.journey { margin-top: 16px; background: var(--surface); border: 2px solid var(--line); border-radius: 18px; padding: 10px 10px 4px; }
+.journey .j-k { font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; color: var(--muted); padding: 0 4px; }
+.journey svg { width: 100%; height: auto; display: block; }
+.jc { cursor: pointer; } .jc:focus-visible circle { stroke: var(--blue); stroke-width: 4; }
+.pulse { animation: jpulse 1.4s infinite; transform-origin: center; transform-box: fill-box; }
+@keyframes jpulse { 50% { transform: scale(1.2); } }
+.city-banner { display: flex; gap: 14px; align-items: center; margin-top: 26px; padding: 14px; border-radius: 18px; background: linear-gradient(135deg, var(--gold-soft), var(--surface)); border: 2px solid var(--line); scroll-margin-top: 80px; }
+.city-banner.later { opacity: .6; filter: grayscale(.5); }
+.city-banner .cb-ic { font-size: 44px; flex: none; width: 64px; height: 64px; display: grid; place-items: center; border-radius: 50%; background: var(--surface); }
+.city-banner .cb-k { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; color: var(--muted); }
+.city-banner .cb-n { font-family: var(--f-display); font-weight: 700; font-size: 1.4rem; }
+.city-banner .cb-t { font-size: .9rem; color: var(--muted); }
+/* story scene */
+.scene { position: relative; border-radius: 18px; overflow: hidden; border: 2px solid var(--line); aspect-ratio: 16 / 10; width: 100%; flex: none; }
+.scene .bg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.people { position: absolute; inset: 0; }
+.person { position: absolute; bottom: 2%; width: 30%; transform-origin: bottom center; transition: transform .2s, filter .2s; filter: saturate(.85); }
+.person.p0 { left: 4%; } .person.p1 { left: 35%; } .person.p2 { right: 4%; }
+.person svg { width: 100%; height: auto; display: block; }
+.person .pname { position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,.55); color: #fff; font-size: .68rem; padding: 1px 8px; border-radius: 99px; white-space: nowrap; }
+.person.talk { transform: scale(1.08); filter: none; animation: talkbob .32s infinite alternate; }
+.person.talk .mouth { d: path("M42 56q8 10 16 0"); }
+@keyframes talkbob { to { transform: scale(1.08) translateY(-4px); } }
+.sbubble { position: absolute; top: 4%; max-width: 70%; background: var(--surface); color: var(--fg); border: 2px solid var(--line); border-radius: 14px; padding: 6px 12px; font-weight: 600; font-size: .95rem; opacity: 0; transition: opacity .2s; box-shadow: 0 4px 12px rgba(0,0,0,.12); }
+.sbubble b { display: block; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.sbubble small { display: block; color: var(--muted); font-weight: 400; font-size: .82rem; }
+.sbubble.show { opacity: 1; } .sbubble.l { left: 3%; } .sbubble.r { right: 3%; } .sbubble.c, .sbubble.narr { left: 50%; transform: translateX(-50%); }
+.line .av { display: none; }
+/* mouth diagrams */
+.mouths { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+.mouths.all { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+.mouth-card { background: var(--surface); border: 2px solid var(--line); border-radius: 14px; padding: 8px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.mouth-card[role="button"] { cursor: pointer; }
+.mouth-card .ml { font-family: var(--f-display); font-weight: 700; font-size: 1.3rem; color: var(--blue); }
+.mouth-card .ml span { font-size: .85rem; color: var(--muted); font-family: var(--f-body); font-weight: 500; }
+.mouth-card svg { width: 100%; height: auto; display: block; }
+.mouth-card .mn { font-size: .8rem; color: var(--muted); }
+/* celebration */
+.confetti { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
+.pop.jump { animation: ejump .9s ease-out; }
+@keyframes ejump { 30% { transform: translateY(-40px) rotate(-8deg); } 60% { transform: translateY(0) rotate(6deg); } 80% { transform: translateY(-12px); } }
+.xp-fly { position: absolute; top: 42%; left: 50%; transform: translateX(-50%); font-family: var(--f-display); font-weight: 700; font-size: 2rem; color: var(--gold); pointer-events: none; animation: xprise 1.5s ease-out forwards; z-index: 6; }
+@keyframes xprise { 0% { opacity: 0; transform: translate(-50%, 20px); } 25% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, -50px); } }
+.goal-hit { display: flex; flex-direction: column; align-items: center; gap: 2px; background: var(--gold-soft); border: 2px solid var(--gold); border-radius: 16px; padding: 10px 16px; font-size: 2rem; animation: pop .5s ease-out; }
+.goal-hit b { font-family: var(--f-display); font-size: 1.2rem; color: var(--fg); }
+.goal-hit span { font-size: .85rem; color: var(--muted); }
 </style>
 
 <div class="app" id="app"><p class="loading">Yükleniyor…</p></div>
@@ -476,7 +541,29 @@ function playClip(a, slow = false, alt = false) {
   if (src) return Promise.resolve(go(src));
   return loadPack(a.split("#")[0], alt).then(() => go(clipSrc(a, alt) || clipSrc(a)));
 }
-function say(w, slow = false, alt = false) { if (w && w.a) playClip(w.a, slow, alt); }
+function say(w, slow = false, alt = false) { if (w && w.a) return playClip(w.a, slow, alt).then(au => { if (au) karaAnimate(w, au, alt); return au; }); }
+/* Karaoke: every rendered copy of a sentence (.kara[data-sq]) lights up word by word while its clip plays.
+   Timings come from the voice model's own phoneme durations (w.k[0] main voice, w.k[1] second voice). */
+const kara = w => `<span class="kara" data-sq="${esc(w.sq)}">${w.sq.split(" ").map(x => `<span class="kw">${hint(x, "sq")}</span>`).join(" ")}</span>`;
+let karaRun = 0;
+function karaAnimate(w, au, alt) {
+  const els = [...document.querySelectorAll(".kara")].filter(e => e.dataset.sq === w.sq);
+  if (!els.length) return;
+  const times = w.k && (w.k[alt ? 1 : 0] || w.k[0]);
+  const run = ++karaRun;
+  const words = els.map(e => [...e.querySelectorAll(".kw")]);
+  const clear = () => words.flat().forEach(x => x.classList.remove("on", "done"));
+  clear();
+  if (!times || times.length !== words[0].length) { els.forEach(e => e.classList.add("speaking")); au.addEventListener("ended", () => els.forEach(e => e.classList.remove("speaking")), { once: true }); return; }
+  const tick = () => {
+    if (run !== karaRun) return;
+    const t = au.currentTime;
+    words.forEach(ws => ws.forEach((x, i) => { const [a, b] = times[i]; x.classList.toggle("on", t >= a - .03 && t < b + .06); x.classList.toggle("done", t >= b + .06); }));
+    if (!au.paused && !au.ended) requestAnimationFrame(tick);
+    else setTimeout(() => { if (run === karaRun) clear(); }, au.ended ? 700 : 0);
+  };
+  if (au.readyState >= 2 && !au.paused) requestAnimationFrame(tick); else au.addEventListener("playing", () => requestAnimationFrame(tick), { once: true });
+}
 /* listening exercises: random talker when variety is on */
 function sayVar(w) { const alt = P.vary !== false && Math.random() < .4; say(w, false, alt); return alt; }
 
@@ -493,23 +580,33 @@ function pic(p, big = false) {
   if (p.startsWith("n:")) return `<span class="${c}"><span class="num">${p.slice(2)}</span></span>`;
   if (p.startsWith("cal:")) return `<span class="${c}"><span class="cal"><i></i>${esc(p.slice(4))}</span></span>`;
   if (p.startsWith("sym:")) return `<span class="${c}"><span class="sym">${esc(p.slice(4))}</span></span>`;
-  return `<span class="${c} emoji" role="img">${p}</span>`;
+  return `<span class="${c} ill">${icons(p)}</span>`;
 }
+/* Twemoji illustrations bundled in icons.json; falls back to the system emoji */
+const SEG = typeof Intl !== "undefined" && Intl.Segmenter ? new Intl.Segmenter("tr", { granularity: "grapheme" }) : null;
+const graphemes = t => SEG ? [...SEG.segment(t)].map(x => x.segment) : Array.from(t);
+const iconCache = {};
+function icon(e) {
+  if (!ICONS[e]) return `<span class="emo">${e}</span>`;
+  return `<img class="tw" alt="" draggable="false" src="${iconCache[e] = iconCache[e] || "data:image/svg+xml;charset=utf-8," + encodeURIComponent(ICONS[e])}">`;
+}
+const icons = t => graphemes(t).filter(g => g.trim()).map(icon).join("");
 
 function picMini(p) {
   if (!p) return "";
   if (p.startsWith("#")) return `<i class="mini-sw" style="background:${p}"></i>`;
   if (p.startsWith("n:")) return `<b class="mini-t">${esc(p.slice(2))}</b>`;
   if (p.startsWith("cal:") || p.startsWith("sym:")) return `<b class="mini-t">${esc(p.slice(4, 7))}</b>`;
-  return `<span>${p}</span>`;
+  return `<span class="mini-i">${icons(p)}</span>`;
 }
 const unitOf = w => UNITS.find(u => u.id === w.u) || { hue: 350, ic: "📘" };
 
 /* ---------- Course structure ---------- */
-let UNITS = [], LESSONS = [], STORIES = [], ALPHA = [], GLOSS = {}, REV = {}, PAIRS = [];
+let UNITS = [], LESSONS = [], STORIES = [], ALPHA = [], GLOSS = {}, REV = {}, PAIRS = [], ICONS = {};
 let TAB = "learn";
 const app = document.getElementById("app");
-fetch("data.json").then(r => r.json()).then(d => {
+Promise.all([fetch("data.json").then(r => r.json()), fetch("icons.json").then(r => r.json()).catch(() => ({}))]).then(([d, ic]) => {
+  ICONS = ic;
   UNITS = d.units; STORIES = d.stories; ALPHA = d.alpha; PAIRS = d.pairs || []; GLOSS = d.gloss; REV = d.rev;
   UNITS.forEach((u, ui) => {
     u.w.forEach(w => w.u = u.id);
@@ -571,12 +668,16 @@ function learnTab(view) {
     const r = $(`<button class="story-card" style="margin-top:12px;width:100%"><span class="ic">${I.repeat}</span><span><span class="t">${due} kelimenin tekrar zamanı geldi</span><br><span class="s">Unutmadan önce tekrar etmek en kalıcı yoldur.</span></span></button>`);
     r.onclick = () => home("review"); view.append(r);
   }
+  const curCity = cityOfUnit(Math.max(0, UNITS.indexOf(LESSONS[cur].unit)));
+  view.append(journeyMap(curCity));
   let gi = 0;
   UNITS.forEach((u, ui) => {
+    const ci = cityOfUnit(ui);
+    if (ui === 0 || cityOfUnit(ui - 1) !== ci) view.append(cityBanner(ci, ci < curCity ? "done" : ci === curCity ? "now" : "later"));
     const unitLocked = LESSONS.indexOf(u.lessons[0]) > cur;
     const doneCount = u.lessons.filter(isDone).length;
     const sec = $(`<section class="unit" style="--h:${u.hue}"><div class="unit-head ${unitLocked ? "locked" : ""}">
-      <div class="u-ic" aria-hidden="true">${u.ic}</div>
+      <div class="u-ic" aria-hidden="true">${icons(u.ic)}</div>
       <div style="flex:1;min-width:0"><div class="k">Ünite ${ui + 1}</div><h2>${esc(u.t)}</h2></div>
       <div class="peek">${doneCount} / ${u.lessons.length} ders<br>${u.w.length} kelime</div></div>
       <div class="unit-tools"><button class="chip tipbtn" aria-expanded="false">${I.bulb}Dil notları</button>
@@ -592,7 +693,7 @@ function learnTab(view) {
       const w = $(`<div class="node-wrap" style="transform:translateX(${offset}px)">
         ${current ? `<div class="bubble">${done ? "Tekrar" : "Başla"}</div>` : ""}
         <button class="node ${done ? "done" : ""} ${locked ? "locked" : ""} ${current ? "current" : ""}" aria-label="${esc(u.t)}, ders ${li + 1}${locked ? ", kilitli" : ""}">
-          ${locked ? I.lock : done ? I.star : current ? `<span class="n-ic">${u.ic}</span>` : `<span>${li + 1}</span>`}</button></div>`);
+          ${locked ? I.lock : done ? I.star : current ? `<span class="n-ic">${icons(u.ic)}</span>` : `<span>${li + 1}</span>`}</button></div>`);
       if (!locked) w.querySelector(".node").onclick = () => { sfx.tap(); startLesson(L); };
       path.append(w);
     });
@@ -600,13 +701,13 @@ function learnTab(view) {
     if (story) {
       const ok = unitDone(u.id);
       const sc = $(`<button class="story-card ${P.stories[story.id] ? "done" : ""}" ${ok ? "" : "disabled"} style="margin:6px auto 0;max-width:360px;width:100%;${ok ? "" : "opacity:.55;cursor:default"}">
-        <span class="ic cover">${ok ? story.cover : I.lock}</span><span><span class="t">Hikâye: ${esc(story.t)}</span><br><span class="s">${ok ? "Dinle, oku, anla" : "Üniteyi bitirince açılır"}</span></span></button>`);
+        <span class="ic cover">${ok ? icons(story.cover) : I.lock}</span><span><span class="t">Hikâye: ${esc(story.t)}</span><br><span class="s">${ok ? "Dinle, oku, anla" : "Üniteyi bitirince açılır"}</span></span></button>`);
       if (ok) sc.onclick = () => openStory(story);
       sec.append(sc);
     }
     view.append(sec);
   });
-  view.append($(`<p class="foot">Her gün 10 dakika: yeni ders, ardından tekrar sekmesi. Sesler Arnavutça için eğitilmiş açık kaynak Kokoro modeliyle üretildi: erkek sesi Agon, kadın sesi Dora.</p>`));
+  view.append($(`<p class="foot">Her gün 10 dakika: yeni ders, ardından tekrar sekmesi. Sesler Arnavutça için eğitilmiş açık kaynak Kokoro modeliyle üretildi: erkek sesi Agon, kadın sesi Dora. Resimler: Twemoji (CC BY 4.0).</p>`));
   const curNode = view.querySelector(".node.current");
   if (curNode && cur > 0) setTimeout(() => curNode.scrollIntoView({ block: "center" }), 0);
 }
@@ -647,7 +748,7 @@ function storiesTab(view) {
   STORIES.forEach(s => {
     const unit = UNITS.find(u => u.id === s.after), ok = unitDone(s.after);
     const c = $(`<button class="story-card ${P.stories[s.id] ? "done" : ""}" ${ok ? "" : "disabled"} style="${ok ? "" : "opacity:.6;cursor:default"}">
-      <span class="ic cover">${ok ? s.cover : I.lock}</span>
+      <span class="ic cover">${ok ? icons(s.cover) : I.lock}</span>
       <span><span class="t">${esc(s.t)}${P.stories[s.id] ? " ⭐" : ""}</span><br><span class="s">${ok ? s.lines.length + " cümle · sesli" : "“" + esc(unit.t) + "” ünitesini bitirince açılır"}</span></span></button>`);
     if (ok) c.onclick = () => openStory(s);
     list.append(c);
@@ -662,20 +763,22 @@ function openStory(s) {
   const el = $(`<div class="lesson">
     <div class="l-top"><button class="x" aria-label="Kapat">${I.x}</button><div style="flex:1;font-family:var(--f-display);font-weight:700;font-size:1.2rem">${esc(s.t)}</div></div>
     <div class="l-body">
-      <div class="story-cover" aria-hidden="true">${s.cover}</div>
       <div class="unit-tools" style="margin:0;justify-content:center"><button class="chip" id="play-all">${I.play}Tümünü dinle</button><button class="chip" id="show-tr">Çevirileri göster</button><button class="chip" id="listen-first" aria-pressed="false">Önce dinle</button></div>
       <div class="lines"></div>
     </div>
     <div class="sheet"><button class="btn">Anladım, sorulara geç</button></div></div>`);
   const lines = el.querySelector(".lines");
   const speakers = [...new Set(s.lines.filter(l => l.who).map(l => l.who))];
+  const scene = storyScene(s, speakers);
+  el.querySelector(".l-body").prepend(scene.el);
   let showAll = false;
   const rows = s.lines.map(l => {
     const side = l.who ? (speakers.indexOf(l.who) % 2 ? "right" : "left") : "narr";
     const r = $(`<div class="line ${side}">${l.av ? `<div class="av" aria-hidden="true">${l.av}</div>` : ""}<button class="speaker sm" aria-label="Dinle">${I.speaker}</button>
-      <div class="txt" role="button" tabindex="0">${l.who ? `<div class="who">${esc(l.who)}</div>` : ""}<div class="sq">${hint(l.sq, "sq")}</div><div class="tr" hidden>${esc(l.tr)}</div></div></div>`);
-    r.querySelector(".speaker").onclick = () => say(l, false, l.f);
-    r.querySelector(".txt").onclick = e => { if (e.target.closest(".hw")) return; const t = r.querySelector(".tr"); t.hidden = !t.hidden; say(l, false, l.f); };
+      <div class="txt" role="button" tabindex="0">${l.who ? `<div class="who">${esc(l.who)}</div>` : ""}<div class="sq">${kara(l)}</div><div class="tr" hidden>${esc(l.tr)}</div></div></div>`);
+    const sayLine = () => { scene.show(l); const pr = say(l, false, l.f); if (pr) pr.then(au => au && au.addEventListener("ended", () => scene.quiet(), { once: true })); };
+    r.querySelector(".speaker").onclick = sayLine;
+    r.querySelector(".txt").onclick = e => { if (e.target.closest(".hw")) return; const t = r.querySelector(".tr"); t.hidden = !t.hidden; sayLine(); };
     lines.append(r); return r;
   });
   el.querySelector(".x").onclick = () => { stopStory(); home(); };
@@ -685,9 +788,10 @@ function openStory(s) {
     stopStory(); let i = 0; storyPlay = true;
     const next = () => {
       rows.forEach(r => r.classList.remove("playing"));
-      if (!storyPlay || i >= s.lines.length) { storyPlay = null; return; }
-      const r = rows[i]; r.classList.add("playing"); r.scrollIntoView({ block: "nearest", behavior: "smooth" });
-      playClip(s.lines[i].a, false, s.lines[i].f).then(au => { if (!au) { i++; return next(); } au.onended = () => { i++; setTimeout(next, 450); }; au.onerror = () => { i++; next(); }; });
+      if (!storyPlay || i >= s.lines.length) { storyPlay = null; scene.quiet(); return; }
+      const r = rows[i], l = s.lines[i]; r.classList.add("playing"); r.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      scene.show(l);
+      say(l, false, l.f).then(au => { if (!au) { i++; return next(); } au.onended = () => { i++; setTimeout(next, 450); }; au.onerror = () => { i++; next(); }; });
     };
     next();
   };
@@ -703,7 +807,7 @@ function storyQuiz(s, qi, right) {
     const el = $(`<div class="lesson"><div class="end"><div class="pop">${eagle(130)}</div><h2>Hikâye tamamlandı!</h2>
       <p style="margin:0;color:var(--muted)">${right} / ${s.q.length} soru doğru · +${xp} XP</p></div>
       <div class="sheet"><button class="btn good">Devam</button></div></div>`);
-    el.querySelector(".btn").onclick = () => home("stories"); app.append(el); return;
+    el.querySelector(".btn").onclick = () => home("stories"); app.append(el); celebrate(el.querySelector(".end"), xp, false); return;
   }
   const q = s.q[qi];
   app.replaceChildren();
@@ -859,12 +963,12 @@ function intro(st, ui) {
   const w = st.w;
   const ex = findExample(w);
   ui.body.append($(`<div class="tag new">${multi(w) ? "Yeni kalıp" : "Yeni kelime"}</div>`));
-  const card = $(`<div class="intro pop" style="--h:${unitOf(w).hue}">${pic(w.p)}<div class="sq">${hint(w.sq, "sq")}</div><div class="tr">${esc(w.tr)}</div></div>`);
+  const card = $(`<div class="intro pop" style="--h:${unitOf(w).hue}">${pic(w.p)}<div class="sq">${kara(w)}</div><div class="tr">${esc(w.tr)}</div></div>`);
   const sp = speakerRow(w); sp.style.justifyContent = "center"; card.append(sp);
   ui.body.append(card);
   if (ex) {
     const exr = $(`<div class="example"><div class="k">Cümlede</div><div class="row"><button class="speaker sm" aria-label="Cümleyi dinle">${I.speaker}</button>
-      <div><div class="s">${hint(ex.sq, "sq")}</div><div class="t">${esc(ex.tr)}</div></div></div></div>`);
+      <div><div class="s">${kara(ex)}</div><div class="t">${esc(ex.tr)}</div></div></div></div>`);
     exr.querySelector(".speaker").onclick = () => say(ex, false, ex.f);
     ui.body.append(exr);
     preload([ex.a]);
@@ -919,7 +1023,7 @@ function toTr(st, ui) {
   const w = st.w;
   const opts = shuffle([w, ...distractors(w, "tr")]);
   ui.body.append($(`<div class="tag">Türkçesi ne?</div>`));
-  const row = speakerRow(w, `<div class="bubble-say">${hint(w.sq, "sq")}</div>`);
+  const row = speakerRow(w, `<div class="bubble-say">${kara(w)}</div>`);
   row.children[0].classList.add("sm"); row.children[1].remove();
   ui.body.append(row);
   const g = $(`<div class="grid2"></div>`); let sel = null;
@@ -1065,7 +1169,7 @@ function speak(st, ui) {
   const w = st.w;
   ui.body.append($(`<div class="tag">Gölgeleme · sesli tekrar et</div>`));
   ui.body.append($(`<h2 class="prompt">Dinle ve aynı şekilde yüksek sesle söyle</h2>`));
-  const card = $(`<div class="intro">${pic(w.p, true)}<div class="sq">${esc(w.sq)}</div><div class="tr">${esc(w.tr)}</div></div>`);
+  const card = $(`<div class="intro">${pic(w.p, true)}<div class="sq">${kara(w)}</div><div class="tr">${esc(w.tr)}</div></div>`);
   const sp = speakerRow(w); sp.style.justifyContent = "center"; card.append(sp);
   ui.body.append(card);
   ui.body.append($(`<div class="shadow-steps"><div>1. Dinle, vurguya ve ë, rr, q gibi seslere dikkat et.</div><div>2. Hemen ardından aynı hızda sen söyle.</div><div>3. Bir kez de yavaş dinleyip tekrar söyle.</div></div>`));
@@ -1076,7 +1180,7 @@ function speak(st, ui) {
 /* -- Grammar tip card -- */
 function tip(st, ui) {
   const u = st.u;
-  ui.body.append($(`<div class="tip-hero" style="--h:${u.hue}">${u.ic}</div>`));
+  ui.body.append($(`<div class="tip-hero" style="--h:${u.hue}">${icons(u.ic)}</div>`));
   ui.body.append($(`<div class="tag new">${I.bulb} Dil notu</div>`));
   ui.body.append($(`<h2 class="prompt">${esc(u.t)}: bilmen gerekenler</h2>`));
   ui.body.append($(`<div class="tipbox" style="font-size:1.05rem">${u.tips.map(t => `<div>${t}</div>`).join("")}</div>`));
@@ -1182,9 +1286,13 @@ function soundsTab(view) {
   view.append($(`<h2 class="section-h">Kulak eğitimi</h2>`));
   view.append($(`<p class="lead">Türkçede olmayan ses farklarını duymayı öğren. İki kelime yalnızca bir sesle ayrılıyor; hangisini duyduğunu seç. Farklı konuşanları ve hızları duymak, kulağın sesi gerçekten ayırt etmesini sağlar.</p>`));
   const all = $(`<button class="btn" style="margin-bottom:12px">Karışık antrenman (12 soru)</button>`);
+  const how = $(`<details class="gsec"><summary>Sesler ağızda nasıl çıkar?</summary><div class="gbody"><p class="sub" style="margin:0">Ağzın yandan görünüşü. Sarı halka dilin değdiği yer; mavi çizgiler gırtlağın titrediğini (sesli harf/ünsüz) gösterir. Bir çizime dokununca örnek kelimeyi dinlersin.</p>
+    <div class="mouths all">${PAIRS.flatMap(c => c.t.split(" – ").map((x, i) => mouthCard(x, c.pairs[0][i]))).join("")}</div></div></details>`);
+  how.querySelectorAll(".mouth-card[data-sq]").forEach(m => m.onclick = () => { const w = PAIRS.flatMap(c => c.pairs.flat()).find(x => x.sq === m.dataset.sq); if (w) say(w); });
   all.onclick = () => pairDrill(PAIRS);
   view.append(all);
   const g = $(`<div class="pair-grid"></div>`);
+  setTimeout(() => g.after(how), 0);
   PAIRS.forEach(c => {
     const st = P.pairStats[c.id] || { n: 0, ok: 0 }, pct = st.n ? Math.round(st.ok / st.n * 100) : null;
     const b = $(`<button class="pair-card"><span class="pl">${esc(c.t)}</span>
@@ -1224,7 +1332,7 @@ function pairDrill(contrasts) {
       const el = $(`<div class="lesson"><div class="end"><div class="pop">${eagle(130)}</div><h2>Kulak antrenmanı bitti</h2>
         <p style="margin:0;color:var(--muted)">${right} / ${trials.length} doğru · +${xp} XP</p></div>
         <div class="sheet"><button class="btn good">Devam</button></div></div>`);
-      el.querySelector(".btn").onclick = () => home("sounds"); app.append(el); return;
+      el.querySelector(".btn").onclick = () => home("sounds"); app.append(el); celebrate(el.querySelector(".end"), xp, false); return;
     }
     const t = trials[i];
     app.replaceChildren();
@@ -1233,7 +1341,7 @@ function pairDrill(contrasts) {
       <div class="l-body"><div class="tag">Hangisini duydun?</div>
         <div class="speak-row" style="justify-content:center"><button class="speaker" aria-label="Tekrar dinle">${I.speaker}</button></div>
         <div class="grid2 pair-opts"></div>
-        <div class="tipbox pair-tip" hidden><div>${t.c.tip}</div></div></div>
+        <div class="tipbox pair-tip" hidden><div>${t.c.tip}</div><div class="mouths">${t.c.t.split(" – ").map(x => mouthCard(x)).join("")}</div></div></div>
       <div class="sheet"><button class="btn" disabled>Kontrol et</button></div></div>`);
     el.querySelector(".x").onclick = () => home("sounds");
     el.querySelector(".speaker").onclick = () => play(t);
@@ -1331,6 +1439,162 @@ function statsPanel() {
   </div>`);
 }
 
+
+/* ---------- Journey through Albania: the units are grouped into cities ---------- */
+const CITIES = [
+  { n: "Shkodër", ic: "🏰", note: "Kuzeyin kültür şehri. Rozafa Kalesi ve Balkanların en büyük gölü Shkodra Gölü buradadır." },
+  { n: "Tiranë", ic: "🏛️", note: "1920'den beri başkent. Kalbinde Skanderbeg Meydanı ve rengârenk boyalı binalar var." },
+  { n: "Durrës", ic: "🏟️", note: "Ülkenin en eski şehirlerinden ve en büyük limanı. Roma döneminden kalma bir amfitiyatrosu var." },
+  { n: "Elbasan", ic: "🧱", note: "Ülkenin tam ortasında, antik Via Egnatia yolunun üzerinde; eski kale surları hâlâ ayakta." },
+  { n: "Berat", ic: "🪟", note: "“Bin pencereli şehir”: yamaçtaki beyaz evleriyle UNESCO Dünya Mirası." },
+  { n: "Korçë", ic: "📚", note: "Güneydoğunun şehri; Arnavutça eğitim veren ilk okul 1887'de burada açıldı." },
+  { n: "Vlorë", ic: "🇦🇱", note: "Arnavutluk'un bağımsızlığı 28 Kasım 1912'de burada ilan edildi." },
+  { n: "Gjirokastër", ic: "🪨", note: "“Taş şehir”: gri taş çatılı evleri ve kalesiyle UNESCO Dünya Mirası." },
+  { n: "Sarandë", ic: "🏖️", note: "İyon Denizi kıyısında; yakınında antik Butrint kenti var. Yolculuğun son durağı." },
+];
+const cityOfUnit = ui => Math.min(CITIES.length - 1, Math.floor(ui * CITIES.length / UNITS.length));
+function journeyMap(curCity) {
+  const W = 340, pts = CITIES.map((c, i) => [26 + i * (W - 52) / (CITIES.length - 1), 36 + (i % 2 ? 34 : 0) + (i % 4 === 3 ? -8 : 0)]);
+  const d = pts.map((p, i) => (i ? "L" : "M") + p[0] + " " + p[1]).join(" ");
+  const done = pts.slice(0, curCity + 1).map((p, i) => (i ? "L" : "M") + p[0] + " " + p[1]).join(" ");
+  const el = $(`<div class="journey"><div class="j-k">Arnavutluk yolculuğu · ${curCity + 1} / ${CITIES.length}</div>
+    <svg viewBox="0 0 ${W} 122" role="img" aria-label="Yolculuk haritası, şu an ${CITIES[curCity].n}">
+      <path d="${d}" fill="none" stroke="var(--line)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="${done}" fill="none" stroke="var(--gold)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+      ${pts.map((p, i) => `<g class="jc" data-i="${i}" tabindex="0" role="button" aria-label="${CITIES[i].n}"><circle cx="${p[0]}" cy="${p[1]}" r="${i === curCity ? 13 : 10}" class="${i === curCity ? "pulse" : ""}" fill="${i < curCity ? "var(--gold)" : i === curCity ? "var(--accent)" : "var(--surface-2)"}" stroke="${i <= curCity ? "#fff" : "var(--line)"}" stroke-width="3"/>
+        <text x="${p[0]}" y="${p[1] + (i % 2 ? 30 : -18)}" text-anchor="middle" font-size="10.5" font-weight="600" fill="${i <= curCity ? "var(--fg)" : "var(--muted)"}">${CITIES[i].n}</text></g>`).join("")}
+    </svg></div>`);
+  el.querySelectorAll(".jc").forEach(g => { const go = () => { const t = document.getElementById("city-" + g.dataset.i); if (t) t.scrollIntoView({ block: "start", behavior: "smooth" }); }; g.onclick = go; g.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } }; });
+  return el;
+}
+function cityBanner(ci, state) {
+  const c = CITIES[ci];
+  return $(`<div class="city-banner ${state}" id="city-${ci}"><div class="cb-ic">${icon(c.ic)}</div><div style="min-width:0"><div class="cb-k">Durak ${ci + 1} · ${state === "done" ? "tamamlandı" : state === "now" ? "buradasın" : "ileride"}</div>
+    <div class="cb-n">${c.n}</div><div class="cb-t">${c.note}</div></div></div>`);
+}
+
+/* ---------- Story scenes: background per story + drawn characters that come alive when they speak ---------- */
+const PEOPLE = {
+  "Mësuesja": { g: "f", hair: "#5a3a22", top: "#7b4bb7", glasses: 1 }, "Nxënësit": { g: "k", hair: "#2a2122", top: "#2e9d4f" },
+  "Arbeni": { g: "k", hair: "#2a2122", top: "#f08a24" }, "Arturi": { g: "m", hair: "#7a4a2a", top: "#2e7bd6" }, "Dritani": { g: "m", hair: "#2a2122", top: "#c8162f" },
+  "Kamerieri": { g: "m", hair: "#3a2a20", top: "#2a2122", apron: 1 }, "Kamerierja": { g: "f", hair: "#2a2122", top: "#2a2122", apron: 1 },
+  "Ana": { g: "f", hair: "#7a3b1f", top: "#2e7bd6" }, "Artani": { g: "m", hair: "#3a2a20", top: "#2e9d4f" }, "Djali": { g: "k", hair: "#5a3a22", top: "#f2a516" },
+  "Unë": { g: "m", hair: "#2a2122", top: "#5a6a7a" }, "Lypësi": { g: "o", hair: "#bbbbbb", top: "#7a6a55", beard: 1 }, "Talesi": { g: "o", hair: "#eeeeee", top: "#f4f0e6", beard: 1 },
+  "Shitësi": { g: "m", hair: "#2a2122", top: "#c8162f", apron: 1, mus: 1 }, "Mjeku": { g: "m", hair: "#5a3a22", top: "#ffffff", coat: 1, glasses: 1 }, "Pacienti": { g: "m", hair: "#3a2a20", top: "#9bb7d4" },
+};
+function personSVG(o) {
+  const skin = "#f3c9a8", kid = o.g === "k", s = kid ? .82 : 1;
+  const longHair = o.g === "f" ? `<path d="M20 50c-2 30 6 52 30 52s32-22 30-52z" fill="${o.hair}"/>` : "";
+  const hairTop = o.g === "f" ? `<path d="M24 44c0-20 12-30 26-30s26 10 26 30c-4-12-14-16-26-16s-22 4-26 16z" fill="${o.hair}"/>`
+    : o.g === "o" ? `<path d="M26 36c2-10 10-16 24-16s22 6 24 16c-6-4-14-6-24-6s-18 2-24 6z" fill="${o.hair}"/>`
+    : `<path d="M24 40c0-18 12-26 26-26s26 8 26 26c-6-8-16-10-26-10s-20 2-26 10z" fill="${o.hair}"/>`;
+  return `<svg viewBox="0 0 100 130" aria-hidden="true"><g transform="translate(${50 - 50 * s} ${130 - 130 * s}) scale(${s})">${longHair}
+    <rect x="22" y="72" width="56" height="58" rx="18" fill="${o.top}" stroke="${o.top === "#ffffff" || o.top === "#f4f0e6" ? "#d9d0c8" : "none"}" stroke-width="2"/>
+    ${o.apron ? `<rect x="34" y="88" width="32" height="42" rx="6" fill="#f6efe6"/>` : ""}${o.coat ? `<path d="M50 74v56" stroke="#d9d0c8" stroke-width="2"/><rect x="58" y="86" width="10" height="8" rx="2" fill="#2e7bd6"/>` : ""}
+    <circle cx="50" cy="44" r="25" fill="${skin}"/>${hairTop}
+    <circle cx="41" cy="46" r="3" fill="#2a2122"/><circle cx="59" cy="46" r="3" fill="#2a2122"/>
+    ${o.glasses ? `<g fill="none" stroke="#2a2122" stroke-width="2"><circle cx="41" cy="46" r="7"/><circle cx="59" cy="46" r="7"/><path d="M48 46h4"/></g>` : ""}
+    ${o.beard ? `<path d="M30 52c2 22 38 22 40 0-6 8-34 8-40 0z" fill="${o.hair}"/>` : ""}${o.mus ? `<path d="M40 55q10-6 20 0" stroke="#2a2122" stroke-width="4" fill="none" stroke-linecap="round"/>` : ""}
+    <path class="mouth" d="M42 57q8 6 16 0" stroke="#2a2122" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    ${o.g === "f" ? `<circle cx="34" cy="53" r="4" fill="#f4a3a8" opacity=".7"/><circle cx="66" cy="53" r="4" fill="#f4a3a8" opacity=".7"/>` : ""}</g></svg>`;
+}
+const SCENES = {
+  klasa: `<rect width="320" height="200" fill="#e9eef5"/><rect x="60" y="22" width="200" height="80" rx="4" fill="#2f5d50" stroke="#8a5a36" stroke-width="5"/><text x="160" y="58" text-anchor="middle" font-size="18" fill="#fff" font-family="Fredoka,sans-serif">4 + 3 = ?</text><text x="160" y="84" text-anchor="middle" font-size="12" fill="#cfe" font-family="Fredoka,sans-serif">Mirëmëngjes!</text><rect y="150" width="320" height="50" fill="#c9a77c"/>`,
+  familja: `<rect width="320" height="200" fill="#f7e7d4"/><rect x="120" y="24" width="80" height="56" rx="4" fill="#fff" stroke="#8a5a36" stroke-width="4"/><circle cx="148" cy="48" r="8" fill="#f2a516"/><circle cx="172" cy="52" r="7" fill="#c8162f"/><rect y="150" width="320" height="50" fill="#b98a5a"/><rect x="40" y="120" width="240" height="36" rx="12" fill="#c8162f" opacity=".75"/>`,
+  kafe: `<rect width="320" height="200" fill="#f6e3cc"/><rect y="150" width="320" height="50" fill="#b07a4f"/><rect x="20" y="30" width="70" height="50" rx="4" fill="#cfe7f7" stroke="#8a5a36" stroke-width="4"/><rect x="230" y="30" width="70" height="50" rx="4" fill="#cfe7f7" stroke="#8a5a36" stroke-width="4"/><rect x="110" y="20" width="100" height="26" rx="6" fill="#c8162f"/><text x="160" y="38" text-anchor="middle" font-size="13" fill="#fff" font-family="Fredoka,sans-serif">KAFE</text><rect x="120" y="120" width="80" height="34" rx="4" fill="#8a5a36"/>`,
+  qindarka: `<rect width="320" height="200" fill="#efe3f2"/><rect x="110" y="18" width="100" height="26" rx="6" fill="#7b4bb7"/><text x="160" y="36" text-anchor="middle" font-size="13" fill="#fff" font-family="Fredoka,sans-serif">HOTEL</text><circle cx="40" cy="30" r="10" fill="#f2a516"/><circle cx="280" cy="30" r="10" fill="#f2a516"/><rect y="150" width="320" height="50" fill="#9c7bb0"/><rect x="120" y="118" width="80" height="34" rx="4" fill="#fff" stroke="#d9d0c8" stroke-width="2"/>`,
+  lypsari: `<rect width="320" height="200" fill="#dfe8f0"/><rect x="10" y="40" width="70" height="110" fill="#c9b8a6"/><rect x="240" y="20" width="70" height="130" fill="#b9a693"/><g fill="#8fb7d9"><rect x="22" y="56" width="16" height="18"/><rect x="50" y="56" width="16" height="18"/><rect x="252" y="36" width="16" height="18"/><rect x="282" y="36" width="16" height="18"/></g><rect y="150" width="320" height="50" fill="#9a9a9a"/><path d="M0 172h320" stroke="#ddd" stroke-width="3" stroke-dasharray="18 14"/>`,
+  talesi: `<rect width="320" height="200" fill="#f3ead6"/><path d="M60 40h200l-100-26z" fill="#e7dcc1" stroke="#c8b89a" stroke-width="2"/><g fill="#efe6cf" stroke="#c8b89a" stroke-width="2"><rect x="76" y="44" width="16" height="106"/><rect x="128" y="44" width="16" height="106"/><rect x="176" y="44" width="16" height="106"/><rect x="228" y="44" width="16" height="106"/></g><rect y="150" width="320" height="50" fill="#d8c8a6"/>`,
+  dyqani: `<rect width="320" height="200" fill="#e8f3e3"/><path d="M90 30h140l14 24H76z" fill="#c8162f"/><path d="M90 30h20l-6 24H76zM130 30h20l2 24h-26zM170 30h20l8 24h-26zM210 30h20l14 24h-26z" fill="#fff"/><rect x="90" y="104" width="140" height="48" fill="#b07a4f"/><g><circle cx="110" cy="100" r="9" fill="#d93a3a"/><circle cx="126" cy="98" r="9" fill="#d93a3a"/><circle cx="168" cy="99" r="8" fill="#7b4bb7"/><circle cx="180" cy="101" r="8" fill="#7b4bb7"/><circle cx="206" cy="99" r="9" fill="#f08a24"/></g><rect y="150" width="320" height="50" fill="#a5c48f"/>`,
+  plazhi: `<rect width="320" height="200" fill="#cfeaf7"/><circle cx="270" cy="34" r="18" fill="#f2c94c"/><rect y="104" width="320" height="50" fill="#2e8bc0"/><path d="M0 110q20-8 40 0t40 0 40 0 40 0 40 0 40 0 40 0 40 0" stroke="#fff" stroke-width="3" fill="none" opacity=".7"/><rect y="150" width="320" height="50" fill="#f1d9a6"/><path d="M40 150l30-50 30 50z" fill="#c8162f" opacity=".85"/><path d="M70 100v56" stroke="#6b4423" stroke-width="3"/>`,
+  mjeku: `<rect width="320" height="200" fill="#eaf4f4"/><rect x="138" y="22" width="44" height="44" rx="6" fill="#fff" stroke="#d9e6e6" stroke-width="2"/><path d="M160 32v24M148 44h24" stroke="#d93a3a" stroke-width="8" stroke-linecap="round"/><rect x="20" y="40" width="70" height="50" rx="4" fill="#cfe7f7" stroke="#9fb7b7" stroke-width="4"/><rect y="150" width="320" height="50" fill="#b9d3d3"/>`,
+  ataturku: `<rect width="320" height="200" fill="#e30a17"/><circle cx="130" cy="90" r="40" fill="#fff"/><circle cx="140" cy="90" r="32" fill="#e30a17"/><path d="M180 90l26-9-16 22v-27l16 22z" fill="#fff"/>`,
+};
+function storyScene(s, speakers) {
+  const el = $(`<div class="scene" aria-hidden="true"><svg class="bg" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice">${SCENES[s.id] || SCENES.familja}</svg>
+    <div class="people"></div><div class="sbubble"></div></div>`);
+  const ppl = el.querySelector(".people"), bub = el.querySelector(".sbubble"), map = {};
+  speakers.slice(0, 3).forEach((who, i) => {
+    const d = $(`<div class="person p${speakers.length > 2 ? i : i * 2}" title="${esc(who)}">${personSVG(PEOPLE[who] || { g: "m", hair: "#2a2122", top: "#5a6a7a" })}<span class="pname">${esc(who)}</span></div>`);
+    ppl.append(d); map[who] = d;
+  });
+  return {
+    el,
+    show(l) {
+      Object.values(map).forEach(d => d.classList.remove("talk"));
+      const d = l.who && map[l.who];
+      if (d) d.classList.add("talk");
+      bub.className = "sbubble show " + (d ? (d.classList.contains("p0") ? "l" : d.classList.contains("p2") ? "r" : "c") : "narr");
+      bub.innerHTML = `${l.who ? `<b>${esc(l.who)}</b>` : "<b>Anlatıcı</b>"}${kara(l)}<small>${esc(l.tr)}</small>`;
+    },
+    quiet() { Object.values(map).forEach(d => d.classList.remove("talk")); },
+  };
+}
+
+/* ---------- Mouth diagrams (side view) for the ear-training contrasts ---------- */
+const TONGUE = {
+  inter: "M110 190 Q120 130 190 118 Q245 110 282 121 Q284 128 262 133 Q205 140 170 160 Q140 180 130 200Z",
+  alv: "M110 190 Q120 135 180 128 Q225 122 247 100 Q256 108 246 128 Q205 146 170 162 Q140 180 130 200Z",
+  post: "M110 190 Q125 120 190 106 Q222 96 238 92 Q248 104 236 122 Q205 142 170 162 Q140 180 130 200Z",
+  pal: "M110 190 Q128 86 188 72 Q228 70 250 120 Q255 135 240 140 Q200 150 170 165 Q140 180 130 200Z",
+  hi: "M110 190 Q130 96 195 88 Q236 90 252 128 Q252 140 240 142 Q200 152 170 166 Q140 182 130 200Z",
+  mid: "M110 190 Q130 114 195 106 Q235 108 252 134 Q252 145 240 146 Q200 155 170 168 Q140 182 130 200Z",
+  cen: "M110 190 Q135 120 185 115 Q225 117 250 140 Q250 148 238 150 Q200 158 170 170 Q140 184 130 200Z",
+  vel: "M110 190 Q114 104 150 100 Q178 112 200 122 Q230 116 247 100 Q256 108 246 128 Q205 146 170 162 Q140 180 130 200Z",
+};
+const SOUND = {   // tongue shape, contact point, voiced, lips rounded, trill, nasal, short note
+  "q": ["pal", [205, 70], 0, 0, 0, 0, "dilin ortası sert damağa"], "ç": ["post", [240, 92], 0, 1, 0, 0, "dil ucu damağın önüne, dudaklar hafif öne"],
+  "th": ["inter", [282, 122], 0, 0, 0, 0, "dil ucu dişlerin arasında, titreşim yok"], "dh": ["inter", [282, 122], 1, 0, 0, 0, "dil ucu dişlerin arasında, gırtlak titrer"],
+  "rr": ["alv", [248, 98], 1, 0, 2, 0, "dil ucu diş etinde birkaç kez titrer"], "r": ["alv", [248, 98], 1, 0, 1, 0, "dil ucu diş etine tek dokunur"],
+  "ll": ["vel", [248, 98], 1, 0, 0, 0, "dil ucu diş etinde, dilin arkası yukarıda (kalın)"], "l": ["alv", [248, 98], 1, 0, 0, 0, "dil ucu diş etinde, dilin arkası aşağıda (ince)"],
+  "e": ["mid", null, 1, 0, 0, 0, "dil önde ve orta yükseklikte"], "ë": ["cen", null, 1, 0, 0, 0, "dil ortada ve gevşek"],
+  "nj": ["pal", [205, 70], 1, 0, 0, 1, "dilin ortası damağa, hava burundan"], "n": ["alv", [248, 98], 1, 0, 0, 1, "dil ucu diş etine, hava burundan"],
+  "gj": ["pal", [205, 70], 1, 0, 0, 0, "dilin ortası damağa, gırtlak titrer"], "xh": ["post", [240, 92], 1, 1, 0, 0, "dil ucu damağın önüne, gırtlak titrer"],
+  "y": ["hi", null, 1, 1, 0, 0, "dil önde ve yüksek, dudaklar yuvarlak"], "i": ["hi", null, 1, 0, 0, 0, "dil önde ve yüksek, dudaklar yayvan"],
+};
+function mouthSVG(letter) {
+  const [tg, pt, voiced, round, trill, nasal] = SOUND[letter] || SOUND["e"];
+  const lipU = round ? "M262 90 Q296 84 310 104" : "M262 92 Q290 88 304 104", lipL = round ? "M262 154 Q296 160 308 140" : "M262 152 Q290 158 302 140";
+  return `<svg viewBox="0 0 320 240" role="img" aria-label="${esc(letter)} sesi: ${esc((SOUND[letter] || [])[6] || "")}">
+    <path d="M40 40 Q160 0 280 60 L300 120 Q290 150 260 150 L250 230 L70 230 Q30 150 40 40Z" fill="var(--surface-2)" stroke="var(--line)" stroke-width="3"/>
+    <path d="M70 70 Q120 52 210 66 Q240 76 262 100" fill="none" stroke="var(--muted)" stroke-width="4" stroke-linecap="round"/>
+    <path d="M70 70 Q60 60 52 56" fill="none" stroke="var(--muted)" stroke-width="4" stroke-linecap="round" opacity=".5"/>
+    <rect x="258" y="96" width="14" height="22" rx="4" fill="#fff" stroke="var(--line)" stroke-width="2"/><rect x="256" y="126" width="14" height="20" rx="4" fill="#fff" stroke="var(--line)" stroke-width="2"/>
+    <path d="${lipU}" fill="none" stroke="var(--accent)" stroke-width="7" stroke-linecap="round"/><path d="${lipL}" fill="none" stroke="var(--accent)" stroke-width="7" stroke-linecap="round"/>
+    <path d="${TONGUE[tg]}" fill="#e8737f" stroke="#b84a56" stroke-width="2"/>
+    ${pt ? `<circle cx="${pt[0]}" cy="${pt[1]}" r="8" fill="none" stroke="var(--gold)" stroke-width="3.5"/>` : ""}
+    ${trill ? `<path d="M${pt[0] - 14} ${pt[1] + 18} l5 -6 l5 6 l5 -6 ${trill > 1 ? "l5 6 l5 -6 l5 6" : ""}" fill="none" stroke="var(--blue)" stroke-width="2.5" stroke-linecap="round"/>` : ""}
+    ${nasal ? `<path d="M70 66 Q56 40 70 24" fill="none" stroke="var(--blue)" stroke-width="3" stroke-dasharray="5 5" marker-end="url(#ar)"/><defs><marker id="ar" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0 0L8 4L0 8z" fill="var(--blue)"/></marker></defs>` : ""}
+    <path d="M95 175 L95 230" stroke="var(--muted)" stroke-width="10" stroke-linecap="round" opacity=".35"/>
+    ${voiced ? `<g stroke="var(--blue)" stroke-width="3" fill="none" stroke-linecap="round"><path d="M112 182 q6 6 0 12 q-6 6 0 12"/><path d="M78 182 q-6 6 0 12 q6 6 0 12"/></g>` : ""}
+  </svg>`;
+}
+function mouthCard(letter, w) {
+  const S = SOUND[letter] || [];
+  return `<div class="mouth-card" ${w ? `data-sq="${esc(w.sq)}" role="button" tabindex="0"` : ""}><div class="ml">${esc(letter)}${w ? ` <span>· ${esc(w.sq)}</span>` : ""}</div>${mouthSVG(letter)}<div class="mn">${esc(S[6] || "")}</div></div>`;
+}
+
+/* ---------- Celebration: confetti, the eagle jumps, the XP flies ---------- */
+function celebrate(host, xp, goalHit) {
+  if (!host || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  host.style.position = "relative";
+  const c = document.createElement("canvas"); c.className = "confetti"; host.append(c);
+  const r = host.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+  c.width = r.width * dpr; c.height = r.height * dpr; const ctx = c.getContext("2d"); ctx.scale(dpr, dpr);
+  const cols = ["#c8162f", "#f2a516", "#2e7bd6", "#3a9a46", "#2a2122"], n = goalHit ? 180 : 100;
+  const ps = Array.from({ length: n }, () => ({ x: r.width / 2 + (Math.random() - .5) * 60, y: r.height * .3, vx: (Math.random() - .5) * 10, vy: -Math.random() * 10 - 3, s: Math.random() * 7 + 4, c: cols[Math.random() * 5 | 0], a: Math.random() * 6 }));
+  let f = 0;
+  const step = () => { ctx.clearRect(0, 0, r.width, r.height); ps.forEach(p => { p.x += p.vx; p.y += p.vy; p.vy += .24; p.vx *= .99; p.a += .2; ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a); ctx.fillStyle = p.c; ctx.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2); ctx.restore(); }); if (++f < 150) requestAnimationFrame(step); else c.remove(); };
+  step();
+  const e = host.querySelector(".pop"); if (e) { e.classList.remove("jump"); void e.offsetWidth; e.classList.add("jump"); }
+  const fly = $(`<div class="xp-fly">+${xp} XP</div>`); host.append(fly); setTimeout(() => fly.remove(), 1600);
+  if (goalHit) {
+    const g = $(`<div class="goal-hit">${icon("🔥")}<b>Günlük hedef tamam!</b><span>${GOAL} XP'ye ulaştın. Yarın da gel, serin büyüsün.</span></div>`);
+    host.prepend(g);
+    setTimeout(() => tone([[523, .12, "triangle"], [659, .12, "triangle"], [784, .12, "triangle"], [1047, .12, "triangle"], [1319, .5, "triangle"]]), 500);
+  }
+}
+
 /* ---------- Finish ---------- */
 function finish(passed) {
   app.replaceChildren();
@@ -1340,6 +1604,7 @@ function finish(passed) {
   if (passed) {
     xp = LS.review ? 5 : LS.practice ? 5 : 10;
     if (LS.hearts === 5) xp += 5;
+    var goalHit = P.dayXp < GOAL && P.dayXp + xp >= GOAL;
     P.xp += xp; P.dayXp += xp; logDay(xp);
     if (LS.L) P.done[LS.L.id] = 1;
     bumpStreak(); save(); sfx.win();
@@ -1357,6 +1622,7 @@ function finish(passed) {
     <div class="sheet"><button class="btn ${passed ? "good" : ""}">${passed ? "Devam" : "Tekrar dene"}</button></div></div>`);
   el.querySelector(".sheet .btn").onclick = () => passed ? home(LS.review ? "review" : "learn") : (LS.review ? startReview(LS.steps.filter(x => x.w).map(x => x.w)) : startLesson(LS.L));
   app.append(el);
+  if (passed) celebrate(el.querySelector(".end"), xp, goalHit);
   el.querySelector(".sheet .btn").focus();
 }
 </script>

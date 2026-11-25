@@ -36,20 +36,40 @@ model = KModel(config=os.path.join(MODEL_DIR, "config.json"),
 vocab = model.vocab
 pack = torch.load(os.path.join(MODEL_DIR, "voices", VOICE + ".pt"), weights_only=True)
 SPEED = {"agon": 0.78 * 1.154, "dardan": 0.78 * 1.168, "pf_dora": 0.66, "if_sara": 0.68, "af_heart": 0.62}.get(VOICE, 0.9) * 0.92   # natural pace, a little slower for learners
-FILTER = ("silenceremove=start_periods=1:start_threshold=-45dB,areverse,silenceremove=start_periods=1:start_threshold=-45dB,areverse,"
-          "adelay=100,apad=pad_dur=0.12,loudnorm=I=-16")
+FILTER = "adelay=100,apad=pad_dur=0.12,loudnorm=I=-16"     # silence is trimmed in numpy so word timings stay exact
+LEAD = 0.1                                                  # seconds added in front by adelay
+
+def word_times(text, ph, dur, spf, offset):
+    """Start/end (s) of each space-separated word of text, from the model's per-phoneme durations."""
+    times, i, t = [], 0, float(dur[0])
+    for wd in text.split(" "):
+        n_ph = len("".join(c for c in g2p(wd) if c in vocab or c == " ").rstrip(".").split(" ")) if wd.strip() else 0
+        start = None
+        for k in range(n_ph):
+            while i < len(ph) and ph[i] == " ": t += float(dur[1 + i]); i += 1
+            if start is None: start = t
+            while i < len(ph) and ph[i] != " ": t += float(dur[1 + i]); i += 1
+        if start is None: start = t
+        times.append([round(max(0.0, start * spf / 24000 - offset) + LEAD, 3), round(max(0.0, t * spf / 24000 - offset) + LEAD, 3)])
+    return times
 
 def synth(text, dst):
     ph = "".join(c for c in g2p(text) if c in vocab or c == " ")
     with torch.no_grad():
-        audio = model(ph, pack[min(len(ph), len(pack)) - 1], SPEED)
-    audio = audio.numpy() if hasattr(audio, "numpy") else np.asarray(audio)
+        o = model(ph, pack[min(len(ph), len(pack)) - 1], SPEED, return_output=True)
+    audio = o.audio.numpy(); dur = o.pred_dur.numpy()
+    spf = len(audio) / dur.sum()
+    loud = np.nonzero(np.abs(audio) > 10 ** (-45 / 20))[0]
+    a, b = (loud[0], loud[-1] + 1) if len(loud) else (0, len(audio))
+    times = word_times(text, ph, dur, spf, a / 24000)
+    audio = audio[a:b]
     with tempfile.NamedTemporaryFile(suffix=".wav") as f:
         with wave.open(f.name, "wb") as w:
             w.setnchannels(1); w.setsampwidth(2); w.setframerate(24000)
             w.writeframes((np.clip(audio, -1, 1) * 32767).astype(np.int16).tobytes())
         subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-i", f.name, "-af", FILTER, "-ac", "1", "-ar", "22050",
                         "-b:a", "48k" if SAMPLES else "40k", dst], check=True)
+    json.dump(times, open(dst[:-4] + ".json", "w"))
 
 if SAMPLES:
     out = os.path.join(ROOT, "..", "ses-ornekleri")
@@ -65,5 +85,5 @@ texts = ([w["sq"] for u in d["units"] for w in u["w"]] + [l["sq"] for s in d["st
 n = 0
 for t in dict.fromkeys(texts):
     dst = os.path.join(OUT, hashlib.md5(t.encode()).hexdigest()[:10] + ".mp3")
-    if not os.path.exists(dst): synth(t, dst); n += 1
-print("generated", n, "total", len(os.listdir(OUT)))
+    if not os.path.exists(dst[:-4] + ".json"): synth(t, dst); n += 1
+print("generated", n, "total", len([f for f in os.listdir(OUT) if f.endswith(".mp3")]))

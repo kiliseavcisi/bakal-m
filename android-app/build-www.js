@@ -11,6 +11,6 @@ const head = '<!doctype html>\n<html lang="tr">\n<head>\n<meta charset="utf-8">\
 const i = page.indexOf('<div class="app"');
 page = head + page.slice(0, i) + "</head>\n<body>\n" + page.slice(i) + "\n</body>\n</html>\n";
 fs.writeFileSync(path.join(out, "index.html"), page);
-fs.copyFileSync(path.join(src, "data.json"), path.join(out, "data.json"));
+for (const f of ["data.json", "icons.json"]) fs.copyFileSync(path.join(src, f), path.join(out, f));
 for (const d of ["packs", "packs2"]) for (const f of fs.readdirSync(path.join(src, d))) fs.copyFileSync(path.join(src, d, f), path.join(out, d, f));
 console.log("www ready:", fs.readdirSync(path.join(out, "packs")).length, "packs");

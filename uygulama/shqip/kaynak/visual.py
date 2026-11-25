@@ -15,7 +15,7 @@ EXTRA_PICS = {
  "ti je": "👉", "ai është": "👨", "ne jemi": "👥", "ata janë": "👨‍👩‍👦", "xhaxha": "👨‍🦳", "teze": "👩‍🦱",
  "e hënë": "cal:Pzt", "e martë": "cal:Sal", "e mërkurë": "cal:Çar", "e enjte": "cal:Per", "e premte": "cal:Cum", "e shtunë": "cal:Cmt",
  "e diel": "cal:Paz", "vit": "🗓️", "sot": "cal:Bugün", "dje": "cal:Dün", "nesër": "cal:Yarın", "tavolinë": "🪵", "jastëk": "🛌", "çati": "🏘️",
- "klasë": "🧑‍🏫", "fjalë": "🔤", "shqip": "🇦🇱", "turqisht": "🇹🇷", "anglisht": "🇬🇧", "vij": "🚶‍➡️", "i ri": "🐣", "i vjetër": "👴",
+ "klasë": "🧑‍🏫", "fjalë": "🔤", "shqip": "🇦🇱", "turqisht": "🇹🇷", "anglisht": "🇬🇧", "vij": "🚶", "i ri": "🐣", "i vjetër": "👴",
  "Ç'po bën?": "🤔", "Ku po shkon?": "🧭", "Do të vij nesër": "📆", "Ju falënderoj": "🙏", "Urdhëroni": "🤲", "Faleminderit për ndihmën": "🤝",
  "qafë": "🦒", "bark": "🫃", "shpinë": "🧍", "Ku ju dhemb?": "🤕", "Më dhemb barku": "🤢", "Keni…?": "🛍️", "lekë": "🪙", "madhësi": "📏",
  "Ku është arka?": "🧾", "rërë": "🏝️", "peshqir": "🧺", "çadër": "⛱️", "Kush?": "sym:?", "Çfarë?": "sym:?", "Si?": "sym:?", "Sa?": "sym:#",
