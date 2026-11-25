@@ -8,6 +8,10 @@ UNIT_LOOK = {  # id: (icon, hue)
  "ndjenja": ("💞", 340), "trupi": ("🧍", 15), "doktor": ("🩺", 180), "pazar": ("🛒", 140), "plazh": ("🏖️", 195),
  "pyetje": ("❓", 230), "lidhezat": ("🔗", 250), "koha-shkuar": ("⏪", 270), "shquar": ("📘", 215), "mbiemra": ("⚖️", 290),
  "karakteri": ("🦉", 35), "te-afermit": ("👪", 325), "proverba": ("📜", 40), "telefoni": ("📱", 205),
+ "rutina": ("⏰", 30), "veshje": ("👕", 285), "ushqim": ("🍲", 15), "qyteti": ("🏙️", 210), "transport": ("🚌", 45),
+ "puna": ("💼", 240), "hobi": ("⚽", 120), "shendeti": ("💊", 175), "blerje": ("🛍️", 330), "udhetim": ("🧳", 195),
+ "koha2": ("⏳", 260), "kundersi": ("☯️", 300), "fiilet2": ("🤲", 20), "teknologji": ("📱", 220), "natyra": ("🌲", 130),
+ "festat": ("🎊", 350), "kosova": ("🇽🇰", 215),
 }
 EXTRA_PICS = {
  "Ju lutem": "🥺", "S'ka përse": "😊", "Më falni": "😅", "Shihemi nesër": "📅", "Si je?": "🙂", "Jo keq": "👌", "Po ti?": "🫵",
@@ -33,7 +37,7 @@ STORY_LOOK = {  # story id: cover scene
 }
 AVATARS = {  # speaker name -> avatar emoji
  "Mësuesja": "👩‍🏫", "Nxënësit": "🧒", "Arbeni": "👦", "Arturi": "🧑", "Dritani": "👦🏻", "Kamerieri": "🧑‍🍳", "Kamerierja": "👩‍🍳",
- "Ana": "👩", "Artani": "👨", "Djali": "👦", "Unë": "🙂", "Lypësi": "🧓", "Talesi": "🧙", "Shitësi": "🧔", "Mjeku": "👨‍⚕️", "Pacienti": "🤒",
+ "Ana": "👩", "Artani": "👨", "Recepsionisti": "🧑‍💼", "Shoferi": "🧔", "Pula": "🐔", "Shqiponja": "🦅", "Djali": "👦", "Unë": "🙂", "Lypësi": "🧓", "Talesi": "🧙", "Shitësi": "🧔", "Mjeku": "👨‍⚕️", "Pacienti": "🤒",
 }
 
-FEMALE = {"Mësuesja", "Kamerierja", "Ana"}   # story speakers voiced by the female voice
+FEMALE = {"Mësuesja", "Kamerierja", "Ana", "Pula", "Shqiponja"}   # story speakers voiced by the female voice

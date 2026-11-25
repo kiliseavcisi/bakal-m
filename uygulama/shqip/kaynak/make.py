@@ -11,13 +11,19 @@ from gloss import FUNCTION
 from visual import UNIT_LOOK, EXTRA_PICS, STORY_LOOK, AVATARS, FEMALE
 from pairs import PAIRS
 from memo import MEMO
+from a2 import UNITS3
+from a2_stories import STORIES3, ROLES
+from verbs import VERBS, TENSES, PRON, rows as verb_rows
 
 OUT = os.path.dirname(HERE)
 CACHE = os.path.join(HERE, ".clips"); os.makedirs(CACHE, exist_ok=True)
 os.makedirs(OUT + "/packs", exist_ok=True)
 MODEL = sys.argv[1] if len(sys.argv) > 1 else "facebook/mms-tts-sqi"
-model = VitsModel.from_pretrained(MODEL).eval(); tok = AutoTokenizer.from_pretrained(MODEL)
-model.config.speaking_rate = 0.9; model.config.noise_scale = 0.5
+NO_MMS = os.environ.get("NO_MMS")       # first pass for new content: list texts, skip the MMS fallback
+if not NO_MMS:
+    model = VitsModel.from_pretrained(MODEL).eval(); tok = AutoTokenizer.from_pretrained(MODEL)
+    model.config.speaking_rate = 0.9; model.config.noise_scale = 0.5
+SAY = []
 packs = {}
 packs2 = {}
 
@@ -54,6 +60,8 @@ def tm(text):
 def audio(pack, text):
     key = hashlib.md5(text.encode()).hexdigest()[:10]
     chosen = os.path.join(VOICE_DIR, key + ".mp3")
+    SAY.append(text)
+    if NO_MMS and not (os.path.exists(chosen) and os.path.exists(os.path.join(ALT_DIR, key + ".mp3"))): return pack + "#" + key
     src = chosen if os.path.exists(chosen) else os.path.join(CACHE, clip(text) + ".mp3")   # fall back to MMS
     packs.setdefault(pack, {})[key] = base64.b64encode(open(src, "rb").read()).decode()
     alt = os.path.join(ALT_DIR, key + ".mp3")                                         # second talker (female)
@@ -72,11 +80,15 @@ for uid, title, vid, vtitle, words, tips in UNITS2:
     units.append({"id": uid, "t": title, "season": 2, "tips": tips,
                   "ic": UNIT_LOOK[uid][0], "hue": UNIT_LOOK[uid][1],
                   "w": [{"sq": sq, "tr": tr, "p": p or EXTRA_PICS.get(sq, ""), "a": audio(uid, sq), "k": tm(sq), "m": MEMO.get(sq)} for sq, tr, p in words]})
+for uid, title, vid, vtitle, words, tips in UNITS3:
+    units.append({"id": uid, "t": title, "season": 3, "lv": "A2", "tips": tips, "kos": uid == "kosova",
+                  "ic": UNIT_LOOK[uid][0], "hue": UNIT_LOOK[uid][1],
+                  "w": [{"sq": sq, "tr": tr, "p": p or EXTRA_PICS.get(sq, ""), "a": audio(uid, sq), "k": tm(sq), "m": MEMO.get(sq)} for sq, tr, p in words]})
 stories = []
-for s in STORIES + STORIES2:
-    used_videos.add(s["src"][0])
-    stories.append({"id": s["id"], "t": s["t"], "after": s["after"],
-                    "cover": STORY_LOOK.get(s["id"], "📖"),
+for s in STORIES + STORIES2 + STORIES3:
+    if "src" in s: used_videos.add(s["src"][0])
+    stories.append({"id": s["id"], "t": s["t"], "after": s["after"], "lv": "A2" if s in STORIES3 else "A1",
+                    "cover": s.get("cover") or STORY_LOOK.get(s["id"], "📖"),
                     "lines": [{"who": who, "av": AVATARS.get(who, ""), "f": who in FEMALE, "sq": sq, "tr": tr, "a": audio("s-" + s["id"], sq), "k": tm(sq)} for who, sq, tr in s["lines"]],
                     "q": [{"q": q, "o": o, "c": c} for q, o, c in s["q"]]})
 alpha = [{"l": l, "say": say, "hint": hint, "ex": ex, "tr": tr, "d": bool(d), "a": audio("alfabe", ex)} for l, say, hint, ex, tr, d in ALPHA]
@@ -115,12 +127,25 @@ EXTRA = ["Dua të pi ujë", "Jam nga Turqia", "Jam në shkollë", "Do të vij ne
          "shtëpia ime", "vajzë e bukur", "me ty", "A je mirë?"]
 extra = [{"sq": x, "a": audio("ayna", x), "k": tm(x)} for x in EXTRA]
 
+# Role-play conversations: NPC lines and every answer option get audio
+roles = [{"id": r["id"], "t": r["t"], "cover": r["cover"], "npc": r["npc"], "av": AVATARS.get(r["npc"], "🧑"), "f": r["npc"] in FEMALE, "goal": r["goal"],
+          "turns": [{"sq": sq, "tr": tr, "a": audio("roller", sq), "k": tm(sq),
+                     "o": [{"sq": osq, "tr": otr, "ok": bool(ok), "fb": fb, "a": audio("roller", osq), "k": tm(osq)} for osq, otr, ok, fb in opts]}
+                    for sq, tr, opts in r["turns"]]} for r in ROLES]
+# Verb conjugator: one clip per tense row (all six persons), word timings let each form light up
+conj = {"pron": PRON, "tenses": TENSES, "verbs": []}
+by = {}
+for v, t, text, full in verb_rows():
+    by.setdefault(v, {})[t] = {"f": full, "a": audio("fiiller", text), "k": tm(text)}
+for v, tr, _ in VERBS:
+    conj["verbs"].append({"v": v, "tr": tr, "t": by[v]})
+
 # Illustrations: Twemoji SVGs (graphics CC BY 4.0, Twitter, Inc. and contributors) for every emoji the course uses
 TWEMOJI = os.environ.get("TWEMOJI_DIR", "/tmp/claude-0/twemoji/package")
 def emoji_list(txt):
     out, cur = [], ""
     for ch in txt:
-        if cur and (ch in "\u200d\ufe0f" or 0x1F3FB <= ord(ch) <= 0x1F3FF or cur.endswith("\u200d") or (0x1F1E6 <= ord(ch) <= 0x1F1FF and len(cur) == 1 and 0x1F1E6 <= ord(cur) <= 0x1F1FF)):
+        if cur and (ch in "\u200d\ufe0f\u20e3" or 0x1F3FB <= ord(ch) <= 0x1F3FF or cur.endswith("\u200d") or (0x1F1E6 <= ord(ch) <= 0x1F1FF and len(cur) == 1 and 0x1F1E6 <= ord(cur) <= 0x1F1FF)):
             cur += ch
         else:
             if cur: out.append(cur)
@@ -140,6 +165,7 @@ for u in units:
     for w in u["w"]:
         if w["p"] and not w["p"].startswith(("#", "n:", "cal:", "sym:")): wanted.update(emoji_list(w["p"]))
 for s_ in stories: wanted.update(emoji_list(s_["cover"]))
+for r in roles: wanted.update(emoji_list(r["cover"] + r["av"]))
 wanted.update(emoji_list("🪞🤝📜💡⚠️🏰🏛️🏟️🧱🪟📚🇦🇱🪨🏖️🔥"))
 for e in sorted(wanted):
     svg = twemoji(e)
@@ -150,6 +176,7 @@ print("icons", len(icons), "missing", missing)
 
 for name, d in packs.items():
     json.dump(d, open(os.path.join(OUT, "packs", name + ".json"), "w"), separators=(",", ":"))
-json.dump({"units": units, "stories": stories, "alpha": alpha, "gloss": gloss, "rev": rev, "pairs": pairs, "extra": extra}, open(os.path.join(OUT, "data.json"), "w"), ensure_ascii=False, separators=(",", ":"))
+json.dump({"units": units, "stories": stories, "alpha": alpha, "gloss": gloss, "rev": rev, "pairs": pairs, "extra": extra, "roles": roles, "conj": conj}, open(os.path.join(OUT, "data.json"), "w"), ensure_ascii=False, separators=(",", ":"))
+json.dump(list(dict.fromkeys(SAY)), open(os.path.join(HERE, ".say.json"), "w"), ensure_ascii=False)
 print("voice clips", len(os.listdir(VOICE_DIR)) if os.path.isdir(VOICE_DIR) else 0, "units", len(units), "words", sum(len(u["w"]) for u in units), "stories", len(stories), "packs", len(packs),
       "clips", sum(len(p) for p in packs.values()))

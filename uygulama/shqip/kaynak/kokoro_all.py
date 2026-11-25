@@ -14,12 +14,12 @@ SAMPLES = "--samples" in sys.argv
 DIGRAPHS = {"xh": "dʒ", "gj": "ɟ", "nj": "ɲ", "sh": "ʃ", "zh": "ʒ", "th": "θ", "dh": "ð", "ll": "ɫ", "rr": "r"}
 LETTERS = {"a": "a", "b": "b", "c": "ts", "ç": "tʃ", "d": "d", "e": "ɛ", "ë": "ə", "f": "f", "g": "ɡ", "h": "h", "i": "i",
            "j": "j", "k": "k", "l": "l", "m": "m", "n": "n", "o": "ɔ", "p": "p", "q": "c", "r": "ɾ", "s": "s", "t": "t",
-           "u": "u", "v": "v", "x": "dz", "y": "y", "z": "z"}
+           "u": "u", "v": "v", "x": "dz", "y": "y", "z": "z", "â": "a", "ê": "ɛ", "î": "i", "ô": "ɔ", "û": "u"}   # circumflex: Gheg (Kosovo) nasal vowels
 KEEP = set(",.!?;:")
 
 def g2p(text):
     t = unicodedata.normalize("NFC", text).lower().replace("’", "'")
-    t = re.sub(r"(?<=\w)'(?=\w)", "", t).replace("'", " ").replace("…", ".").replace("-", " ")
+    t = re.sub(r"(?<=\w)'(?=\w)", "", t).replace("'", " ").replace("…", ".").replace(" – ", ", ").replace("-", " ")
     out, i = [], 0
     while i < len(t):
         two = t[i:i + 2]
@@ -80,7 +80,8 @@ if SAMPLES:
 
 OUT = os.path.join(HERE, ".clips-kokoro-" + VOICE); os.makedirs(OUT, exist_ok=True)
 d = json.load(open(os.path.join(ROOT, "data.json")))
-texts = ([w["sq"] for u in d["units"] for w in u["w"]] + [l["sq"] for s in d["stories"] for l in s["lines"]] +
+SAYF = os.path.join(HERE, ".say.json")
+texts = (json.load(open(SAYF)) if os.path.exists(SAYF) else []) + ([w["sq"] for u in d["units"] for w in u["w"]] + [l["sq"] for s in d["stories"] for l in s["lines"]] +
          [a["ex"] for a in d["alpha"]] + [x["sq"] for p in d.get("pairs", []) for pr in p["pairs"] for x in pr] + [x["sq"] for x in d.get("extra", [])])
 n = 0
 for t in dict.fromkeys(texts):
