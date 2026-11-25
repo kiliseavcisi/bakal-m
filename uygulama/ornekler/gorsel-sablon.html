@@ -1,0 +1,261 @@
+<title>Shqiponja Görsel Örnekler</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Lexend:wght@400;500;600&display=swap">
+<style>
+/* Layout: one column of six numbered demo cards (the numbers match the proposal list), each a working mini-prototype. */
+:root {
+  --bg: #fbf8f6; --surface: #ffffff; --surface-2: #f2ece9; --line: #e4dcd8; --fg: #2a2122; --muted: #7d7172;
+  --accent: #c8162f; --accent-deep: #8f0f22; --accent-soft: #fbe3e6; --blue: #2e7bd6; --blue-soft: #e2eefb;
+  --good: #3a9a46; --gold: #f2a516; --gold-soft: #fff1d2; --skin: #f3c9a8; --skin-2: #d9a07c;
+  --f-display: "Fredoka", "Segoe UI Rounded", system-ui, sans-serif; --f-body: "Lexend", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #171314; --surface: #221c1d; --surface-2: #2d2627; --line: #3b3233; --fg: #f3eeed; --muted: #a99d9e;
+  --accent: #f04a5f; --accent-deep: #a8182c; --accent-soft: #3c1b20; --blue: #5fa2ef; --blue-soft: #1a2a3d; --gold-soft: #3a2d12; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #171314; --surface: #221c1d; --surface-2: #2d2627; --line: #3b3233; --fg: #f3eeed; --muted: #a99d9e;
+  --accent: #f04a5f; --accent-deep: #a8182c; --accent-soft: #3c1b20; --blue: #5fa2ef; --blue-soft: #1a2a3d; --gold-soft: #3a2d12; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--f-body); font-size: 17px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 24px 48px; }
+.wrap { max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+h1 { font-family: var(--f-display); font-size: 2rem; margin: 0; color: var(--accent); text-wrap: balance; }
+.intro { color: var(--muted); margin: 0; }
+.card { background: var(--surface); border: 2px solid var(--line); border-radius: 22px; padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+.card h2 { font-family: var(--f-display); font-size: 1.3rem; margin: 0; display: flex; gap: 10px; align-items: center; }
+.card h2 .n { background: var(--accent); color: #fff; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: 1rem; flex: none; }
+.why { color: var(--muted); font-size: .92rem; margin: 0; }
+button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; }
+button:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+.btn { font-family: var(--f-display); font-weight: 600; border-radius: 14px; padding: 10px 16px; background: var(--blue); color: #fff; box-shadow: 0 4px 0 #1f5aa0; }
+.btn.alt { background: var(--accent); box-shadow: 0 4px 0 var(--accent-deep); }
+.btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #1f5aa0; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+/* 1 karaoke */
+.kara { font-family: var(--f-display); font-weight: 600; font-size: clamp(1.4rem, 6vw, 2rem); line-height: 1.4; display: flex; flex-wrap: wrap; gap: .25em .35em; }
+.kara span { border-radius: 8px; padding: 0 4px; transition: background .12s, color .12s, transform .12s; }
+.kara span.on { background: var(--gold); color: #2a2122; transform: translateY(-2px); }
+.kara span.done { color: var(--blue); }
+.tr { color: var(--muted); }
+.wave { height: 6px; background: var(--surface-2); border-radius: 99px; overflow: hidden; }
+.wave i { display: block; height: 100%; width: 0; background: var(--blue); }
+
+/* 2 mouth */
+.mouth-wrap { display: grid; grid-template-columns: 1fr; gap: 10px; }
+.mouth svg { width: 100%; max-width: 360px; height: auto; display: block; margin: 0 auto; }
+.vib { opacity: 0; }
+.voiced .vib { opacity: 1; animation: buzz .12s infinite alternate; }
+@keyframes buzz { from { transform: translateX(-1.5px); } to { transform: translateX(1.5px); } }
+.legend { font-size: .9rem; color: var(--muted); }
+.legend b { color: var(--fg); }
+
+/* 3 icons */
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.compare > div { border: 2px dashed var(--line); border-radius: 16px; padding: 12px; text-align: center; min-width: 0; }
+.compare .k { font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.icons { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+.icons .em { font-size: 44px; }
+.icons figure { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: .8rem; font-weight: 600; }
+.icons svg { width: 56px; height: 56px; }
+
+/* 4 dialogue */
+.scene { position: relative; border-radius: 18px; overflow: hidden; border: 2px solid var(--line); aspect-ratio: 16 / 11; max-width: 100%; }
+.scene svg.bg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.who { position: absolute; bottom: 4%; width: 34%; transition: transform .2s; transform-origin: bottom center; }
+.who.l { left: 6%; } .who.r { right: 6%; }
+.who.talk { transform: scale(1.08); animation: bob .35s infinite alternate; }
+@keyframes bob { to { transform: scale(1.08) translateY(-4px); } }
+.who svg { width: 100%; height: auto; display: block; }
+.bubble { position: absolute; top: 25%; max-width: 62%; background: var(--surface); color: var(--fg); border: 2px solid var(--line); border-radius: 14px; padding: 8px 12px; font-weight: 600; font-size: .95rem; opacity: 0; transition: opacity .2s; }
+.bubble.l { left: 4%; } .bubble.r { right: 4%; }
+.bubble.show { opacity: 1; }
+.bubble small { display: block; color: var(--muted); font-weight: 400; }
+
+/* 5 journey */
+.map svg { width: 100%; height: auto; display: block; }
+.city { cursor: pointer; }
+.city:focus-visible circle { stroke: var(--blue); stroke-width: 4; }
+.pulse { animation: pulse 1.4s infinite; transform-origin: center; transform-box: fill-box; }
+@keyframes pulse { 50% { transform: scale(1.25); } }
+.note { background: var(--gold-soft); border-radius: 14px; padding: 10px 14px; min-height: 3em; }
+
+/* 6 celebrate */
+.stage { position: relative; height: 220px; border-radius: 18px; background: linear-gradient(180deg, var(--accent-soft), var(--surface)); overflow: hidden; display: grid; place-items: center; }
+.stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.eagle { width: 120px; transition: transform .2s; }
+.eagle.jump { animation: jump .9s ease-out; }
+@keyframes jump { 30% { transform: translateY(-40px) rotate(-8deg); } 60% { transform: translateY(0) rotate(6deg); } 80% { transform: translateY(-12px); } }
+.xp { position: absolute; top: 14px; font-family: var(--f-display); font-weight: 700; font-size: 1.6rem; color: var(--gold); opacity: 0; }
+.xp.show { animation: rise 1.4s ease-out; }
+@keyframes rise { 0% { opacity: 0; transform: translateY(20px); } 30% { opacity: 1; } 100% { opacity: 0; transform: translateY(-30px); } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <h1>Görsel geliştirme örnekleri</h1>
+  <p class="intro">Her kart önerilen bir geliştirmenin çalışan küçük bir örneği. Dinle, dokun, dene; beğendiklerini söyle, uygulamaya ekleyeyim.</p>
+
+  <section class="card">
+    <h2><span class="n">1</span>Karaoke kelime takibi</h2>
+    <p class="why">Ses çalarken her kelime söylendiği anda yanar. Duyduğun sesi yazılışıyla eşleştirir; özellikle uzun cümlelerde kaybolmazsın.</p>
+    <div class="kara" id="kara"></div>
+    <div class="tr">Bir Türk kahvesi istiyorum, lütfen.</div>
+    <div class="wave"><i id="karabar"></i></div>
+    <div class="row"><button class="btn" id="k-agon">▶ Erkek sesi (Agon)</button><button class="btn alt" id="k-dora">▶ Kadın sesi (Dora)</button></div>
+  </section>
+
+  <section class="card">
+    <h2><span class="n">2</span>Ağız ve dil çizimi</h2>
+    <p class="why">Telaffuz bölümünde her ses farkını çizimle gösterir. Örnek: <b>th</b> ve <b>dh</b>. Dil ikisinde de dişlerin arasında; fark, gırtlağın titreyip titrememesi.</p>
+    <div class="mouth" id="mouth">
+      <svg viewBox="0 0 320 240" role="img" aria-label="Ağzın yandan görünüşü: dil ucu üst ve alt dişlerin arasında">
+        <path d="M40 40 Q160 0 280 60 L300 120 Q290 150 260 150 L250 230 L70 230 Q30 150 40 40Z" fill="var(--surface-2)" stroke="var(--line)" stroke-width="3"/>
+        <path d="M70 70 Q120 52 210 70 Q240 78 262 100" fill="none" stroke="var(--muted)" stroke-width="4" stroke-linecap="round"/>
+        <text x="150" y="58" font-size="12" fill="var(--muted)" text-anchor="middle">damak</text>
+        <rect x="258" y="96" width="14" height="22" rx="4" fill="#fff" stroke="var(--line)" stroke-width="2"/>
+        <rect x="256" y="126" width="14" height="20" rx="4" fill="#fff" stroke="var(--line)" stroke-width="2"/>
+        <path d="M262 92 Q290 88 304 104" fill="none" stroke="var(--accent)" stroke-width="7" stroke-linecap="round"/>
+        <path d="M262 152 Q290 158 302 140" fill="none" stroke="var(--accent)" stroke-width="7" stroke-linecap="round"/>
+        <text x="300" y="86" font-size="12" fill="var(--muted)" text-anchor="end">dudak</text>
+        <path d="M110 190 Q120 130 190 118 Q245 110 282 121 Q284 128 262 133 Q205 140 170 160 Q140 180 130 200Z" fill="#e8737f" stroke="#b84a56" stroke-width="2"/>
+        <text x="175" y="152" font-size="12" fill="#fff" text-anchor="middle">dil</text>
+        <circle cx="282" cy="122" r="7" fill="none" stroke="var(--gold)" stroke-width="3"/>
+        <path d="M95 175 L95 230" stroke="var(--muted)" stroke-width="10" stroke-linecap="round" opacity=".35"/>
+        <text x="60" y="222" font-size="12" fill="var(--muted)">gırtlak</text>
+        <g class="vib" stroke="var(--blue)" stroke-width="3" fill="none" stroke-linecap="round">
+          <path d="M112 180 q6 6 0 12 q-6 6 0 12"/><path d="M78 180 q-6 6 0 12 q6 6 0 12"/>
+        </g>
+      </svg>
+    </div>
+    <div class="row"><button class="btn" id="m-th">th · <i>thi</i> (domuz)</button><button class="btn alt" id="m-dh">dh · <i>dhi</i> (keçi)</button></div>
+    <div class="legend" id="m-legend"><b>Sarı halka:</b> dil ucu üst ve alt dişlerin arasında. Bir sese dokun.</div>
+  </section>
+
+  <section class="card">
+    <h2><span class="n">3</span>Tek tip resim seti</h2>
+    <p class="why">Emojiler her telefonda farklı çizilir. Uygulamaya ait, aynı renk ve çizgide çizimler her yerde aynı görünür ve dersin kimliğini taşır.</p>
+    <div class="compare">
+      <div><div class="k">Şu an: emoji</div><div class="icons"><span class="em">🍎</span><span class="em">🐈</span><span class="em">🏠</span></div></div>
+      <div><div class="k">Öneri: ortak çizim</div><div class="icons">
+        <figure><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="var(--accent-soft)"/><path d="M32 22c-8-6-20-2-20 12 0 12 9 20 15 20 3 0 3-2 5-2s2 2 5 2c6 0 15-8 15-20 0-14-12-18-20-12z" fill="#d93a3a"/><path d="M32 22c0-5 2-9 6-11" stroke="#6b4423" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M36 16c4-4 10-3 12 0-4 3-9 3-12 0z" fill="#3a9a46"/></svg>mollë</figure>
+        <figure><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="var(--accent-soft)"/><path d="M16 50c0-14 6-22 16-22s16 8 16 22z" fill="#f2a516"/><circle cx="32" cy="26" r="12" fill="#f2a516"/><path d="M21 20l2-10 7 7zM43 20l-2-10-7 7z" fill="#f2a516"/><circle cx="28" cy="25" r="2" fill="#2a2122"/><circle cx="36" cy="25" r="2" fill="#2a2122"/><path d="M30 30q2 2 4 0" stroke="#2a2122" stroke-width="1.6" fill="none"/></svg>mace</figure>
+        <figure><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="var(--accent-soft)"/><path d="M14 30L32 15l18 15" fill="#c8162f"/><rect x="18" y="29" width="28" height="20" rx="2" fill="#fff" stroke="#2a2122" stroke-width="2"/><rect x="28" y="36" width="8" height="13" fill="#6b4423"/><rect x="21" y="33" width="6" height="6" fill="#2e7bd6"/></svg>shtëpi</figure>
+      </div></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><span class="n">4</span>Canlı diyalog sahnesi</h2>
+    <p class="why">Hikâyeler bir sahnede geçer; konuşan karakter öne çıkar ve konuşma balonu açılır. Erkek ve kadın karakterler kendi sesleriyle konuşur.</p>
+    <div class="scene" id="scene">
+      <svg class="bg" viewBox="0 0 320 220" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <rect width="320" height="220" fill="#f6e3cc"/><rect y="150" width="320" height="70" fill="#b07a4f"/>
+        <rect x="20" y="30" width="70" height="50" rx="4" fill="#cfe7f7" stroke="#8a5a36" stroke-width="4"/>
+        <rect x="230" y="30" width="70" height="50" rx="4" fill="#cfe7f7" stroke="#8a5a36" stroke-width="4"/>
+        <rect x="110" y="20" width="100" height="26" rx="6" fill="#c8162f"/><text x="160" y="38" text-anchor="middle" font-size="13" fill="#fff" font-family="Fredoka, sans-serif">KAFE</text>
+        <rect x="120" y="120" width="80" height="34" rx="4" fill="#8a5a36"/><rect x="146" y="108" width="12" height="12" rx="2" fill="#fff"/><rect x="162" y="110" width="10" height="10" rx="2" fill="#fff"/>
+      </svg>
+      <div class="who l" id="w-m"><svg viewBox="0 0 100 130" aria-label="Garson (erkek)"><rect x="22" y="70" width="56" height="60" rx="18" fill="#2a2122"/><rect x="38" y="70" width="24" height="40" fill="#fff"/><circle cx="50" cy="44" r="26" fill="var(--skin)"/><path d="M24 40c0-18 12-26 26-26s26 8 26 26c-6-8-16-10-26-10s-20 2-26 10z" fill="#3a2a20"/><circle cx="41" cy="46" r="3" fill="#2a2122"/><circle cx="59" cy="46" r="3" fill="#2a2122"/><path d="M42 57q8 6 16 0" stroke="#2a2122" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg></div>
+      <div class="who r" id="w-f"><svg viewBox="0 0 100 130" aria-label="Ana (kadın)"><path d="M20 50c-2 30 6 50 30 50s32-20 30-50z" fill="#7a3b1f"/><rect x="22" y="72" width="56" height="58" rx="18" fill="#2e7bd6"/><circle cx="50" cy="44" r="25" fill="var(--skin)"/><path d="M24 44c0-20 12-30 26-30s26 10 26 30c-4-12-14-16-26-16s-22 4-26 16z" fill="#7a3b1f"/><circle cx="41" cy="46" r="3" fill="#2a2122"/><circle cx="59" cy="46" r="3" fill="#2a2122"/><path d="M42 56q8 6 16 0" stroke="#2a2122" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="34" cy="53" r="4" fill="#f4a3a8" opacity=".7"/><circle cx="66" cy="53" r="4" fill="#f4a3a8" opacity=".7"/></svg></div>
+      <div class="bubble l" id="b-m"></div><div class="bubble r" id="b-f"></div>
+    </div>
+    <div class="row"><button class="btn" id="d-play">▶ Diyaloğu dinle</button></div>
+  </section>
+
+  <section class="card">
+    <h2><span class="n">5</span>Arnavutluk yolculuğu</h2>
+    <p class="why">Ders yolu bir haritaya dönüşür. Her bölüm bir şehir; bitirdikçe sonraki şehre gidersin ve şehirle ilgili kısa bir kültür notu açılır. Harita temsilîdir.</p>
+    <div class="map">
+      <svg viewBox="0 0 320 300" role="img" aria-label="Şehirleri birbirine bağlayan yol">
+        <path d="M70 40 C120 60 90 100 140 110 S200 160 160 190 S110 240 170 260 S250 250 260 280" fill="none" stroke="var(--line)" stroke-width="10" stroke-linecap="round"/>
+        <path d="M70 40 C120 60 90 100 140 110 S200 160 160 190" fill="none" stroke="var(--gold)" stroke-width="10" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="note" id="note">Bir şehre dokun.</div>
+  </section>
+
+  <section class="card">
+    <h2><span class="n">6</span>Kutlama</h2>
+    <p class="why">Ders bitince konfeti, maskot zıplar ve kazandığın XP uçar. Küçük bir ödül, ertesi gün geri gelme isteğini artırır.</p>
+    <div class="stage" id="stage"><canvas id="conf"></canvas><div class="xp" id="xp">+15 XP</div>
+      <svg class="eagle" id="eagle" viewBox="0 0 100 100" aria-hidden="true"><path d="M14 58c-8-10-6-24 4-30 0 10 6 16 14 18z" fill="#2a2122"/><path d="M86 58c8-10 6-24-4-30 0 10-6 16-14 18z" fill="#2a2122"/><ellipse cx="50" cy="62" rx="30" ry="30" fill="#c8162f"/><circle cx="50" cy="40" r="24" fill="#2a2122"/><circle cx="41" cy="38" r="7" fill="#fff"/><circle cx="59" cy="38" r="7" fill="#fff"/><circle cx="42" cy="38" r="3.4" fill="#2a2122"/><circle cx="60" cy="38" r="3.4" fill="#2a2122"/><path d="M44 47h12l-6 12z" fill="#f2a516"/><path d="M38 88l-4 8M50 90v8M62 88l4 8" stroke="#f2a516" stroke-width="3" stroke-linecap="round"/></svg>
+    </div>
+    <div class="row"><button class="btn alt" id="cele">Dersi bitir</button></div>
+  </section>
+</div>
+
+<script>
+const DATA = __DATA__;
+const $ = s => document.querySelector(s);
+const src = b64 => "data:audio/mpeg;base64," + b64;
+let cur = null;
+function play(b64) { if (cur) cur.pause(); cur = new Audio(src(b64)); cur.play().catch(() => {}); return cur; }
+
+/* 1. karaoke */
+const words = "Dua një kafe turke, ju lutem.".split(" ");
+const kara = $("#kara"); kara.innerHTML = words.map(w => `<span>${w}</span>`).join("");
+const spans = [...kara.children];
+function karaoke(v) {
+  const k = DATA.kara[v], au = play(k.audio);
+  spans.forEach(s => s.className = "");
+  const tick = () => {
+    const t = au.currentTime;
+    spans.forEach((s, i) => { const [a, b] = k.times[i]; s.className = t >= a && t < b + .05 ? "on" : t >= b ? "done" : ""; });
+    $("#karabar").style.width = (au.duration ? t / au.duration * 100 : 0) + "%";
+    if (!au.paused && !au.ended) requestAnimationFrame(tick); else if (au.ended) { spans.forEach(s => s.className = "done"); $("#karabar").style.width = "100%"; }
+  };
+  au.addEventListener("playing", () => requestAnimationFrame(tick), { once: true });
+}
+$("#k-agon").onclick = () => karaoke("agon"); $("#k-dora").onclick = () => karaoke("pf_dora");
+
+/* 2. mouth */
+$("#m-th").onclick = () => { $("#mouth").classList.remove("voiced"); $("#m-legend").innerHTML = "<b>th</b>: dil ucu dişlerin arasında, gırtlak <b>titremez</b>; sadece hava çıkar (İngilizce <i>think</i>)."; play(DATA.thi); };
+$("#m-dh").onclick = () => { $("#mouth").classList.add("voiced"); $("#m-legend").innerHTML = "<b>dh</b>: dil aynı yerde ama gırtlak <b>titrer</b> (mavi çizgiler); ses vızıldar (İngilizce <i>this</i>)."; play(DATA.dhi); setTimeout(() => $("#mouth").classList.remove("voiced"), 1400); };
+
+/* 4. dialogue */
+const lines = [["m", "Mirëdita! Urdhëroni!", "İyi günler! Buyurun!", DATA.l1], ["f", "Mirëdita. Dua një çaj me limon, ju lutem.", "İyi günler. Limonlu bir çay istiyorum, lütfen.", DATA.l2],
+  ["m", "Diçka tjetër?", "Başka bir şey?", DATA.l3], ["f", "Po, një akullore me fruta.", "Evet, meyveli bir dondurma.", DATA.l4]];
+$("#d-play").onclick = () => {
+  let i = 0;
+  const next = () => {
+    ["m", "f"].forEach(x => { $("#w-" + x).classList.remove("talk"); $("#b-" + x).classList.remove("show"); });
+    if (i >= lines.length) return;
+    const [who, sq, tr, b64] = lines[i++];
+    const b = $("#b-" + who); b.innerHTML = `${sq}<small>${tr}</small>`; b.classList.add("show"); $("#w-" + who).classList.add("talk");
+    const au = play(b64); au.onended = () => setTimeout(next, 500); au.onerror = next;
+  };
+  next();
+};
+
+/* 5. journey */
+const cities = [[70, 40, "Shkodër", "Kuzeyin kültür şehri; Rozafa Kalesi'nin efsanesi burada anlatılır.", 2], [140, 110, "Tiranë", "Başkent. Skanderbeg Meydanı ve rengârenk binalarıyla bilinir.", 2],
+  [160, 190, "Durrës", "Adriyatik kıyısında, Roma amfitiyatrosu olan antik bir liman şehri.", 1], [170, 260, "Berat", "“Bin pencereli şehir”: yamaçtaki beyaz Osmanlı evleriyle UNESCO mirası.", 0],
+  [260, 280, "Gjirokastër", "“Taş şehir”: gri taş çatılı evleri ve kalesiyle UNESCO mirası.", 0]];
+const map = $(".map svg");
+cities.forEach(([x, y, n, note, st]) => {
+  const g = document.createElementNS("http://www.w3.org/2000/svg", "g"); g.setAttribute("class", "city"); g.setAttribute("tabindex", "0"); g.setAttribute("role", "button");
+  g.innerHTML = `<circle cx="${x}" cy="${y}" r="16" class="${st === 1 ? "pulse" : ""}" fill="${st === 2 ? "var(--gold)" : st === 1 ? "var(--accent)" : "var(--surface-2)"}" stroke="${st ? "#fff" : "var(--line)"}" stroke-width="3"/>
+    <text x="${x}" y="${y + 5}" text-anchor="middle" font-size="13" fill="${st ? "#fff" : "var(--muted)"}">${st === 2 ? "★" : st === 1 ? "▶" : "🔒"}</text>
+    <text x="${x > 220 ? x - 22 : x + 22}" y="${y + 5}" text-anchor="${x > 220 ? "end" : "start"}" font-size="14" font-weight="600" fill="var(--fg)" font-family="Fredoka, sans-serif">${n}</text>`;
+  const show = () => { $("#note").innerHTML = `<b>${n}</b> · ${st === 2 ? "tamamlandı" : st === 1 ? "şu anki bölüm" : "kilitli"}<br>${note}`; };
+  g.onclick = show; g.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); show(); } };
+  map.append(g);
+});
+
+/* 6. celebrate */
+$("#cele").onclick = () => {
+  const c = $("#conf"), ctx = c.getContext("2d"), r = c.getBoundingClientRect();
+  c.width = r.width * devicePixelRatio; c.height = r.height * devicePixelRatio; ctx.scale(devicePixelRatio, devicePixelRatio);
+  const cols = ["#c8162f", "#f2a516", "#2e7bd6", "#3a9a46", "#2a2122"];
+  const ps = Array.from({ length: 90 }, () => ({ x: r.width / 2, y: r.height * .55, vx: (Math.random() - .5) * 9, vy: -Math.random() * 9 - 3, s: Math.random() * 6 + 4, c: cols[Math.random() * 5 | 0], a: Math.random() * 6 }));
+  let f = 0;
+  const step = () => { ctx.clearRect(0, 0, r.width, r.height); ps.forEach(p => { p.x += p.vx; p.y += p.vy; p.vy += .25; p.a += .2; ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a); ctx.fillStyle = p.c; ctx.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2); ctx.restore(); }); if (++f < 120) requestAnimationFrame(step); else ctx.clearRect(0, 0, r.width, r.height); };
+  step();
+  const e = $("#eagle"); e.classList.remove("jump"); void e.offsetWidth; e.classList.add("jump");
+  const x = $("#xp"); x.classList.remove("show"); void x.offsetWidth; x.classList.add("show");
+  try { const ac = new AudioContext(); [523, 659, 784, 1047].forEach((f, i) => { const o = ac.createOscillator(), g = ac.createGain(); o.type = "triangle"; o.frequency.value = f; g.gain.setValueAtTime(.15, ac.currentTime + i * .1); g.gain.exponentialRampToValueAtTime(.001, ac.currentTime + i * .1 + .3); o.connect(g).connect(ac.destination); o.start(ac.currentTime + i * .1); o.stop(ac.currentTime + i * .1 + .3); }); } catch {}
+};
+</script>
