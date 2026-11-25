@@ -26,6 +26,7 @@ h1,h2,h3{font-family:var(--f-display);margin:0;letter-spacing:-.015em;text-wrap:
 p{margin:0}
 .in{max-width:var(--max);margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 :focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:6px}
+h1[tabindex="-1"]:focus{outline:none}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 
 /* Duyuru + prototip notu */
@@ -37,7 +38,7 @@ p{margin:0}
 /* Header */
 header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(255,255,255,.92);backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
 .hrow{display:flex;align-items:center;gap:20px;padding-block:14px}
-.logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);flex:none}
+.logo{min-height:44px;display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);flex:none}
 .logo svg{color:var(--brand)}
 .logo span{font-family:var(--f-display);font-weight:700;font-size:1.55rem;letter-spacing:-.04em;line-height:1}
 .search{flex:1;min-width:0;max-width:520px;position:relative}
@@ -46,14 +47,14 @@ header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;backgroun
 .search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted)}
 .hact{display:flex;align-items:center;gap:8px;margin-left:auto;flex:none}
 .lang{display:flex;border:1px solid var(--line);border-radius:99px;padding:3px}
-.lang button{border:0;background:none;padding:5px 9px;border-radius:99px;font-size:.78rem;font-weight:600;color:var(--muted);cursor:pointer}
+.lang button{min-height:36px;min-width:36px;border:0;background:none;padding:5px 9px;border-radius:99px;font-size:.78rem;font-weight:600;color:var(--muted);cursor:pointer}
 .lang button[aria-pressed="true"]{background:var(--ink);color:#fff}
 .cartbtn{display:flex;align-items:center;gap:8px;text-decoration:none;border-radius:99px;padding:9px 14px;background:var(--brand);color:#fff;font-weight:600;font-size:.9rem;transition:background .15s}
 .cartbtn:hover{background:var(--brand-hover)}
 .cartbtn .n{background:#fff;color:var(--brand);border-radius:99px;min-width:22px;height:22px;display:grid;place-items:center;font-size:.75rem;font-variant-numeric:tabular-nums;padding:0 6px}
 .catnav{display:flex;gap:4px;padding-bottom:10px;overflow-x:auto;scrollbar-width:none}
 .catnav::-webkit-scrollbar{display:none}
-.catnav a{flex:none;text-decoration:none;font-size:.9rem;color:var(--muted);padding:6px 12px;border-radius:99px;transition:background .15s,color .15s}
+.catnav a{display:inline-flex;align-items:center;min-height:40px;flex:none;text-decoration:none;font-size:.9rem;color:var(--muted);padding:6px 12px;border-radius:99px;transition:background .15s,color .15s}
 .catnav a:hover{background:var(--ice-2);color:var(--ink)}
 .catnav a[aria-current="page"]{background:var(--ice);color:var(--brand);font-weight:600}
 
@@ -113,7 +114,12 @@ main{min-height:60vh}
 
 /* Ürün ızgarası */
 .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px 16px}
-.card{display:grid;gap:10px;text-decoration:none;color:var(--ink);min-width:0;position:relative}
+.card{display:grid;gap:10px;color:var(--ink);min-width:0;position:relative}
+.card .lnk{text-decoration:none;color:inherit}
+.card .lnk::after{content:"";position:absolute;inset:0;z-index:1;border-radius:var(--r)}
+.card .lnk:focus-visible{outline:none}
+.card:focus-within .im{outline:2px solid var(--brand);outline-offset:3px}
+.card:hover .lnk{color:var(--brand)}
 .card .im{aspect-ratio:1/1;max-width:100%;border-radius:var(--r);display:grid;place-items:center;position:relative;overflow:hidden;transition:transform .3s}
 .card:hover .im svg{transform:scale(1.06)}
 .im svg{transition:transform .35s cubic-bezier(.2,.7,.2,1);color:var(--brand)}
@@ -125,7 +131,7 @@ main{min-height:60vh}
 .price{display:flex;gap:8px;align-items:baseline;font-variant-numeric:tabular-nums}
 .price b{font-weight:600}
 .price s{color:var(--muted);font-size:.86rem}
-.quick{position:absolute;right:10px;bottom:10px;width:38px;height:38px;border-radius:50%;border:0;background:#fff;color:var(--brand);display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 18px -8px rgba(14,26,51,.4);transition:background .15s,color .15s}
+.quick{z-index:2;position:absolute;right:10px;bottom:10px;width:38px;height:38px;border-radius:50%;border:0;background:#fff;color:var(--brand);display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 18px -8px rgba(14,26,51,.4);transition:background .15s,color .15s}
 .quick:hover{background:var(--brand);color:#fff}
 
 /* Kampanya */
@@ -147,7 +153,8 @@ select{border:1px solid var(--line);border-radius:99px;padding:9px 14px;backgrou
 
 /* Ürün sayfası */
 .crumbs{font-size:.84rem;color:var(--muted);display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
-.crumbs a{text-decoration:none}.crumbs a:hover{color:var(--brand)}
+.crumbs{align-items:center}
+.crumbs a{text-decoration:none;padding-block:10px}.crumbs a:hover{color:var(--brand)}
 .pd{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:48px;align-items:start}
 .gal{display:grid;gap:12px}
 .gal .main{aspect-ratio:1/1;max-width:100%;border-radius:var(--r-lg);display:grid;place-items:center;position:relative}
@@ -189,7 +196,7 @@ select{border:1px solid var(--line);border-radius:99px;padding:9px 14px;backgrou
 .it .nm{font-weight:500;text-decoration:none}
 .it .vr{font-size:.84rem;color:var(--muted)}
 .it .rt{display:grid;gap:8px;justify-items:end}
-.it .rm{border:0;background:none;color:var(--muted);font-size:.82rem;cursor:pointer;text-decoration:underline}
+.it .rm{padding:10px 4px;min-height:40px;border:0;background:none;color:var(--muted);font-size:.82rem;cursor:pointer;text-decoration:underline}
 .sum{background:var(--ice-2);border-radius:var(--r-lg);padding:24px;display:grid;gap:14px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 130px)}
 .sum h2{font-size:1.15rem}
 .row{display:flex;justify-content:space-between;gap:12px;font-size:.94rem;font-variant-numeric:tabular-nums}
@@ -233,15 +240,58 @@ form.co{display:grid;gap:18px}
 .ordno{font-family:var(--f-display);font-weight:700;font-size:1.2rem;background:var(--ice);color:var(--brand);padding:8px 16px;border-radius:99px;font-variant-numeric:tabular-nums}
 
 /* Toast */
-.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:12px 14px 12px 18px;border-radius:99px;display:flex;gap:14px;align-items:center;font-size:.9rem;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:70;max-width:calc(100% - 32px)}
-.toast.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
-.toast span{white-space:nowrap}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:12px 14px 12px 18px;border-radius:99px;display:flex;gap:14px;align-items:center;font-size:.9rem;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .2s,transform .2s,visibility .2s;z-index:70;max-width:calc(100% - 32px)}
+.toast.on{visibility:visible;opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.toast span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .toast a{color:#fff;font-weight:600;background:rgba(255,255,255,.14);padding:6px 12px;border-radius:99px;text-decoration:none;white-space:nowrap}
 
+/* Adımlar, stok, yardım, özet */
+.steps{list-style:none;margin:0 0 20px;padding:0;display:flex;align-items:center;gap:10px;font-size:.86rem;color:var(--muted);flex-wrap:wrap}
+.steps li{display:flex;align-items:center;gap:8px}
+.steps li a{display:flex;align-items:center;gap:8px;text-decoration:none;min-height:32px}
+.steps li a:hover{color:var(--brand)}
+.steps b{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--ice-2);border:1px solid var(--line);font-size:.78rem;font-variant-numeric:tabular-nums}
+.steps li[aria-current]{color:var(--ink);font-weight:600}
+.steps li[aria-current] b{background:var(--brand);border-color:var(--brand);color:#fff}
+.steps li.done b{background:var(--ice);border-color:var(--ice);color:var(--brand)}
+.steps li.sep{width:24px;height:1px;background:var(--line)}
+.center .steps{justify-content:center}
+.items{list-style:none;margin:0;padding:0}
+.stock{font-size:.86rem;color:#8a4b00;margin:0}
+.stock.out{color:var(--muted)}
+.badge.out{background:#fff;color:var(--muted);border:1px solid var(--line)}
+.vat{font-size:.8rem;color:var(--muted)}
+.btn[disabled]{background:var(--line);color:var(--muted)}
+.step button[disabled]{opacity:.35;cursor:not-allowed}
+.terms{font-size:.82rem;color:var(--muted);text-align:center}
+.terms a{color:var(--brand)}
+.linkbtn{border:0;background:none;color:var(--muted);font-size:.88rem;cursor:pointer;text-decoration:underline;text-underline-offset:3px;min-height:36px;padding:6px 8px}
+.linkbtn[disabled]{text-decoration:none;cursor:default}
+.recap{max-width:760px;margin:0 auto;width:100%;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+.recap section{background:var(--ice-2);border-radius:var(--r);padding:20px;display:grid;gap:10px;align-content:start}
+.recap section:last-child{grid-column:1/-1}
+.recap h2{font-size:1rem}
+.next{margin:0;padding-left:20px;display:grid;gap:8px;font-size:.92rem}
+.help{max-width:760px;display:grid;gap:16px}
+.help h1{font-size:clamp(1.6rem,3vw,2.2rem)}
+.help .note{font-size:.86rem;background:#fff7e6;color:#7a5200;padding:8px 14px;border-radius:10px;justify-self:start}
+.faq{display:grid;border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;padding:18px 0;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:16px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";color:var(--brand);font-size:1.3rem;line-height:1}
+.faq details[open] summary::after{content:"−"}
+.faq details p{padding-bottom:18px;color:var(--muted);max-width:65ch}
+::selection{background:#cfe0fb;color:var(--ink)}
+input,textarea{caret-color:var(--brand)}
+@media (max-width:640px){.recap{grid-template-columns:minmax(0,1fr)}}
 footer{border-top:1px solid var(--line);background:var(--ice-2);font-size:.88rem;color:var(--muted)}
 .fgrid{display:grid;grid-template-columns:minmax(0,1.4fr) repeat(3,minmax(0,1fr));gap:24px;padding-block:40px}
-.fgrid h3{font-size:.95rem;color:var(--ink);margin-bottom:10px}
-.fgrid ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.fgrid h2{font-size:.95rem;color:var(--ink);margin-bottom:10px}
+.fgrid a{text-decoration:none;display:inline-block;padding-block:6px}
+.fgrid a:hover{color:var(--brand)}
+.fgrid ul a{min-height:32px}
+.fgrid ul{list-style:none;margin:0;padding:0;display:grid;gap:2px}
 .fbot{border-top:1px solid var(--line);padding-block:16px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 
 @media (max-width:1000px){
@@ -276,7 +326,7 @@ footer{border-top:1px solid var(--line);background:var(--ice-2);font-size:.88rem
   .strip .proto{display:none}
   .otp input{width:48px;height:58px}
 }
-@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card:hover .im svg,.cat:hover,.hstack .t:hover{transform:none}.btn:active{transform:none}.toast{transform:translate(-50%,0)}}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -297,12 +347,12 @@ footer{border-top:1px solid var(--line);background:var(--ice-2);font-size:.88rem
   </defs>
 </svg>
 
-<div class="strip"><div class="in"><span id="stripTxt"></span><span class="proto" id="protoTxt"></span></div></div>
+<aside class="strip" aria-label="Kose"><div class="in"><span id="stripTxt"></span><span class="proto" id="protoTxt"></span></div></aside>
 
 <header class="top">
   <div class="in">
     <div class="hrow">
-      <a class="logo" href="#home" aria-label="Kose"><svg width="30" height="30"><use href="#kmark"/></svg><span>kose</span></a>
+      <a class="logo" href="#home" aria-label="Kose"><svg width="30" height="30" aria-hidden="true"><use href="#kmark"/></svg><span>kose</span></a>
       <div class="search" role="search">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         <label for="q" class="sr" id="qLabel">Search</label>
@@ -310,9 +360,9 @@ footer{border-top:1px solid var(--line);background:var(--ice-2);font-size:.88rem
       </div>
       <div class="hact">
         <div class="lang" role="group" aria-label="Gjuha / Language">
-          <button data-l="sq">SQ</button><button data-l="en">EN</button><button data-l="tr">TR</button><button data-l="sr">SR</button>
+          <button data-l="sq" lang="sq" aria-label="Shqip">SQ</button><button data-l="en" lang="en" aria-label="English">EN</button><button data-l="tr" lang="tr" aria-label="Türkçe">TR</button><button data-l="sr" lang="sr-Latn" aria-label="Srpski">SR</button>
         </div>
-        <a class="cartbtn" href="#cart"><svg width="18" height="18"><use href="#kmark" style="color:#fff"/></svg><span class="lbl" id="cartLbl"></span><span class="n" id="cartN">0</span></a>
+        <a class="cartbtn" id="cartBtn" href="#cart"><svg width="18" height="18" aria-hidden="true"><use href="#kmark" style="color:#fff"/></svg><span class="lbl" id="cartLbl"></span><span class="n" id="cartN">0</span></a>
       </div>
     </div>
     <nav class="catnav" id="catnav" aria-label="Kategoritë"></nav>
@@ -328,83 +378,107 @@ footer{border-top:1px solid var(--line);background:var(--ice-2);font-size:.88rem
   </div>
 </footer>
 
-<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastTxt"></span><a href="#cart" id="toastLink"></a></div>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastTxt"></span><a href="#cart" id="toastLink" hidden>Shporta</a></div>
 
 <script>
 (function(){
 /* ---------- Metinler (4 dil) ---------- */
 const T={
-sq:{strip:"<b>Pagesa në dorëzim</b> · Dërgesa falas mbi 30 € · 1–3 ditë në të gjithë Kosovën",proto:"Prototip · porositë nuk dërgohen",search:"Kërko produkte…",cart:"Shporta",all:"Të gjitha",
-heroT:"Gjithçka që të duhet. E paguan kur të vjen.",heroS:"Porosit sot nga mbi 1 000 produkte. Dërgesa në 1–3 ditë pune në të gjitha 38 komunat e Kosovës.",heroB:"Shiko produktet",heroB2:"Ofertat e javës",
-tr1:"Pagesa në dorëzim",tr1s:"Paguan me para kur të vjen",tr2:"Dërgesa 1–3 ditë",tr2s:"Në të gjitha komunat",tr3:"Kthim 14 ditë",tr3s:"Pa pyetje të tepërta",tr4:"Mbështetje",tr4s:"Çdo ditë 09:00–21:00",
-cats:"Kategoritë",newT:"Të rejat",seeAll:"Shiko të gjitha",popT:"Më të shiturat",campT:"Java e shtëpisë",campS:"Deri në 30% zbritje për produktet e shtëpisë. Vetëm deri të dielën.",campB:"Shiko ofertat",
-add:"Shto në shportë",added:"U shtua në shportë",view:"Shiko shportën",qty:"Sasia",color:"Ngjyra",size:"Madhësia",save:"Kursen {x}",
-iDel:"Dërgesa: 1–3 ditë pune",iDelS:"Porosit sot, mbërrin deri më {d}.",iCod:"Pagesa në dorëzim",iCodS:"Paguan me para në dorë kur ta marrësh porosinë. Pa kartë.",iRet:"Kthim brenda 14 ditëve",iRetS:"Nëse nuk të pëlqen, e kthen falas.",
+sq:{strip:"<b>Pagesa në dorëzim</b> · Dërgesa falas mbi 30 € · 1–3 ditë në të gjithë Kosovën",proto:"Prototip · porositë nuk dërgohen",search:"Kërko produkte…",cart:"Shporta",cartA:"Shporta, {n} produkte",all:"Të gjitha",
+heroT:"Gjithçka që të duhet. E paguan kur të vjen.",heroS:"Porosit sot, paguaj me para kur ta marrësh. Dërgesa në 1–3 ditë pune në të gjitha 38 komunat e Kosovës.",heroB:"Shiko produktet",heroB2:"Ofertat e javës",
+tr1:"Pagesa në dorëzim",tr1s:"Paguan me para kur të vjen",tr2:"Dërgesa 1–3 ditë",tr2s:"Në të gjitha komunat",tr3:"Kthim 14 ditë",tr3s:"Korrieri e merr falas",tr4:"Mbështetje",tr4s:"Çdo ditë 09:00–21:00",
+cats:"Kategoritë",newT:"Të rejat",seeAll:"Shiko të gjitha",popT:"Më të shiturat",relT:"Mund të të pëlqejnë",campT:"Java e shtëpisë",campS:"Deri në 30% zbritje për produktet e shtëpisë. Vetëm deri të dielën.",campB:"Shiko ofertat",
+add:"Shto në shportë",added:"U shtua në shportë",view:"Shiko shportën",qty:"Sasia",color:"Ngjyra",size:"Madhësia",pickSize:"Zgjidh madhësinë",save:"Kursen {x}",vat:"Çmimi përfshin TVSH-në",
+out:"E shitur",outS:"Ky produkt nuk është në stok tani.",low:"Vetëm {n} copë në stok",maxQ:"Nuk ka më shumë në stok",
+iDel:"Dërgesa: 1–3 ditë pune",iDelS:"Porosit sot. Dërgesa e pritshme: {d}.",iCod:"Pagesa në dorëzim",iCodS:"Paguan me para në dorë kur ta marrësh porosinë. Pa kartë.",iRet:"Kthim brenda 14 ditëve",iRetS:"Nëse nuk të pëlqen, korrieri e merr falas.",
 details:"Detajet",subtotal:"Nëntotali",ship:"Dërgesa",free:"Falas",total:"Totali",toFree:"Edhe {x} dhe dërgesa është falas",gotFree:"Dërgesa jote është falas",checkout:"Vazhdo te porosia",
 empty:"Shporta është bosh",emptyS:"Shto disa produkte dhe kthehu këtu.",cont:"Vazhdo blerjen",remove:"Hiq",
+steps:["Shporta","Dërgesa","Konfirmimi"],
 orderT:"Ku ta dërgojmë?",name:"Emri dhe mbiemri",phone:"Numri i celularit",phoneH:"Do të dërgojmë një SMS për ta konfirmuar porosinë.",city:"Komuna",choose:"Zgjidh komunën",address:"Adresa",addressP:"Rruga, numri, lagjja ose fshati",note:"Shënim për korrierin",opt:"opsional",noteP:"P.sh. telefono para se të vish",
-pay:"Mënyra e pagesës",payS:"Paguan {t} me para në dorë kur të vjen porosia.",place:"Konfirmo porosinë",summary:"Porosia jote",
+pay:"Mënyra e pagesës",payS:"Paguan {t} me para në dorë kur të vjen porosia.",place:"Konfirmo porosinë",summary:"Porosia jote",terms:"Duke konfirmuar, pranon <a href=\"#help\">Kushtet e shitjes</a> dhe <a href=\"#help\">Politikën e privatësisë</a>.",
 errName:"Shkruaj emrin dhe mbiemrin.",errPhone:"Shkruaj një numër celulari të Kosovës, p.sh. 044 123 456.",errCity:"Zgjidh komunën.",errAddr:"Shkruaj adresën e plotë.",errCode:"Kodi nuk është i saktë. Provo përsëri.",
-verT:"Konfirmo numrin",verS:"Dërguam një kod 4-shifror në {p}. Shkruaje këtu për ta konfirmuar porosinë.",verB:"Konfirmo",demo:"Prototip: kodi është {c}",back:"Ndrysho të dhënat",
-doneT:"Faleminderit, {n}! Porosia u pranua.",doneS:"Do të të njoftojmë me SMS kur korrieri të niset. Paguan {t} në dorëzim.",ordNo:"Numri i porosisë",home:"Kthehu në fillim",
+verT:"Konfirmo numrin",verS:"Dërguam një kod 4-shifror në {p}. Shkruaje këtu për ta konfirmuar porosinë.",verB:"Konfirmo",demo:"Prototip: kodi është {c}",back:"Ndrysho të dhënat",resend:"Dërgo kodin përsëri",resendIn:"Mund ta dërgosh përsëri pas {s} sekondash",resent:"Dërguam një kod të ri.",
+doneT:"Faleminderit, {n}! Porosia u pranua.",doneS:"Paguan {t} me para në dorë kur të vjen porosia.",ordNo:"Numri i porosisë",home:"Kthehu në fillim",deliverTo:"Dërgesa te",nextT:"Çfarë ndodh tani",
+nx:["Ta konfirmojmë porosinë me SMS sot.","Korrieri ta sjell brenda 1–3 ditë pune dhe të telefonon para se të vijë.","Kontrollon produktin dhe paguan me para në dorë."],
 sort:"Rendit",sPop:"Më të shiturat",sLow:"Çmimi: nga më i ulëti",sHigh:"Çmimi: nga më i larti",results:"{n} produkte",searchFor:"Rezultatet për “{q}”",noRes:"Nuk gjetëm asgjë. Provo një fjalë tjetër.",
-sale:"Ofertë",nw:"E re",f1:"Kose",f1s:"Dyqani online i Kosovës. Porosit lehtë, paguaj në dorëzim.",f2:"Ndihmë",f3:"Kompania",f4:"Kontakt",
-fl:["Si të porosis","Dërgesa","Kthimet","Pyetjet e shpeshta"],fc:["Rreth nesh","Kushtet","Privatësia"],
-w:"Pesha",dim:"Përmasat",mat:"Materiali",war:"Garancia",bat:"Bateria",vol:"Vëllimi",age:"Mosha",yr:"vit",yrs:"vjet",mo:"muaj",hr:"orë",
+nf:"Produkti nuk u gjet",nfS:"Mund të jetë hequr ose lidhja është e gabuar.",
+sale:"Ofertë",nw:"E re",f1s:"Dyqani online i Kosovës. Porosit lehtë, paguaj në dorëzim.",f2:"Ndihmë",f3:"Kompania",f4:"Kontakt",
+fl:["Si të porosis","Dërgesa","Kthimet","Pyetjet e shpeshta"],fc:["Rreth nesh","Kushtet e shitjes","Privatësia"],
+helpT:"Ndihmë",helpS:"Tekst shembull. Teksti përfundimtar shkruhet nga paneli i administrimit.",
+faq:[["Si të porosis?","Shto produktet në shportë, shkruaj emrin, numrin e celularit dhe adresën, pastaj konfirmo me kodin që të vjen me SMS. Nuk të duhet llogari."],["Si paguaj?","Me para në dorë te korrieri, kur të vjen porosia. Për momentin nuk pranojmë pagesa me kartë."],["Sa zgjat dërgesa dhe sa kushton?","1–3 ditë pune në të gjitha 38 komunat. Dërgesa kushton 2 € dhe është falas për porositë mbi 30 €."],["Si e kthej një produkt?","Brenda 14 ditëve nga marrja, i papërdorur dhe në paketimin origjinal. Na shkruaj dhe korrieri e merr pa pagesë."],["Çka ndodh nëse nuk jam në shtëpi?","Korrieri të telefonon para dërgesës. Nëse nuk je aty, caktoni një kohë tjetër."]],
+w:"Pesha",dim:"Përmasat",mat:"Materiali",war:"Garancia",bat:"Bateria",vol:"Vëllimi",age:"Mosha",yr:"vit",yrs:"vjet",hr:"orë",dd:"ditë",
 c:{black:"E zezë",white:"E bardhë",blue:"Blu",grey:"Gri",beige:"Bezhë"}},
-en:{strip:"<b>Cash on delivery</b> · Free delivery over 30 € · 1–3 days across Kosovo",proto:"Prototype · orders are not sent",search:"Search products…",cart:"Cart",all:"All",
-heroT:"Everything you need. Pay when it arrives.",heroS:"Order today from over 1,000 products. Delivered in 1–3 working days to all 38 municipalities of Kosovo.",heroB:"Browse products",heroB2:"Deals of the week",
-tr1:"Cash on delivery",tr1s:"Pay in cash when it arrives",tr2:"1–3 day delivery",tr2s:"To every municipality",tr3:"14-day returns",tr3s:"No awkward questions",tr4:"Support",tr4s:"Daily 09:00–21:00",
-cats:"Categories",newT:"New in",seeAll:"See all",popT:"Best sellers",campT:"Home week",campS:"Up to 30% off home products. Until Sunday only.",campB:"See the deals",
-add:"Add to cart",added:"Added to cart",view:"View cart",qty:"Quantity",color:"Colour",size:"Size",save:"Save {x}",
-iDel:"Delivery: 1–3 working days",iDelS:"Order today, arrives by {d}.",iCod:"Cash on delivery",iCodS:"Pay in cash when you receive the order. No card needed.",iRet:"14-day returns",iRetS:"Don't like it? Return it for free.",
+en:{strip:"<b>Cash on delivery</b> · Free delivery over 30 € · 1–3 days across Kosovo",proto:"Prototype · orders are not sent",search:"Search products…",cart:"Cart",cartA:"Cart, {n} items",all:"All",
+heroT:"Everything you need. Pay when it arrives.",heroS:"Order today, pay in cash when you receive it. Delivered in 1–3 working days to all 38 municipalities of Kosovo.",heroB:"Browse products",heroB2:"Deals of the week",
+tr1:"Cash on delivery",tr1s:"Pay in cash when it arrives",tr2:"1–3 day delivery",tr2s:"To every municipality",tr3:"14-day returns",tr3s:"Free courier pickup",tr4:"Support",tr4s:"Daily 09:00–21:00",
+cats:"Categories",newT:"New in",seeAll:"See all",popT:"Best sellers",relT:"You may also like",campT:"Home week",campS:"Up to 30% off home products. Until Sunday only.",campB:"See the deals",
+add:"Add to cart",added:"Added to cart",view:"View cart",qty:"Quantity",color:"Colour",size:"Size",pickSize:"Choose a size",save:"Save {x}",vat:"Price includes VAT",
+out:"Sold out",outS:"This product is out of stock right now.",low:"Only {n} left in stock",maxQ:"No more in stock",
+iDel:"Delivery: 1–3 working days",iDelS:"Order today, arrives by {d}.",iCod:"Cash on delivery",iCodS:"Pay in cash when you receive the order. No card needed.",iRet:"14-day returns",iRetS:"Don't like it? The courier picks it up for free.",
 details:"Details",subtotal:"Subtotal",ship:"Delivery",free:"Free",total:"Total",toFree:"{x} more for free delivery",gotFree:"Your delivery is free",checkout:"Continue to checkout",
 empty:"Your cart is empty",emptyS:"Add a few products and come back here.",cont:"Continue shopping",remove:"Remove",
+steps:["Cart","Delivery","Confirmation"],
 orderT:"Where should we deliver?",name:"Full name",phone:"Mobile number",phoneH:"We'll send an SMS to confirm your order.",city:"Municipality",choose:"Choose municipality",address:"Address",addressP:"Street, number, neighbourhood or village",note:"Note for the courier",opt:"optional",noteP:"E.g. call before you arrive",
-pay:"Payment method",payS:"Pay {t} in cash when the order arrives.",place:"Place order",summary:"Your order",
+pay:"Payment method",payS:"Pay {t} in cash when the order arrives.",place:"Place order",summary:"Your order",terms:"By placing the order you accept the <a href=\"#help\">Terms of sale</a> and <a href=\"#help\">Privacy policy</a>.",
 errName:"Enter your full name.",errPhone:"Enter a Kosovo mobile number, e.g. 044 123 456.",errCity:"Choose a municipality.",errAddr:"Enter your full address.",errCode:"That code is not right. Try again.",
-verT:"Confirm your number",verS:"We sent a 4-digit code to {p}. Enter it here to confirm the order.",verB:"Confirm",demo:"Prototype: the code is {c}",back:"Change details",
-doneT:"Thank you, {n}! Your order is in.",doneS:"We'll text you when the courier sets off. You pay {t} on delivery.",ordNo:"Order number",home:"Back to home",
+verT:"Confirm your number",verS:"We sent a 4-digit code to {p}. Enter it here to confirm the order.",verB:"Confirm",demo:"Prototype: the code is {c}",back:"Change details",resend:"Send the code again",resendIn:"You can resend in {s} seconds",resent:"We sent a new code.",
+doneT:"Thank you, {n}! Your order is in.",doneS:"You pay {t} in cash when the order arrives.",ordNo:"Order number",home:"Back to home",deliverTo:"Delivering to",nextT:"What happens next",
+nx:["We confirm your order by SMS today.","The courier delivers within 1–3 working days and calls before arriving.","You check the product and pay in cash."],
 sort:"Sort",sPop:"Best sellers",sLow:"Price: low to high",sHigh:"Price: high to low",results:"{n} products",searchFor:"Results for “{q}”",noRes:"Nothing found. Try another word.",
-sale:"Sale",nw:"New",f1:"Kose",f1s:"Kosovo's online store. Easy ordering, cash on delivery.",f2:"Help",f3:"Company",f4:"Contact",
-fl:["How to order","Delivery","Returns","FAQ"],fc:["About us","Terms","Privacy"],
-w:"Weight",dim:"Dimensions",mat:"Material",war:"Warranty",bat:"Battery",vol:"Volume",age:"Age",yr:"year",yrs:"years",mo:"months",hr:"h",
+nf:"Product not found",nfS:"It may have been removed, or the link is wrong.",
+sale:"Sale",nw:"New",f1s:"Kosovo's online store. Easy ordering, cash on delivery.",f2:"Help",f3:"Company",f4:"Contact",
+fl:["How to order","Delivery","Returns","FAQ"],fc:["About us","Terms of sale","Privacy"],
+helpT:"Help",helpS:"Sample text. The final text is written from the admin panel.",
+faq:[["How do I order?","Add products to your cart, enter your name, mobile number and address, then confirm with the code we send by SMS. No account needed."],["How do I pay?","In cash to the courier when the order arrives. We don't accept card payments for now."],["How long does delivery take, and what does it cost?","1–3 working days to all 38 municipalities. Delivery costs 2 € and is free for orders over 30 €."],["How do I return a product?","Within 14 days of receiving it, unused and in its original packaging. Message us and the courier collects it for free."],["What if I'm not at home?","The courier calls before delivering. If you're not there, you agree on another time."]],
+w:"Weight",dim:"Dimensions",mat:"Material",war:"Warranty",bat:"Battery",vol:"Volume",age:"Age",yr:"year",yrs:"years",hr:"h",dd:"days",
 c:{black:"Black",white:"White",blue:"Blue",grey:"Grey",beige:"Beige"}},
-tr:{strip:"<b>Kapıda ödeme</b> · 30 € üzeri ücretsiz kargo · Tüm Kosova'ya 1–3 gün",proto:"Prototip · siparişler gönderilmez",search:"Ürün ara…",cart:"Sepet",all:"Tümü",
-heroT:"İhtiyacın olan her şey. Kapıda öde.",heroS:"1.000'den fazla ürün arasından bugün sipariş ver. Kosova'nın 38 belediyesine 1–3 iş gününde teslimat.",heroB:"Ürünlere göz at",heroB2:"Haftanın fırsatları",
-tr1:"Kapıda ödeme",tr1s:"Teslimatta nakit öde",tr2:"1–3 günde teslimat",tr2s:"Tüm belediyelere",tr3:"14 gün iade",tr3s:"Soru sorulmadan",tr4:"Destek",tr4s:"Her gün 09:00–21:00",
-cats:"Kategoriler",newT:"Yeni gelenler",seeAll:"Tümünü gör",popT:"Çok satanlar",campT:"Ev haftası",campS:"Ev ürünlerinde %30'a varan indirim. Sadece pazara kadar.",campB:"Fırsatları gör",
-add:"Sepete ekle",added:"Sepete eklendi",view:"Sepeti gör",qty:"Adet",color:"Renk",size:"Beden",save:"{x} tasarruf",
-iDel:"Teslimat: 1–3 iş günü",iDelS:"Bugün sipariş ver, en geç {d} kapında.",iCod:"Kapıda ödeme",iCodS:"Siparişi teslim alırken nakit ödersin. Kart gerekmez.",iRet:"14 gün içinde iade",iRetS:"Beğenmezsen ücretsiz iade edersin.",
+tr:{strip:"<b>Kapıda ödeme</b> · 30 € üzeri ücretsiz kargo · Tüm Kosova'ya 1–3 gün",proto:"Prototip · siparişler gönderilmez",search:"Ürün ara…",cart:"Sepet",cartA:"Sepet, {n} ürün",all:"Tümü",
+heroT:"İhtiyacın olan her şey. Kapıda öde.",heroS:"Bugün sipariş ver, teslim alırken nakit öde. Kosova'nın 38 belediyesine 1–3 iş gününde teslimat.",heroB:"Ürünlere göz at",heroB2:"Haftanın fırsatları",
+tr1:"Kapıda ödeme",tr1s:"Teslimatta nakit öde",tr2:"1–3 günde teslimat",tr2s:"Tüm belediyelere",tr3:"14 gün iade",tr3s:"Kurye ücretsiz alır",tr4:"Destek",tr4s:"Her gün 09:00–21:00",
+cats:"Kategoriler",newT:"Yeni gelenler",seeAll:"Tümünü gör",popT:"Çok satanlar",relT:"Bunlar da ilgini çekebilir",campT:"Ev haftası",campS:"Ev ürünlerinde %30'a varan indirim. Sadece pazara kadar.",campB:"Fırsatları gör",
+add:"Sepete ekle",added:"Sepete eklendi",view:"Sepeti gör",qty:"Adet",color:"Renk",size:"Beden",pickSize:"Beden seç",save:"{x} tasarruf",vat:"Fiyata KDV dahildir",
+out:"Tükendi",outS:"Bu ürün şu anda stokta yok.",low:"Stokta sadece {n} adet",maxQ:"Stokta daha fazla yok",
+iDel:"Teslimat: 1–3 iş günü",iDelS:"Bugün sipariş ver, en geç {d} kapında.",iCod:"Kapıda ödeme",iCodS:"Siparişi teslim alırken nakit ödersin. Kart gerekmez.",iRet:"14 gün içinde iade",iRetS:"Beğenmezsen kurye ücretsiz geri alır.",
 details:"Özellikler",subtotal:"Ara toplam",ship:"Kargo",free:"Ücretsiz",total:"Toplam",toFree:"Ücretsiz kargo için {x} daha",gotFree:"Kargon ücretsiz",checkout:"Siparişe devam et",
 empty:"Sepetin boş",emptyS:"Birkaç ürün ekleyip buraya dön.",cont:"Alışverişe devam et",remove:"Kaldır",
+steps:["Sepet","Teslimat","Onay"],
 orderT:"Nereye gönderelim?",name:"Ad soyad",phone:"Cep telefonu",phoneH:"Siparişi onaylamak için SMS göndereceğiz.",city:"Belediye",choose:"Belediye seç",address:"Adres",addressP:"Sokak, numara, mahalle veya köy",note:"Kurye için not",opt:"isteğe bağlı",noteP:"Örn. gelmeden önce ara",
-pay:"Ödeme yöntemi",payS:"Sipariş geldiğinde {t} nakit ödersin.",place:"Siparişi onayla",summary:"Siparişin",
+pay:"Ödeme yöntemi",payS:"Sipariş geldiğinde {t} nakit ödersin.",place:"Siparişi onayla",summary:"Siparişin",terms:"Onaylayarak <a href=\"#help\">Satış koşullarını</a> ve <a href=\"#help\">Gizlilik politikasını</a> kabul edersin.",
 errName:"Adını ve soyadını yaz.",errPhone:"Kosova cep numarası yaz, örn. 044 123 456.",errCity:"Belediye seç.",errAddr:"Tam adresini yaz.",errCode:"Kod doğru değil. Tekrar dene.",
-verT:"Numaranı onayla",verS:"{p} numarasına 4 haneli bir kod gönderdik. Siparişi onaylamak için buraya yaz.",verB:"Onayla",demo:"Prototip: kod {c}",back:"Bilgileri değiştir",
-doneT:"Teşekkürler, {n}! Siparişin alındı.",doneS:"Kurye yola çıkınca SMS ile haber vereceğiz. Teslimatta {t} ödersin.",ordNo:"Sipariş numarası",home:"Ana sayfaya dön",
+verT:"Numaranı onayla",verS:"{p} numarasına 4 haneli bir kod gönderdik. Siparişi onaylamak için buraya yaz.",verB:"Onayla",demo:"Prototip: kod {c}",back:"Bilgileri değiştir",resend:"Kodu tekrar gönder",resendIn:"{s} saniye sonra tekrar gönderebilirsin",resent:"Yeni bir kod gönderdik.",
+doneT:"Teşekkürler, {n}! Siparişin alındı.",doneS:"Sipariş geldiğinde {t} nakit ödersin.",ordNo:"Sipariş numarası",home:"Ana sayfaya dön",deliverTo:"Teslimat adresi",nextT:"Bundan sonra ne olacak",
+nx:["Siparişini bugün SMS ile onaylıyoruz.","Kurye 1–3 iş günü içinde getirir ve gelmeden önce arar.","Ürünü kontrol eder, nakit ödersin."],
 sort:"Sırala",sPop:"Çok satanlar",sLow:"Fiyat: artan",sHigh:"Fiyat: azalan",results:"{n} ürün",searchFor:"“{q}” için sonuçlar",noRes:"Bir şey bulamadık. Başka bir kelime dene.",
-sale:"İndirim",nw:"Yeni",f1:"Kose",f1s:"Kosova'nın online mağazası. Kolay sipariş, kapıda ödeme.",f2:"Yardım",f3:"Şirket",f4:"İletişim",
-fl:["Nasıl sipariş verilir","Teslimat","İadeler","Sık sorulanlar"],fc:["Hakkımızda","Koşullar","Gizlilik"],
-w:"Ağırlık",dim:"Boyutlar",mat:"Malzeme",war:"Garanti",bat:"Pil",vol:"Hacim",age:"Yaş",yr:"yıl",yrs:"yıl",mo:"ay",hr:"saat",
+nf:"Ürün bulunamadı",nfS:"Kaldırılmış olabilir ya da bağlantı hatalı.",
+sale:"İndirim",nw:"Yeni",f1s:"Kosova'nın online mağazası. Kolay sipariş, kapıda ödeme.",f2:"Yardım",f3:"Şirket",f4:"İletişim",
+fl:["Nasıl sipariş verilir","Teslimat","İadeler","Sık sorulanlar"],fc:["Hakkımızda","Satış koşulları","Gizlilik"],
+helpT:"Yardım",helpS:"Örnek metin. Son metin admin panelinden yazılacak.",
+faq:[["Nasıl sipariş veririm?","Ürünleri sepete ekle, adını, cep numaranı ve adresini yaz, sonra SMS ile gelen kodla onayla. Üyelik gerekmez."],["Nasıl öderim?","Sipariş geldiğinde kuryeye nakit ödersin. Şimdilik kartla ödeme almıyoruz."],["Teslimat ne kadar sürer, ücreti ne?","38 belediyenin hepsine 1–3 iş günü. Kargo 2 €, 30 € üzeri siparişlerde ücretsiz."],["Ürünü nasıl iade ederim?","Teslim aldıktan sonra 14 gün içinde, kullanılmamış ve orijinal ambalajında. Bize yaz, kurye ücretsiz alır."],["Evde değilsem ne olur?","Kurye teslimattan önce arar. Evde değilsen başka bir zaman belirlersiniz."]],
+w:"Ağırlık",dim:"Boyutlar",mat:"Malzeme",war:"Garanti",bat:"Pil",vol:"Hacim",age:"Yaş",yr:"yıl",yrs:"yıl",hr:"saat",dd:"gün",
 c:{black:"Siyah",white:"Beyaz",blue:"Mavi",grey:"Gri",beige:"Bej"}},
-sr:{strip:"<b>Plaćanje pouzećem</b> · Besplatna dostava preko 30 € · 1–3 dana na celom Kosovu",proto:"Prototip · porudžbine se ne šalju",search:"Pretraži proizvode…",cart:"Korpa",all:"Sve",
-heroT:"Sve što ti treba. Plaćaš kad stigne.",heroS:"Poruči danas od preko 1.000 proizvoda. Dostava za 1–3 radna dana u sve 38 opštine Kosova.",heroB:"Pogledaj proizvode",heroB2:"Ponude nedelje",
-tr1:"Plaćanje pouzećem",tr1s:"Plaćaš gotovinom pri dostavi",tr2:"Dostava 1–3 dana",tr2s:"U sve opštine",tr3:"Povrat 14 dana",tr3s:"Bez suvišnih pitanja",tr4:"Podrška",tr4s:"Svaki dan 09:00–21:00",
-cats:"Kategorije",newT:"Novo",seeAll:"Pogledaj sve",popT:"Najprodavanije",campT:"Nedelja doma",campS:"Do 30% popusta na proizvode za dom. Samo do nedelje.",campB:"Pogledaj ponude",
-add:"Dodaj u korpu",added:"Dodato u korpu",view:"Pogledaj korpu",qty:"Količina",color:"Boja",size:"Veličina",save:"Ušteda {x}",
-iDel:"Dostava: 1–3 radna dana",iDelS:"Poruči danas, stiže do {d}.",iCod:"Plaćanje pouzećem",iCodS:"Plaćaš gotovinom kad preuzmeš porudžbinu. Bez kartice.",iRet:"Povrat u roku od 14 dana",iRetS:"Ako ti se ne dopadne, vraćaš besplatno.",
+sr:{strip:"<b>Plaćanje pouzećem</b> · Besplatna dostava preko 30 € · 1–3 dana na celom Kosovu",proto:"Prototip · porudžbine se ne šalju",search:"Pretraži proizvode…",cart:"Korpa",cartA:"Korpa, {n} proizvoda",all:"Sve",
+heroT:"Sve što ti treba. Plaćaš kad stigne.",heroS:"Poruči danas, plati gotovinom kad preuzmeš. Dostava za 1–3 radna dana u sve 38 opštine Kosova.",heroB:"Pogledaj proizvode",heroB2:"Ponude nedelje",
+tr1:"Plaćanje pouzećem",tr1s:"Plaćaš gotovinom pri dostavi",tr2:"Dostava 1–3 dana",tr2s:"U sve opštine",tr3:"Povrat 14 dana",tr3s:"Kurir preuzima besplatno",tr4:"Podrška",tr4s:"Svaki dan 09:00–21:00",
+cats:"Kategorije",newT:"Novo",seeAll:"Pogledaj sve",popT:"Najprodavanije",relT:"Možda će ti se dopasti",campT:"Nedelja doma",campS:"Do 30% popusta na proizvode za dom. Samo do nedelje.",campB:"Pogledaj ponude",
+add:"Dodaj u korpu",added:"Dodato u korpu",view:"Pogledaj korpu",qty:"Količina",color:"Boja",size:"Veličina",pickSize:"Izaberi veličinu",save:"Ušteda {x}",vat:"Cena uključuje PDV",
+out:"Rasprodato",outS:"Ovog proizvoda trenutno nema na stanju.",low:"Na stanju još samo {n} kom.",maxQ:"Nema više na stanju",
+iDel:"Dostava: 1–3 radna dana",iDelS:"Poruči danas. Očekivana dostava: {d}.",iCod:"Plaćanje pouzećem",iCodS:"Plaćaš gotovinom kad preuzmeš porudžbinu. Bez kartice.",iRet:"Povrat u roku od 14 dana",iRetS:"Ako ti se ne dopadne, kurir ga besplatno preuzima.",
 details:"Detalji",subtotal:"Međuzbir",ship:"Dostava",free:"Besplatno",total:"Ukupno",toFree:"Još {x} do besplatne dostave",gotFree:"Tvoja dostava je besplatna",checkout:"Nastavi na porudžbinu",
 empty:"Korpa je prazna",emptyS:"Dodaj nekoliko proizvoda i vrati se ovde.",cont:"Nastavi kupovinu",remove:"Ukloni",
+steps:["Korpa","Dostava","Potvrda"],
 orderT:"Gde da dostavimo?",name:"Ime i prezime",phone:"Broj mobilnog",phoneH:"Poslaćemo SMS da potvrdimo porudžbinu.",city:"Opština",choose:"Izaberi opštinu",address:"Adresa",addressP:"Ulica, broj, naselje ili selo",note:"Napomena za kurira",opt:"opciono",noteP:"Npr. pozovi pre dolaska",
-pay:"Način plaćanja",payS:"Plaćaš {t} gotovinom kad porudžbina stigne.",place:"Potvrdi porudžbinu",summary:"Tvoja porudžbina",
+pay:"Način plaćanja",payS:"Plaćaš {t} gotovinom kad porudžbina stigne.",place:"Potvrdi porudžbinu",summary:"Tvoja porudžbina",terms:"Potvrdom prihvataš <a href=\"#help\">Uslove prodaje</a> i <a href=\"#help\">Politiku privatnosti</a>.",
 errName:"Upiši ime i prezime.",errPhone:"Upiši kosovski broj mobilnog, npr. 044 123 456.",errCity:"Izaberi opštinu.",errAddr:"Upiši punu adresu.",errCode:"Kod nije tačan. Pokušaj ponovo.",
-verT:"Potvrdi broj",verS:"Poslali smo četvorocifreni kod na {p}. Upiši ga ovde da potvrdiš porudžbinu.",verB:"Potvrdi",demo:"Prototip: kod je {c}",back:"Promeni podatke",
-doneT:"Hvala, {n}! Porudžbina je primljena.",doneS:"Javićemo ti SMS-om kad kurir krene. Plaćaš {t} pri dostavi.",ordNo:"Broj porudžbine",home:"Nazad na početnu",
+verT:"Potvrdi broj",verS:"Poslali smo četvorocifreni kod na {p}. Upiši ga ovde da potvrdiš porudžbinu.",verB:"Potvrdi",demo:"Prototip: kod je {c}",back:"Promeni podatke",resend:"Pošalji kod ponovo",resendIn:"Možeš ponovo poslati za {s} sekundi",resent:"Poslali smo novi kod.",
+doneT:"Hvala, {n}! Porudžbina je primljena.",doneS:"Plaćaš {t} gotovinom kad porudžbina stigne.",ordNo:"Broj porudžbine",home:"Nazad na početnu",deliverTo:"Dostava na",nextT:"Šta sledi",
+nx:["Danas potvrđujemo porudžbinu SMS-om.","Kurir dostavlja za 1–3 radna dana i zove pre dolaska.","Pregledaš proizvod i plaćaš gotovinom."],
 sort:"Sortiraj",sPop:"Najprodavanije",sLow:"Cena: od najniže",sHigh:"Cena: od najviše",results:"{n} proizvoda",searchFor:"Rezultati za „{q}“",noRes:"Ništa nismo našli. Probaj drugu reč.",
-sale:"Akcija",nw:"Novo",f1:"Kose",f1s:"Onlajn prodavnica Kosova. Lako naručivanje, plaćanje pouzećem.",f2:"Pomoć",f3:"Kompanija",f4:"Kontakt",
-fl:["Kako naručiti","Dostava","Povrat","Česta pitanja"],fc:["O nama","Uslovi","Privatnost"],
-w:"Težina",dim:"Dimenzije",mat:"Materijal",war:"Garancija",bat:"Baterija",vol:"Zapremina",age:"Uzrast",yr:"godina",yrs:"godine",mo:"meseci",hr:"h",
+nf:"Proizvod nije pronađen",nfS:"Možda je uklonjen ili je link pogrešan.",
+sale:"Akcija",nw:"Novo",f1s:"Onlajn prodavnica Kosova. Lako naručivanje, plaćanje pouzećem.",f2:"Pomoć",f3:"Kompanija",f4:"Kontakt",
+fl:["Kako naručiti","Dostava","Povrat","Česta pitanja"],fc:["O nama","Uslovi prodaje","Privatnost"],
+helpT:"Pomoć",helpS:"Primer teksta. Konačan tekst se piše iz admin panela.",
+faq:[["Kako da naručim?","Dodaj proizvode u korpu, upiši ime, broj mobilnog i adresu, pa potvrdi kodom koji stiže SMS-om. Nalog nije potreban."],["Kako plaćam?","Gotovinom kuriru kad porudžbina stigne. Trenutno ne primamo plaćanje karticom."],["Koliko traje dostava i koliko košta?","1–3 radna dana u sve 38 opštine. Dostava košta 2 € i besplatna je za porudžbine preko 30 €."],["Kako da vratim proizvod?","U roku od 14 dana od prijema, nekorišćen i u originalnom pakovanju. Javi nam se i kurir ga besplatno preuzima."],["Šta ako nisam kod kuće?","Kurir zove pre dostave. Ako nisi tu, dogovorite drugo vreme."]],
+w:"Težina",dim:"Dimenzije",mat:"Materijal",war:"Garancija",bat:"Baterija",vol:"Zapremina",age:"Uzrast",yr:"godina",yrs:"godine",hr:"h",dd:"dana",
 c:{black:"Crna",white:"Bela",blue:"Plava",grey:"Siva",beige:"Bež"}}
 };
 const CATS=[
@@ -417,113 +491,147 @@ const CATS=[
 ];
 const COLORS={black:"#1a1f2b",white:"#ffffff",blue:"#244aa5",grey:"#9aa3b2",beige:"#d9c7a7"};
 const P=[
- {id:1,cat:"electronics",icon:"headphones",price:39.9,old:54.9,pop:98,nw:0,n:{sq:"Kufje pa tel me anulim zhurme",en:"Noise-cancelling wireless headphones",tr:"Gürültü önleyici kablosuz kulaklık",sr:"Bežične slušalice sa poništavanjem buke"},colors:["black","white"],sp:[["bat","30 h"],["w","220 g"],["war","2 yrs"]]},
- {id:2,cat:"electronics",icon:"charger",price:14.9,pop:80,nw:1,n:{sq:"Karikues i shpejtë USB-C 30W",en:"30W USB-C fast charger",tr:"30W USB-C hızlı şarj cihazı",sr:"Brzi USB-C punjač 30W"},colors:["white"],sp:[["w","60 g"],["war","1 yr"]]},
- {id:3,cat:"electronics",icon:"watch",price:59,pop:91,nw:1,n:{sq:"Orë inteligjente me GPS",en:"Smart watch with GPS",tr:"GPS'li akıllı saat",sr:"Pametni sat sa GPS-om"},colors:["black","grey","blue"],sp:[["bat","7 d"],["w","38 g"],["war","2 yrs"]]},
- {id:4,cat:"home",icon:"lamp",price:24.5,old:34.9,pop:70,nw:0,n:{sq:"Llambë tavoline LED me ndriçim të rregullueshëm",en:"Dimmable LED desk lamp",tr:"Ayarlanabilir LED masa lambası",sr:"LED stona lampa sa podešavanjem"},colors:["white","black"],sp:[["dim","38 × 16 cm"],["w","0,9 kg"],["war","2 yrs"]]},
- {id:5,cat:"home",icon:"cup",price:18.9,pop:64,nw:1,n:{sq:"Set me 4 filxhanë qeramike",en:"Set of 4 ceramic cups",tr:"4'lü seramik fincan seti",sr:"Set od 4 keramičke šolje"},colors:["white","beige","blue"],sp:[["vol","250 ml"],["mat","Qeramikë / Ceramic"]]},
- {id:6,cat:"home",icon:"blanket",price:34,old:44,pop:77,nw:0,n:{sq:"Batanije leshi 150 × 200",en:"Wool blanket 150 × 200",tr:"Yün battaniye 150 × 200",sr:"Vuneno ćebe 150 × 200"},colors:["grey","beige","blue"],sp:[["dim","150 × 200 cm"],["mat","80% lesh / wool"]]},
- {id:7,cat:"beauty",icon:"cream",price:12.9,pop:88,nw:0,n:{sq:"Krem hidratues për fytyrë 50 ml",en:"Hydrating face cream 50 ml",tr:"Nemlendirici yüz kremi 50 ml",sr:"Hidratantna krema za lice 50 ml"},sp:[["vol","50 ml"]]},
- {id:8,cat:"beauty",icon:"perfume",price:44,pop:73,nw:1,n:{sq:"Parfum Eau de Parfum 100 ml",en:"Eau de Parfum 100 ml",tr:"Eau de Parfum 100 ml",sr:"Parfem Eau de Parfum 100 ml"},sp:[["vol","100 ml"]]},
- {id:9,cat:"fashion",icon:"jacket",price:69.9,old:89.9,pop:84,nw:0,n:{sq:"Xhaketë dimri e lehtë",en:"Lightweight winter jacket",tr:"Hafif kışlık mont",sr:"Lagana zimska jakna"},colors:["black","blue","beige"],sizes:["S","M","L","XL"],sp:[["mat","100% poliestër"],["w","650 g"]]},
- {id:10,cat:"sport",icon:"shoe",price:49.9,pop:95,nw:1,n:{sq:"Atlete vrapimi",en:"Running shoes",tr:"Koşu ayakkabısı",sr:"Patike za trčanje"},colors:["white","black","blue"],sizes:["38","39","40","41","42","43","44","45"],sp:[["w","280 g"]]},
- {id:11,cat:"sport",icon:"bottle",price:16.5,pop:68,nw:0,n:{sq:"Shishe termike 750 ml",en:"Insulated bottle 750 ml",tr:"Termos şişe 750 ml",sr:"Termos boca 750 ml"},colors:["blue","black","white"],sp:[["vol","750 ml"],["mat","Inox"]]},
- {id:12,cat:"kids",icon:"blocks",price:21,pop:60,nw:1,n:{sq:"Set kubesh druri për fëmijë",en:"Wooden building blocks set",tr:"Ahşap yapı blokları seti",sr:"Set drvenih kocki za decu"},sp:[["age","3+"],["mat","Dru / Wood"]]}
+ {id:1,cat:"electronics",icon:"headphones",price:39.9,old:54.9,pop:98,nw:0,stock:24,n:{sq:"Kufje pa tel me anulim zhurme",en:"Noise-cancelling wireless headphones",tr:"Gürültü önleyici kablosuz kulaklık",sr:"Bežične slušalice sa poništavanjem buke"},colors:["black","white"],sp:[["bat","30 h"],["w","220 g"],["war","2 yrs"]]},
+ {id:2,cat:"electronics",icon:"charger",price:14.9,pop:80,nw:1,stock:60,n:{sq:"Karikues i shpejtë USB-C 30W",en:"30W USB-C fast charger",tr:"30W USB-C hızlı şarj cihazı",sr:"Brzi USB-C punjač 30W"},colors:["white"],sp:[["w","60 g"],["war","1 yr"]]},
+ {id:3,cat:"electronics",icon:"watch",price:59,pop:91,nw:1,stock:3,n:{sq:"Orë inteligjente me GPS",en:"Smart watch with GPS",tr:"GPS'li akıllı saat",sr:"Pametni sat sa GPS-om"},colors:["black","grey","blue"],sp:[["bat","7 d"],["w","38 g"],["war","2 yrs"]]},
+ {id:4,cat:"home",icon:"lamp",price:24.5,old:34.9,pop:70,nw:0,stock:15,n:{sq:"Llambë tavoline LED me ndriçim të rregullueshëm",en:"Dimmable LED desk lamp",tr:"Ayarlanabilir LED masa lambası",sr:"LED stona lampa sa podešavanjem"},colors:["white","black"],sp:[["dim","38 × 16 cm"],["w","0,9 kg"],["war","2 yrs"]]},
+ {id:5,cat:"home",icon:"cup",price:18.9,pop:64,nw:1,stock:30,n:{sq:"Set me 4 filxhanë qeramike",en:"Set of 4 ceramic cups",tr:"4'lü seramik fincan seti",sr:"Set od 4 keramičke šolje"},colors:["white","beige","blue"],sp:[["vol","250 ml"],["mat","Qeramikë / Ceramic"]]},
+ {id:6,cat:"home",icon:"blanket",price:34,old:44,pop:77,nw:0,stock:12,n:{sq:"Batanije leshi 150 × 200",en:"Wool blanket 150 × 200",tr:"Yün battaniye 150 × 200",sr:"Vuneno ćebe 150 × 200"},colors:["grey","beige","blue"],sp:[["dim","150 × 200 cm"],["mat","80% lesh / wool"]]},
+ {id:7,cat:"beauty",icon:"cream",price:12.9,pop:88,nw:0,stock:40,n:{sq:"Krem hidratues për fytyrë 50 ml",en:"Hydrating face cream 50 ml",tr:"Nemlendirici yüz kremi 50 ml",sr:"Hidratantna krema za lice 50 ml"},sp:[["vol","50 ml"]]},
+ {id:8,cat:"beauty",icon:"perfume",price:44,pop:73,nw:1,stock:0,n:{sq:"Parfum Eau de Parfum 100 ml",en:"Eau de Parfum 100 ml",tr:"Eau de Parfum 100 ml",sr:"Parfem Eau de Parfum 100 ml"},sp:[["vol","100 ml"]]},
+ {id:9,cat:"fashion",icon:"jacket",price:69.9,old:89.9,pop:84,nw:0,stock:4,n:{sq:"Xhaketë dimri e lehtë",en:"Lightweight winter jacket",tr:"Hafif kışlık mont",sr:"Lagana zimska jakna"},colors:["black","blue","beige"],sizes:["S","M","L","XL"],sp:[["mat","100% poliestër"],["w","650 g"]]},
+ {id:10,cat:"sport",icon:"shoe",price:49.9,pop:95,nw:1,stock:22,n:{sq:"Atlete vrapimi",en:"Running shoes",tr:"Koşu ayakkabısı",sr:"Patike za trčanje"},colors:["white","black","blue"],sizes:["38","39","40","41","42","43","44","45"],sp:[["w","280 g"]]},
+ {id:11,cat:"sport",icon:"bottle",price:16.5,pop:68,nw:0,stock:35,n:{sq:"Shishe termike 750 ml",en:"Insulated bottle 750 ml",tr:"Termos şişe 750 ml",sr:"Termos boca 750 ml"},colors:["blue","black","white"],sp:[["vol","750 ml"],["mat","Inox"]]},
+ {id:12,cat:"kids",icon:"blocks",price:21,pop:60,nw:1,stock:18,n:{sq:"Set kubesh druri për fëmijë",en:"Wooden building blocks set",tr:"Ahşap yapı blokları seti",sr:"Set drvenih kocki za decu"},sp:[["age","3+"],["mat","Dru / Wood"]]}
 ];
 const MUNI=["Deçan","Dragash","Drenas","Ferizaj","Fushë Kosovë","Gjakovë","Gjilan","Graçanicë","Hani i Elezit","Istog","Junik","Kaçanik","Kamenicë","Klinë","Kllokot","Leposaviq","Lipjan","Malishevë","Mamushë","Mitrovicë e Jugut","Mitrovicë e Veriut","Novobërdë","Obiliq","Partesh","Pejë","Podujevë","Prishtinë","Prizren","Rahovec","Ranillug","Shtërpcë","Shtime","Skënderaj","Suharekë","Viti","Vushtrri","Zubin Potok","Zveçan"];
-const FREE=30, SHIP=2;
+const FREE=30, SHIP=2, MAXQ=20, RESEND=30;
+const LNAME={sq:"Shqip",en:"English",tr:"Türkçe",sr:"Srpski"};
 
 /* ---------- Durum ---------- */
 const store={get(k,d){try{const v=localStorage.getItem("kose:"+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem("kose:"+k,JSON.stringify(v))}catch(e){}}};
-const S={lang:store.get("lang","sq"),cart:store.get("cart",[]),q:"",sort:"pop",form:{name:"",phone:"",city:"",addr:"",note:""},code:"",order:null,pv:{}};
+const S={lang:store.get("lang","sq"),cart:store.get("cart",[]).filter(i=>P.some(p=>p.id===i.id&&p.stock>0)),q:"",sort:"pop",form:{name:"",phone:"",city:"",addr:"",note:""},code:"",sentAt:0,order:null,pv:{}};
+if(!T[S.lang])S.lang="sq";
 const L=()=>T[S.lang];
-const t=(k,v)=>{let s=L()[k]??T.sq[k]??k;if(v)for(const x in v)s=s.replace("{"+x+"}",v[x]);return s};
-const eur=n=>{const s=n.toFixed(2).replace(".",",");return (S.lang==="en"?n.toFixed(2):s)+" €"};
+const t=(k,v)=>{let s=L()[k]??T.sq[k]??k;if(v)for(const x in v)s=s.split("{"+x+"}").join(v[x]);return s};
+const eur=n=>(S.lang==="en"?n.toFixed(2):n.toFixed(2).replace(".",","))+" €";
+const pById=id=>P.find(p=>p.id===id);
 const pn=p=>p.n[S.lang]||p.n.sq;
 const cn=id=>{const c=CATS.find(c=>c.id===id);return c?(c.n[S.lang]||c.n.sq):""};
 const cbg=id=>(CATS.find(c=>c.id===id)||{}).bg||"#eaf1fd";
 const ico=(name,size,sw)=>`<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="${sw||2.4}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-${name}"/></svg>`;
-const unit=v=>v.replace(/(\d+) yrs?$/,(m,n)=>n+" "+(n==="1"?t("yr"):t("yrs"))).replace(/(\d+) h$/,(m,n)=>n+" "+t("hr")).replace(/(\d+) d$/,(m,n)=>n+" "+({sq:"ditë",en:"days",tr:"gün",sr:"dana"})[S.lang]);
+const unit=v=>v.replace(/^(\d+) yrs?$/,(m,n)=>n+" "+(n==="1"?t("yr"):t("yrs"))).replace(/^(\d+) h$/,(m,n)=>n+" "+t("hr")).replace(/^(\d+) d$/,(m,n)=>n+" "+t("dd"));
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const save=()=>{store.set("cart",S.cart);store.set("lang",S.lang)};
-const sub=()=>S.cart.reduce((a,i)=>a+P.find(p=>p.id===i.id).price*i.qty,0);
+const sub=()=>S.cart.reduce((a,i)=>a+pById(i.id).price*i.qty,0);
 const shipCost=s=>s>=FREE||s===0?0:SHIP;
 const count=()=>S.cart.reduce((a,i)=>a+i.qty,0);
+const inCart=id=>S.cart.filter(i=>i.id===id).reduce((a,i)=>a+i.qty,0);
+const maxFor=p=>Math.min(MAXQ,p.stock);
+const pct=p=>Math.round((1-p.price/p.old)*100);
+const varText=i=>[i.c?L().c[i.c]:null,i.s&&i.s!=="-"?i.s:null].filter(Boolean).join(" · ");
+const DN={sq:[["e diel","e hënë","e martë","e mërkurë","e enjte","e premte","e shtunë"],["janar","shkurt","mars","prill","maj","qershor","korrik","gusht","shtator","tetor","nëntor","dhjetor"]],
+ en:[["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],["January","February","March","April","May","June","July","August","September","October","November","December"]],
+ tr:[["Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi"],["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"]],
+ sr:[["nedelja","ponedeljak","utorak","sreda","četvrtak","petak","subota"],["januar","februar","mart","april","maj","jun","jul","avgust","septembar","oktobar","novembar","decembar"]]};
 const delDate=()=>{const d=new Date();let n=0;while(n<3){d.setDate(d.getDate()+1);if(d.getDay()!==0)n++}
-  return d.toLocaleDateString({sq:"sq-AL",en:"en-GB",tr:"tr-TR",sr:"sr-Latn-RS"}[S.lang],{weekday:"long",day:"numeric",month:"long"})};
+  const [w,m]=DN[S.lang],day=d.getDate(),mo=m[d.getMonth()],wd=w[d.getDay()];
+  return S.lang==="en"?`${wd}, ${day} ${mo}`:S.lang==="tr"?`${day} ${mo} ${wd}`:S.lang==="sr"?`${wd}, ${day}. ${mo}`:`${wd}, ${day} ${mo}`};
 
 /* ---------- Parçalar ---------- */
-function card(p){
-  const b=p.old?`<span class="badge sale">${t("sale")} −${Math.round((1-p.price/p.old)*100)}%</span>`:p.nw?`<span class="badge new">${t("nw")}</span>`:"";
-  return `<a class="card" href="#p-${p.id}">
-    <div class="im" style="background:${cbg(p.cat)}">${b}${ico(p.icon,"46%")}
-      <button class="quick" data-quick="${p.id}" aria-label="${esc(t("add"))}: ${esc(pn(p))}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div>
-    <span class="cat-l">${cn(p.cat)}</span><span class="nm">${esc(pn(p))}</span>
-    <span class="price"><b>${eur(p.price)}</b>${p.old?`<s>${eur(p.old)}</s>`:""}</span></a>`;
+function badge(p){
+  if(!p.stock) return `<span class="badge out">${t("out")}</span>`;
+  if(p.old) return `<span class="badge sale">${t("sale")} −${pct(p)}%</span>`;
+  if(p.nw) return `<span class="badge new">${t("nw")}</span>`;
+  return "";
 }
-const iTruck=`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h11v10H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>`;
-const iCash=`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6 9.5v5M18 9.5v5"/></svg>`;
-const iBack=`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></svg>`;
-const iChat=`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/></svg>`;
+function card(p){
+  return `<article class="card">
+    <div class="im" style="background:${cbg(p.cat)}">${badge(p)}${ico(p.icon,"46%")}
+      ${p.stock?`<button class="quick" data-quick="${p.id}" aria-label="${esc(t("add"))}: ${esc(pn(p))}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>`:""}</div>
+    <span class="cat-l">${cn(p.cat)}</span><a class="nm lnk" href="#p-${p.id}">${esc(pn(p))}</a>
+    <span class="price"><b>${eur(p.price)}</b>${p.old?`<s><span class="sr">${esc(t("save",{x:""}))}</span>${eur(p.old)}</s>`:""}</span></article>`;
+}
+const iTruck=`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h11v10H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>`;
+const iCash=`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6 9.5v5M18 9.5v5"/></svg>`;
+const iBack=`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></svg>`;
+const iChat=`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>`;
+const iCheck=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>`;
+function steps(cur){
+  const st=L().steps;
+  return `<ol class="steps">${st.map((s,i)=>{const n=i+1,done=n<cur;
+    const inner=`<b>${done?iCheck:n}</b>${s}`;
+    return `<li class="${done?"done":""}"${n===cur?' aria-current="step"':""}>${done&&n===1?`<a href="#cart">${inner}</a>`:inner}</li>`}).join('<li class="sep" aria-hidden="true"></li>')}</ol>`;
+}
 
 /* ---------- Görünümler ---------- */
 function vHome(){
-  const pop=[...P].sort((a,b)=>b.pop-a.pop).slice(0,4), nw=P.filter(p=>p.nw).slice(0,4);
-  const tiles=[P[0],P[9],P[7]];
+  const pop=P.filter(p=>p.stock).sort((a,b)=>b.pop-a.pop).slice(0,4), nw=P.filter(p=>p.nw).slice(0,4);
+  const tiles=[P[0],P[9],P[6]];
   return `<div class="view">
   <section class="hero"><div class="hgrid">
     <div><h1>${t("heroT")}</h1><p>${t("heroS")}</p>
       <div class="hbtns"><a class="btn p" href="#shop">${t("heroB")}</a><a class="btn g" href="#c-home">${t("heroB2")}</a></div></div>
     <div class="hstack" aria-hidden="true">${tiles.map(p=>`<a class="t" href="#p-${p.id}" tabindex="-1"><div class="im" style="background:${cbg(p.cat)};color:var(--brand)">${ico(p.icon,"55%")}</div><span>${esc(pn(p))}</span><b>${eur(p.price)}</b></a>`).join("")}</div>
   </div></section>
-  <section class="trust">
+  <section class="trust" aria-label="${esc(t("iCod"))}">
     <div>${iCash}<p><b>${t("tr1")}</b><span>${t("tr1s")}</span></p></div>
     <div>${iTruck}<p><b>${t("tr2")}</b><span>${t("tr2s")}</span></p></div>
     <div>${iBack}<p><b>${t("tr3")}</b><span>${t("tr3s")}</span></p></div>
     <div>${iChat}<p><b>${t("tr4")}</b><span>${t("tr4s")}</span></p></div>
   </section>
-  <section><div class="sh"><h2>${t("cats")}</h2></div>
+  <section aria-labelledby="h-cats"><div class="sh"><h2 id="h-cats">${t("cats")}</h2></div>
     <div class="cats">${CATS.map(c=>`<a class="cat" href="#c-${c.id}"><span class="ic">${ico(c.icon,34,2.6)}</span>${cn(c.id)}</a>`).join("")}</div></section>
-  <section><div class="sh"><h2>${t("popT")}</h2><a href="#shop">${t("seeAll")} →</a></div><div class="grid">${pop.map(card).join("")}</div></section>
+  <section aria-labelledby="h-pop"><div class="sh"><h2 id="h-pop">${t("popT")}</h2><a href="#shop">${t("seeAll")} →</a></div><div class="grid">${pop.map(card).join("")}</div></section>
   <section class="camp"><div><h2>${t("campT")}</h2><p>${t("campS")}</p></div><a class="btn" href="#c-home">${t("campB")}</a></section>
-  <section><div class="sh"><h2>${t("newT")}</h2><a href="#shop">${t("seeAll")} →</a></div><div class="grid">${nw.map(card).join("")}</div></section>
+  <section aria-labelledby="h-new"><div class="sh"><h2 id="h-new">${t("newT")}</h2><a href="#shop">${t("seeAll")} →</a></div><div class="grid">${nw.map(card).join("")}</div></section>
   </div>`;
 }
 function vList(cat){
   let list=P.filter(p=>!cat||p.cat===cat);
   const q=S.q.trim().toLowerCase();
   if(q) list=list.filter(p=>Object.values(p.n).some(n=>n.toLowerCase().includes(q))||Object.values(CATS.find(c=>c.id===p.cat).n).some(n=>n.toLowerCase().includes(q)));
-  list.sort((a,b)=>S.sort==="low"?a.price-b.price:S.sort==="high"?b.price-a.price:b.pop-a.pop);
+  list.sort((a,b)=>(!a.stock)-(!b.stock)||(S.sort==="low"?a.price-b.price:S.sort==="high"?b.price-a.price:b.pop-a.pop));
   const title=q?t("searchFor",{q:esc(S.q.trim())}):cat?cn(cat):t("all");
   return `<div class="view" style="gap:0">
-  <div class="lhead"><div><h1>${title}</h1><p class="cnt">${t("results",{n:list.length})}</p></div>
+  <div class="lhead"><div><h1>${title}</h1><p class="cnt" aria-live="polite">${t("results",{n:list.length})}</p></div>
     <div><label class="sr" for="sort">${t("sort")}</label><select id="sort">
       <option value="pop"${S.sort==="pop"?" selected":""}>${t("sPop")}</option><option value="low"${S.sort==="low"?" selected":""}>${t("sLow")}</option><option value="high"${S.sort==="high"?" selected":""}>${t("sHigh")}</option></select></div></div>
-  <div class="chips"><a class="chip" href="#shop"${!cat?' aria-current="page"':""}>${t("all")}</a>${CATS.map(c=>`<a class="chip" href="#c-${c.id}"${cat===c.id?' aria-current="page"':""}>${cn(c.id)}</a>`).join("")}</div>
+  <div class="chips" role="group" aria-label="${esc(t("cats"))}: ${esc(title)}"><a class="chip" href="#shop"${!cat?' aria-current="page"':""}>${t("all")}</a>${CATS.map(c=>`<a class="chip" href="#c-${c.id}"${cat===c.id?' aria-current="page"':""}>${cn(c.id)}</a>`).join("")}</div>
   ${list.length?`<div class="grid">${list.map(card).join("")}</div>`:`<p class="emptyres">${t("noRes")}</p>`}
   </div>`;
 }
+function vNotFound(){
+  return `<div class="view"><div class="center"><div class="okc" style="background:var(--ice);color:var(--brand)"><svg width="34" height="34" aria-hidden="true"><use href="#kmark"/></svg></div><h1>${t("nf")}</h1><p>${t("nfS")}</p><a class="btn p" href="#shop">${t("heroB")}</a></div></div>`;
+}
 function vProduct(id){
-  const p=P.find(x=>x.id===id); if(!p) return vList();
+  const p=pById(id); if(!p) return vNotFound();
   const v=S.pv[id]||(S.pv[id]={c:p.colors?p.colors[0]:null,s:p.sizes?null:"-",q:1,img:0});
+  const room=Math.max(0,maxFor(p)-inCart(id));
+  if(v.q>Math.max(1,room))v.q=Math.max(1,room);
   const shades=[cbg(p.cat),"#f4f7fc","#e6edf9","#eef1f6"];
   const sizeMissing=p.sizes&&!v.s;
+  const blocked=!p.stock||!room;
+  const btnLabel=!p.stock?t("out"):!room?t("maxQ"):sizeMissing?t("pickSize"):t("add");
+  const related=P.filter(x=>x.cat===p.cat&&x.id!==p.id).concat(P.filter(x=>x.cat!==p.cat&&x.stock)).slice(0,4);
   return `<div class="view" style="gap:0">
-  <nav class="crumbs" aria-label="breadcrumb"><a href="#home">Kose</a><span>/</span><a href="#c-${p.cat}">${cn(p.cat)}</a><span>/</span><span>${esc(pn(p))}</span></nav>
+  <nav class="crumbs" aria-label="breadcrumb"><a href="#home">Kose</a><span aria-hidden="true">/</span><a href="#c-${p.cat}">${cn(p.cat)}</a><span aria-hidden="true">/</span><span aria-current="page">${esc(pn(p))}</span></nav>
   <div class="pd">
     <div class="gal">
-      <div class="main" style="background:${shades[v.img]};color:${v.c&&v.c!=="white"?COLORS[v.c]:"var(--brand)"}">${p.old?`<span class="badge sale">${t("sale")} −${Math.round((1-p.price/p.old)*100)}%</span>`:""}${ico(p.icon,"52%",2)}</div>
-      <div class="thumbs">${shades.map((s,i)=>`<button data-img="${i}" aria-pressed="${v.img===i}" aria-label="${i+1}" style="background:${s};color:var(--brand)">${ico(p.icon,"50%",2.6)}</button>`).join("")}</div>
+      <div class="main" style="background:${shades[v.img]};color:${v.c&&v.c!=="white"?COLORS[v.c]:"var(--brand)"}">${badge(p)}${ico(p.icon,"52%",2)}</div>
+      <div class="thumbs">${shades.map((s,i)=>`<button data-img="${i}" aria-pressed="${v.img===i}" aria-label="${esc(pn(p))} ${i+1}/4" style="background:${s};color:var(--brand)">${ico(p.icon,"50%",2.6)}</button>`).join("")}</div>
     </div>
     <div class="pinfo">
-      <div style="display:grid;gap:10px"><span class="cat-l" style="font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">${cn(p.cat)}</span><h1>${esc(pn(p))}</h1>
-        <div class="price"><b>${eur(p.price)}</b>${p.old?`<s>${eur(p.old)}</s><span class="save">${t("save",{x:eur(p.old-p.price)})}</span>`:""}</div></div>
-      ${p.colors?`<div class="opt"><span class="lb">${t("color")}: <span>${L().c[v.c]}</span></span><div class="sw">${p.colors.map(c=>`<button data-color="${c}" aria-pressed="${v.c===c}"><i style="background:${COLORS[c]}"></i>${L().c[c]}</button>`).join("")}</div></div>`:""}
-      ${p.sizes?`<div class="opt"><span class="lb">${t("size")}</span><div class="sw">${p.sizes.map(s=>`<button data-size="${s}" aria-pressed="${v.s===s}">${s}</button>`).join("")}</div></div>`:""}
-      <div class="buyrow"><div class="step" role="group" aria-label="${t("qty")}"><button data-q="-1" aria-label="−">−</button><output>${v.q}</output><button data-q="1" aria-label="+">+</button></div>
-        <button class="btn p" id="addBtn"${sizeMissing?" disabled":""}>${sizeMissing?t("size")+" ↑":t("add")}</button></div>
+      <div style="display:grid;gap:10px"><h1>${esc(pn(p))}</h1>
+        <div class="price"><b>${eur(p.price)}</b>${p.old?`<s>${eur(p.old)}</s><span class="save">${t("save",{x:eur(p.old-p.price)})}</span>`:""}</div>
+        <span class="vat">${t("vat")}</span></div>
+      ${p.colors?`<div class="opt" role="group" aria-labelledby="lb-c"><span class="lb" id="lb-c">${t("color")}: <span>${L().c[v.c]}</span></span><div class="sw">${p.colors.map(c=>`<button data-color="${c}" aria-pressed="${v.c===c}"><i style="background:${COLORS[c]}" aria-hidden="true"></i>${L().c[c]}</button>`).join("")}</div></div>`:""}
+      ${p.sizes?`<div class="opt" role="group" aria-labelledby="lb-s"><span class="lb" id="lb-s">${t("size")}</span><div class="sw">${p.sizes.map(s=>`<button data-size="${s}" aria-pressed="${v.s===s}"${!p.stock?" disabled":""}>${s}</button>`).join("")}</div></div>`:""}
+      ${!p.stock?`<p class="stock out">${t("outS")}</p>`:p.stock<=5?`<p class="stock">${t("low",{n:p.stock})}</p>`:""}
+      <div class="buyrow">${blocked?"":`<div class="step" role="group" aria-label="${t("qty")}"><button data-q="-1" aria-label="−" ${v.q<=1?"disabled":""}>−</button><output aria-live="polite">${v.q}</output><button data-q="1" aria-label="+" ${v.q>=room?"disabled":""}>+</button></div>`}
+        <button class="btn p" id="addBtn"${sizeMissing||blocked?" disabled":""}>${btnLabel}</button></div>
       <div class="info">
-        <div>${iTruck}<p><b>${t("iDel")}</b><span>${t("iDelS",{d:delDate()})}</span></p></div>
+        <div>${iTruck}<p><b>${t("iDel")}</b>${p.stock?`<span>${t("iDelS",{d:delDate()})}</span>`:""}</p></div>
         <div>${iCash}<p><b>${t("iCod")}</b><span>${t("iCodS")}</span></p></div>
         <div>${iBack}<p><b>${t("iRet")}</b><span>${t("iRetS")}</span></p></div>
       </div>
@@ -531,179 +639,227 @@ function vProduct(id){
         <dl class="specs">${p.sp.map(([k,val])=>`<dt>${t(k)}</dt><dd>${esc(unit(val))}</dd>`).join("")}</dl></div>
     </div>
   </div>
-  <section style="margin-top:64px"><div class="sh"><h2>${t("popT")}</h2></div><div class="grid">${P.filter(x=>x.cat===p.cat&&x.id!==p.id).concat(P.filter(x=>x.cat!==p.cat)).slice(0,4).map(card).join("")}</div></section>
+  <section style="margin-top:64px" aria-labelledby="h-rel"><div class="sh"><h2 id="h-rel">${t("relT")}</h2></div><div class="grid">${related.map(card).join("")}</div></section>
   </div>`;
 }
 function summary(withItems){
-  const s=sub(),sh=shipCost(s),left=Math.max(0,FREE-s);
-  return `<aside class="sum"><h2>${t("summary")}</h2>
-   ${withItems?`<div class="mini">${S.cart.map(i=>{const p=P.find(x=>x.id===i.id);return `<div><span class="im" style="background:${cbg(p.cat)};color:var(--brand)">${ico(p.icon,26,2.6)}</span><span>${esc(pn(p))} <span style="color:var(--muted)">× ${i.qty}</span></span><b style="font-variant-numeric:tabular-nums">${eur(p.price*i.qty)}</b></div>`}).join("")}</div>`:""}
+  const s=sub(),sh=shipCost(s),left=Math.max(0,FREE-s),pr=Math.min(100,Math.round(s/FREE*100));
+  return `<aside class="sum" aria-labelledby="h-sum"><h2 id="h-sum">${t("summary")}</h2>
+   ${withItems?`<div class="mini">${S.cart.map(i=>{const p=pById(i.id),vt=varText(i);return `<div><span class="im" style="background:${cbg(p.cat)};color:var(--brand)">${ico(p.icon,26,2.6)}</span><span>${esc(pn(p))} <span style="color:var(--muted)">× ${i.qty}${vt?" · "+vt:""}</span></span><b style="font-variant-numeric:tabular-nums">${eur(p.price*i.qty)}</b></div>`}).join("")}</div>`:""}
    <div class="row"><span>${t("subtotal")}</span><span>${eur(s)}</span></div>
    <div class="row"><span>${t("ship")}</span><span>${sh?eur(sh):t("free")}</span></div>
-   <div class="free"><span>${left>0?t("toFree",{x:eur(left)}):t("gotFree")}</span><div class="bar"><i style="width:${Math.min(100,s/FREE*100)}%"></i></div></div>
+   <div class="free"><span id="freeTxt">${left>0?t("toFree",{x:eur(left)}):t("gotFree")}</span><div class="bar" role="progressbar" aria-labelledby="freeTxt" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pr}"><i style="width:${pr}%"></i></div></div>
    <div class="row t"><span>${t("total")}</span><span>${eur(s+sh)}</span></div>
    ${withItems?"":`<a class="btn p w" href="#checkout">${t("checkout")}</a><p style="font-size:.82rem;color:var(--muted);display:flex;gap:8px;align-items:center"><span style="color:var(--brand)">${iCash}</span>${t("iCodS")}</p>`}
   </aside>`;
 }
 function vCart(){
-  if(!S.cart.length) return `<div class="view"><div class="center"><div class="okc" style="background:var(--ice);color:var(--brand)"><svg width="34" height="34"><use href="#kmark"/></svg></div><h1>${t("empty")}</h1><p>${t("emptyS")}</p><a class="btn p" href="#shop">${t("cont")}</a></div></div>`;
-  return `<div class="view"><div class="two"><div><h1>${t("cart")}</h1><div class="items">${S.cart.map((i,ix)=>{const p=P.find(x=>x.id===i.id);
-    const vr=[i.c?L().c[i.c]:null,i.s&&i.s!=="-"?i.s:null].filter(Boolean).join(" · ");
-    return `<div class="it"><a href="#p-${p.id}" class="im" style="background:${cbg(p.cat)};color:var(--brand)" aria-hidden="true" tabindex="-1">${ico(p.icon,44,2.4)}</a>
-      <div style="display:grid;gap:4px;min-width:0"><a class="nm" href="#p-${p.id}">${esc(pn(p))}</a>${vr?`<span class="vr">${vr}</span>`:""}<span class="price"><b>${eur(p.price)}</b></span></div>
-      <div class="rt"><div class="step" role="group" aria-label="${t("qty")}"><button data-cq="${ix}" data-d="-1" aria-label="−">−</button><output>${i.qty}</output><button data-cq="${ix}" data-d="1" aria-label="+">+</button></div><button class="rm" data-rm="${ix}">${t("remove")}</button></div></div>`}).join("")}</div>
+  if(!S.cart.length) return `<div class="view"><div class="center"><div class="okc" style="background:var(--ice);color:var(--brand)"><svg width="34" height="34" aria-hidden="true"><use href="#kmark"/></svg></div><h1>${t("empty")}</h1><p>${t("emptyS")}</p><a class="btn p" href="#shop">${t("cont")}</a></div></div>`;
+  return `<div class="view"><div class="two"><div>${steps(1)}<h1>${t("cart")}</h1><ul class="items">${S.cart.map((i,ix)=>{const p=pById(i.id),vr=varText(i),mx=maxFor(p)-inCart(p.id)+i.qty;
+    return `<li class="it"><a href="#p-${p.id}" class="im" style="background:${cbg(p.cat)};color:var(--brand)" aria-hidden="true" tabindex="-1">${ico(p.icon,44,2.4)}</a>
+      <div style="display:grid;gap:4px;min-width:0"><a class="nm" href="#p-${p.id}">${esc(pn(p))}</a>${vr?`<span class="vr">${vr}</span>`:""}<span class="price"><b>${eur(p.price)}</b></span>${p.stock<=5?`<span class="stock">${t("low",{n:p.stock})}</span>`:""}</div>
+      <div class="rt"><div class="step" role="group" aria-label="${t("qty")}: ${esc(pn(p))}"><button data-cq="${ix}" data-d="-1" aria-label="−" ${i.qty<=1?"disabled":""}>−</button><output aria-live="polite">${i.qty}</output><button data-cq="${ix}" data-d="1" aria-label="+" ${i.qty>=mx?"disabled":""}>+</button></div><button class="rm" data-rm="${ix}">${t("remove")}<span class="sr">: ${esc(pn(p))}</span></button></div></li>`}).join("")}</ul>
     <p style="margin-top:20px"><a href="#shop" style="color:var(--brand);font-weight:600;text-decoration:none">← ${t("cont")}</a></p></div>
     ${summary(false)}</div></div>`;
 }
 function fld(id,label,input,hint,err,optional){
-  return `<div class="fld" id="f-${id}"><label for="${id}">${label}${optional?` <small>(${t("opt")})</small>`:""}</label>${input}${hint?`<span class="hint">${hint}</span>`:""}<span class="er" id="e-${id}">${err||""}</span></div>`;
+  return `<div class="fld" id="f-${id}"><label for="${id}">${label}${optional?` <small>(${t("opt")})</small>`:""}</label>${input}${hint?`<span class="hint" id="h-${id}">${hint}</span>`:""}${err?`<span class="er" id="e-${id}">${err}</span>`:""}</div>`;
 }
 function vCheckout(){
-  if(!S.cart.length){location.hash="#cart";return ""}
+  if(!S.cart.length){location.replace("#cart");return ""}
   const f=S.form,tot=sub()+shipCost(sub());
-  return `<div class="view"><div class="two"><div><h1>${t("orderT")}</h1>
+  return `<div class="view"><div class="two"><div>${steps(2)}<h1>${t("orderT")}</h1>
   <form class="co" id="co" novalidate>
-    ${fld("name",t("name"),`<input id="name" autocomplete="name" value="${esc(f.name)}" aria-describedby="e-name">`,"",t("errName"))}
-    ${fld("phone",t("phone"),`<div class="phone"><span>+383</span><input id="phone" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="44 123 456" value="${esc(f.phone)}" aria-describedby="e-phone"></div>`,t("phoneH"),t("errPhone"))}
+    ${fld("name",t("name"),`<input id="name" autocomplete="name" required value="${esc(f.name)}" aria-describedby="e-name">`,"",t("errName"))}
+    ${fld("phone",t("phone"),`<div class="phone"><span aria-hidden="true">+383</span><input id="phone" type="tel" inputmode="tel" autocomplete="tel-national" required placeholder="44 123 456" value="${esc(f.phone)}" aria-describedby="h-phone e-phone"></div>`,t("phoneH"),t("errPhone"))}
     <div class="pair">
-      ${fld("city",t("city"),`<select id="city" autocomplete="address-level2" aria-describedby="e-city"><option value="">${t("choose")}</option>${MUNI.map(m=>`<option${f.city===m?" selected":""}>${m}</option>`).join("")}</select>`,"",t("errCity"))}
-      ${fld("addr",t("address"),`<input id="addr" autocomplete="street-address" placeholder="${esc(t("addressP"))}" value="${esc(f.addr)}" aria-describedby="e-addr">`,"",t("errAddr"))}
+      ${fld("city",t("city"),`<select id="city" autocomplete="address-level2" required aria-describedby="e-city"><option value="">${t("choose")}</option>${MUNI.map(m=>`<option${f.city===m?" selected":""}>${m}</option>`).join("")}</select>`,"",t("errCity"))}
+      ${fld("addr",t("address"),`<input id="addr" autocomplete="street-address" required placeholder="${esc(t("addressP"))}" value="${esc(f.addr)}" aria-describedby="e-addr">`,"",t("errAddr"))}
     </div>
-    ${fld("note",t("note"),`<input id="note" placeholder="${esc(t("noteP"))}" value="${esc(f.note)}">`,"","",true)}
-    <div class="fld"><span style="font-size:.88rem;font-weight:600">${t("pay")}</span>
-      <div class="paym"><span class="dot" aria-hidden="true"></span><span style="color:var(--brand)">${iCash}</span><p><b>${t("iCod")}</b><span>${t("payS",{t:eur(tot)})}</span></p></div></div>
+    ${fld("note",t("note"),`<input id="note" maxlength="140" placeholder="${esc(t("noteP"))}" value="${esc(f.note)}">`,"","",true)}
+    <fieldset class="fld" style="border:0;padding:0;margin:0"><legend style="font-size:.88rem;font-weight:600;margin-bottom:6px;padding:0">${t("pay")}</legend>
+      <div class="paym"><span class="dot" aria-hidden="true"></span><span style="color:var(--brand)">${iCash}</span><p><b>${t("iCod")}</b><span>${t("payS",{t:eur(tot)})}</span></p></div></fieldset>
     <button class="btn p w" type="submit">${t("place")} · ${eur(tot)}</button>
+    <p class="terms">${t("terms")}</p>
   </form></div>${summary(true)}</div></div>`;
 }
 function vVerify(){
-  if(!S.code){location.hash="#checkout";return ""}
-  return `<div class="view"><div class="center">
-    <div class="okc"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 18h3"/></svg></div>
+  if(!S.code){location.replace("#checkout");return ""}
+  const left=Math.max(0,RESEND-Math.floor((Date.now()-S.sentAt)/1000));
+  return `<div class="view"><div class="center">${steps(3)}
+    <div class="okc"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 18h3"/></svg></div>
     <h1>${t("verT")}</h1><p>${t("verS",{p:"+383 "+esc(S.form.phone)})}</p>
-    <form id="otpf" style="display:grid;gap:16px;justify-items:center">
-      <div class="otp">${[0,1,2,3].map(i=>`<input inputmode="numeric" maxlength="1" aria-label="${i+1}" id="o${i}" autocomplete="${i?"off":"one-time-code"}">`).join("")}</div>
-      <span class="er" id="otpErr" style="color:var(--err);font-size:.86rem" hidden>${t("errCode")}</span>
+    <form id="otpf" novalidate style="display:grid;gap:16px;justify-items:center">
+      <div class="otp" role="group" aria-label="${esc(t("verT"))}">${[0,1,2,3].map(i=>`<input inputmode="numeric" pattern="[0-9]*" maxlength="1" aria-label="${i+1}/4" id="o${i}" autocomplete="${i?"off":"one-time-code"}">`).join("")}</div>
+      <span class="er" id="otpErr" role="alert" style="color:var(--err);font-size:.86rem" hidden>${t("errCode")}</span>
       <span class="demo">${t("demo",{c:S.code})}</span>
       <button class="btn p" type="submit">${t("verB")}</button>
-      <a href="#checkout" style="color:var(--muted);font-size:.88rem">${t("back")}</a>
+      <button class="linkbtn" type="button" id="resend"${left?" disabled":""}>${left?t("resendIn",{s:left}):t("resend")}</button>
+      <a href="#checkout" class="linkbtn">${t("back")}</a>
     </form></div></div>`;
 }
 function vDone(){
-  const o=S.order; if(!o){location.hash="#home";return ""}
+  const o=S.order; if(!o){location.replace("#home");return ""}
   return `<div class="view"><div class="center">
-    <div class="okc"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
+    <div class="okc"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
     <h1>${t("doneT",{n:esc(o.first)})}</h1>
     <p>${t("ordNo")}</p><span class="ordno">${o.no}</span>
-    <p>${t("doneS",{t:eur(o.total)})}</p>
-    <p style="font-size:.9rem">${t("iDelS",{d:delDate()})} · ${esc(o.city)}</p>
-    <a class="btn p" href="#home">${t("home")}</a></div></div>`;
+    <p>${t("doneS",{t:eur(o.total)})}</p></div>
+    <div class="recap">
+      <section aria-labelledby="h-next"><h2 id="h-next">${t("nextT")}</h2><ol class="next">${L().nx.map(x=>`<li>${x}</li>`).join("")}</ol></section>
+      <section aria-labelledby="h-to"><h2 id="h-to">${t("deliverTo")}</h2><p>${esc(o.name)}<br>${esc(o.addr)}, ${esc(o.city)}<br>+383 ${esc(o.phone)}</p><p style="color:var(--muted);font-size:.9rem;margin-top:8px">${t("iDelS",{d:delDate()})}</p></section>
+      <section aria-labelledby="h-items"><h2 id="h-items">${t("summary")}</h2><div class="mini">${o.items.map(i=>{const p=pById(i.id),vt=varText(i);return `<div><span class="im" style="background:${cbg(p.cat)};color:var(--brand)">${ico(p.icon,26,2.6)}</span><span>${esc(pn(p))} <span style="color:var(--muted)">× ${i.qty}${vt?" · "+vt:""}</span></span><b style="font-variant-numeric:tabular-nums">${eur(p.price*i.qty)}</b></div>`}).join("")}</div>
+        <div class="row" style="margin-top:12px"><span>${t("ship")}</span><span>${o.ship?eur(o.ship):t("free")}</span></div><div class="row t"><span>${t("total")}</span><span>${eur(o.total)}</span></div></section>
+    </div>
+    <div class="center" style="padding-top:0"><a class="btn p" href="#home">${t("home")}</a></div></div>`;
+}
+function vHelp(){
+  return `<div class="view"><div class="help"><h1>${t("helpT")}</h1><p class="note">${t("helpS")}</p>
+    <div class="faq">${L().faq.map(([q,a],i)=>`<details${i===0?" open":""}><summary>${q}</summary><p>${a}</p></details>`).join("")}</div>
+    <div class="info" style="margin-top:8px"><div>${iChat}<p><b>${t("f4")}</b><span>+383 44 000 000 · info@kose.example · ${t("tr4s")}</span></p></div></div></div></div>`;
 }
 
 /* ---------- Yönlendirme ---------- */
-const app=document.getElementById("app");
-function route(){
+const app=document.getElementById("app"), qIn=document.getElementById("q");
+let first=true, timer=null;
+function route(opts){
   const h=(location.hash||"#home").slice(1);
-  let html,cur="";
-  if(h==="shop"){html=vList();cur="shop"}
-  else if(h.startsWith("c-")){S.q="";html=vList(h.slice(2));cur=h.slice(2)}
-  else if(h.startsWith("p-")){html=vProduct(+h.slice(2));cur=(P.find(p=>p.id===+h.slice(2))||{}).cat}
-  else if(h==="cart") html=vCart();
-  else if(h==="checkout") html=vCheckout();
-  else if(h==="verify") html=vVerify();
-  else if(h==="done") html=vDone();
-  else html=vHome();
+  let html,cur="",title="";
+  clearInterval(timer);
+  if(h==="shop"){html=vList();cur="shop";title=S.q.trim()?t("searchFor",{q:S.q.trim()}):t("all")}
+  else if(h.startsWith("c-")&&CATS.some(c=>c.id===h.slice(2))){if(!opts||!opts.keepQ){S.q="";qIn.value=""}html=vList(h.slice(2));cur=h.slice(2);title=cn(cur)}
+  else if(h.startsWith("p-")){const p=pById(+h.slice(2));html=vProduct(+h.slice(2));cur=p?p.cat:"";title=p?pn(p):t("nf")}
+  else if(h==="cart"){html=vCart();title=t("cart")}
+  else if(h==="checkout"){html=vCheckout();title=t("orderT")}
+  else if(h==="verify"){html=vVerify();title=t("verT")}
+  else if(h==="done"){html=vDone();title=t("ordNo")}
+  else if(h==="help"){html=vHelp();title=t("helpT")}
+  else {html=vHome();title="Kose"}
   if(html==="")return;
   app.innerHTML=html;
+  document.title=title==="Kose"?"Kose":title+" · Kose";
   chrome(cur);
+  if(h==="verify")startTimer();
+  if(!first&&!(opts&&opts.keepFocus)){const h1=app.querySelector("h1");if(h1){h1.tabIndex=-1;h1.focus({preventScroll:true})}}
+  first=false;
 }
 function chrome(cur){
   document.documentElement.lang=S.lang==="sr"?"sr-Latn":S.lang;
   document.getElementById("stripTxt").innerHTML=t("strip");
   document.getElementById("protoTxt").textContent=t("proto");
   document.getElementById("footProto").textContent=t("proto");
-  const q=document.getElementById("q"); q.placeholder=t("search"); document.getElementById("qLabel").textContent=t("search");
+  qIn.placeholder=t("search"); document.getElementById("qLabel").textContent=t("search");
   document.getElementById("cartLbl").textContent=t("cart");
   document.getElementById("cartN").textContent=count();
+  document.getElementById("cartBtn").setAttribute("aria-label",t("cartA",{n:count()}));
   document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.l===S.lang));
-  document.getElementById("catnav").innerHTML=`<a href="#shop"${cur==="shop"?' aria-current="page"':""}>${t("all")}</a>`+CATS.map(c=>`<a href="#c-${c.id}"${cur===c.id?' aria-current="page"':""}>${cn(c.id)}</a>`).join("");
+  const nav=document.getElementById("catnav"); nav.setAttribute("aria-label",t("cats"));
+  nav.innerHTML=`<a href="#shop"${cur==="shop"?' aria-current="page"':""}>${t("all")}</a>`+CATS.map(c=>`<a href="#c-${c.id}"${cur===c.id?' aria-current="page"':""}>${cn(c.id)}</a>`).join("");
   const L_=L();
-  document.getElementById("foot").innerHTML=`<div><a class="logo" href="#home" style="margin-bottom:10px"><svg width="26" height="26"><use href="#kmark"/></svg><span style="font-size:1.35rem">kose</span></a><p style="max-width:34ch;margin-top:10px">${t("f1s")}</p></div>
-   <div><h3>${t("f2")}</h3><ul>${L_.fl.map(x=>`<li>${x}</li>`).join("")}</ul></div>
-   <div><h3>${t("f3")}</h3><ul>${L_.fc.map(x=>`<li>${x}</li>`).join("")}</ul></div>
-   <div><h3>${t("f4")}</h3><ul><li>+383 44 000 000</li><li>info@kose.example</li><li>Prishtinë</li></ul></div>`;
+  document.getElementById("foot").innerHTML=`<div><a class="logo" href="#home" aria-label="Kose"><svg width="26" height="26" aria-hidden="true"><use href="#kmark"/></svg><span style="font-size:1.35rem">kose</span></a><p style="max-width:34ch;margin-top:6px">${t("f1s")}</p></div>
+   <nav aria-labelledby="fh2"><h2 id="fh2">${t("f2")}</h2><ul>${L_.fl.map(x=>`<li><a href="#help">${x}</a></li>`).join("")}</ul></nav>
+   <nav aria-labelledby="fh3"><h2 id="fh3">${t("f3")}</h2><ul>${L_.fc.map(x=>`<li><a href="#help">${x}</a></li>`).join("")}</ul></nav>
+   <div><h2>${t("f4")}</h2><ul><li>+383 44 000 000</li><li>info@kose.example</li><li>${t("tr4s")}</li></ul></div>`;
+}
+function startTimer(){
+  timer=setInterval(()=>{const b=document.getElementById("resend");if(!b){clearInterval(timer);return}
+    const left=Math.max(0,RESEND-Math.floor((Date.now()-S.sentAt)/1000));
+    b.disabled=left>0;b.textContent=left?t("resendIn",{s:left}):t("resend");if(!left)clearInterval(timer)},1000);
 }
 
 /* ---------- Sepet ---------- */
 let toastT;
+function toast(msg,link){
+  const to=document.getElementById("toast"),a=document.getElementById("toastLink");
+  document.getElementById("toastTxt").textContent=msg;
+  a.textContent=t("view"); a.hidden=!link;
+  to.classList.add("on"); clearTimeout(toastT); toastT=setTimeout(()=>to.classList.remove("on"),3200);
+}
 function addToCart(id,c,s,q){
+  const p=pById(id),room=maxFor(p)-inCart(id);
+  if(room<=0){toast(t("maxQ"));return false}
+  q=Math.min(q,room);
   const ex=S.cart.find(i=>i.id===id&&i.c===c&&i.s===s);
   if(ex) ex.qty+=q; else S.cart.push({id,c,s,qty:q});
   save(); document.getElementById("cartN").textContent=count();
-  const to=document.getElementById("toast");
-  document.getElementById("toastTxt").textContent=t("added");
-  document.getElementById("toastLink").textContent=t("view");
-  to.classList.add("on"); clearTimeout(toastT); toastT=setTimeout(()=>to.classList.remove("on"),2800);
+  document.getElementById("cartBtn").setAttribute("aria-label",t("cartA",{n:count()}));
+  const vt=varText({c,s});
+  toast(`${t("added")}: ${pn(p)}${vt?" ("+vt+")":""}`,true);
+  return true;
 }
 
 /* ---------- Olaylar ---------- */
 document.addEventListener("click",e=>{
   const qb=e.target.closest("[data-quick]");
-  if(qb){e.preventDefault();e.stopPropagation();const p=P.find(x=>x.id===+qb.dataset.quick);
+  if(qb){e.preventDefault();const p=pById(+qb.dataset.quick);
     if(p.sizes){location.hash="#p-"+p.id;return} addToCart(p.id,p.colors?p.colors[0]:null,"-",1);return}
   const lb=e.target.closest(".lang button");
-  if(lb){S.lang=lb.dataset.l;save();route();return}
+  if(lb){S.lang=lb.dataset.l;save();route({keepFocus:true,keepQ:true});lb.focus();return}
   const h=(location.hash||"").slice(1);
   if(h.startsWith("p-")){
     const id=+h.slice(2),v=S.pv[id];if(!v)return;
     const c=e.target.closest("[data-color]"),s=e.target.closest("[data-size]"),q=e.target.closest("[data-q]"),im=e.target.closest("[data-img]");
-    if(c){v.c=c.dataset.color;route();return}
-    if(s){v.s=s.dataset.size;route();return}
-    if(q){v.q=Math.max(1,Math.min(20,v.q+ +q.dataset.q));route();return}
-    if(im){v.img=+im.dataset.img;route();return}
-    if(e.target.closest("#addBtn")){addToCart(id,v.c,v.s,v.q);return}
+    const refocus=sel=>{route({keepFocus:true});const el=app.querySelector(sel);if(el)el.focus()};
+    if(c){v.c=c.dataset.color;refocus(`[data-color="${v.c}"]`);return}
+    if(s){v.s=s.dataset.size;refocus(`[data-size="${v.s}"]`);return}
+    if(q){const p=pById(id),room=Math.max(1,maxFor(p)-inCart(id));v.q=Math.max(1,Math.min(room,v.q+ +q.dataset.q));refocus(`[data-q="${q.dataset.q}"]:not([disabled])`)||0;return}
+    if(im){v.img=+im.dataset.img;refocus(`[data-img="${v.img}"]`);return}
+    if(e.target.closest("#addBtn")){if(addToCart(id,v.c,v.s,v.q)){v.q=1;route({keepFocus:true});app.querySelector("#addBtn")?.focus()}return}
   }
   const cq=e.target.closest("[data-cq]");
-  if(cq){const it=S.cart[+cq.dataset.cq];it.qty=Math.max(1,Math.min(20,it.qty+ +cq.dataset.d));save();route();return}
+  if(cq){const ix=+cq.dataset.cq,it=S.cart[ix],p=pById(it.id),mx=maxFor(p)-inCart(p.id)+it.qty;
+    it.qty=Math.max(1,Math.min(mx,it.qty+ +cq.dataset.d));save();route({keepFocus:true});app.querySelector(`[data-cq="${ix}"][data-d="${cq.dataset.d}"]:not([disabled])`)?.focus();return}
   const rm=e.target.closest("[data-rm]");
-  if(rm){S.cart.splice(+rm.dataset.rm,1);save();route();return}
+  if(rm){S.cart.splice(+rm.dataset.rm,1);save();route({keepFocus:true});(app.querySelector("[data-rm]")||app.querySelector("h1"))?.focus();return}
+  if(e.target.closest("#resend")){S.code=String(1000+Math.floor(Math.random()*9000));S.sentAt=Date.now();route({keepFocus:true});toast(t("resent"));document.getElementById("o0")?.focus();return}
 });
-document.addEventListener("change",e=>{if(e.target.id==="sort"){S.sort=e.target.value;route()}});
-const qIn=document.getElementById("q");
-qIn.addEventListener("input",()=>{S.q=qIn.value;const h=location.hash.slice(1);
-  if(h!=="shop"){location.hash="#shop"}else route();
-  setTimeout(()=>{qIn.focus()},0)});
-document.addEventListener("input",e=>{if(e.target.closest("#co")){S.form[e.target.id]=e.target.value;e.target.closest(".fld")?.classList.remove("bad")}});
+document.addEventListener("change",e=>{if(e.target.id==="sort"){S.sort=e.target.value;route({keepFocus:true});document.getElementById("sort")?.focus()}});
+qIn.addEventListener("input",()=>{S.q=qIn.value;
+  if(location.hash.slice(1)!=="shop"){history.replaceState(null,"","#shop")}
+  route({keepFocus:true,keepQ:true});});
+document.addEventListener("input",e=>{
+  if(e.target.closest("#co")){S.form[e.target.id]=e.target.value;const f=e.target.closest(".fld");if(f&&f.classList.contains("bad")){f.classList.remove("bad");e.target.removeAttribute("aria-invalid")}}
+  const m=/^o(\d)$/.exec(e.target.id||""); if(!m)return;
+  e.target.value=e.target.value.replace(/\D/g,"").slice(-1);
+  document.getElementById("otpErr").hidden=true;
+  if(e.target.value&&+m[1]<3)document.getElementById("o"+(+m[1]+1)).focus();
+  if([0,1,2,3].every(i=>document.getElementById("o"+i).value))document.getElementById("otpf").requestSubmit();
+});
+document.addEventListener("paste",e=>{
+  if(!/^o\d$/.test(e.target.id||""))return;
+  const d=(e.clipboardData?.getData("text")||"").replace(/\D/g,"").slice(0,4); if(!d)return;
+  e.preventDefault(); [...d].forEach((ch,i)=>{const el=document.getElementById("o"+i);if(el)el.value=ch});
+  document.getElementById("o"+Math.min(3,d.length-1))?.focus();
+  if(d.length===4)document.getElementById("otpf").requestSubmit();
+});
+document.addEventListener("keydown",e=>{
+  const m=/^o(\d)$/.exec(e.target.id||""); if(m&&e.key==="Backspace"&&!e.target.value&&+m[1]>0)document.getElementById("o"+(+m[1]-1)).focus();
+});
+document.addEventListener("focusout",e=>{
+  if(e.target.id==="phone"){const d=e.target.value.replace(/\D/g,"").replace(/^383/,"").replace(/^0/,"");if(/^\d{8}$/.test(d)){e.target.value=d.replace(/^(\d{2})(\d{3})(\d{3})$/,"$1 $2 $3");S.form.phone=e.target.value}}
+});
 document.addEventListener("submit",e=>{
   e.preventDefault();
   if(e.target.id==="co"){
     const f=S.form; ["name","phone","city","addr","note"].forEach(k=>{const el=document.getElementById(k);if(el)f[k]=el.value.trim()});
     const ph=f.phone.replace(/\D/g,"").replace(/^383/,"").replace(/^0/,"");
     const bad={name:f.name.split(/\s+/).filter(Boolean).length<2,phone:!/^4[3-9]\d{6}$/.test(ph),city:!f.city,addr:f.addr.length<5};
-    let first=null;
-    for(const k in bad){document.getElementById("f-"+k).classList.toggle("bad",bad[k]);if(bad[k]&&!first)first=k}
-    if(first){document.getElementById(first).focus();return}
+    let firstBad=null;
+    for(const k in bad){document.getElementById("f-"+k).classList.toggle("bad",bad[k]);const el=document.getElementById(k);if(bad[k])el.setAttribute("aria-invalid","true");else el.removeAttribute("aria-invalid");if(bad[k]&&!firstBad)firstBad=k}
+    if(firstBad){document.getElementById(firstBad).focus();return}
     f.phone=ph.replace(/^(\d{2})(\d{3})(\d{3})$/,"$1 $2 $3");
-    S.code=String(1000+Math.floor(Math.random()*9000));
+    S.code=String(1000+Math.floor(Math.random()*9000)); S.sentAt=Date.now();
     location.hash="#verify";
   }
   if(e.target.id==="otpf"){
     const v=[0,1,2,3].map(i=>document.getElementById("o"+i).value).join("");
-    if(v!==S.code){document.getElementById("otpErr").hidden=false;document.getElementById("o0").focus();return}
-    const s=sub();
-    S.order={no:"KS-"+String(Date.now()).slice(-6),first:S.form.name.split(" ")[0],total:s+shipCost(s),city:S.form.city};
+    if(v!==S.code){document.getElementById("otpErr").hidden=false;[0,1,2,3].forEach(i=>document.getElementById("o"+i).value="");document.getElementById("o0").focus();return}
+    const s=sub(),sh=shipCost(s);
+    S.order={no:"KS-"+String(Date.now()).slice(-6),first:S.form.name.split(/\s+/)[0],name:S.form.name,addr:S.form.addr,city:S.form.city,phone:S.form.phone,items:S.cart.map(i=>({...i})),ship:sh,total:s+sh};
     S.cart=[];S.code="";save();location.hash="#done";
   }
 });
-document.addEventListener("input",e=>{
-  const m=/^o(\d)$/.exec(e.target.id||""); if(!m)return;
-  e.target.value=e.target.value.replace(/\D/g,"").slice(0,1);
-  if(e.target.value&&+m[1]<3)document.getElementById("o"+(+m[1]+1)).focus();
-});
-document.addEventListener("keydown",e=>{
-  const m=/^o(\d)$/.exec(e.target.id||""); if(m&&e.key==="Backspace"&&!e.target.value&&+m[1]>0)document.getElementById("o"+(+m[1]-1)).focus();
-});
-let lastH=location.hash;
-window.addEventListener("hashchange",()=>{route();if(!location.hash.startsWith("#shop")||lastH.startsWith("#p-"))window.scrollTo({top:0,behavior:"instant"});lastH=location.hash;
+window.addEventListener("hashchange",()=>{route();window.scrollTo({top:0,behavior:"instant"});
   if(location.hash==="#verify")setTimeout(()=>document.getElementById("o0")?.focus(),50)});
 route();
 })();
