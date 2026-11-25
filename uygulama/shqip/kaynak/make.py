@@ -29,6 +29,7 @@ from stories4 import STORIES4
 from gram import GRAM
 import csv, re
 from patterns import PATTERNS, NUMBERS
+from patterns2 import PATTERNS2, EXTRA_EX
 from verbs import VERBS, TENSES, PRON, rows as verb_rows
 
 OUT = os.path.dirname(HERE)
@@ -206,8 +207,26 @@ def filled(x, o): return re.sub(r"\s*\([^)]*\)", "", x.replace("___", o)).replac
 gram = [{"id": gid, "t": gt, "items": [dict(s=x, o=o, c=c, tr=tr, why=why, **{"full": filled(x, o[c])}, a=audio("gramer", filled(x, o[c])), k=tm(filled(x, o[c])))
          for x, o, c, tr, why in items]} for gid, gt, items in GRAM]
 # Teach-first pattern lessons (rule + illustrated colour-block examples + targeted gap drills)
+def split_blocks(text, target):
+    # compact examples: colour the target red (1) and the rest blue (0); trailing punctuation joins the block before it
+    i = text.find(target)
+    if i < 0: raise SystemExit(f"pattern target {target!r} not in {text!r}")
+    pre, post = text[:i].strip(), text[i + len(target):].strip()
+    out = [[pre, 0]] if pre else []
+    out.append([target, 1])
+    if post:
+        if re.fullmatch(r"[.!?,…:;]+", post): out[-1][0] += post
+        else: out.append([post, 0])
+    return out
+
+def expand_ex(e):
+    if isinstance(e[3], list): return e
+    who, mood, sc, sq, tr, sqt, trt = e
+    return (who, mood, sc, split_blocks(tr, trt), split_blocks(sq, sqt), sq, tr)
+
 pats = []
-for P_ in PATTERNS:
+for P_ in PATTERNS + PATTERNS2:
+    P_["ex"] = [expand_ex(e) for e in P_["ex"] + EXTRA_EX.get(P_["id"], [])]
     exs = [{"who": who, "mood": mood, "scene": sc, "trb": trb, "sqb": sqb, "sq": sq, "tr": tr, "a": audio("kalip", sq), "k": tm(sq)}
            for who, mood, sc, trb, sqb, sq, tr in P_["ex"]]
     drills = [dict(s=x, o=o, c=0, tr=tr, why=why, full=filled(x, o[0]), a=audio("kalip", filled(x, o[0])), k=tm(filled(x, o[0])))

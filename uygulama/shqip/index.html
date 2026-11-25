@@ -1142,7 +1142,7 @@ function startLesson(L) {
   const steps = [];
   const pat = PATS.find(x => x.unit === L.unit.id);
   if (pat && L.li === 0 && !practice) steps.push({ k: "teach", p: pat });
-  else if (L.li === 0 && !P.tipsSeen[L.unit.id]) steps.push({ k: "tip", u: L.unit });
+  else if ((L.li === 0 || (pat && L.li === 1)) && !P.tipsSeen[L.unit.id + ":tip"] && (L.unit.tips || []).length) steps.push({ k: "tip", u: L.unit });
   // 1. introduce each new item, immediately followed by hearing it again (recognition)
   let held = null;
   words.forEach(w => {
@@ -1511,7 +1511,7 @@ function tip(st, ui) {
   ui.body.append($(`<h2 class="prompt">${esc(u.t)}: bilmen gerekenler</h2>`));
   ui.body.append($(`<div class="tipbox" style="font-size:1.05rem">${u.tips.map(t => `<div>${t}</div>`).join("")}</div>`));
   ui.btn.disabled = false; ui.btn.textContent = "Anladım";
-  ui.btn.onclick = () => { P.tipsSeen[u.id] = 1; save(); LS.i++; renderStep(); };
+  ui.btn.onclick = () => { P.tipsSeen[u.id + ":tip"] = 1; save(); LS.i++; renderStep(); };
 }
 function bumpStreak() {
   const y = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
