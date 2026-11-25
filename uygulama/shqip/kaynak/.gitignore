@@ -3,3 +3,5 @@
 .clips-kokoro-*/
 .say.json
 .pairs.json
+.clips-zani/
+.zani-map.json

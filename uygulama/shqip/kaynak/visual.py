@@ -13,6 +13,8 @@ UNIT_LOOK = {  # id: (icon, hue)
  "koha2": ("⏳", 260), "kundersi": ("☯️", 300), "fiilet2": ("🤲", 20), "teknologji": ("📱", 220), "natyra": ("🌲", 130),
  "festat": ("🎊", 350), "kosova": ("🇽🇰", 215),
  "sira": ("🥇", 40), "shumes": ("📚", 195), "krahasim": ("📊", 265), "kibarlik": ("🎩", 20), "ardhme": ("🔮", 280), "kushti": ("🤔", 150), "kryer": ("✅", 120),
+ "tregues": ("👉", 60), "numrat2": ("📆", 205), "pesore": ("🪞", 290), "shumes2": ("👪", 330), "lidhore": ("🔗", 175), "modale": ("💪", 25), "eshdizime": ("🧩", 140),
+ "tregim": ("📖", 35), "habitore": ("😮", 310), "mendim": ("💭", 225),
  "sik1": ("⭐", 45), "sik2": ("👥", 200), "sik3": ("📣", 10), "sik4": ("🤝", 160), "sik5": ("💓", 335),
 }
 EXTRA_PICS = {
@@ -39,7 +41,7 @@ STORY_LOOK = {  # story id: cover scene
 }
 AVATARS = {  # speaker name -> avatar emoji
  "Mësuesja": "👩‍🏫", "Nxënësit": "🧒", "Arbeni": "👦", "Arturi": "🧑", "Dritani": "👦🏻", "Kamerieri": "🧑‍🍳", "Kamerierja": "👩‍🍳",
- "Ana": "👩", "Artani": "👨", "Recepsionisti": "🧑‍💼", "Shoferi": "🧔", "Pula": "🐔", "Shqiponja": "🦅", "Trajneri": "🧑‍🏫", "Nëna": "👩", "Shefja": "👩‍💼", "Punonjësja": "👩‍💼", "Fatmiri": "👨", "Të gjithë": "🎉", "Djali": "👦", "Unë": "🙂", "Lypësi": "🧓", "Talesi": "🧙", "Shitësi": "🧔", "Mjeku": "👨‍⚕️", "Pacienti": "🤒",
+ "Ana": "👩", "Artani": "👨", "Recepsionisti": "🧑‍💼", "Shoferi": "🧔", "Pula": "🐔", "Shqiponja": "🦅", "Erioni": "🧑", "Polici": "👮", "Shitësja": "👩‍💼", "Vajza": "👧", "Plaku": "🧓", "Sekretarja": "👩‍💼", "Farmacistja": "👩‍⚕️", "Shoqja": "👩", "Gjyshja": "👵", "Trajneri": "🧑‍🏫", "Nëna": "👩", "Shefja": "👩‍💼", "Punonjësja": "👩‍💼", "Fatmiri": "👨", "Të gjithë": "🎉", "Djali": "👦", "Unë": "🙂", "Lypësi": "🧓", "Talesi": "🧙", "Shitësi": "🧔", "Mjeku": "👨‍⚕️", "Pacienti": "🤒",
 }
 
-FEMALE = {"Mësuesja", "Kamerierja", "Ana", "Pula", "Shqiponja", "Nëna", "Shefja", "Punonjësja"}   # story speakers voiced by the female voice
+FEMALE = {"Mësuesja", "Kamerierja", "Ana", "Pula", "Shqiponja", "Nëna", "Shefja", "Punonjësja", "Shitësja", "Vajza", "Sekretarja", "Farmacistja", "Shoqja", "Gjyshja"}   # story speakers voiced by the female voice

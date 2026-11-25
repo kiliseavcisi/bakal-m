@@ -15,6 +15,12 @@ from a2 import UNITS3
 from a2_stories import STORIES3, ROLES
 from freq import UNITS_F
 from new_units import UNITS_N, MODULES
+from v5_units import UNITS_V5, PLACE, MODULE_B1, MODULE_ROLES, ROLES2, TEXTS, GRAM2
+MODULES = [list(M) for M in MODULES]
+for M in MODULES:
+    M[4] = list(M[4]) + [u for u, mid in PLACE.items() if mid == M[0]]
+    M[5] = list(M[5]) + MODULE_ROLES.get(M[0], [])
+MODULES.append(list(MODULE_B1))
 try:
     from story_gloss import STORY_GLOSS
 except ImportError:
@@ -57,8 +63,12 @@ def clip(text):
 GEMINI = os.path.join(HERE, ".clips-gemini")
 VOICE_DIR = os.path.join(HERE, os.environ.get("VOICE_DIR", ".clips-kokoro-agon"))      # main voice: Kokoro shqip "Agon" (male)
 ALT_DIR = os.path.join(HERE, os.environ.get("ALT_DIR", ".clips-kokoro-pf_dora"))       # second voice: Kokoro shqip + "Dora" style (female)
+# Real Kosovo voices from Zani (zani_kosova.py): these clips replace the synthetic ones for both talkers
+ZMAP_F = os.path.join(HERE, ".zani-map.json")
+ZMAP = {t: p for t, p in (json.load(open(ZMAP_F)).items() if os.path.exists(ZMAP_F) else []) if os.path.exists(p)}
 def tm(text):
     """word timings [[start, end], ...] for the main and the second voice (karaoke highlighting)"""
+    if text in ZMAP: return [None, None]          # no word timings for Zani clips: the whole line lights up
     key = hashlib.md5(text.encode()).hexdigest()[:10]
     out = []
     for d in (VOICE_DIR, ALT_DIR):
@@ -70,6 +80,10 @@ def audio(pack, text):
     key = hashlib.md5(text.encode()).hexdigest()[:10]
     chosen = os.path.join(VOICE_DIR, key + ".mp3")
     SAY.append(text)
+    if text in ZMAP:
+        b64 = base64.b64encode(open(ZMAP[text], "rb").read()).decode()
+        packs.setdefault(pack, {})[key] = b64; packs2.setdefault(pack, {})[key] = b64
+        return pack + "#" + key
     if NO_MMS and not (os.path.exists(chosen) and os.path.exists(os.path.join(ALT_DIR, key + ".mp3"))): return pack + "#" + key
     src = chosen if os.path.exists(chosen) else os.path.join(CACHE, clip(text) + ".mp3")   # fall back to MMS
     packs.setdefault(pack, {})[key] = base64.b64encode(open(src, "rb").read()).decode()
@@ -97,7 +111,7 @@ for uid, title, vid, vtitle, words, tips in UNITS3:
     units.append({"id": uid, "t": title, "season": 3, "lv": "A2", "tips": tips, "kos": uid == "kosova",
                   "ic": UNIT_LOOK[uid][0], "hue": UNIT_LOOK[uid][1],
                   "w": [{"sq": sq, "tr": tr, "p": p or EXTRA_PICS.get(sq, ""), "a": audio(uid, sq), "k": tm(sq), "m": MEMO.get(sq)} for sq, tr, p in words]})
-for uid, title, vid, vtitle, words, tips in UNITS_N:
+for uid, title, vid, vtitle, words, tips in UNITS_N + UNITS_V5:
     units.append({"id": uid, "t": title, "season": 2, "tips": tips,
                   "ic": UNIT_LOOK[uid][0], "hue": UNIT_LOOK[uid][1],
                   "w": [{"sq": sq, "tr": tr, "p": p or EXTRA_PICS.get(sq, ""), "a": audio(uid, sq), "k": tm(sq), "m": MEMO.get(sq)} for sq, tr, p in words]})
@@ -109,10 +123,13 @@ for u in units:
 mods = [{"id": mid, "t": mt, "lv": lv, "can": can, "units": us, "roles": rs,
          "wr": {"p": wp, "chk": chk, "sq": wsq, "tr": wtr, "a": audio("gorev", wsq), "k": tm(wsq)}}
         for mid, mt, lv, can, us, rs, (wp, chk, wsq, wtr) in MODULES]
+ROLES = ROLES + ROLES2
+GRAM = GRAM + GRAM2
+STORIES5 = [{"id": tid, "t": tt, "after": aft, "lv": lv, "cover": cov, "kind": "text", "lines": lines, "q": q} for tid, tt, aft, lv, cov, lines, q in TEXTS]
 stories = []
-for s in STORIES + STORIES2 + STORIES3 + STORIES4:
+for s in STORIES + STORIES2 + STORIES3 + STORIES4 + STORIES5:
     if "src" in s: used_videos.add(s["src"][0])
-    stories.append({"id": s["id"], "t": s["t"], "after": s["after"], "lv": s.get("lv") or ("A2" if s in STORIES3 else "A1"),
+    stories.append({"id": s["id"], "t": s["t"], "after": s["after"], "kind": s.get("kind", "story"), "lv": s.get("lv") or ("A2" if s in STORIES3 else "A1"),
                     "cover": s.get("cover") or STORY_LOOK.get(s["id"], "📖"),
                     "lines": [{"who": who, "av": AVATARS.get(who, ""), "f": who in FEMALE, "sq": sq, "tr": tr, "a": audio("s-" + s["id"], sq), "k": tm(sq)} for who, sq, tr in s["lines"]],
                     "q": [{"q": q, "o": o, "c": c} for q, o, c in s["q"]]})
@@ -254,7 +271,7 @@ for u in units:
 for s_ in stories: wanted.update(emoji_list(s_["cover"]))
 for r in roles: wanted.update(emoji_list(r["cover"] + r["av"]))
 wanted.update(emoji_list("🚶🫴🍽️🥤😴🗣️👀👂✍️📖🏃🏊🎤😂😢🚪🔒🤲🛍️🏷️💼🧠⏳❓💡🤔🤝🏁✅💭⏰🚿👕💇⚽🏆😞✋🪑"))
-wanted.update(emoji_list("🎤📓🎵🧬🏅⚡🧭🎞️👄🎬📝▶️🎶🧥🎼🪕😄😂🧸📰🚪⛲🌳🪑🏮🌉🗿🌾🏛️🗼🏰🚩⚓🛶⛵🐟🪝🧺🏠🌴⛪🌅🏡🐄🌻🪵🛖🐓🌲🍯🌄🦅🕌🧿🍵🧶⚖️🪔🏺🧵🥁🪞🕰️🗝️👨‍👩‍👧✈️💼✨🌱🌿👂⏱️🎯🎙️🗣️"))
+wanted.update(emoji_list("📊📋🪧💬🚌🌦️🧾📰💌🇹🇷🎞️❤️😴🔀✍️🗣️🎯⏱️🧠🔁🎧👉📆👪🔗💪🧩📖😮💭🕌🎤📓🎵🧬🏅⚡🧭🎞️👄🎬📝▶️🎶🧥🎼🪕😄😂🧸📰🚪⛲🌳🪑🏮🌉🗿🌾🏛️🗼🏰🚩⚓🛶⛵🐟🪝🧺🏠🌴⛪🌅🏡🐄🌻🪵🛖🐓🌲🍯🌄🦅🕌🧿🍵🧶⚖️🪔🏺🧵🥁🪞🕰️🗝️👨‍👩‍👧✈️💼✨🌱🌿👂⏱️🎯🎙️🗣️"))
 wanted.update(emoji_list("🗺️✏️🧠📈🎧🤸🎯🏛️✍️🔁🕌🌉⛰️⛏️🇽🇰🎙️📒🪞🤝📜💡⚠️🏰🏛️🏟️🧱🪟📚🇦🇱🪨🏖️🔥"))
 for e in sorted(wanted):
     svg = twemoji(e)
