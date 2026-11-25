@@ -10,6 +10,7 @@ from sezon2 import UNITS2, STORIES2, VIDEO_GROUPS
 from gloss import FUNCTION
 from visual import UNIT_LOOK, EXTRA_PICS, STORY_LOOK, AVATARS, FEMALE
 from pairs import PAIRS
+from memo import MEMO
 
 OUT = os.path.dirname(HERE)
 CACHE = os.path.join(HERE, ".clips"); os.makedirs(CACHE, exist_ok=True)
@@ -65,12 +66,12 @@ for uid, title, words in UNITS:
     vid, vtitle, tips = UNIT_INFO[uid]; used_videos.add(vid)
     units.append({"id": uid, "t": title, "season": 1, "tips": tips,
                   "ic": UNIT_LOOK[uid][0], "hue": UNIT_LOOK[uid][1],
-                  "w": [{"sq": sq, "tr": tr, "p": p or EXTRA_PICS.get(sq, ""), "a": audio(uid, sq), "k": tm(sq)} for sq, tr, p in words]})
+                  "w": [{"sq": sq, "tr": tr, "p": p or EXTRA_PICS.get(sq, ""), "a": audio(uid, sq), "k": tm(sq), "m": MEMO.get(sq)} for sq, tr, p in words]})
 for uid, title, vid, vtitle, words, tips in UNITS2:
     used_videos.add(vid)
     units.append({"id": uid, "t": title, "season": 2, "tips": tips,
                   "ic": UNIT_LOOK[uid][0], "hue": UNIT_LOOK[uid][1],
-                  "w": [{"sq": sq, "tr": tr, "p": p or EXTRA_PICS.get(sq, ""), "a": audio(uid, sq), "k": tm(sq)} for sq, tr, p in words]})
+                  "w": [{"sq": sq, "tr": tr, "p": p or EXTRA_PICS.get(sq, ""), "a": audio(uid, sq), "k": tm(sq), "m": MEMO.get(sq)} for sq, tr, p in words]})
 stories = []
 for s in STORIES + STORIES2:
     used_videos.add(s["src"][0])
@@ -109,6 +110,11 @@ pairs = [{"id": pid, "t": lbl, "tip": tip, "pairs": [[{"sq": a, "tr": at, "a": a
 os.makedirs(os.path.join(OUT, "packs2"), exist_ok=True)
 for name, d in packs2.items():
     json.dump(d, open(os.path.join(OUT, "packs2", name + ".json"), "w"), separators=(",", ":"))
+# Extra phrases spoken in the grammar "mirror" section
+EXTRA = ["Dua të pi ujë", "Jam nga Turqia", "Jam në shkollë", "Do të vij nesër", "Nuk flas shqip", "Unë flas turqisht",
+         "shtëpia ime", "vajzë e bukur", "me ty", "A je mirë?"]
+extra = [{"sq": x, "a": audio("ayna", x), "k": tm(x)} for x in EXTRA]
+
 # Illustrations: Twemoji SVGs (graphics CC BY 4.0, Twitter, Inc. and contributors) for every emoji the course uses
 TWEMOJI = os.environ.get("TWEMOJI_DIR", "/tmp/claude-0/twemoji/package")
 def emoji_list(txt):
@@ -134,6 +140,7 @@ for u in units:
     for w in u["w"]:
         if w["p"] and not w["p"].startswith(("#", "n:", "cal:", "sym:")): wanted.update(emoji_list(w["p"]))
 for s_ in stories: wanted.update(emoji_list(s_["cover"]))
+wanted.update(emoji_list("🪞🤝📜💡⚠️🏰🏛️🏟️🧱🪟📚🇦🇱🪨🏖️🔥"))
 for e in sorted(wanted):
     svg = twemoji(e)
     if svg: icons[e] = svg
@@ -143,6 +150,6 @@ print("icons", len(icons), "missing", missing)
 
 for name, d in packs.items():
     json.dump(d, open(os.path.join(OUT, "packs", name + ".json"), "w"), separators=(",", ":"))
-json.dump({"units": units, "stories": stories, "alpha": alpha, "gloss": gloss, "rev": rev, "pairs": pairs}, open(os.path.join(OUT, "data.json"), "w"), ensure_ascii=False, separators=(",", ":"))
+json.dump({"units": units, "stories": stories, "alpha": alpha, "gloss": gloss, "rev": rev, "pairs": pairs, "extra": extra}, open(os.path.join(OUT, "data.json"), "w"), ensure_ascii=False, separators=(",", ":"))
 print("voice clips", len(os.listdir(VOICE_DIR)) if os.path.isdir(VOICE_DIR) else 0, "units", len(units), "words", sum(len(u["w"]) for u in units), "stories", len(stories), "packs", len(packs),
       "clips", sum(len(p) for p in packs.values()))

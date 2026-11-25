@@ -422,6 +422,28 @@ nav.bottom button { font-size: .68rem; }
 .goal-hit { display: flex; flex-direction: column; align-items: center; gap: 2px; background: var(--gold-soft); border: 2px solid var(--gold); border-radius: 16px; padding: 10px 16px; font-size: 2rem; animation: pop .5s ease-out; }
 .goal-hit b { font-family: var(--f-display); font-size: 1.2rem; color: var(--fg); }
 .goal-hit span { font-size: .85rem; color: var(--muted); }
+
+.memo { border-radius: 16px; padding: 12px 14px; border: 2px solid var(--line); background: var(--surface); display: flex; flex-direction: column; gap: 4px; text-align: left; }
+.memo.sm { padding: 8px 12px; margin: 2px 0 4px; }
+.memo-k { font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+.memo-t { font-size: 1rem; line-height: 1.45; }
+.memo-t b { color: var(--accent); }
+.memo-tr { background: color-mix(in srgb, var(--good) 10%, var(--surface)); border-color: color-mix(in srgb, var(--good) 40%, var(--line)); }
+.memo-et { background: var(--gold-soft); border-color: color-mix(in srgb, var(--gold) 50%, var(--line)); }
+.memo-hk { background: color-mix(in srgb, var(--blue) 10%, var(--surface)); border-color: color-mix(in srgb, var(--blue) 40%, var(--line)); }
+.memo-dk { background: var(--accent-soft); border-color: var(--accent); }
+.sheet .memo { color: var(--fg); }
+.mirror-tip { align-self: flex-start; border: 2px dashed var(--line); border-radius: 99px; padding: 6px 14px; font-weight: 600; color: var(--blue); background: var(--surface); }
+.mirrors { display: flex; flex-direction: column; gap: 12px; }
+.mirror { border: 2px solid var(--line); border-radius: 16px; padding: 12px; display: flex; flex-direction: column; gap: 8px; background: var(--bg); }
+.mrow { display: flex; flex-wrap: wrap; gap: 6px; }
+.mrow.tr::before { content: "TR"; font-size: .7rem; font-weight: 700; color: var(--muted); align-self: center; width: 24px; }
+.mrow.sq::before { content: "SQ"; font-size: .7rem; font-weight: 700; color: var(--muted); align-self: center; width: 24px; }
+.mc { border-radius: 10px; padding: 6px 12px; font-weight: 700; font-family: var(--f-display); font-size: 1.05rem; color: #fff; }
+.mc.c0 { background: #2e7bd6; } .mc.c1 { background: #c8162f; } .mc.c2 { background: #3a9a46; }
+.marrow { font-size: 1.1rem; padding-left: 30px; opacity: .8; }
+.mnote { font-size: .9rem; color: var(--muted); }
+.mnote b { color: var(--fg); }
 </style>
 
 <div class="app" id="app"><p class="loading">Yükleniyor…</p></div>
@@ -602,12 +624,12 @@ function picMini(p) {
 const unitOf = w => UNITS.find(u => u.id === w.u) || { hue: 350, ic: "📘" };
 
 /* ---------- Course structure ---------- */
-let UNITS = [], LESSONS = [], STORIES = [], ALPHA = [], GLOSS = {}, REV = {}, PAIRS = [], ICONS = {};
+let UNITS = [], LESSONS = [], STORIES = [], ALPHA = [], GLOSS = {}, REV = {}, PAIRS = [], ICONS = {}, EXTRA = [];
 let TAB = "learn";
 const app = document.getElementById("app");
 Promise.all([fetch("data.json").then(r => r.json()), fetch("icons.json").then(r => r.json()).catch(() => ({}))]).then(([d, ic]) => {
   ICONS = ic;
-  UNITS = d.units; STORIES = d.stories; ALPHA = d.alpha; PAIRS = d.pairs || []; GLOSS = d.gloss; REV = d.rev;
+  UNITS = d.units; STORIES = d.stories; ALPHA = d.alpha; PAIRS = d.pairs || []; EXTRA = d.extra || []; GLOSS = d.gloss; REV = d.rev;
   UNITS.forEach((u, ui) => {
     u.w.forEach(w => w.u = u.id);
     const n = Math.ceil(u.w.length / 5), size = Math.ceil(u.w.length / n);
@@ -935,6 +957,7 @@ function resolve(ui, ok, correctText, st) {
   if (st && st.w) srsUpdate(st.w, ok);
   if (ok) { LS.right++; sfx.ok(); }
   else {
+    if (st && st.w && st.w.m) ui.sheet.querySelector(".fb").insertAdjacentHTML("afterend", memoBox(st.w.m, true));
     sfx.no(); LS.hearts--; ui.root.querySelector(".hearts").innerHTML = I.heart + LS.hearts;
     ui.body.classList.add("shake");
     if (st && st.k !== "match") LS.redo.push({ ...st });
@@ -966,6 +989,7 @@ function intro(st, ui) {
   const card = $(`<div class="intro pop" style="--h:${unitOf(w).hue}">${pic(w.p)}<div class="sq">${kara(w)}</div><div class="tr">${esc(w.tr)}</div></div>`);
   const sp = speakerRow(w); sp.style.justifyContent = "center"; card.append(sp);
   ui.body.append(card);
+  if (w.m) ui.body.append($(memoBox(w.m)));
   if (ex) {
     const exr = $(`<div class="example"><div class="k">Cümlede</div><div class="row"><button class="speaker sm" aria-label="Cümleyi dinle">${I.speaker}</button>
       <div><div class="s">${kara(ex)}</div><div class="t">${esc(ex.tr)}</div></div></div></div>`);
@@ -1091,6 +1115,7 @@ function build(st, ui, byEar = false) {
     setTimeout(() => sayVar(w), 250);
   } else {
     ui.body.append($(`<div class="tag">Cümleyi kur</div>`));
+    if (target.length >= 3) ui.body.append($(`<button class="mirror-tip" type="button">${icon("🪞")} Ayna ipucu</button>`));
     ui.body.append($(`<div class="speak-row">${w.p ? pic(w.p) : eagle(64)}<div class="bubble-say">${hint(w.tr, "tr")}</div></div>`));
   }
   const line = $(`<div class="answer-line" aria-label="Cevabın"></div>`);
@@ -1108,6 +1133,8 @@ function build(st, ui, byEar = false) {
     bank.append(tb);
   });
   ui.body.append(line, bank);
+  const mt = ui.body.querySelector(".mirror-tip");
+  if (mt) mt.onclick = () => { mt.outerHTML = `<div class="tipbox"><div>${icon("🪞")} Arnavutça çoğu zaman Türkçenin <b>aynası</b>dır: Türkçe cümleyi <b>sondan başa</b> düşün. Fiil öne gelir, ekler küçük kelimeler olarak kelimenin <b>önüne</b> geçer.</div></div>`; };
   ui.btn.onclick = () => {
     line.querySelectorAll("button").forEach(x => x.disabled = true); bank.querySelectorAll("button").forEach(x => x.disabled = true);
     const ok = norm(chosen.map(c => c.t).join(" ")) === norm(target.join(" "));
@@ -1377,6 +1404,7 @@ const G = (w, g) => `<span class="g-${g}">${w}</span>`;
 function grammarTab(view) {
   view.append($(`<h2 class="section-h">Gramer</h2>`));
   view.append($(`<p class="lead">Renkler cinsiyeti gösterir: <span class="g-m">eril</span> kelimeler mavi, <span class="g-f">dişil</span> kelimeler kırmızı. Renkle eşleştirmek cinsiyeti hatırlamayı kolaylaştırır. Arnavutça kelimelere dokununca dinleyebilirsin.</p>`));
+  mirrorSection(view);
   const sec = (title, body, note = "") => view.append($(`<details class="gsec"><summary>${title}</summary><div class="gbody">${body}${note ? `<div class="tipbox"><div>${note}</div></div>` : ""}</div></details>`));
   const tbl = (head, rows) => `<div class="gtable-wrap"><table class="gtable"><thead><tr>${head.map(h => `<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
   sec("1 · Cinsiyet ve belirli isim", tbl(["Belirsiz", "Belirli", "Türkçe"], [
@@ -1420,7 +1448,7 @@ function grammarTab(view) {
 /* grammar cells: play the clip if the phrase exists in the course, otherwise nothing */
 function playTTSFallback(text) {
   const key = text.toLowerCase().replace(/[.!?]/g, "").trim();
-  const w = allWords().find(x => x.sq.toLowerCase().replace(/[.!?]/g, "").trim() === key) || STORIES.flatMap(s => s.lines).find(x => x.sq.toLowerCase().replace(/[.!?]/g, "").trim() === key);
+  const w = [...allWords(), ...EXTRA].find(x => x.sq.toLowerCase().replace(/[.!?]/g, "").trim() === key) || STORIES.flatMap(s => s.lines).find(x => x.sq.toLowerCase().replace(/[.!?]/g, "").trim() === key);
   if (w) say(w); else sfx.tap();
 }
 
@@ -1593,6 +1621,54 @@ function celebrate(host, xp, goalHit) {
     host.prepend(g);
     setTimeout(() => tone([[523, .12, "triangle"], [659, .12, "triangle"], [784, .12, "triangle"], [1047, .12, "triangle"], [1319, .5, "triangle"]]), 500);
   }
+}
+
+
+/* ---------- Memory hooks: etymology, shared words, keyword stories, false friends ---------- */
+const MEMO_T = { tr: ["🤝", "Türkçeden tanıdık"], et: ["📜", "Kelimenin hikâyesi"], hk: ["💡", "Hafıza hikâyesi"], dk: ["⚠️", "Dikkat: yalancı dost"] };
+function memoBox(m, small = false) {
+  const [ic, label] = MEMO_T[m[0]] || MEMO_T.hk;
+  return `<div class="memo memo-${m[0]} ${small ? "sm" : ""}"><div class="memo-k">${icon(ic)} ${label}</div><div class="memo-t">${m[1]}</div></div>`;
+}
+
+/* ---------- Mirror: Turkish and Albanian build phrases in reverse order ---------- */
+const MIRROR = [
+  { tr: [["Su", 0], ["içmek", 1], ["istiyorum", 2]], sq: [["Dua", 2], ["të pi", 1], ["ujë", 0]], say: "Dua të pi ujë", note: "Tam ayna: Türkçenin son kelimesi Arnavutçada ilk sırada." },
+  { tr: [["Türkiye", 0], ["-den", 1], ["-im", 2]], sq: [["Jam", 2], ["nga", 1], ["Turqia", 0]], say: "Jam nga Turqia", note: "Türkçedeki ekler (-den, -im) Arnavutçada ayrı kelimelerdir ve <b>öne</b> geçer." },
+  { tr: [["Okul", 0], ["-da", 1], ["-yım", 2]], sq: [["Jam", 2], ["në", 1], ["shkollë", 0]], say: "Jam në shkollë", note: "“-da” eki → <b>në</b> edatı, “-yım” eki → <b>jam</b> fiili." },
+  { tr: [["Yarın", 0], ["gel", 1], ["-eceğim", 2]], sq: [["Do të", 2], ["vij", 1], ["nesër", 0]], say: "Do të vij nesër", note: "Gelecek zaman eki (-ecek) fiilin önüne <b>do të</b> olarak geçer." },
+  { tr: [["Arnavutça", 0], ["konuş", 1], ["-mu-yorum", 2]], sq: [["Nuk", 2], ["flas", 1], ["shqip", 0]], say: "Nuk flas shqip", note: "Olumsuzluk eki (-mu) fiilin önüne <b>nuk</b> olarak geçer." },
+  { tr: [["Ben", 0], ["Türkçe", 1], ["konuşuyorum", 2]], sq: [["Unë", 0], ["flas", 2], ["turqisht", 1]], say: "Unë flas turqisht", note: "Türkçede fiil sonda, Arnavutçada özneden hemen sonra." },
+  { tr: [["benim", 0], ["evim", 1]], sq: [["shtëpia", 1], ["ime", 0]], say: "shtëpia ime", note: "Sahiplik (benim) ismin <b>arkasına</b> geçer." },
+  { tr: [["güzel", 0], ["kız", 1]], sq: [["vajzë", 1], ["e bukur", 0]], say: "vajzë e bukur", note: "Sıfat ismin <b>arkasına</b> geçer ve önüne i/e alır." },
+  { tr: [["sen", 0], ["-inle", 1]], sq: [["me", 1], ["ty", 0]], say: "me ty", note: "“-le/-la” eki → <b>me</b> edatı, öne." },
+  { tr: [["İyi", 0], ["mi", 1], ["-sin?", 2]], sq: [["A", 1], ["je", 2], ["mirë?", 0]], say: "A je mirë?", note: "Soru eki “mi” cümlenin başına <b>A</b> olarak geçer." },
+];
+function mirrorSection(view) {
+  const box = $(`<details class="gsec" open><summary>${icon("🪞")} Tersten düşün: Arnavutça, Türkçenin aynası</summary><div class="gbody">
+    <p class="sub" style="margin:0">Türkçe ekleri kelimenin <b>sonuna</b> ekler ve fiili <b>sona</b> koyar. Arnavutça ise aynı bilgiyi küçük kelimelerle <b>öne</b> koyar. Çoğu cümleyi Türkçeden <b>sondan başa</b> çevirince Arnavutça sırayı bulursun. Aynı renkler aynı anlamdır; “Türkçe sırasıyla göster”e basıp kelimelerin nasıl yer değiştirdiğini izle.</p>
+    <div class="mirrors"></div></div></details>`);
+  const list = box.querySelector(".mirrors");
+  MIRROR.forEach(m => {
+    const card = $(`<div class="mirror"><div class="mrow tr">${m.tr.map(([t, c]) => `<span class="mc c${c}">${esc(t)}</span>`).join("")}</div>
+      <div class="marrow">${icon("🪞")}</div>
+      <div class="mrow sq">${m.sq.map(([t, c], i) => `<span class="mc c${c}" data-c="${c}">${esc(t)}</span>`).join("")}</div>
+      <div class="mnote">${m.note}</div>
+      <div class="row"><button class="chip mflip" type="button">Türkçe sırasıyla göster</button><button class="chip msay" type="button">${I.play}Dinle</button></div></div>`);
+    const row = card.querySelector(".mrow.sq"), chips = [...row.children];
+    let flipped = false;
+    card.querySelector(".mflip").onclick = e => {
+      flipped = !flipped;
+      const first = chips.map(c => c.getBoundingClientRect());
+      const order = flipped ? [...chips].sort((a, b) => a.dataset.c - b.dataset.c) : chips;
+      order.forEach(c => row.append(c));
+      chips.forEach((c, i) => { const last = c.getBoundingClientRect(), dx = first[i].left - last.left; c.animate([{ transform: `translateX(${dx}px)` }, { transform: "none" }], { duration: 450, easing: "cubic-bezier(.2,.8,.2,1)" }); });
+      e.currentTarget.textContent = flipped ? "Arnavutça sırasına dön" : "Türkçe sırasıyla göster";
+    };
+    card.querySelector(".msay").onclick = () => playTTSFallback(m.say);
+    list.append(card);
+  });
+  view.append(box);
 }
 
 /* ---------- Finish ---------- */

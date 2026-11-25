@@ -81,7 +81,7 @@ if SAMPLES:
 OUT = os.path.join(HERE, ".clips-kokoro-" + VOICE); os.makedirs(OUT, exist_ok=True)
 d = json.load(open(os.path.join(ROOT, "data.json")))
 texts = ([w["sq"] for u in d["units"] for w in u["w"]] + [l["sq"] for s in d["stories"] for l in s["lines"]] +
-         [a["ex"] for a in d["alpha"]] + [x["sq"] for p in d.get("pairs", []) for pr in p["pairs"] for x in pr])
+         [a["ex"] for a in d["alpha"]] + [x["sq"] for p in d.get("pairs", []) for pr in p["pairs"] for x in pr] + [x["sq"] for x in d.get("extra", [])])
 n = 0
 for t in dict.fromkeys(texts):
     dst = os.path.join(OUT, hashlib.md5(t.encode()).hexdigest()[:10] + ".mp3")
