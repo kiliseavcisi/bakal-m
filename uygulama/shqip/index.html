@@ -585,6 +585,14 @@ nav.bottom button { font-size: .68rem; }
 a.btn { text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; } a.btn .tw { width: 20px; height: 20px; }
 
 @media (max-width: 600px) { .stage { aspect-ratio: 4/5; } .actor { width: 30%; } .actor.a0 { left: 3%; } .actor.a1 { left: 35%; } .actor.a2 { right: 3%; } .subs .sq { font-size: 1.5rem; } }
+
+.sub-h { font-family: var(--f-display); font-size: 1.05rem; margin: 14px 0 6px; display: flex; gap: 6px; align-items: center; } .sub-h .tw { width: 20px; height: 20px; }
+.songbook { margin-bottom: 4px; }
+.sheet-card input.sg-t, .sheet-card input.sg-a { padding: 10px 12px; border-radius: 12px; border: 2px solid var(--line); background: var(--bg); color: var(--fg); font: inherit; }
+.lyr { display: flex; flex-direction: column; gap: 6px; padding: 14px; border-radius: 18px; background: var(--surface); border: 2px solid var(--line); font-size: 1.1rem; line-height: 1.5; }
+.ly.gapline { height: 8px; }
+.hw.gapw { color: transparent; background: var(--gold-soft); border-radius: 6px; border-bottom-color: var(--gold); } .hw.gapw.shown { color: inherit; background: color-mix(in srgb, var(--good) 18%, transparent); }
+.pw.added { border-color: var(--good); }
 </style>
 
 <div class="app" id="app"><p class="loading">Yükleniyor…</p></div>
@@ -634,7 +642,7 @@ const S = {
 };
 const today = () => new Date().toISOString().slice(0, 10);
 let P = S.get("shq-progress", { done: {}, xp: 0, streak: 0, last: "", day: "", dayXp: 0, seen: {} });
-P.srs = P.srs || {}; P.stories = P.stories || {}; P.tipsSeen = P.tipsSeen || {}; P.nb = P.nb || {}; P.roles = P.roles || {}; P.cap = P.cap || "after"; P.img = P.img || {}; P.hook = P.hook || {}; P.cando = P.cando || {}; P.checks = P.checks || []; P.scene = P.scene || {}; P.storyPrep = P.storyPrep || {}; P.writ = P.writ || {}; P.fast = P.fast || {};
+P.srs = P.srs || {}; P.stories = P.stories || {}; P.tipsSeen = P.tipsSeen || {}; P.nb = P.nb || {}; P.roles = P.roles || {}; P.cap = P.cap || "after"; P.img = P.img || {}; P.hook = P.hook || {}; P.cando = P.cando || {}; P.checks = P.checks || []; P.scene = P.scene || {}; P.storyPrep = P.storyPrep || {}; P.songs = P.songs || []; P.writ = P.writ || {}; P.fast = P.fast || {};
 if (P.day !== today()) { P.day = today(); P.dayXp = 0; }
 /* Spaced repetition: FSRS-style memory model (stability S in days, difficulty D 1..10).
    Recall probability R(t) = (1 + t / (9 S))^-1, so the next review at t = S keeps R ≈ 90%. Default FSRS-4.5 weights. */
@@ -1474,6 +1482,7 @@ document.addEventListener("click", e => {
   if (e.target.closest(".hint-pop")) return;
   const h = e.target.closest(".hw");
   closeHint();
+  if (h && h.classList.contains("gapw") && !h.classList.contains("shown")) return;
   if (!h) return;
   e.stopPropagation();
   const r = h.getBoundingClientRect();
@@ -2788,6 +2797,24 @@ function rulesSection() {
 }
 
 /* ---------- Culture corner: real songs and films, with tasks (we link, we do not copy) ---------- */
+const POP = [
+  { a: "Era Istrefi", t: "BonBon", y: 2016, g: "Kosova pop", note: "Uluslararası listelere giren ilk Kosova pop şarkılarından. Sözlerin çoğu Gegçe: Kosova konuşmasını tanımak için birebir.", words: [["bonbon", "şeker"], ["zemër", "kalp"]], kos: 1 },
+  { a: "Dhurata Dora ft. Soolking", t: "Zemër", y: 2019, g: "Kosova pop", note: "Arnavutça ve Fransızca karışık büyük bir hit. Arnavutça kısımlarda sevgi sözleri çok tekrar eder.", words: [["zemër", "kalp; canım (hitap)"], ["dua", "seviyorum"]], kos: 1 },
+  { a: "Dhurata Dora", t: "Pa mu", y: 2023, g: "Kosova pop", note: "Başlık Gegçe: <b>pa mu</b> = standart <i>pa mua</i> = bensiz. “pa” (-sız) edatını öğrenmek için güzel bir örnek.", words: [["pa", "-sız, olmadan"], ["mu / mua", "beni, ben (Gegçe / standart)"]], kos: 1 },
+  { a: "Elvana Gjata", t: "Me tana", y: 2017, g: "Arnavutluk pop", note: "Başlık Gegçe: <b>me tana</b> ≈ standart <i>me të gjitha</i> = hepsiyle, tüm varlığıyla.", words: [["me", "ile"], ["tana", "hepsi (Gegçe)"]] },
+  { a: "Genta Ismajli", t: "Tutje", y: 0, g: "Kosova pop", note: "Listelerde en tanınan şarkılardan biri olarak geçiyor. <b>tutje</b> = uzağa, öteye.", words: [["tutje", "uzağa, öteye"], ["larg", "uzak"]], kos: 1 },
+  { a: "Albatrit Muqiqi", t: "A po don", y: 0, g: "Kosova pop", note: "Başlık tam bir Gegçe soru: <b>A po don?</b> = standart <i>A do?</i> = İstiyor musun? (A … ? soru kalıbını hatırla).", words: [["a … ?", "soru eki (mi?)"], ["po don", "istiyorsun (Gegçe)"]], kos: 1 },
+  { a: "Noizy", t: "Gjithmonë", y: 0, g: "Rap / hip-hop", note: "Arnavut rap'inin en çok dinlenenlerinden. Rap hızlıdır: önce başlığı ve nakaratı yakalamayı hedefle.", words: [["gjithmonë", "her zaman"]] },
+  { a: "Shkumbin Ismaili", t: "Sa me vjen inat", y: 0, g: "Kosova pop", note: "<b>inat</b> Türkçeden geçmiş: “Sa më vjen inat!” = Ne kadar sinirleniyorum! Duygu ifadeleri için güzel.", words: [["sa", "ne kadar"], ["më vjen inat", "sinirleniyorum (inat ediyorum)"]], kos: 1 },
+  { a: "Ledri Vula", t: "Bling", y: 0, g: "Kosova rap / pop", note: "Son yılların çok dinlenen parçalarından; günlük konuşma dili ve argo bol.", words: [] , kos: 1 },
+  { a: "Tuna ft. Bardhi", t: "Xhelov", y: 0, g: "Pop", note: "Kuzey Makedonya'lı Arnavut sanatçı Tuna'nın parlak bir pop şarkısı; <b>xhelov</b> = kıskanç (İng. <i>jealous</i>'tan, Arnavutça yazımla).", words: [["xhelos / xhelov", "kıskanç (argo)"]] },
+  { a: "Jonida Maliqi", t: "Ktheju tokës", y: 2019, g: "Eurovision", note: "Arnavutluk'un 2019 Eurovision şarkısı, tamamen Arnavutça. Göç eden insanlara “toprağına dön” diye seslenir.", words: [["ktheju", "dön (emir)"], ["tokës", "toprağa (tokë = toprak)"]] },
+  { a: "Rona Nishliu", t: "Suus", y: 2012, g: "Eurovision", note: "2012 Eurovision'da 5. olan, Arnavutça söylenmiş güçlü bir balad. Başlık Latince ama sözler Arnavutça.", words: [["zë", "ses"]] },
+  { a: "Arilena Ara", t: "Shaj", y: 2020, g: "Eurovision", note: "2020 için seçilen Arnavutça versiyon. <b>shaj</b> = söverim, lanet ederim; öfkeli bir aşk şarkısı.", words: [["shaj", "söverim, lanet ederim"]] },
+  { a: "Anxhela Peristeri", t: "Karma", y: 2021, g: "Eurovision", note: "2021 Eurovision'da Arnavutça söylendi; geleneksel güney ezgileriyle modern pop karışımı.", words: [["karma", "karma"], ["shpirt", "ruh"]] },
+  { a: "Albina & Familja Kelmendi", t: "Duje", y: 2023, g: "Eurovision · Gegçe", note: "Kosova kökenli bir ailenin söylediği, 2023'te Arnavutluk'u temsil eden şarkı. Sözler Gegçe ağırlıklı: Kosova konuşmasını duymak için çok iyi.", words: [], kos: 1 },
+  { a: "Shkodra Elektronike", t: "Zjerm", y: 2025, g: "Eurovision · Gegçe", note: "İşkodra'nın kuzey lehçesiyle söylenmiş elektronik halk şarkısı. <b>zjerm</b> = standart <i>zjarr</i> = ateş: Gegçenin ses farkına güzel örnek.", words: [["zjerm / zjarr", "ateş (Gegçe / standart)"]] },
+];
 const CULTURE = [
   { e: "🎶", k: "Halk türküsü", t: "Moj e bukura More", q: "Moj e bukura More", note: "İtalya'daki Arbëresh'lerin, yani 15. yüzyılda Balkanlardan göç eden Arnavutların, geride kalan vatana, Mora'ya duydukları özlemi anlatan türküsü. Anonimdir, kuşaktan kuşağa aktarılır.", words: [["e bukur", "güzel"], ["moj", "ey (kadına seslenme)"]], tasks: ["Başlıktaki üç kelimeyi kaç kez duydun? Say.", "Ruh hâli hangisi: hüzünlü mü, neşeli mi?", "“e bukur”u duyduğunda dur ve tekrar et."] },
   { e: "🧥", k: "Halk şarkısı", t: "Xhamadani vija-vija", q: "Xhamadani vija vija", note: "Geleneksel halk şarkısı. Xhamadan, işlemeli geleneksel yelektir; “vija-vija” çizgi çizgi demek. Düğünlerde ve bayramlarda sık söylenir.", words: [["xhamadan", "geleneksel yelek"], ["vija", "çizgiler"]], tasks: ["Nakaratı bul: hangi satır tekrar ediyor?", "Ritmi el çırparak takip et.", "Tanıdığın 3 kelimeyi yaz."] },
@@ -2800,7 +2827,16 @@ const CULTURE = [
   { e: "📰", k: "A2 ve üstü", t: "Haberler (lajme)", q: "lajme RTSH", note: "Arnavutluk devlet kanalı RTSH ve Kosova RTK haberleri. Haber dili yavaş ve düzgündür; başlıklar sık tekrar eder.", words: [["lajme", "haberler"], ["qeveria", "hükümet"], ["moti", "hava durumu"]], tasks: ["Sadece hava durumunu (moti) izle: şehir ve sıcaklıkları yakala.", "Bir haberin başlığını Türkçeye çevir."] },
 ];
 function cultureSection() {
-  const box = $(`<div><h2 class="section-h">Kültür köşesi: şarkılar ve filmler</h2><p class="lead">Gerçek Arnavutça: türküler, klasik filmler, çizgi filmler, haberler. Telif hakkı nedeniyle içeriği kopyalamıyoruz; YouTube'da açılır. Her kartta dinlemeden önce kelimeler ve dinlerken görevler var.</p><div class="story-list cult"></div></div>`);
+  const box = $(`<div><h2 class="section-h">Şarkılar, filmler, kültür</h2><p class="lead">Gerçek Arnavutça: pop, rap, Eurovision, türküler, filmler. Şarkılar YouTube'da açılır; sözlerini “Şarkı defteri”ne yapıştırırsan uygulama onları çalışma metnine çevirir.</p>
+    <div class="story-list songbook"></div><h3 class="sub-h">${icon("🎤")} Pop ve rap</h3><div class="story-list popl"></div><h3 class="sub-h">${icon("🎶")} Türküler, filmler, gelenek</h3><div class="story-list cult"></div></div>`);
+  const sb = $(`<button class="story-card"><span class="ic cover">${icon("📓")}</span><span><span class="t">Şarkı defteri · ${P.songs.length} şarkı</span><br><span class="s">Sözleri yapıştır: her kelimeye dokununca anlamı, bilinmeyenleri deftere ekleme, boşluk doldurma.</span></span></button>`);
+  sb.onclick = songBook; box.querySelector(".songbook").append(sb);
+  const pl = box.querySelector(".popl");
+  POP.forEach((c, pi) => {
+    const done = (P.popd || {})[pi];
+    const b = $(`<button class="story-card ${done ? "done" : ""}"><span class="ic cover">${icon(c.kos ? "🇽🇰" : "🎤")}</span><span><span class="t">${esc(c.t)}${done ? " ✓" : ""}</span><br><span class="s">${esc(c.a)} · ${esc(c.g)}${c.y ? " · " + c.y : ""}</span></span></button>`);
+    b.onclick = () => openPop(c, pi); pl.append(b);
+  });
   const list = box.querySelector(".cult");
   CULTURE.forEach((c, ci) => {
     const done = (P.cult || {})[ci];
@@ -2820,6 +2856,80 @@ function cultureSection() {
     list.append(b);
   });
   return box;
+}
+
+
+/* ---------- Pop songs: listen with a task, then study the lyrics in the song book ---------- */
+const POP_TASKS = ["Önce sadece dinle: başlık kelimesi kaç kez geçiyor? Say.", "Nakaratı bul ve onunla birlikte söyle (gölgeleme).", "Tanıdığın 5 kelimeyi yakala ve deftere yaz.", "Sözlü versiyonu aç, bir kıtayı Şarkı defterine yapıştırıp çalış."];
+function openPop(c, pi) {
+  const yt = q => "https://www.youtube.com/results?search_query=" + encodeURIComponent(q);
+  const ov = $(`<div class="overlay" role="dialog" aria-label="${esc(c.t)}"><div class="sheet-card"><div class="memo-k">${icon(c.kos ? "🇽🇰" : "🎤")} ${esc(c.g)}${c.y ? " · " + c.y : ""}</div>
+    <h2 class="section-h" style="margin:0">${esc(c.t)} <small style="color:var(--muted);font-weight:500">· ${esc(c.a)}</small></h2>
+    <p style="margin:0">${c.note}</p>
+    ${c.words.length ? `<div><b>Önce bu kelimeler</b><div class="prelist">${c.words.map(([a, t]) => `<button class="pw" type="button" data-s="${esc(a)}"><b>${esc(a)}</b><span>${esc(t)}</span></button>`).join("")}</div></div>` : ""}
+    ${c.kos ? `<div class="tipbox"><div>${icon("🇽🇰")} Gegçe dinle: sondaki <b>ë</b> düşer, <b>â</b> gibi genizden sesler, <b>me + fiil</b> mastarı. Kosova ünitesindeki karşılıkları hatırla.</div></div>` : ""}
+    <div><b>Görevlerin</b><div class="chk">${POP_TASKS.map(t => `<label class="ci"><input type="checkbox"> ${esc(t)}</label>`).join("")}</div></div>
+    <div class="grid2"><a class="btn" href="${yt(c.a + " " + c.t + " official video")}" target="_blank" rel="noopener">${icon("▶️")} Klip</a><a class="btn ghost" href="${yt(c.a + " " + c.t + " tekst lyrics")}" target="_blank" rel="noopener">${icon("📝")} Sözlü</a></div>
+    <div class="grid2"><button class="btn ghost addsong">${icon("📓")} Deftere ekle</button><button class="btn ghost close">Kapat</button></div></div></div>`);
+  ov.querySelectorAll(".pw").forEach(x => x.onclick = () => playTTSFallback(x.dataset.s));
+  ov.querySelectorAll(".ci input").forEach(x => x.onchange = () => { if ([...ov.querySelectorAll(".ci input")].every(y => y.checked)) { P.popd = P.popd || {}; if (!P.popd[pi]) { P.popd[pi] = 1; const xp = 5; P.xp += xp; P.dayXp += xp; logDay(xp); save(); sfx.win(); } } });
+  ov.querySelector(".addsong").onclick = () => { ov.remove(); songEdit({ title: c.t, artist: c.a, text: "" }); };
+  ov.querySelector(".close").onclick = () => ov.remove(); ov.onclick = e => { if (e.target === ov) ov.remove(); };
+  document.body.append(ov);
+}
+function songBook() {
+  if (curAudio) curAudio.pause();
+  app.replaceChildren();
+  const el = $(`<div class="lesson"><div class="l-top"><button class="x" aria-label="Kapat">${I.x}</button><div style="flex:1;font-family:var(--f-display);font-weight:700">${icon("📓")} Şarkı defteri</div></div>
+    <div class="l-body"><p class="sub" style="margin:0">Sevdiğin bir şarkının sözlerini (ya da herhangi bir Arnavutça metni) buraya yapıştır. Uygulama her kelimenin anlamını bulmaya çalışır; bilinmeyenleri kendi çevirinle deftere eklersin. Şarkılar sadece bu cihazda saklanır.</p>
+      <button class="btn">+ Yeni şarkı / metin</button><div class="story-list sl"></div></div></div>`);
+  el.querySelector(".x").onclick = () => home("stories");
+  el.querySelector(".btn").onclick = () => songEdit({ title: "", artist: "", text: "" });
+  const sl = el.querySelector(".sl");
+  if (!P.songs.length) sl.append($(`<p class="sub">Henüz şarkı yok. Pop listesinden bir şarkı seç, “Sözlü” videosunu aç, sözleri buraya yapıştır.</p>`));
+  P.songs.forEach((sg, i) => { const b = $(`<button class="story-card"><span class="ic cover">${icon("🎵")}</span><span><span class="t">${esc(sg.title || "Adsız")}</span><br><span class="s">${esc(sg.artist || "")} · ${sg.text.split(/\n/).filter(Boolean).length} satır · %${songCoverage(sg.text)} tanıdık</span></span></button>`); b.onclick = () => songStudy(i); sl.append(b); });
+  app.append(el);
+}
+function songEdit(sg, idx) {
+  const ov = $(`<div class="overlay" role="dialog" aria-label="Şarkı"><div class="sheet-card"><h2 class="section-h" style="margin:0">${idx === undefined ? "Yeni şarkı" : "Şarkıyı düzenle"}</h2>
+    <input class="sg-t" placeholder="Şarkı adı" value="${esc(sg.title)}"><input class="sg-a" placeholder="Sanatçı" value="${esc(sg.artist)}">
+    <textarea class="wbox sg-x" rows="10" lang="sq" placeholder="Sözleri buraya yapıştır…">${esc(sg.text)}</textarea>
+    <div class="grid2"><button class="btn ghost cancel">Vazgeç</button><button class="btn good ok">Kaydet</button></div>${idx !== undefined ? `<button class="btn bad del">Sil</button>` : ""}</div></div>`);
+  ov.querySelector(".cancel").onclick = () => ov.remove();
+  ov.querySelector(".ok").onclick = () => {
+    const n = { title: ov.querySelector(".sg-t").value.trim(), artist: ov.querySelector(".sg-a").value.trim(), text: ov.querySelector(".sg-x").value.replace(/\r/g, "").trim() };
+    if (!n.text) return ov.querySelector(".sg-x").focus();
+    if (idx === undefined) P.songs.push(n); else P.songs[idx] = n;
+    try { save(); } catch { alert("Cihazda yer kalmadı."); return; }
+    ov.remove(); songStudy(idx === undefined ? P.songs.length - 1 : idx);
+  };
+  const d = ov.querySelector(".del"); if (d) d.onclick = () => { if (confirm("Silinsin mi?")) { P.songs.splice(idx, 1); save(); ov.remove(); songBook(); } };
+  document.body.append(ov); ov.querySelector(idx === undefined && !sg.title ? ".sg-t" : ".sg-x").focus();
+}
+const songTok = t => (t.toLowerCase().match(/[a-zëçâêîôû]+/g) || []);
+function songKnown(t) { return !!(GLOSS[t] || P.nb[t] || lookup([t], 0, GLOSS)); }
+function songCoverage(text) { const ts = songTok(text); return ts.length ? Math.round(ts.filter(songKnown).length / ts.length * 100) : 0; }
+function songStudy(i) {
+  const sg = P.songs[i]; if (!sg) return songBook();
+  if (curAudio) curAudio.pause();
+  app.replaceChildren();
+  const lines = sg.text.split("\n");
+  const unknown = [...new Set(songTok(sg.text).filter(t => !songKnown(t) && t.length > 1))];
+  const el = $(`<div class="lesson"><div class="l-top"><button class="x" aria-label="Kapat">${I.x}</button><div style="flex:1;font-family:var(--f-display);font-weight:700">${icon("🎵")} ${esc(sg.title || "Şarkı")}</div><button class="chip ed" type="button">Düzenle</button></div>
+    <div class="l-body"><div class="sub">${esc(sg.artist || "")} · kelimelerin <b>%${songCoverage(sg.text)}</b>'i tanıdık · altı noktalı kelimeye dokun</div>
+      <div class="unit-tools" style="margin:0"><button class="chip gapm" type="button" aria-pressed="false">Boşluk modu</button>${sg.artist || sg.title ? `<a class="chip" href="https://www.youtube.com/results?search_query=${encodeURIComponent((sg.artist + " " + sg.title).trim())}" target="_blank" rel="noopener">${I.play}YouTube</a>` : ""}</div>
+      <div class="lyr">${lines.map(l => l.trim() ? `<div class="ly">${hint(l, "sq")}</div>` : `<div class="ly gapline"></div>`).join("")}</div>
+      ${unknown.length ? `<div><b>Sözlükte olmayan kelimeler (${unknown.length})</b><div class="sub">Anlamını biliyorsan ya da öğrendiysen dokun ve kendi çevirinle deftere ekle.</div><div class="prelist unk">${unknown.slice(0, 80).map(t => `<button class="pw" type="button" data-t="${esc(t)}"><b>${esc(t)}</b><span>+ deftere</span></button>`).join("")}</div></div>` : ""}</div></div>`);
+  el.querySelector(".x").onclick = songBook;
+  el.querySelector(".ed").onclick = () => songEdit(sg, i);
+  el.querySelectorAll(".unk .pw").forEach(b => b.onclick = () => { const t = b.dataset.t, tr = prompt(`“${t}” ne demek? (Türkçe)`); if (!tr) return; P.nb[t] = { sq: t, tr: tr.trim(), t: Date.now() }; save(); b.querySelector("span").textContent = tr; b.classList.add("added"); sfx.ok(); });
+  // cloze mode: every 4th glossed word becomes a gap you reveal by tapping (retrieval while singing along)
+  el.querySelector(".gapm").onclick = e => {
+    const on = e.currentTarget.getAttribute("aria-pressed") !== "true"; e.currentTarget.setAttribute("aria-pressed", String(on));
+    let k = 0; el.querySelectorAll(".lyr .hw").forEach(h => { if (on && ++k % 4 === 0) h.classList.add("gapw"); else h.classList.remove("gapw", "shown"); });
+  };
+  el.querySelector(".lyr").addEventListener("click", e => { const h = e.target.closest(".gapw"); if (h && !h.classList.contains("shown")) { e.stopPropagation(); h.classList.add("shown"); } }, true);
+  app.append(el);
 }
 
 /* ---------- Finish ---------- */

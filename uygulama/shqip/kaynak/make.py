@@ -254,7 +254,7 @@ for u in units:
 for s_ in stories: wanted.update(emoji_list(s_["cover"]))
 for r in roles: wanted.update(emoji_list(r["cover"] + r["av"]))
 wanted.update(emoji_list("🚶🫴🍽️🥤😴🗣️👀👂✍️📖🏃🏊🎤😂😢🚪🔒🤲🛍️🏷️💼🧠⏳❓💡🤔🤝🏁✅💭⏰🚿👕💇⚽🏆😞✋🪑"))
-wanted.update(emoji_list("🧬🏅⚡🧭🎞️👄🎬📝▶️🎶🧥🎼🪕😄😂🧸📰🚪⛲🌳🪑🏮🌉🗿🌾🏛️🗼🏰🚩⚓🛶⛵🐟🪝🧺🏠🌴⛪🌅🏡🐄🌻🪵🛖🐓🌲🍯🌄🦅🕌🧿🍵🧶⚖️🪔🏺🧵🥁🪞🕰️🗝️👨‍👩‍👧✈️💼✨🌱🌿👂⏱️🎯🎙️🗣️"))
+wanted.update(emoji_list("🎤📓🎵🧬🏅⚡🧭🎞️👄🎬📝▶️🎶🧥🎼🪕😄😂🧸📰🚪⛲🌳🪑🏮🌉🗿🌾🏛️🗼🏰🚩⚓🛶⛵🐟🪝🧺🏠🌴⛪🌅🏡🐄🌻🪵🛖🐓🌲🍯🌄🦅🕌🧿🍵🧶⚖️🪔🏺🧵🥁🪞🕰️🗝️👨‍👩‍👧✈️💼✨🌱🌿👂⏱️🎯🎙️🗣️"))
 wanted.update(emoji_list("🗺️✏️🧠📈🎧🤸🎯🏛️✍️🔁🕌🌉⛰️⛏️🇽🇰🎙️📒🪞🤝📜💡⚠️🏰🏛️🏟️🧱🪟📚🇦🇱🪨🏖️🔥"))
 for e in sorted(wanted):
     svg = twemoji(e)
