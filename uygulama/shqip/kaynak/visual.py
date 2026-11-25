@@ -12,6 +12,7 @@ UNIT_LOOK = {  # id: (icon, hue)
  "puna": ("💼", 240), "hobi": ("⚽", 120), "shendeti": ("💊", 175), "blerje": ("🛍️", 330), "udhetim": ("🧳", 195),
  "koha2": ("⏳", 260), "kundersi": ("☯️", 300), "fiilet2": ("🤲", 20), "teknologji": ("📱", 220), "natyra": ("🌲", 130),
  "festat": ("🎊", 350), "kosova": ("🇽🇰", 215),
+ "sira": ("🥇", 40), "shumes": ("📚", 195), "krahasim": ("📊", 265), "kibarlik": ("🎩", 20), "ardhme": ("🔮", 280), "kushti": ("🤔", 150), "kryer": ("✅", 120),
  "sik1": ("⭐", 45), "sik2": ("👥", 200), "sik3": ("📣", 10), "sik4": ("🤝", 160), "sik5": ("💓", 335),
 }
 EXTRA_PICS = {

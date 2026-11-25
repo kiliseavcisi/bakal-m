@@ -1,0 +1,25 @@
+# Turkish glosses for inflected forms in the stories that the course dictionary does not cover
+# (shown in the "before you read" list of each story).
+STORY_GLOSS = {
+ "arriti": "vardı", "artin": "sanatı", "askënd": "kimseyi", "biri": "oğlu (biri im = oğlum)", "blen": "satın alır", "bë": "oldu (u bë)",
+ "ditëlindja": "doğum günü", "djema": "çocuklar! (hitap)", "doni": "istiyorsunuz", "dritën": "ışığı", "duhet": "gerek, lazım", "dukej": "görünüyordu",
+ "dyshe": "iki kişilik", "eci": "yürüdü", "ecte": "yürürdü", "emrin": "adı(nı)", "erdhe": "geldin", "filloni": "başlayabilirsiniz / başlayın",
+ "fluturoi": "uçtu", "formular": "form", "fshatar": "köylü", "gabuar": "yanlış", "gjeti": "buldu", "gjithë": "bütün, tüm",
+ "gjuhë": "dil", "gol": "gol", "harruar": "unutmuş", "heroi": "kahraman", "huaja": "yabancı", "humbur": "kaybolmuş",
+ "interesante": "ilginç", "jep": "verir; ver!", "jepnin": "verirlerdi", "kaluar": "geçen", "kohën": "zamanı", "kolegët": "iş arkadaşları",
+ "kombëtar": "millî", "kompania": "şirket", "kotec": "kümes", "krahët": "kanatları", "krerë": "baş (çift başlı)", "kryeqytetin": "başkenti",
+ "kthehej": "dönüyordu", "kthehet": "döner", "kthehuni": "dönün", "kthye": "döndü (u kthye)", "kushtojnë": "fiyatı (ne kadar) tutuyor", "kështjellën": "kaleyi",
+ "larg": "uzak", "largëta": "uzak (çoğul)", "lot": "gözyaşı", "luftës": "savaşın", "majta": "sol (e majta)", "makiato": "makyato",
+ "male": "dağlar", "mami": "anne (hitap)", "mbi": "üstünde", "mbretëresha": "kraliçe", "mbrojti": "savundu", "mendon": "düşünür, sanır",
+ "mendonte": "sanıyordu", "mirat": "iyileri", "misri": "mısır", "mori": "aldı; bindi", "mësoi": "öğrendi", "ndezi": "yaktı",
+ "ngjyre": "renk", "ngriti": "kaldırdı", "njihte": "tanıyordu", "numër": "numara", "nëntor": "kasım", "nëpër": "içinden, boyunca",
+ "oh": "ah!", "orë": "saat", "paguajnë": "öderler", "pallatin": "sarayı", "pas": "sonra", "pavarur": "bağımsız",
+ "pazar": "pazar (çarşı)", "plak": "yaşlı adam", "plot": "dolu", "plotësoni": "doldurun", "priste": "bekliyordu", "projekte": "projeler",
+ "provoni": "denemek", "pulat": "tavuklar", "punoni": "çalışmak (siz)", "punonte": "çalışıyordu", "përvojë": "deneyim", "qendër": "merkez",
+ "quajtur": "adlandırılan", "ra": "düştü; yağdı", "respekt": "saygı", "rreth": "yaklaşık; etrafında", "rrit": "büyüdü (u rrit)", "shkoi": "gitti",
+ "shkëlqyeshëm": "harika", "shohim": "görelim, bakalım", "shpëtoi": "kurtardı", "shqetësoni": "endişelenin (mos u shqetësoni = endişelenmeyin)", "shqiponje": "kartal", "shqiptarëve": "Arnavutların",
+ "shqipërisë": "Arnavutluk'un", "shtrat": "yatak", "shënoj": "atayım (gol)", "sime": "benim (jetës sime = hayatımın)", "sjellim": "getirelim, getireceğiz", "skënderbe": "İskender Bey",
+ "sulltanit": "sultanın", "surprizë": "sürpriz", "së": "-nın (bağlaç)", "te": "-e, yanına", "terezë": "Teresa", "tetëdhjetë": "seksen",
+ "time": "benim (dişil)", "tonë": "bizim", "topin": "topu", "trajner": "antrenör", "tregoni": "anlatın", "vazhdoni": "devam edin",
+ "vjetra": "eski (çoğul)", "vjetësh": "yıl (… yıl sonra)", "vuri": "koydu",
+}

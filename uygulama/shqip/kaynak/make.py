@@ -14,6 +14,11 @@ from memo import MEMO
 from a2 import UNITS3
 from a2_stories import STORIES3, ROLES
 from freq import UNITS_F
+from new_units import UNITS_N, MODULES
+try:
+    from story_gloss import STORY_GLOSS
+except ImportError:
+    STORY_GLOSS = {}
 from stories4 import STORIES4
 from gram import GRAM
 import csv, re
@@ -92,6 +97,18 @@ for uid, title, vid, vtitle, words, tips in UNITS3:
     units.append({"id": uid, "t": title, "season": 3, "lv": "A2", "tips": tips, "kos": uid == "kosova",
                   "ic": UNIT_LOOK[uid][0], "hue": UNIT_LOOK[uid][1],
                   "w": [{"sq": sq, "tr": tr, "p": p or EXTRA_PICS.get(sq, ""), "a": audio(uid, sq), "k": tm(sq), "m": MEMO.get(sq)} for sq, tr, p in words]})
+for uid, title, vid, vtitle, words, tips in UNITS_N:
+    units.append({"id": uid, "t": title, "season": 2, "tips": tips,
+                  "ic": UNIT_LOOK[uid][0], "hue": UNIT_LOOK[uid][1],
+                  "w": [{"sq": sq, "tr": tr, "p": p or EXTRA_PICS.get(sq, ""), "a": audio(uid, sq), "k": tm(sq), "m": MEMO.get(sq)} for sq, tr, p in words]})
+# Curriculum order: 14 modules (A1 = 9 stops in Albania, A2 = 5 in Kosovo), each with a can-do goal and a mission
+ORDER = {uid: (mi, k) for mi, M in enumerate(MODULES) for k, uid in enumerate(M[4])}
+units.sort(key=lambda u: ORDER[u["id"]])
+for u in units:
+    mi = ORDER[u["id"]][0]; u["mod"] = mi; u["lv"] = MODULES[mi][2]; u["season"] = 3 if u["lv"] == "A2" else 2
+mods = [{"id": mid, "t": mt, "lv": lv, "can": can, "units": us, "roles": rs,
+         "wr": {"p": wp, "chk": chk, "sq": wsq, "tr": wtr, "a": audio("gorev", wsq), "k": tm(wsq)}}
+        for mid, mt, lv, can, us, rs, (wp, chk, wsq, wtr) in MODULES]
 stories = []
 for s in STORIES + STORIES2 + STORIES3 + STORIES4:
     if "src" in s: used_videos.add(s["src"][0])
@@ -119,11 +136,40 @@ for u in units:
             gloss.setdefault(k, w["tr"])
             if k.startswith(("i ", "e ")): gloss.setdefault(k[2:], w["tr"])
 gloss.update(FUNCTION)
+for k_, v_ in STORY_GLOSS.items(): gloss.setdefault(k_, v_)
 rev = {}
 for u in units:
     for w in u["w"]:
         t = w["tr"].lower().split(" (")[0].split(",")[0].split(" / ")[0].strip("?!. ")
         if " " not in t and " " not in w["sq"].strip("?!. "): rev.setdefault(t, w["sq"].strip("?!. "))
+
+TOKR = re.compile(r"[a-zëç]+")
+def look(t):
+    if t in STORY_GLOSS: return STORY_GLOSS[t]
+    if t in gloss: return gloss[t]
+    for suf in ("ave", "ëve", "it", "in", "ës", "ën", "ja", "në", "të", "ve", "a", "i", "u", "t", "n"):
+        if t.endswith(suf) and len(t) - len(suf) >= 2:
+            b = t[:-len(suf)]
+            for c in (b, b + "ë", b + "e"):
+                if c in gloss: return gloss[c]
+    return None
+uidx = {u["id"]: i for i, u in enumerate(units)}
+NAMES = {"ana", "artan", "artani", "arben", "arbeni", "dritan", "dritani", "besnik", "besniku", "besnike", "fatmir", "fatmiri", "mimoza", "demir", "talesin", "gjergj", "kastrioti", "mustafa", "qemal", "ataturku", "selanik", "edrene", "krujë", "krujës", "prizren", "prishtinë", "kosova", "kosovës", "turqisë", "anës"}
+MISSING = set()
+for st in stories:
+    known = set(x for u in units[:uidx[st["after"]] + 1] for w in u["w"] for x in TOKR.findall(w["sq"].lower()))
+    toks = [x for l in st["lines"] for x in TOKR.findall(l["sq"].lower())]
+    unk = [t for t in dict.fromkeys(toks) if t not in known and t not in NAMES and len(t) > 1]
+    pre = []
+    for t in unk:
+        g = look(t)
+        if g: pre.append({"sq": t, "tr": g.split(";")[0], "n": toks.count(t), "a": audio("s-" + st["id"], t), "k": tm(t)})
+        else: MISSING.add(t)
+    st["pre"] = pre
+    st["cov"] = round(sum(t in known or t in NAMES for t in toks) / max(1, len(toks)) * 100)
+    st["cov2"] = round(sum(bool(t in known or t in NAMES or look(t)) for t in toks) / max(1, len(toks)) * 100)
+json.dump(sorted(MISSING), open(os.path.join(HERE, ".missing_gloss.json"), "w"), ensure_ascii=False)
+print("story coverage known->with pre-teach:", [(st["id"], st["cov"], st["cov2"]) for st in stories], "missing gloss", len(MISSING))
 
 pairs = [{"id": pid, "t": lbl, "tip": tip, "pairs": [[{"sq": a, "tr": at, "a": audio("ciftler", a)}, {"sq": b, "tr": bt, "a": audio("ciftler", b)}] for (a, at), (b, bt) in prs]}
          for pid, lbl, tip, prs in PAIRS]
@@ -208,6 +254,7 @@ for u in units:
 for s_ in stories: wanted.update(emoji_list(s_["cover"]))
 for r in roles: wanted.update(emoji_list(r["cover"] + r["av"]))
 wanted.update(emoji_list("🚶🫴🍽️🥤😴🗣️👀👂✍️📖🏃🏊🎤😂😢🚪🔒🤲🛍️🏷️💼🧠⏳❓💡🤔🤝🏁✅💭⏰🚿👕💇⚽🏆😞✋🪑"))
+wanted.update(emoji_list("🧬🏅⚡🧭🎞️👄🎬📝▶️🎶🧥🎼🪕😄😂🧸📰🚪⛲🌳🪑🏮🌉🗿🌾🏛️🗼🏰🚩⚓🛶⛵🐟🪝🧺🏠🌴⛪🌅🏡🐄🌻🪵🛖🐓🌲🍯🌄🦅🕌🧿🍵🧶⚖️🪔🏺🧵🥁🪞🕰️🗝️👨‍👩‍👧✈️💼✨🌱🌿👂⏱️🎯🎙️🗣️"))
 wanted.update(emoji_list("🗺️✏️🧠📈🎧🤸🎯🏛️✍️🔁🕌🌉⛰️⛏️🇽🇰🎙️📒🪞🤝📜💡⚠️🏰🏛️🏟️🧱🪟📚🇦🇱🪨🏖️🔥"))
 for e in sorted(wanted):
     svg = twemoji(e)
@@ -222,7 +269,7 @@ os.makedirs(os.path.join(OUT, "packs2"), exist_ok=True)
 for name, d in packs2.items():
     json.dump(d, open(os.path.join(OUT, "packs2", name + ".json"), "w"), separators=(",", ":"))
 
-json.dump({"units": units, "stories": stories, "alpha": alpha, "gloss": gloss, "rev": rev, "pairs": pairs, "extra": extra, "roles": roles, "conj": conj, "gram": gram, "freq": FREQ}, open(os.path.join(OUT, "data.json"), "w"), ensure_ascii=False, separators=(",", ":"))
+json.dump({"units": units, "stories": stories, "alpha": alpha, "gloss": gloss, "rev": rev, "pairs": pairs, "extra": extra, "roles": roles, "conj": conj, "gram": gram, "freq": FREQ, "mods": mods}, open(os.path.join(OUT, "data.json"), "w"), ensure_ascii=False, separators=(",", ":"))
 json.dump(list(dict.fromkeys(SAY)), open(os.path.join(HERE, ".say.json"), "w"), ensure_ascii=False)
 print("voice clips", len(os.listdir(VOICE_DIR)) if os.path.isdir(VOICE_DIR) else 0, "units", len(units), "words", sum(len(u["w"]) for u in units), "stories", len(stories), "packs", len(packs),
       "clips", sum(len(p) for p in packs.values()))
