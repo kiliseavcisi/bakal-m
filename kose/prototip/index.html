@@ -9,7 +9,7 @@
    Tek tema: mağaza bilinçli olarak açık zeminde tasarlandı (yön C · Qiell). */
 :root{
   --brand:#244aa5; --brand-hover:#1c3c8a; --ink:#0e1a33; --muted:#5a6680; --line:#e3e8f2;
-  --ice:#eaf1fd; --ice-2:#f4f7fc; --white:#ffffff; --gold:#c9a24a; --ok:#1f7a4d; --err:#b42318;
+  --ice:#eaf1fd; --ice-2:#f4f7fc; --white:#ffffff; --gold:#c9a24a; --ok:#1f7a4d; --err:#b42318; --heart:#d6336c;
   --glow:linear-gradient(135deg,#244aa5 0%,#5aa0ea 100%);
   --f-display:"Geologica","Onest",system-ui,sans-serif;
   --f-body:"Onest",system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -285,6 +285,81 @@ form.co{display:grid;gap:18px}
 ::selection{background:#cfe0fb;color:var(--ink)}
 input,textarea{caret-color:var(--brand)}
 @media (max-width:640px){.recap{grid-template-columns:minmax(0,1fr)}}
+/* Üyelik, favori, sekme çubuğu */
+.hico{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:var(--ink);text-decoration:none;transition:background .15s}
+.hico:hover{background:var(--ice-2)}
+.favb{position:absolute;right:10px;top:10px;z-index:2;width:38px;height:38px;border-radius:50%;border:0;background:rgba(255,255,255,.92);display:grid;place-items:center;cursor:pointer;color:var(--ink);transition:transform .15s,color .15s}
+.favb:hover{transform:scale(1.06)}
+.favb[aria-pressed="true"]{color:var(--heart)}
+.favb[aria-pressed="true"] svg path{fill:currentColor}
+.favb.lg{position:static;width:48px;height:48px;flex:none;border:1px solid var(--line);background:#fff}
+.rate{display:flex;gap:4px;align-items:center;font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.rate svg{color:var(--gold)}
+.rate b{color:var(--ink);font-weight:600}
+.good{color:var(--ok)!important;font-weight:600}
+.free.ok #freeTxt{color:var(--ok);font-weight:600}
+.free.ok .bar i{background:var(--ok)}
+.cnt-inline{font-family:var(--f-body);font-weight:400;font-size:1rem;color:var(--muted)}
+.cartbar{display:none}
+.gate{max-width:480px;margin:0 auto;width:100%;display:grid;gap:18px}
+.gate h1{font-size:clamp(1.5rem,3vw,2rem)}
+.gate .steps{margin-bottom:0}
+.guestbtn{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:2px solid var(--brand);background:var(--ice-2);border-radius:var(--r);padding:18px;cursor:pointer;color:var(--ink);transition:background .15s}
+.guestbtn:hover{background:var(--ice)}
+.guestbtn > svg{color:var(--brand);flex:none}
+.guestbtn b{display:block;font-size:1.05rem}
+.guestbtn span span{color:var(--muted);font-size:.86rem}
+.guestbtn .arr{margin-left:auto;color:var(--brand);flex:none}
+.or{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:.84rem}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+.gs{color:var(--muted);font-size:.92rem}
+.tabs{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--line)}
+.tabs button{border:0;background:none;padding:12px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;min-height:46px}
+.tabs button[aria-selected="true"]{color:var(--brand);border-bottom-color:var(--brand)}
+.secure{display:flex;gap:8px;align-items:center;justify-content:center;font-size:.84rem;color:var(--ok);font-weight:600}
+.verified{display:flex;justify-content:space-between;align-items:center;gap:12px;border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--ice-2);font-variant-numeric:tabular-nums}
+.verified span{color:var(--ok);font-size:.84rem;font-weight:600;display:flex;gap:6px;align-items:center}
+.fld .lbl{font-size:.88rem;font-weight:600}
+.acc{display:grid;gap:20px;max-width:880px}
+.acc-h{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.acc-h h1{font-size:clamp(1.6rem,3vw,2.2rem)}
+.acc-2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+.panel{border:1px solid var(--line);border-radius:var(--r);padding:20px;display:grid;gap:12px;align-content:start}
+.panel h2{font-size:1.1rem}
+.panel .btn{justify-self:start}
+.cnt{color:var(--muted);font-size:.9rem}
+.ord{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;padding:14px 0;border-top:1px solid var(--line);font-size:.94rem;align-items:center}
+.ord:first-of-type{border-top:0}
+.pill{font-size:.75rem;font-weight:600;padding:3px 10px;border-radius:99px;background:#fff4e0;color:#8a4b00;justify-self:end}
+.offer{border:2px solid var(--brand);background:#fff!important}
+.offer .btn{justify-self:start}
+.tabbar{display:none}
+@media (max-width:640px){
+  .hact .hico,.hact .cartbtn{display:none}
+  .tabbar{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));position:fixed;left:0;right:0;bottom:0;z-index:55;background:#fff;border-top:1px solid var(--line);
+    padding:4px max(6px,env(safe-area-inset-right,0px)) calc(4px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px))}
+  .tabbar a{display:grid;justify-items:center;align-content:center;gap:2px;min-height:52px;font-size:.68rem;color:var(--muted);text-decoration:none;position:relative;text-align:center}
+  .tabbar a svg{color:currentColor}
+  .tabbar a[aria-current="page"]{color:var(--brand);font-weight:600}
+  .tabbar .n{position:absolute;top:3px;left:calc(50% + 5px);background:var(--brand);color:#fff;border-radius:99px;min-width:18px;height:18px;font-size:.66rem;display:grid;place-items:center;padding:0 5px;font-variant-numeric:tabular-nums}
+  body{padding-bottom:calc(64px + env(safe-area-inset-bottom,0px))}
+  body.has-cartbar{padding-bottom:calc(138px + env(safe-area-inset-bottom,0px))}
+  .toast{bottom:calc(74px + env(safe-area-inset-bottom,0px))}
+  body.has-cartbar .toast{bottom:calc(146px + env(safe-area-inset-bottom,0px))}
+  .cartbar{display:flex;position:fixed;left:0;right:0;bottom:calc(61px + env(safe-area-inset-bottom,0px));z-index:54;background:#fff;border-top:1px solid var(--line);box-shadow:0 -10px 24px -18px rgba(14,26,51,.35);
+    align-items:center;justify-content:space-between;gap:12px;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px))}
+  .cartbar > div{display:grid;line-height:1.25;min-width:0}
+  .cartbar .cb-l{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+  .cartbar b{font-size:1.1rem;font-variant-numeric:tabular-nums}
+  .cartbar .good{font-size:.78rem}
+  .cartbar .btn{padding:12px 18px;flex:none}
+  .sum .btn.w{display:none}
+  .acc-2{grid-template-columns:minmax(0,1fr)}
+  .buyrow{flex-wrap:wrap}
+  .steps{gap:8px;flex-wrap:nowrap}
+  .steps li.sep{width:14px}
+  .steps li:not([aria-current]) .st-t{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+}
 footer{border-top:1px solid var(--line);background:var(--ice-2);font-size:.88rem;color:var(--muted)}
 .fgrid{display:grid;grid-template-columns:minmax(0,1.4fr) repeat(3,minmax(0,1fr));gap:24px;padding-block:40px}
 .fgrid h2{font-size:.95rem;color:var(--ink);margin-bottom:10px}
@@ -362,6 +437,8 @@ footer{border-top:1px solid var(--line);background:var(--ice-2);font-size:.88rem
         <div class="lang" role="group" aria-label="Gjuha / Language">
           <button data-l="sq" lang="sq" aria-label="Shqip">SQ</button><button data-l="en" lang="en" aria-label="English">EN</button><button data-l="tr" lang="tr" aria-label="Türkçe">TR</button><button data-l="sr" lang="sr-Latn" aria-label="Srpski">SR</button>
         </div>
+        <a class="hico" id="hFav" href="#favorites"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7.5-4.6-9.2-9.3C1.7 7.6 3.8 4.5 7 4.5c2 0 3.4 1.1 5 3 1.6-1.9 3-3 5-3 3.2 0 5.3 3.1 4.2 6.2C19.5 15.4 12 20 12 20z"/></svg></a>
+        <a class="hico" id="hAcc" href="#account"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8.5" r="4"/><path d="M4 20.5c1.2-4 4.3-6 8-6s6.8 2 8 6"/></svg></a>
         <a class="cartbtn" id="cartBtn" href="#cart"><svg width="18" height="18" aria-hidden="true"><use href="#kmark" style="color:#fff"/></svg><span class="lbl" id="cartLbl"></span><span class="n" id="cartN">0</span></a>
       </div>
     </div>
@@ -377,6 +454,8 @@ footer{border-top:1px solid var(--line);background:var(--ice-2);font-size:.88rem
     <div class="fbot"><span>© 2026 Kose · Prishtinë, Kosovë</span><span id="footProto"></span></div>
   </div>
 </footer>
+
+<nav class="tabbar" id="tabbar" aria-label="Menu"></nav>
 
 <div class="toast" id="toast" role="status" aria-live="polite"><span id="toastTxt"></span><a href="#cart" id="toastLink" hidden>Shporta</a></div>
 
@@ -508,12 +587,55 @@ const MUNI=["Deçan","Dragash","Drenas","Ferizaj","Fushë Kosovë","Gjakovë","G
 const FREE=30, SHIP=2, MAXQ=20, RESEND=30;
 const LNAME={sq:"Shqip",en:"English",tr:"Türkçe",sr:"Srpski"};
 
+/* ---------- Üyelik, favoriler, sepet ekleri (4 dil) ---------- */
+Object.assign(T.sq,{results1:"1 produkt",items1:"1 produkt",selected1:"1 produkt",cartA1:"Shporta, 1 produkt",fav:"Të preferuarat",favAdd:"Ruaj te të preferuarat",favRm:"Hiq nga të preferuarat",favEmpty:"Nuk ke ruajtur asgjë ende",favEmptyS:"Prek zemrën te një produkt dhe do ta gjesh këtu.",
+tabHome:"Kreu",tabCats:"Kategoritë",tabAcc:"Llogaria",account:"Llogaria",
+gateT:"Si dëshiron të vazhdosh?",guest:"Vazhdo pa llogari",guestS:"Vetëm emri, telefoni dhe adresa. Pa regjistrim.",or:"ose me llogari",login:"Hyr",register:"Regjistrohu",
+gateS:"Me llogari i sheh porositë, ruan adresën dhe porosit më shpejt herën tjetër.",accLoginT:"Hyr në llogari",sendCode:"Dërgo kodin",noPass:"Pa fjalëkalim: hyn me kodin që të vjen me SMS.",secure:"Blerje e sigurt",
+loginVerS:"Dërguam një kod 4-shifror në {p}. Shkruaje këtu për të hyrë.",
+hi:"Përshëndetje, {n}",hiAnon:"Llogaria jote",myOrders:"Porositë e mia",noOrders:"Nuk ke porosi ende.",addrT:"Adresa e ruajtur",noAddr:"Adresa ruhet vetë me porosinë e parë.",logout:"Dil nga llogaria",
+st:"Në përgatitje",items:"{n} produkte",verified:"I verifikuar",
+offerT:"Ruaj të dhënat me një prekje",offerS:"Numri yt u verifikua. Krijo llogari pa fjalëkalim: ndiq porosinë dhe porosit më shpejt herën tjetër.",offerB:"Krijo llogarinë",accCreated:"Llogaria u krijua. Mirë se erdhe!",loggedIn:"Hyre me sukses.",loggedOut:"Dole nga llogaria.",
+savings:"Kursen",together:"Blihen shpesh bashkë",reviews:"vlerësime",selected:"{n} produkte",favAdded:"U ruajt te të preferuarat",favRemoved:"U hoq nga të preferuarat",viewFav:"Shiko"});
+Object.assign(T.en,{results1:"1 product",items1:"1 item",selected1:"1 item",cartA1:"Cart, 1 item",fav:"Favourites",favAdd:"Save to favourites",favRm:"Remove from favourites",favEmpty:"Nothing saved yet",favEmptyS:"Tap the heart on a product and you'll find it here.",
+tabHome:"Home",tabCats:"Categories",tabAcc:"Account",account:"Account",
+gateT:"How would you like to continue?",guest:"Continue without an account",guestS:"Just your name, phone and address. No sign-up.",or:"or with an account",login:"Sign in",register:"Sign up",
+gateS:"With an account you can see your orders, save your address and check out faster next time.",accLoginT:"Sign in to your account",sendCode:"Send code",noPass:"No password: you sign in with a code sent by SMS.",secure:"Secure shopping",
+loginVerS:"We sent a 4-digit code to {p}. Enter it here to sign in.",
+hi:"Hello, {n}",hiAnon:"Your account",myOrders:"My orders",noOrders:"You have no orders yet.",addrT:"Saved address",noAddr:"Your address is saved with your first order.",logout:"Sign out",
+st:"Being prepared",items:"{n} items",verified:"Verified",
+offerT:"Save your details in one tap",offerS:"Your number is verified. Create a password-free account to track this order and check out faster next time.",offerB:"Create account",accCreated:"Account created. Welcome!",loggedIn:"You're signed in.",loggedOut:"You've signed out.",
+savings:"You save",together:"Frequently bought together",reviews:"reviews",selected:"{n} items",favAdded:"Saved to favourites",favRemoved:"Removed from favourites",viewFav:"View"});
+Object.assign(T.tr,{fav:"Favoriler",favAdd:"Favorilere ekle",favRm:"Favorilerden çıkar",favEmpty:"Henüz bir şey kaydetmedin",favEmptyS:"Bir üründeki kalbe dokun, burada bulursun.",
+tabHome:"Ana sayfa",tabCats:"Kategoriler",tabAcc:"Hesabım",account:"Hesabım",
+gateT:"Nasıl devam etmek istersin?",guest:"Üye olmadan devam et",guestS:"Sadece ad, telefon ve adres. Kayıt yok.",or:"ya da hesapla",login:"Giriş yap",register:"Üye ol",
+gateS:"Hesapla siparişlerini görür, adresini kaydeder ve bir dahaki sefere daha hızlı sipariş verirsin.",accLoginT:"Hesabına giriş yap",sendCode:"Kod gönder",noPass:"Şifre yok: SMS ile gelen kodla giriş yaparsın.",secure:"Güvenli alışveriş",
+loginVerS:"{p} numarasına 4 haneli bir kod gönderdik. Giriş için buraya yaz.",
+hi:"Merhaba, {n}",hiAnon:"Hesabın",myOrders:"Siparişlerim",noOrders:"Henüz siparişin yok.",addrT:"Kayıtlı adres",noAddr:"Adresin ilk siparişte kendiliğinden kaydedilir.",logout:"Çıkış yap",
+st:"Hazırlanıyor",items:"{n} ürün",verified:"Doğrulandı",
+offerT:"Bilgilerini tek dokunuşla kaydet",offerS:"Numaran doğrulandı. Şifresiz bir hesap aç: siparişini takip et, bir dahaki sefere daha hızlı sipariş ver.",offerB:"Hesap oluştur",accCreated:"Hesabın oluşturuldu. Hoş geldin!",loggedIn:"Giriş yaptın.",loggedOut:"Çıkış yaptın.",
+savings:"Kazancın",together:"Sıklıkla birlikte alınanlar",reviews:"değerlendirme",selected:"{n} ürün",favAdded:"Favorilere eklendi",favRemoved:"Favorilerden çıkarıldı",viewFav:"Gör"});
+Object.assign(T.sr,{results1:"1 proizvod",items1:"1 proizvod",selected1:"1 proizvod",cartA1:"Korpa, 1 proizvod",fav:"Omiljeno",favAdd:"Sačuvaj u omiljeno",favRm:"Ukloni iz omiljenog",favEmpty:"Još ništa nisi sačuvao",favEmptyS:"Dodirni srce na proizvodu i naći ćeš ga ovde.",
+tabHome:"Početna",tabCats:"Kategorije",tabAcc:"Nalog",account:"Nalog",
+gateT:"Kako želiš da nastaviš?",guest:"Nastavi bez naloga",guestS:"Samo ime, telefon i adresa. Bez registracije.",or:"ili sa nalogom",login:"Prijava",register:"Registracija",
+gateS:"Sa nalogom vidiš porudžbine, čuvaš adresu i sledeći put brže naručuješ.",accLoginT:"Prijavi se na nalog",sendCode:"Pošalji kod",noPass:"Bez lozinke: prijavljuješ se kodom koji stiže SMS-om.",secure:"Sigurna kupovina",
+loginVerS:"Poslali smo četvorocifreni kod na {p}. Upiši ga ovde za prijavu.",
+hi:"Zdravo, {n}",hiAnon:"Tvoj nalog",myOrders:"Moje porudžbine",noOrders:"Još nemaš porudžbina.",addrT:"Sačuvana adresa",noAddr:"Adresa se sama čuva uz prvu porudžbinu.",logout:"Odjavi se",
+st:"U pripremi",items:"{n} proizvoda",verified:"Potvrđen",
+offerT:"Sačuvaj podatke jednim dodirom",offerS:"Tvoj broj je potvrđen. Napravi nalog bez lozinke: prati porudžbinu i sledeći put naruči brže.",offerB:"Napravi nalog",accCreated:"Nalog je napravljen. Dobro došao!",loggedIn:"Prijavljen si.",loggedOut:"Odjavio si se.",
+savings:"Ušteda",together:"Često se kupuju zajedno",reviews:"ocena",selected:"{n} proizvoda",favAdded:"Sačuvano u omiljeno",favRemoved:"Uklonjeno iz omiljenog",viewFav:"Pogledaj"});
+/* Örnek puanlar (prototip): [ortalama, değerlendirme sayısı] */
+const RATE={1:[4.6,128],2:[4.4,57],3:[4.3,41],4:[4.7,212],5:[4.8,36],6:[4.5,19],7:[4.6,304],9:[4.4,73],10:[4.7,165],11:[4.5,88],12:[4.9,24]};
+
 /* ---------- Durum ---------- */
 const store={get(k,d){try{const v=localStorage.getItem("kose:"+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem("kose:"+k,JSON.stringify(v))}catch(e){}}};
-const S={lang:store.get("lang","sq"),cart:store.get("cart",[]).filter(i=>P.some(p=>p.id===i.id&&p.stock>0)),q:"",sort:"pop",form:{name:"",phone:"",city:"",addr:"",note:""},code:"",sentAt:0,order:null,pv:{}};
+const S={lang:store.get("lang","sq"),cart:store.get("cart",[]).filter(i=>P.some(p=>p.id===i.id&&p.stock>0)),fav:store.get("fav",[]),user:store.get("user",null),orders:store.get("orders",[]),
+  guest:false,q:"",sort:"pop",form:{name:"",phone:"",city:"",addr:"",note:""},code:"",sentAt:0,otpFor:"order",pending:null,after:"#checkout",gateTab:"login",order:null,pv:{}};
 if(!T[S.lang])S.lang="sq";
 const L=()=>T[S.lang];
 const t=(k,v)=>{let s=L()[k]??T.sq[k]??k;if(v)for(const x in v)s=s.split("{"+x+"}").join(v[x]);return s};
+const tn=(k,n)=>t((n===1&&(L()[k+"1"]))?k+"1":k,{n});
+const dec=n=>S.lang==="en"?String(n):String(n).replace(".",",");
 const eur=n=>(S.lang==="en"?n.toFixed(2):n.toFixed(2).replace(".",","))+" €";
 const pById=id=>P.find(p=>p.id===id);
 const pn=p=>p.n[S.lang]||p.n.sq;
@@ -522,21 +644,41 @@ const cbg=id=>(CATS.find(c=>c.id===id)||{}).bg||"#eaf1fd";
 const ico=(name,size,sw)=>`<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="${sw||2.4}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-${name}"/></svg>`;
 const unit=v=>v.replace(/^(\d+) yrs?$/,(m,n)=>n+" "+(n==="1"?t("yr"):t("yrs"))).replace(/^(\d+) h$/,(m,n)=>n+" "+t("hr")).replace(/^(\d+) d$/,(m,n)=>n+" "+t("dd"));
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const save=()=>{store.set("cart",S.cart);store.set("lang",S.lang)};
+const save=()=>{store.set("cart",S.cart);store.set("lang",S.lang);store.set("fav",S.fav);store.set("user",S.user);store.set("orders",S.orders)};
 const sub=()=>S.cart.reduce((a,i)=>a+pById(i.id).price*i.qty,0);
+const saved=()=>S.cart.reduce((a,i)=>{const p=pById(i.id);return a+(p.old?(p.old-p.price)*i.qty:0)},0);
 const shipCost=s=>s>=FREE||s===0?0:SHIP;
 const count=()=>S.cart.reduce((a,i)=>a+i.qty,0);
 const inCart=id=>S.cart.filter(i=>i.id===id).reduce((a,i)=>a+i.qty,0);
 const maxFor=p=>Math.min(MAXQ,p.stock);
 const pct=p=>Math.round((1-p.price/p.old)*100);
+const isFav=id=>S.fav.includes(id);
 const varText=i=>[i.c?L().c[i.c]:null,i.s&&i.s!=="-"?i.s:null].filter(Boolean).join(" · ");
+const normPhone=v=>v.replace(/\D/g,"").replace(/^383/,"").replace(/^0/,"");
+const fmtPhone=d=>d.replace(/^(\d{2})(\d{3})(\d{3})$/,"$1 $2 $3");
+const okPhone=d=>/^4[3-9]\d{6}$/.test(d);
 const DN={sq:[["e diel","e hënë","e martë","e mërkurë","e enjte","e premte","e shtunë"],["janar","shkurt","mars","prill","maj","qershor","korrik","gusht","shtator","tetor","nëntor","dhjetor"]],
  en:[["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],["January","February","March","April","May","June","July","August","September","October","November","December"]],
  tr:[["Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi"],["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"]],
  sr:[["nedelja","ponedeljak","utorak","sreda","četvrtak","petak","subota"],["januar","februar","mart","april","maj","jun","jul","avgust","septembar","oktobar","novembar","decembar"]]};
-const delDate=()=>{const d=new Date();let n=0;while(n<3){d.setDate(d.getDate()+1);if(d.getDay()!==0)n++}
-  const [w,m]=DN[S.lang],day=d.getDate(),mo=m[d.getMonth()],wd=w[d.getDay()];
-  return S.lang==="en"?`${wd}, ${day} ${mo}`:S.lang==="tr"?`${day} ${mo} ${wd}`:S.lang==="sr"?`${wd}, ${day}. ${mo}`:`${wd}, ${day} ${mo}`};
+const fmtDate=(d,wd)=>{const [w,m]=DN[S.lang],day=d.getDate(),mo=m[d.getMonth()],wn=w[d.getDay()];
+  if(!wd)return S.lang==="sr"?`${day}. ${mo}`:`${day} ${mo}`;
+  return S.lang==="tr"?`${day} ${mo} ${wn}`:S.lang==="sr"?`${wn}, ${day}. ${mo}`:`${wn}, ${day} ${mo}`};
+const delDate=()=>{const d=new Date();let n=0;while(n<3){d.setDate(d.getDate()+1);if(d.getDay()!==0)n++}return fmtDate(d,true)};
+
+/* ---------- İkonlar ---------- */
+const iTruck=`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h11v10H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>`;
+const iCash=`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6 9.5v5M18 9.5v5"/></svg>`;
+const iBack=`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></svg>`;
+const iChat=`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>`;
+const iCheck=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>`;
+const iHeart=s=>`<svg width="${s||20}" height="${s||20}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7.5-4.6-9.2-9.3C1.7 7.6 3.8 4.5 7 4.5c2 0 3.4 1.1 5 3 1.6-1.9 3-3 5-3 3.2 0 5.3 3.1 4.2 6.2C19.5 15.4 12 20 12 20z"/></svg>`;
+const iUser=`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8.5" r="4"/><path d="M4 20.5c1.2-4 4.3-6 8-6s6.8 2 8 6"/></svg>`;
+const iHome=`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V20h-5v-6h-6v6H4z"/></svg>`;
+const iGrid=`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg>`;
+const iShield=`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5.5c0 4.4 3 7.9 7 9.5 4-1.6 7-5.1 7-9.5V6z"/><path d="m9 12 2.2 2.2L15.5 10"/></svg>`;
+const iArrow=`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`;
+const iStar=`<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>`;
 
 /* ---------- Parçalar ---------- */
 function badge(p){
@@ -545,22 +687,19 @@ function badge(p){
   if(p.nw) return `<span class="badge new">${t("nw")}</span>`;
   return "";
 }
+const rate=p=>{const r=RATE[p.id];return r?`<span class="rate">${iStar}<b>${dec(r[0])}</b><span>(${r[1]})</span><span class="sr"> ${t("reviews")}</span></span>`:""};
+const favBtn=(p,cls)=>`<button class="${cls||"favb"}" data-fav="${p.id}" aria-pressed="${isFav(p.id)}" aria-label="${esc(isFav(p.id)?t("favRm"):t("favAdd"))}: ${esc(pn(p))}">${iHeart()}</button>`;
 function card(p){
   return `<article class="card">
-    <div class="im" style="background:${cbg(p.cat)}">${badge(p)}${ico(p.icon,"46%")}
+    <div class="im" style="background:${cbg(p.cat)}">${badge(p)}${ico(p.icon,"46%")}${favBtn(p)}
       ${p.stock?`<button class="quick" data-quick="${p.id}" aria-label="${esc(t("add"))}: ${esc(pn(p))}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>`:""}</div>
-    <span class="cat-l">${cn(p.cat)}</span><a class="nm lnk" href="#p-${p.id}">${esc(pn(p))}</a>
-    <span class="price"><b>${eur(p.price)}</b>${p.old?`<s><span class="sr">${esc(t("save",{x:""}))}</span>${eur(p.old)}</s>`:""}</span></article>`;
+    <a class="nm lnk" href="#p-${p.id}">${esc(pn(p))}</a>${rate(p)}
+    <span class="price"><b>${eur(p.price)}</b>${p.old?`<s>${eur(p.old)}</s>`:""}</span></article>`;
 }
-const iTruck=`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h11v10H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>`;
-const iCash=`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6 9.5v5M18 9.5v5"/></svg>`;
-const iBack=`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></svg>`;
-const iChat=`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>`;
-const iCheck=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>`;
 function steps(cur){
   const st=L().steps;
   return `<ol class="steps">${st.map((s,i)=>{const n=i+1,done=n<cur;
-    const inner=`<b>${done?iCheck:n}</b>${s}`;
+    const inner=`<b>${done?iCheck:n}</b><span class="st-t">${s}</span>`;
     return `<li class="${done?"done":""}"${n===cur?' aria-current="step"':""}>${done&&n===1?`<a href="#cart">${inner}</a>`:inner}</li>`}).join('<li class="sep" aria-hidden="true"></li>')}</ol>`;
 }
 
@@ -594,16 +733,17 @@ function vList(cat){
   list.sort((a,b)=>(!a.stock)-(!b.stock)||(S.sort==="low"?a.price-b.price:S.sort==="high"?b.price-a.price:b.pop-a.pop));
   const title=q?t("searchFor",{q:esc(S.q.trim())}):cat?cn(cat):t("all");
   return `<div class="view" style="gap:0">
-  <div class="lhead"><div><h1>${title}</h1><p class="cnt" aria-live="polite">${t("results",{n:list.length})}</p></div>
+  <div class="lhead"><div><h1>${title}</h1><p class="cnt" aria-live="polite">${tn("results",list.length)}</p></div>
     <div><label class="sr" for="sort">${t("sort")}</label><select id="sort">
       <option value="pop"${S.sort==="pop"?" selected":""}>${t("sPop")}</option><option value="low"${S.sort==="low"?" selected":""}>${t("sLow")}</option><option value="high"${S.sort==="high"?" selected":""}>${t("sHigh")}</option></select></div></div>
   <div class="chips" role="group" aria-label="${esc(t("cats"))}: ${esc(title)}"><a class="chip" href="#shop"${!cat?' aria-current="page"':""}>${t("all")}</a>${CATS.map(c=>`<a class="chip" href="#c-${c.id}"${cat===c.id?' aria-current="page"':""}>${cn(c.id)}</a>`).join("")}</div>
   ${list.length?`<div class="grid">${list.map(card).join("")}</div>`:`<p class="emptyres">${t("noRes")}</p>`}
   </div>`;
 }
-function vNotFound(){
-  return `<div class="view"><div class="center"><div class="okc" style="background:var(--ice);color:var(--brand)"><svg width="34" height="34" aria-hidden="true"><use href="#kmark"/></svg></div><h1>${t("nf")}</h1><p>${t("nfS")}</p><a class="btn p" href="#shop">${t("heroB")}</a></div></div>`;
+function emptyState(icon,h,p,btn){
+  return `<div class="view"><div class="center"><div class="okc" style="background:var(--ice);color:var(--brand)">${icon}</div><h1>${h}</h1><p>${p}</p>${btn||""}</div></div>`;
 }
+function vNotFound(){return emptyState(`<svg width="34" height="34" aria-hidden="true"><use href="#kmark"/></svg>`,t("nf"),t("nfS"),`<a class="btn p" href="#shop">${t("heroB")}</a>`)}
 function vProduct(id){
   const p=pById(id); if(!p) return vNotFound();
   const v=S.pv[id]||(S.pv[id]={c:p.colors?p.colors[0]:null,s:p.sizes?null:"-",q:1,img:0});
@@ -622,14 +762,14 @@ function vProduct(id){
       <div class="thumbs">${shades.map((s,i)=>`<button data-img="${i}" aria-pressed="${v.img===i}" aria-label="${esc(pn(p))} ${i+1}/4" style="background:${s};color:var(--brand)">${ico(p.icon,"50%",2.6)}</button>`).join("")}</div>
     </div>
     <div class="pinfo">
-      <div style="display:grid;gap:10px"><h1>${esc(pn(p))}</h1>
+      <div style="display:grid;gap:10px"><h1>${esc(pn(p))}</h1>${rate(p)}
         <div class="price"><b>${eur(p.price)}</b>${p.old?`<s>${eur(p.old)}</s><span class="save">${t("save",{x:eur(p.old-p.price)})}</span>`:""}</div>
         <span class="vat">${t("vat")}</span></div>
       ${p.colors?`<div class="opt" role="group" aria-labelledby="lb-c"><span class="lb" id="lb-c">${t("color")}: <span>${L().c[v.c]}</span></span><div class="sw">${p.colors.map(c=>`<button data-color="${c}" aria-pressed="${v.c===c}"><i style="background:${COLORS[c]}" aria-hidden="true"></i>${L().c[c]}</button>`).join("")}</div></div>`:""}
       ${p.sizes?`<div class="opt" role="group" aria-labelledby="lb-s"><span class="lb" id="lb-s">${t("size")}</span><div class="sw">${p.sizes.map(s=>`<button data-size="${s}" aria-pressed="${v.s===s}"${!p.stock?" disabled":""}>${s}</button>`).join("")}</div></div>`:""}
       ${!p.stock?`<p class="stock out">${t("outS")}</p>`:p.stock<=5?`<p class="stock">${t("low",{n:p.stock})}</p>`:""}
       <div class="buyrow">${blocked?"":`<div class="step" role="group" aria-label="${t("qty")}"><button data-q="-1" aria-label="−" ${v.q<=1?"disabled":""}>−</button><output aria-live="polite">${v.q}</output><button data-q="1" aria-label="+" ${v.q>=room?"disabled":""}>+</button></div>`}
-        <button class="btn p" id="addBtn"${sizeMissing||blocked?" disabled":""}>${btnLabel}</button></div>
+        <button class="btn p" id="addBtn"${sizeMissing||blocked?" disabled":""}>${btnLabel}</button>${favBtn(p,"favb lg")}</div>
       <div class="info">
         <div>${iTruck}<p><b>${t("iDel")}</b>${p.stock?`<span>${t("iDelS",{d:delDate()})}</span>`:""}</p></div>
         <div>${iCash}<p><b>${t("iCod")}</b><span>${t("iCodS")}</span></p></div>
@@ -643,35 +783,60 @@ function vProduct(id){
   </div>`;
 }
 function summary(withItems){
-  const s=sub(),sh=shipCost(s),left=Math.max(0,FREE-s),pr=Math.min(100,Math.round(s/FREE*100));
+  const s=sub(),sh=shipCost(s),left=Math.max(0,FREE-s),pr=Math.min(100,Math.round(s/FREE*100)),sv=saved();
   return `<aside class="sum" aria-labelledby="h-sum"><h2 id="h-sum">${t("summary")}</h2>
    ${withItems?`<div class="mini">${S.cart.map(i=>{const p=pById(i.id),vt=varText(i);return `<div><span class="im" style="background:${cbg(p.cat)};color:var(--brand)">${ico(p.icon,26,2.6)}</span><span>${esc(pn(p))} <span style="color:var(--muted)">× ${i.qty}${vt?" · "+vt:""}</span></span><b style="font-variant-numeric:tabular-nums">${eur(p.price*i.qty)}</b></div>`}).join("")}</div>`:""}
    <div class="row"><span>${t("subtotal")}</span><span>${eur(s)}</span></div>
-   <div class="row"><span>${t("ship")}</span><span>${sh?eur(sh):t("free")}</span></div>
-   <div class="free"><span id="freeTxt">${left>0?t("toFree",{x:eur(left)}):t("gotFree")}</span><div class="bar" role="progressbar" aria-labelledby="freeTxt" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pr}"><i style="width:${pr}%"></i></div></div>
+   <div class="row"><span>${t("ship")}</span><span${sh?"":' class="good"'}>${sh?eur(sh):t("free")}</span></div>
+   ${sv>0?`<div class="row good"><span>${t("savings")}</span><span>−${eur(sv)}</span></div>`:""}
+   <div class="free${left>0?"":" ok"}"><span id="freeTxt">${left>0?t("toFree",{x:eur(left)}):t("gotFree")}</span><div class="bar" role="progressbar" aria-labelledby="freeTxt" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pr}"><i style="width:${pr}%"></i></div></div>
    <div class="row t"><span>${t("total")}</span><span>${eur(s+sh)}</span></div>
    ${withItems?"":`<a class="btn p w" href="#checkout">${t("checkout")}</a><p style="font-size:.82rem;color:var(--muted);display:flex;gap:8px;align-items:center"><span style="color:var(--brand)">${iCash}</span>${t("iCodS")}</p>`}
   </aside>`;
 }
 function vCart(){
-  if(!S.cart.length) return `<div class="view"><div class="center"><div class="okc" style="background:var(--ice);color:var(--brand)"><svg width="34" height="34" aria-hidden="true"><use href="#kmark"/></svg></div><h1>${t("empty")}</h1><p>${t("emptyS")}</p><a class="btn p" href="#shop">${t("cont")}</a></div></div>`;
-  return `<div class="view"><div class="two"><div>${steps(1)}<h1>${t("cart")}</h1><ul class="items">${S.cart.map((i,ix)=>{const p=pById(i.id),vr=varText(i),mx=maxFor(p)-inCart(p.id)+i.qty;
+  if(!S.cart.length) return emptyState(`<svg width="34" height="34" aria-hidden="true"><use href="#kmark"/></svg>`,t("empty"),t("emptyS"),`<a class="btn p" href="#shop">${t("cont")}</a>`);
+  const xs=P.filter(p=>p.stock&&!S.cart.some(i=>i.id===p.id)).sort((a,b)=>b.pop-a.pop).slice(0,4);
+  const s=sub(),sh=shipCost(s),sv=saved();
+  return `<div class="view"><div class="two"><div>${steps(1)}<h1>${t("cart")} <span class="cnt-inline">(${tn("selected",count())})</span></h1><ul class="items">${S.cart.map((i,ix)=>{const p=pById(i.id),vr=varText(i),mx=maxFor(p)-inCart(p.id)+i.qty;
     return `<li class="it"><a href="#p-${p.id}" class="im" style="background:${cbg(p.cat)};color:var(--brand)" aria-hidden="true" tabindex="-1">${ico(p.icon,44,2.4)}</a>
-      <div style="display:grid;gap:4px;min-width:0"><a class="nm" href="#p-${p.id}">${esc(pn(p))}</a>${vr?`<span class="vr">${vr}</span>`:""}<span class="price"><b>${eur(p.price)}</b></span>${p.stock<=5?`<span class="stock">${t("low",{n:p.stock})}</span>`:""}</div>
+      <div style="display:grid;gap:4px;min-width:0"><a class="nm" href="#p-${p.id}">${esc(pn(p))}</a>${vr?`<span class="vr">${vr}</span>`:""}<span class="price"><b>${eur(p.price)}</b>${p.old?`<s>${eur(p.old)}</s>`:""}</span>${p.stock<=5?`<span class="stock">${t("low",{n:p.stock})}</span>`:""}</div>
       <div class="rt"><div class="step" role="group" aria-label="${t("qty")}: ${esc(pn(p))}"><button data-cq="${ix}" data-d="-1" aria-label="−" ${i.qty<=1?"disabled":""}>−</button><output aria-live="polite">${i.qty}</output><button data-cq="${ix}" data-d="1" aria-label="+" ${i.qty>=mx?"disabled":""}>+</button></div><button class="rm" data-rm="${ix}">${t("remove")}<span class="sr">: ${esc(pn(p))}</span></button></div></li>`}).join("")}</ul>
     <p style="margin-top:20px"><a href="#shop" style="color:var(--brand);font-weight:600;text-decoration:none">← ${t("cont")}</a></p></div>
-    ${summary(false)}</div></div>`;
+    ${summary(false)}</div>
+    ${xs.length?`<section aria-labelledby="h-xs"><div class="sh"><h2 id="h-xs">${t("together")}</h2></div><div class="grid">${xs.map(card).join("")}</div></section>`:""}
+    <div class="cartbar" aria-label="${esc(t("total"))}"><div><span class="cb-l">${t("total")}</span><b>${eur(s+sh)}</b>${sv>0?`<span class="good">${t("savings")} ${eur(sv)}</span>`:""}</div><a class="btn p" href="#checkout">${t("checkout")}</a></div>
+    </div>`;
+}
+function vGate(ctx){
+  const tab=ctx==="account"?S.gateTab:S.gateTab, reg=tab==="register";
+  return `<div class="view"><div class="gate">
+    ${ctx==="checkout"?steps(2):""}
+    <h1>${ctx==="checkout"?t("gateT"):t("accLoginT")}</h1>
+    ${ctx==="checkout"?`<button class="guestbtn" type="button" data-guest>${iCash}<span><b>${t("guest")}</b><span>${t("guestS")}</span></span><span class="arr">${iArrow}</span></button>
+    <p class="or">${t("or")}</p>`:""}
+    <p class="gs">${t("gateS")}</p>
+    <div class="tabs" role="tablist"><button role="tab" id="tab-login" aria-selected="${!reg}" aria-controls="authp" data-tab="login">${t("login")}</button><button role="tab" id="tab-register" aria-selected="${reg}" aria-controls="authp" data-tab="register">${t("register")}</button></div>
+    <form id="authf" class="co" novalidate data-ctx="${ctx}">
+      <div id="authp" role="tabpanel" aria-labelledby="tab-${tab}" style="display:grid;gap:18px">
+      ${reg?fld("aname",t("name"),`<input id="aname" autocomplete="name" required aria-describedby="e-aname">`,"",t("errName")):""}
+      ${fld("aphone",t("phone"),`<div class="phone"><span aria-hidden="true">+383</span><input id="aphone" type="tel" inputmode="tel" autocomplete="tel-national" required placeholder="44 123 456" aria-describedby="h-aphone e-aphone"></div>`,t("noPass"),t("errPhone"))}
+      <button class="btn ${ctx==="checkout"?"g":"p"} w" type="submit">${t("sendCode")}</button></div>
+    </form>
+    <p class="secure">${iShield}${t("secure")}</p>
+  </div></div>`;
 }
 function fld(id,label,input,hint,err,optional){
   return `<div class="fld" id="f-${id}"><label for="${id}">${label}${optional?` <small>(${t("opt")})</small>`:""}</label>${input}${hint?`<span class="hint" id="h-${id}">${hint}</span>`:""}${err?`<span class="er" id="e-${id}">${err}</span>`:""}</div>`;
 }
 function vCheckout(){
-  if(!S.cart.length){location.replace("#cart");return ""}
-  const f=S.form,tot=sub()+shipCost(sub());
+  const f=S.form,u=S.user,tot=sub()+shipCost(sub());
+  if(u){for(const k of ["name","city","addr"])if(!f[k]&&u[k])f[k]=u[k];f.phone=u.phone}
   return `<div class="view"><div class="two"><div>${steps(2)}<h1>${t("orderT")}</h1>
   <form class="co" id="co" novalidate>
     ${fld("name",t("name"),`<input id="name" autocomplete="name" required value="${esc(f.name)}" aria-describedby="e-name">`,"",t("errName"))}
-    ${fld("phone",t("phone"),`<div class="phone"><span aria-hidden="true">+383</span><input id="phone" type="tel" inputmode="tel" autocomplete="tel-national" required placeholder="44 123 456" value="${esc(f.phone)}" aria-describedby="h-phone e-phone"></div>`,t("phoneH"),t("errPhone"))}
+    ${u?`<div class="fld"><span class="lbl">${t("phone")}</span><div class="verified"><b>+383 ${esc(u.phone)}</b><span>${iCheck}${t("verified")}</span></div></div>`
+       :fld("phone",t("phone"),`<div class="phone"><span aria-hidden="true">+383</span><input id="phone" type="tel" inputmode="tel" autocomplete="tel-national" required placeholder="44 123 456" value="${esc(f.phone)}" aria-describedby="h-phone e-phone"></div>`,t("phoneH"),t("errPhone"))}
     <div class="pair">
       ${fld("city",t("city"),`<select id="city" autocomplete="address-level2" required aria-describedby="e-city"><option value="">${t("choose")}</option>${MUNI.map(m=>`<option${f.city===m?" selected":""}>${m}</option>`).join("")}</select>`,"",t("errCity"))}
       ${fld("addr",t("address"),`<input id="addr" autocomplete="street-address" required placeholder="${esc(t("addressP"))}" value="${esc(f.addr)}" aria-describedby="e-addr">`,"",t("errAddr"))}
@@ -684,34 +849,58 @@ function vCheckout(){
   </form></div>${summary(true)}</div></div>`;
 }
 function vVerify(){
-  if(!S.code){location.replace("#checkout");return ""}
+  const login=S.otpFor==="login", ph=login?S.pending.phone:S.form.phone;
   const left=Math.max(0,RESEND-Math.floor((Date.now()-S.sentAt)/1000));
-  return `<div class="view"><div class="center">${steps(3)}
+  return `<div class="view"><div class="center">${login?"":steps(3)}
     <div class="okc"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 18h3"/></svg></div>
-    <h1>${t("verT")}</h1><p>${t("verS",{p:"+383 "+esc(S.form.phone)})}</p>
+    <h1>${t("verT")}</h1><p>${t(login?"loginVerS":"verS",{p:"+383 "+esc(ph)})}</p>
     <form id="otpf" novalidate style="display:grid;gap:16px;justify-items:center">
       <div class="otp" role="group" aria-label="${esc(t("verT"))}">${[0,1,2,3].map(i=>`<input inputmode="numeric" pattern="[0-9]*" maxlength="1" aria-label="${i+1}/4" id="o${i}" autocomplete="${i?"off":"one-time-code"}">`).join("")}</div>
       <span class="er" id="otpErr" role="alert" style="color:var(--err);font-size:.86rem" hidden>${t("errCode")}</span>
       <span class="demo">${t("demo",{c:S.code})}</span>
       <button class="btn p" type="submit">${t("verB")}</button>
       <button class="linkbtn" type="button" id="resend"${left?" disabled":""}>${left?t("resendIn",{s:left}):t("resend")}</button>
-      <a href="#checkout" class="linkbtn">${t("back")}</a>
+      <a href="${login?S.after==="#account"?"#account":"#gate":"#checkout"}" class="linkbtn">${t("back")}</a>
     </form></div></div>`;
 }
+function orderMini(items){
+  return `<div class="mini">${items.map(i=>{const p=pById(i.id),vt=varText(i);return `<div><span class="im" style="background:${cbg(p.cat)};color:var(--brand)">${ico(p.icon,26,2.6)}</span><span>${esc(pn(p))} <span style="color:var(--muted)">× ${i.qty}${vt?" · "+vt:""}</span></span><b style="font-variant-numeric:tabular-nums">${eur(p.price*i.qty)}</b></div>`}).join("")}</div>`;
+}
 function vDone(){
-  const o=S.order; if(!o){location.replace("#home");return ""}
+  const o=S.order;
   return `<div class="view"><div class="center">
     <div class="okc"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
     <h1>${t("doneT",{n:esc(o.first)})}</h1>
     <p>${t("ordNo")}</p><span class="ordno">${o.no}</span>
     <p>${t("doneS",{t:eur(o.total)})}</p></div>
     <div class="recap">
+      ${!S.user?`<section class="offer" aria-labelledby="h-offer"><h2 id="h-offer">${t("offerT")}</h2><p>${t("offerS")}</p><button class="btn p" type="button" data-mkacc>${t("offerB")}</button></section>`:""}
       <section aria-labelledby="h-next"><h2 id="h-next">${t("nextT")}</h2><ol class="next">${L().nx.map(x=>`<li>${x}</li>`).join("")}</ol></section>
       <section aria-labelledby="h-to"><h2 id="h-to">${t("deliverTo")}</h2><p>${esc(o.name)}<br>${esc(o.addr)}, ${esc(o.city)}<br>+383 ${esc(o.phone)}</p><p style="color:var(--muted);font-size:.9rem;margin-top:8px">${t("iDelS",{d:delDate()})}</p></section>
-      <section aria-labelledby="h-items"><h2 id="h-items">${t("summary")}</h2><div class="mini">${o.items.map(i=>{const p=pById(i.id),vt=varText(i);return `<div><span class="im" style="background:${cbg(p.cat)};color:var(--brand)">${ico(p.icon,26,2.6)}</span><span>${esc(pn(p))} <span style="color:var(--muted)">× ${i.qty}${vt?" · "+vt:""}</span></span><b style="font-variant-numeric:tabular-nums">${eur(p.price*i.qty)}</b></div>`}).join("")}</div>
-        <div class="row" style="margin-top:12px"><span>${t("ship")}</span><span>${o.ship?eur(o.ship):t("free")}</span></div><div class="row t"><span>${t("total")}</span><span>${eur(o.total)}</span></div></section>
+      <section aria-labelledby="h-items"><h2 id="h-items">${t("summary")}</h2>${orderMini(o.items)}
+        <div class="row" style="margin-top:12px"><span>${t("ship")}</span><span${o.ship?"":' class="good"'}>${o.ship?eur(o.ship):t("free")}</span></div><div class="row t"><span>${t("total")}</span><span>${eur(o.total)}</span></div></section>
     </div>
     <div class="center" style="padding-top:0"><a class="btn p" href="#home">${t("home")}</a></div></div>`;
+}
+function vAccount(){
+  const u=S.user; if(!u) return vGate("account");
+  const mine=S.orders.filter(o=>o.phone===u.phone);
+  return `<div class="view"><div class="acc">
+    <div class="acc-h"><div><h1>${u.name?t("hi",{n:esc(u.name.split(/\s+/)[0])}):t("hiAnon")}</h1><p class="cnt">+383 ${esc(u.phone)} · <span class="good">${t("verified")}</span></p></div>
+      <button class="btn g" type="button" data-logout>${t("logout")}</button></div>
+    <section class="panel" aria-labelledby="h-ord"><h2 id="h-ord">${t("myOrders")}</h2>
+      ${mine.length?mine.slice().reverse().map(o=>`<div class="ord"><b>${o.no}</b><span class="pill">${t("st")}</span><span class="cnt">${fmtDate(new Date(o.at))} · ${tn("items",o.items.reduce((a,i)=>a+i.qty,0))}</span><b style="justify-self:end;font-variant-numeric:tabular-nums">${eur(o.total)}</b></div>`).join(""):`<p class="cnt">${t("noOrders")}</p>`}
+    </section>
+    <div class="acc-2">
+      <section class="panel" aria-labelledby="h-adr"><h2 id="h-adr">${t("addrT")}</h2>${u.addr?`<p>${esc(u.name||"")}<br>${esc(u.addr)}, ${esc(u.city)}</p>`:`<p class="cnt">${t("noAddr")}</p>`}</section>
+      <section class="panel" aria-labelledby="h-fv"><h2 id="h-fv">${t("fav")}</h2><p class="cnt">${tn("items",S.fav.length)}</p><a class="btn g" href="#favorites">${t("viewFav")}</a></section>
+    </div>
+  </div></div>`;
+}
+function vFav(){
+  const list=S.fav.map(pById).filter(Boolean);
+  if(!list.length) return emptyState(`<span style="color:var(--brand)">${iHeart(32)}</span>`,t("favEmpty"),t("favEmptyS"),`<a class="btn p" href="#shop">${t("heroB")}</a>`);
+  return `<div class="view" style="gap:0"><div class="lhead"><div><h1>${t("fav")}</h1><p class="cnt">${tn("results",list.length)}</p></div></div><div class="grid">${list.map(card).join("")}</div></div>`;
 }
 function vHelp(){
   return `<div class="view"><div class="help"><h1>${t("helpT")}</h1><p class="note">${t("helpS")}</p>
@@ -722,44 +911,57 @@ function vHelp(){
 /* ---------- Yönlendirme ---------- */
 const app=document.getElementById("app"), qIn=document.getElementById("q");
 let first=true, timer=null;
+function go(h){if(location.hash===h)route();else location.hash=h}
 function route(opts){
   const h=(location.hash||"#home").slice(1);
-  let html,cur="",title="";
+  let html,cur="",title="",tab="";
   clearInterval(timer);
-  if(h==="shop"){html=vList();cur="shop";title=S.q.trim()?t("searchFor",{q:S.q.trim()}):t("all")}
-  else if(h.startsWith("c-")&&CATS.some(c=>c.id===h.slice(2))){if(!opts||!opts.keepQ){S.q="";qIn.value=""}html=vList(h.slice(2));cur=h.slice(2);title=cn(cur)}
-  else if(h.startsWith("p-")){const p=pById(+h.slice(2));html=vProduct(+h.slice(2));cur=p?p.cat:"";title=p?pn(p):t("nf")}
-  else if(h==="cart"){html=vCart();title=t("cart")}
-  else if(h==="checkout"){html=vCheckout();title=t("orderT")}
-  else if(h==="verify"){html=vVerify();title=t("verT")}
-  else if(h==="done"){html=vDone();title=t("ordNo")}
+  if(h==="shop"){html=vList();cur="shop";tab="cats";title=S.q.trim()?t("searchFor",{q:S.q.trim()}):t("all")}
+  else if(h.startsWith("c-")&&CATS.some(c=>c.id===h.slice(2))){if(!opts||!opts.keepQ){S.q="";qIn.value=""}html=vList(h.slice(2));cur=h.slice(2);tab="cats";title=cn(cur)}
+  else if(h.startsWith("p-")){const p=pById(+h.slice(2));html=vProduct(+h.slice(2));cur=p?p.cat:"";tab="cats";title=p?pn(p):t("nf")}
+  else if(h==="cart"){html=vCart();title=t("cart");tab="cart"}
+  else if(h==="gate"){if(!S.cart.length){location.replace("#cart");return}if(S.user){location.replace("#checkout");return}html=vGate("checkout");title=t("gateT");tab="cart"}
+  else if(h==="checkout"){if(!S.cart.length){location.replace("#cart");return}if(!S.user&&!S.guest){location.replace("#gate");return}html=vCheckout();title=t("orderT");tab="cart"}
+  else if(h==="verify"){if(!S.code){location.replace(S.otpFor==="login"?"#account":"#checkout");return}html=vVerify();title=t("verT");tab=S.otpFor==="login"?"acc":"cart"}
+  else if(h==="done"){if(!S.order){location.replace("#home");return}html=vDone();title=t("ordNo")}
+  else if(h==="account"){html=vAccount();title=t("account");tab="acc"}
+  else if(h==="favorites"){html=vFav();title=t("fav");tab="fav"}
   else if(h==="help"){html=vHelp();title=t("helpT")}
-  else {html=vHome();title="Kose"}
-  if(html==="")return;
+  else {html=vHome();title="Kose";tab="home"}
   app.innerHTML=html;
+  document.body.classList.toggle("has-cartbar",h==="cart"&&S.cart.length>0);
   document.title=title==="Kose"?"Kose":title+" · Kose";
-  chrome(cur);
+  chrome(cur,tab);
   if(h==="verify")startTimer();
   if(!first&&!(opts&&opts.keepFocus)){const h1=app.querySelector("h1");if(h1){h1.tabIndex=-1;h1.focus({preventScroll:true})}}
   first=false;
 }
-function chrome(cur){
+function chrome(cur,tab){
   document.documentElement.lang=S.lang==="sr"?"sr-Latn":S.lang;
   document.getElementById("stripTxt").innerHTML=t("strip");
   document.getElementById("protoTxt").textContent=t("proto");
   document.getElementById("footProto").textContent=t("proto");
   qIn.placeholder=t("search"); document.getElementById("qLabel").textContent=t("search");
   document.getElementById("cartLbl").textContent=t("cart");
-  document.getElementById("cartN").textContent=count();
-  document.getElementById("cartBtn").setAttribute("aria-label",t("cartA",{n:count()}));
+  updCount();
+  document.getElementById("hFav").setAttribute("aria-label",t("fav"));
+  document.getElementById("hAcc").setAttribute("aria-label",t("account"));
   document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.l===S.lang));
   const nav=document.getElementById("catnav"); nav.setAttribute("aria-label",t("cats"));
   nav.innerHTML=`<a href="#shop"${cur==="shop"?' aria-current="page"':""}>${t("all")}</a>`+CATS.map(c=>`<a href="#c-${c.id}"${cur===c.id?' aria-current="page"':""}>${cn(c.id)}</a>`).join("");
+  const tb=[["home","#home",iHome,t("tabHome")],["cats","#shop",iGrid,t("tabCats")],["cart","#cart",`<svg width="22" height="22" aria-hidden="true"><use href="#kmark"/></svg>`,t("cart")],["fav","#favorites",iHeart(22),t("fav")],["acc","#account",iUser,t("tabAcc")]];
+  document.getElementById("tabbar").innerHTML=tb.map(([k,href,ic,lb])=>`<a href="${href}"${tab===k?' aria-current="page"':""}>${ic}<span>${lb}</span>${k==="cart"?`<span class="n" id="tabN"${count()?"":" hidden"}>${count()}</span>`:""}</a>`).join("");
   const L_=L();
   document.getElementById("foot").innerHTML=`<div><a class="logo" href="#home" aria-label="Kose"><svg width="26" height="26" aria-hidden="true"><use href="#kmark"/></svg><span style="font-size:1.35rem">kose</span></a><p style="max-width:34ch;margin-top:6px">${t("f1s")}</p></div>
    <nav aria-labelledby="fh2"><h2 id="fh2">${t("f2")}</h2><ul>${L_.fl.map(x=>`<li><a href="#help">${x}</a></li>`).join("")}</ul></nav>
    <nav aria-labelledby="fh3"><h2 id="fh3">${t("f3")}</h2><ul>${L_.fc.map(x=>`<li><a href="#help">${x}</a></li>`).join("")}</ul></nav>
    <div><h2>${t("f4")}</h2><ul><li>+383 44 000 000</li><li>info@kose.example</li><li>${t("tr4s")}</li></ul></div>`;
+}
+function updCount(){
+  const n=count();
+  document.getElementById("cartN").textContent=n;
+  document.getElementById("cartBtn").setAttribute("aria-label",tn("cartA",n));
+  const tb=document.getElementById("tabN"); if(tb){tb.textContent=n;tb.hidden=!n}
 }
 function startTimer(){
   timer=setInterval(()=>{const b=document.getElementById("resend");if(!b){clearInterval(timer);return}
@@ -767,12 +969,12 @@ function startTimer(){
     b.disabled=left>0;b.textContent=left?t("resendIn",{s:left}):t("resend");if(!left)clearInterval(timer)},1000);
 }
 
-/* ---------- Sepet ---------- */
+/* ---------- Sepet, favori, sipariş ---------- */
 let toastT;
-function toast(msg,link){
+function toast(msg,link,href){
   const to=document.getElementById("toast"),a=document.getElementById("toastLink");
   document.getElementById("toastTxt").textContent=msg;
-  a.textContent=t("view"); a.hidden=!link;
+  a.textContent=link||""; a.href=href||"#cart"; a.hidden=!link;
   to.classList.add("on"); clearTimeout(toastT); toastT=setTimeout(()=>to.classList.remove("on"),3200);
 }
 function addToCart(id,c,s,q){
@@ -781,28 +983,47 @@ function addToCart(id,c,s,q){
   q=Math.min(q,room);
   const ex=S.cart.find(i=>i.id===id&&i.c===c&&i.s===s);
   if(ex) ex.qty+=q; else S.cart.push({id,c,s,qty:q});
-  save(); document.getElementById("cartN").textContent=count();
-  document.getElementById("cartBtn").setAttribute("aria-label",t("cartA",{n:count()}));
+  save(); updCount();
   const vt=varText({c,s});
-  toast(`${t("added")}: ${pn(p)}${vt?" ("+vt+")":""}`,true);
+  toast(`${t("added")}: ${pn(p)}${vt?" ("+vt+")":""}`,t("view"),"#cart");
   return true;
+}
+function toggleFav(id){
+  const on=isFav(id); S.fav=on?S.fav.filter(x=>x!==id):[...S.fav,id]; save();
+  document.querySelectorAll(`[data-fav="${id}"]`).forEach(b=>{b.setAttribute("aria-pressed",!on);b.setAttribute("aria-label",`${on?t("favAdd"):t("favRm")}: ${pn(pById(id))}`)});
+  toast(on?t("favRemoved"):t("favAdded"),on?"":t("viewFav"),"#favorites");
+  if(location.hash==="#favorites"&&on)route({keepFocus:true});
+}
+function placeOrder(){
+  const s=sub(),sh=shipCost(s),f=S.form;
+  S.order={no:"KS-"+String(Date.now()).slice(-6),at:Date.now(),first:f.name.split(/\s+/)[0],name:f.name,addr:f.addr,city:f.city,phone:f.phone,items:S.cart.map(i=>({...i})),ship:sh,total:s+sh};
+  S.orders.push(S.order);
+  if(S.user){Object.assign(S.user,{name:f.name,addr:f.addr,city:f.city})}
+  S.cart=[];S.code="";S.guest=false;save();updCount();go("#done");
 }
 
 /* ---------- Olaylar ---------- */
 document.addEventListener("click",e=>{
+  const fb=e.target.closest("[data-fav]");
+  if(fb){e.preventDefault();toggleFav(+fb.dataset.fav);return}
   const qb=e.target.closest("[data-quick]");
   if(qb){e.preventDefault();const p=pById(+qb.dataset.quick);
     if(p.sizes){location.hash="#p-"+p.id;return} addToCart(p.id,p.colors?p.colors[0]:null,"-",1);return}
   const lb=e.target.closest(".lang button");
   if(lb){S.lang=lb.dataset.l;save();route({keepFocus:true,keepQ:true});lb.focus();return}
+  if(e.target.closest("[data-guest]")){S.guest=true;go("#checkout");return}
+  const tb=e.target.closest("[data-tab]");
+  if(tb){S.gateTab=tb.dataset.tab;route({keepFocus:true});document.getElementById("tab-"+S.gateTab)?.focus();return}
+  if(e.target.closest("[data-logout]")){S.user=null;save();toast(t("loggedOut"));route();return}
+  if(e.target.closest("[data-mkacc]")){const o=S.order;S.user={phone:o.phone,name:o.name,addr:o.addr,city:o.city};save();toast(t("accCreated"));go("#account");return}
   const h=(location.hash||"").slice(1);
   if(h.startsWith("p-")){
     const id=+h.slice(2),v=S.pv[id];if(!v)return;
     const c=e.target.closest("[data-color]"),s=e.target.closest("[data-size]"),q=e.target.closest("[data-q]"),im=e.target.closest("[data-img]");
-    const refocus=sel=>{route({keepFocus:true});const el=app.querySelector(sel);if(el)el.focus()};
+    const refocus=sel=>{route({keepFocus:true});app.querySelector(sel)?.focus()};
     if(c){v.c=c.dataset.color;refocus(`[data-color="${v.c}"]`);return}
     if(s){v.s=s.dataset.size;refocus(`[data-size="${v.s}"]`);return}
-    if(q){const p=pById(id),room=Math.max(1,maxFor(p)-inCart(id));v.q=Math.max(1,Math.min(room,v.q+ +q.dataset.q));refocus(`[data-q="${q.dataset.q}"]:not([disabled])`)||0;return}
+    if(q){const p=pById(id),room=Math.max(1,maxFor(p)-inCart(id));v.q=Math.max(1,Math.min(room,v.q+ +q.dataset.q));refocus(`[data-q="${q.dataset.q}"]:not([disabled])`);return}
     if(im){v.img=+im.dataset.img;refocus(`[data-img="${v.img}"]`);return}
     if(e.target.closest("#addBtn")){if(addToCart(id,v.c,v.s,v.q)){v.q=1;route({keepFocus:true});app.querySelector("#addBtn")?.focus()}return}
   }
@@ -817,8 +1038,12 @@ document.addEventListener("change",e=>{if(e.target.id==="sort"){S.sort=e.target.
 qIn.addEventListener("input",()=>{S.q=qIn.value;
   if(location.hash.slice(1)!=="shop"){history.replaceState(null,"","#shop")}
   route({keepFocus:true,keepQ:true});});
+const clearBad=el=>{const f=el.closest(".fld");if(f&&f.classList.contains("bad")){f.classList.remove("bad");el.removeAttribute("aria-invalid")}};
+const markBad=(bad)=>{let firstBad=null;for(const k in bad){const box=document.getElementById("f-"+k),el=document.getElementById(k);if(!box||!el)continue;box.classList.toggle("bad",bad[k]);if(bad[k])el.setAttribute("aria-invalid","true");else el.removeAttribute("aria-invalid");if(bad[k]&&!firstBad)firstBad=k}
+  if(firstBad)document.getElementById(firstBad).focus();return !firstBad};
 document.addEventListener("input",e=>{
-  if(e.target.closest("#co")){S.form[e.target.id]=e.target.value;const f=e.target.closest(".fld");if(f&&f.classList.contains("bad")){f.classList.remove("bad");e.target.removeAttribute("aria-invalid")}}
+  if(e.target.closest("#co")){S.form[e.target.id]=e.target.value;clearBad(e.target)}
+  if(e.target.closest("#authf"))clearBad(e.target);
   const m=/^o(\d)$/.exec(e.target.id||""); if(!m)return;
   e.target.value=e.target.value.replace(/\D/g,"").slice(-1);
   document.getElementById("otpErr").hidden=true;
@@ -836,27 +1061,38 @@ document.addEventListener("keydown",e=>{
   const m=/^o(\d)$/.exec(e.target.id||""); if(m&&e.key==="Backspace"&&!e.target.value&&+m[1]>0)document.getElementById("o"+(+m[1]-1)).focus();
 });
 document.addEventListener("focusout",e=>{
-  if(e.target.id==="phone"){const d=e.target.value.replace(/\D/g,"").replace(/^383/,"").replace(/^0/,"");if(/^\d{8}$/.test(d)){e.target.value=d.replace(/^(\d{2})(\d{3})(\d{3})$/,"$1 $2 $3");S.form.phone=e.target.value}}
+  if(e.target.id==="phone"||e.target.id==="aphone"){const d=normPhone(e.target.value);if(okPhone(d)){e.target.value=fmtPhone(d);if(e.target.id==="phone")S.form.phone=e.target.value}}
 });
 document.addEventListener("submit",e=>{
   e.preventDefault();
   if(e.target.id==="co"){
     const f=S.form; ["name","phone","city","addr","note"].forEach(k=>{const el=document.getElementById(k);if(el)f[k]=el.value.trim()});
-    const ph=f.phone.replace(/\D/g,"").replace(/^383/,"").replace(/^0/,"");
-    const bad={name:f.name.split(/\s+/).filter(Boolean).length<2,phone:!/^4[3-9]\d{6}$/.test(ph),city:!f.city,addr:f.addr.length<5};
-    let firstBad=null;
-    for(const k in bad){document.getElementById("f-"+k).classList.toggle("bad",bad[k]);const el=document.getElementById(k);if(bad[k])el.setAttribute("aria-invalid","true");else el.removeAttribute("aria-invalid");if(bad[k]&&!firstBad)firstBad=k}
-    if(firstBad){document.getElementById(firstBad).focus();return}
-    f.phone=ph.replace(/^(\d{2})(\d{3})(\d{3})$/,"$1 $2 $3");
-    S.code=String(1000+Math.floor(Math.random()*9000)); S.sentAt=Date.now();
-    location.hash="#verify";
+    const ph=S.user?normPhone(S.user.phone):normPhone(f.phone);
+    if(!markBad({name:f.name.split(/\s+/).filter(Boolean).length<2,phone:!S.user&&!okPhone(ph),city:!f.city,addr:f.addr.length<5}))return;
+    f.phone=fmtPhone(ph);
+    if(S.user){placeOrder();return}
+    S.otpFor="order";S.code=String(1000+Math.floor(Math.random()*9000)); S.sentAt=Date.now();
+    go("#verify");
+  }
+  if(e.target.id==="authf"){
+    const ctx=e.target.dataset.ctx,ne=document.getElementById("aname"),pe=document.getElementById("aphone");
+    const name=ne?ne.value.trim():"",ph=normPhone(pe.value);
+    if(!markBad({aname:!!ne&&name.split(/\s+/).filter(Boolean).length<2,aphone:!okPhone(ph)}))return;
+    S.pending={phone:fmtPhone(ph),name};S.after=ctx==="account"?"#account":"#checkout";
+    S.otpFor="login";S.code=String(1000+Math.floor(Math.random()*9000));S.sentAt=Date.now();
+    go("#verify");
   }
   if(e.target.id==="otpf"){
     const v=[0,1,2,3].map(i=>document.getElementById("o"+i).value).join("");
     if(v!==S.code){document.getElementById("otpErr").hidden=false;[0,1,2,3].forEach(i=>document.getElementById("o"+i).value="");document.getElementById("o0").focus();return}
-    const s=sub(),sh=shipCost(s);
-    S.order={no:"KS-"+String(Date.now()).slice(-6),first:S.form.name.split(/\s+/)[0],name:S.form.name,addr:S.form.addr,city:S.form.city,phone:S.form.phone,items:S.cart.map(i=>({...i})),ship:sh,total:s+sh};
-    S.cart=[];S.code="";save();location.hash="#done";
+    if(S.otpFor==="login"){
+      const pd=S.pending,known=S.user&&S.user.phone===pd.phone?S.user:null;
+      const prev=S.orders.filter(o=>o.phone===pd.phone).pop();
+      S.user=known||{phone:pd.phone,name:pd.name||(prev?prev.name:""),addr:prev?prev.addr:"",city:prev?prev.city:""};
+      if(pd.name)S.user.name=pd.name;
+      S.code="";S.pending=null;save();toast(t("loggedIn"));go(S.after);return;
+    }
+    placeOrder();
   }
 });
 window.addEventListener("hashchange",()=>{route();window.scrollTo({top:0,behavior:"instant"});

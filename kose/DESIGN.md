@@ -19,6 +19,17 @@ Durum: onaylandı (renk yönü C "Qiell", geçici logo). Yazı tipi: önerilen e
 
 Kural: gradyan yalnızca hero ve kampanya bloklarında. Butonlar düz mavi.
 
+### Anlamsal renkler (Hepsiburada disiplininden uyarlandı)
+Mavi **yalnızca aksiyon** içindir (ana buton, link, aktif sekme, adet rozeti). Diğer anlamlar sabit renklerle:
+
+| Anlam | Token | Değer | Örnek |
+|---|---|---|---|
+| Kazanç, bedava kargo, başarı, doğrulandı | `--ok` | `#1f7a4d` | "Kursen 25,40 €", "Falas", "I verifikuar" |
+| Hata | `--err` | `#b42318` | form hataları |
+| Az stok, sipariş durumu | metin `#8a4b00`, zemin `#fff4e0` | — | "Vetëm 3 copë", "Në përgatitje" |
+| Favori | `--heart` | `#d6336c` | dolu kalp |
+| Puan yıldızı / "E re" rozeti | `--gold` | `#c9a24a` | ★ 4,6 |
+
 ## Yazı tipi
 - Başlık: Geologica (600/700)
 - Metin: Onest (400/500/600)
