@@ -1,0 +1,710 @@
+<meta charset="utf-8">
+<title>Kose Vitrin Prototipi</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@500;600;700&family=Onest:wght@400;500;600&display=swap&subset=latin-ext,cyrillic">
+<style>
+/* Layout: duyuru bandı → yapışkan header (logo, kategoriler, arama, dil, sepet) → görünüm (ana sayfa | liste | ürün | sepet | sipariş | doğrulama | onay) → footer.
+   Tek tema: mağaza bilinçli olarak açık zeminde tasarlandı (yön C · Qiell). */
+:root{
+  --brand:#244aa5; --brand-hover:#1c3c8a; --ink:#0e1a33; --muted:#5a6680; --line:#e3e8f2;
+  --ice:#eaf1fd; --ice-2:#f4f7fc; --white:#ffffff; --gold:#c9a24a; --ok:#1f7a4d; --err:#b42318;
+  --glow:linear-gradient(135deg,#244aa5 0%,#5aa0ea 100%);
+  --f-display:"Geologica","Onest",system-ui,sans-serif;
+  --f-body:"Onest",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:14px; --r-lg:22px; --max:1200px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--white);color:var(--ink);font:16px/1.55 var(--f-body);-webkit-font-smoothing:antialiased;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--white)}
+a{color:inherit}
+button,input,select,textarea{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--f-display);margin:0;letter-spacing:-.015em;text-wrap:balance;line-height:1.12}
+p{margin:0}
+.in{max-width:var(--max);margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:6px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* Duyuru + prototip notu */
+.strip{background:var(--ink);color:#fff;font-size:.8rem}
+.strip .in{display:flex;justify-content:space-between;gap:12px;padding-block:7px;flex-wrap:wrap}
+.strip b{font-weight:600}
+.proto{opacity:.65}
+
+/* Header */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(255,255,255,.92);backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
+.hrow{display:flex;align-items:center;gap:20px;padding-block:14px}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);flex:none}
+.logo svg{color:var(--brand)}
+.logo span{font-family:var(--f-display);font-weight:700;font-size:1.55rem;letter-spacing:-.04em;line-height:1}
+.search{flex:1;min-width:0;max-width:520px;position:relative}
+.search input{width:100%;border:1px solid var(--line);background:var(--ice-2);border-radius:99px;padding:10px 16px 10px 40px;outline:none;transition:border-color .15s,background .15s}
+.search input:focus{border-color:var(--brand);background:#fff}
+.search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.hact{display:flex;align-items:center;gap:8px;margin-left:auto;flex:none}
+.lang{display:flex;border:1px solid var(--line);border-radius:99px;padding:3px}
+.lang button{border:0;background:none;padding:5px 9px;border-radius:99px;font-size:.78rem;font-weight:600;color:var(--muted);cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.cartbtn{display:flex;align-items:center;gap:8px;text-decoration:none;border-radius:99px;padding:9px 14px;background:var(--brand);color:#fff;font-weight:600;font-size:.9rem;transition:background .15s}
+.cartbtn:hover{background:var(--brand-hover)}
+.cartbtn .n{background:#fff;color:var(--brand);border-radius:99px;min-width:22px;height:22px;display:grid;place-items:center;font-size:.75rem;font-variant-numeric:tabular-nums;padding:0 6px}
+.catnav{display:flex;gap:4px;padding-bottom:10px;overflow-x:auto;scrollbar-width:none}
+.catnav::-webkit-scrollbar{display:none}
+.catnav a{flex:none;text-decoration:none;font-size:.9rem;color:var(--muted);padding:6px 12px;border-radius:99px;transition:background .15s,color .15s}
+.catnav a:hover{background:var(--ice-2);color:var(--ink)}
+.catnav a[aria-current="page"]{background:var(--ice);color:var(--brand);font-weight:600}
+
+/* Butonlar */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;cursor:pointer;text-decoration:none;border-radius:99px;padding:13px 22px;font-weight:600;font-size:.95rem;transition:background .15s,transform .1s}
+.btn:active{transform:scale(.98)}
+.btn.p{background:var(--brand);color:#fff}
+.btn.p:hover{background:var(--brand-hover)}
+.btn.g{background:var(--ice-2);color:var(--ink);border:1px solid var(--line)}
+.btn.g:hover{background:var(--ice)}
+.btn.w{width:100%}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+
+main{min-height:60vh}
+.view{padding-block:28px 64px;display:grid;gap:56px}
+
+/* Hero */
+.hero{position:relative;overflow:hidden;border-radius:var(--r-lg);background:linear-gradient(160deg,var(--ice) 0%,#fff 72%);border:1px solid var(--line)}
+.hero::after{content:"";position:absolute;right:-140px;top:-160px;width:520px;height:520px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#7db6f0 0%,#244aa5 52%,transparent 71%);opacity:.85;pointer-events:none}
+.hgrid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:32px;align-items:center;padding:56px 48px}
+.hero h1{font-size:clamp(2rem,4.4vw,3.4rem);font-weight:700;max-width:16ch}
+.hero p{color:var(--muted);font-size:1.08rem;max-width:44ch;margin-top:16px}
+.hbtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+.hstack{position:relative;height:380px}
+.hstack .t{position:absolute;background:#fff;border-radius:18px;box-shadow:0 30px 60px -30px rgba(14,26,51,.45);padding:14px;display:grid;gap:8px;width:170px;font-size:.82rem;text-decoration:none;color:var(--ink);transition:transform .25s}
+.hstack .t:hover{transform:translateY(-4px)}
+.hstack .t .im{aspect-ratio:1/1;border-radius:12px;display:grid;place-items:center;max-width:100%}
+.hstack .t b{font-variant-numeric:tabular-nums}
+.hstack .t:nth-child(1){left:2%;top:56px}
+.hstack .t:nth-child(2){left:38%;top:0;width:190px}
+.hstack .t:nth-child(3){left:60%;top:118px}
+@media (prefers-reduced-motion:no-preference){
+  .hstack .t{animation:rise .7s cubic-bezier(.2,.7,.2,1) both}
+  .hstack .t:nth-child(2){animation-delay:.08s}.hstack .t:nth-child(3){animation-delay:.16s}
+  @keyframes rise{from{transform:translateY(14px)}to{transform:none}}
+}
+
+/* Güven satırı */
+.trust{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.trust div{display:flex;gap:12px;align-items:center;padding:16px;border-radius:var(--r);background:var(--ice-2);font-size:.9rem;min-width:0}
+.trust svg{flex:none;color:var(--brand)}
+.trust b{display:block;font-weight:600}
+.trust span{color:var(--muted);font-size:.82rem}
+
+/* Bölüm başlığı */
+.sh{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:20px}
+.sh h2{font-size:1.6rem}
+.sh a{font-size:.9rem;color:var(--brand);font-weight:600;text-decoration:none}
+.sh a:hover{text-decoration:underline}
+
+/* Kategoriler */
+.cats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.cat{display:grid;gap:10px;justify-items:center;text-decoration:none;padding:18px 10px;border-radius:var(--r);border:1px solid var(--line);transition:border-color .15s,transform .2s;font-size:.9rem;font-weight:500;text-align:center}
+.cat:hover{border-color:var(--brand);transform:translateY(-2px)}
+.cat .ic{width:64px;height:64px;border-radius:50%;background:var(--ice);display:grid;place-items:center;color:var(--brand)}
+
+/* Ürün ızgarası */
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px 16px}
+.card{display:grid;gap:10px;text-decoration:none;color:var(--ink);min-width:0;position:relative}
+.card .im{aspect-ratio:1/1;max-width:100%;border-radius:var(--r);display:grid;place-items:center;position:relative;overflow:hidden;transition:transform .3s}
+.card:hover .im svg{transform:scale(1.06)}
+.im svg{transition:transform .35s cubic-bezier(.2,.7,.2,1);color:var(--brand)}
+.badge{position:absolute;left:10px;top:10px;font-size:.72rem;font-weight:600;padding:3px 9px;border-radius:99px;background:#fff;color:var(--ink)}
+.badge.sale{background:var(--ink);color:#fff}
+.badge.new{background:var(--gold);color:var(--ink)}
+.card .nm{font-size:.94rem;line-height:1.35}
+.card .cat-l{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.price{display:flex;gap:8px;align-items:baseline;font-variant-numeric:tabular-nums}
+.price b{font-weight:600}
+.price s{color:var(--muted);font-size:.86rem}
+.quick{position:absolute;right:10px;bottom:10px;width:38px;height:38px;border-radius:50%;border:0;background:#fff;color:var(--brand);display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 18px -8px rgba(14,26,51,.4);transition:background .15s,color .15s}
+.quick:hover{background:var(--brand);color:#fff}
+
+/* Kampanya */
+.camp{border-radius:var(--r-lg);background:var(--glow);color:#fff;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:center;padding:40px 44px;position:relative;overflow:hidden}
+.camp::after{content:"";position:absolute;right:-60px;bottom:-120px;width:340px;height:340px;border-radius:50%;background:rgba(255,255,255,.12)}
+.camp h2{font-size:clamp(1.5rem,3vw,2.2rem)}
+.camp p{opacity:.85;margin-top:8px;max-width:46ch}
+.camp .btn{background:#fff;color:var(--brand);position:relative;z-index:1}
+
+/* Liste */
+.lhead{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.lhead h1{font-size:clamp(1.6rem,3vw,2.2rem)}
+.lhead .cnt{color:var(--muted);font-size:.9rem;margin-top:4px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:99px;padding:7px 14px;font-size:.86rem;cursor:pointer;text-decoration:none}
+.chip[aria-current="page"],.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+select{border:1px solid var(--line);border-radius:99px;padding:9px 14px;background:#fff}
+.emptyres{padding:48px 16px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:var(--r)}
+
+/* Ürün sayfası */
+.crumbs{font-size:.84rem;color:var(--muted);display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.crumbs a{text-decoration:none}.crumbs a:hover{color:var(--brand)}
+.pd{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:48px;align-items:start}
+.gal{display:grid;gap:12px}
+.gal .main{aspect-ratio:1/1;max-width:100%;border-radius:var(--r-lg);display:grid;place-items:center;position:relative}
+.thumbs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.thumbs button{aspect-ratio:1/1;max-width:100%;border-radius:12px;border:2px solid transparent;cursor:pointer;display:grid;place-items:center;padding:0}
+.thumbs button[aria-pressed="true"]{border-color:var(--brand)}
+.pinfo{display:grid;gap:20px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 130px)}
+.pinfo h1{font-size:clamp(1.6rem,3vw,2.2rem)}
+.pinfo .price b{font-size:1.6rem;font-family:var(--f-display);font-weight:700}
+.pinfo .save{font-size:.8rem;font-weight:600;color:var(--ok);background:#e7f4ec;padding:3px 9px;border-radius:99px}
+.opt{display:grid;gap:10px}
+.opt label,.opt .lb{font-size:.86rem;font-weight:600}
+.opt .lb span{font-weight:400;color:var(--muted)}
+.sw{display:flex;gap:8px;flex-wrap:wrap}
+.sw button{border:1px solid var(--line);background:#fff;border-radius:99px;padding:8px 14px;cursor:pointer;font-size:.88rem;display:flex;align-items:center;gap:8px}
+.sw button i{width:16px;height:16px;border-radius:50%;border:1px solid rgba(0,0,0,.15)}
+.sw button[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.buyrow{display:flex;gap:10px}
+.step{display:flex;align-items:center;border:1px solid var(--line);border-radius:99px}
+.step button{border:0;background:none;width:40px;height:44px;cursor:pointer;font-size:1.1rem}
+.step output{min-width:28px;text-align:center;font-variant-numeric:tabular-nums;font-weight:600}
+.buyrow .btn{flex:1}
+.info{border:1px solid var(--line);border-radius:var(--r);display:grid}
+.info div{display:flex;gap:12px;padding:14px 16px;font-size:.9rem;align-items:flex-start}
+.info div+div{border-top:1px solid var(--line)}
+.info svg{flex:none;color:var(--brand);margin-top:2px}
+.info b{display:block;font-weight:600}
+.info span{color:var(--muted);font-size:.86rem}
+.specs{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 24px;font-size:.92rem;margin:0}
+.specs dt{color:var(--muted)}
+.specs dd{margin:0;font-variant-numeric:tabular-nums}
+
+/* Sepet & sipariş */
+.two{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:40px;align-items:start}
+.two h1{font-size:clamp(1.6rem,3vw,2.2rem);margin-bottom:20px}
+.items{display:grid;border-top:1px solid var(--line)}
+.it{display:grid;grid-template-columns:88px minmax(0,1fr) auto;gap:16px;padding:16px 0;border-bottom:1px solid var(--line);align-items:center}
+.it .im{width:88px;height:88px;border-radius:12px;display:grid;place-items:center}
+.it .nm{font-weight:500;text-decoration:none}
+.it .vr{font-size:.84rem;color:var(--muted)}
+.it .rt{display:grid;gap:8px;justify-items:end}
+.it .rm{border:0;background:none;color:var(--muted);font-size:.82rem;cursor:pointer;text-decoration:underline}
+.sum{background:var(--ice-2);border-radius:var(--r-lg);padding:24px;display:grid;gap:14px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 130px)}
+.sum h2{font-size:1.15rem}
+.row{display:flex;justify-content:space-between;gap:12px;font-size:.94rem;font-variant-numeric:tabular-nums}
+.row.t{font-weight:700;font-size:1.1rem;border-top:1px solid var(--line);padding-top:14px}
+.free{font-size:.84rem;display:grid;gap:6px}
+.bar{height:6px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--glow);border-radius:99px;transition:width .4s}
+.mini{display:grid;gap:10px}
+.mini div{display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:10px;align-items:center;font-size:.86rem}
+.mini .im{width:48px;height:48px;border-radius:10px;display:grid;place-items:center}
+
+form.co{display:grid;gap:18px}
+.fld{display:grid;gap:6px}
+.fld label{font-size:.88rem;font-weight:600}
+.fld label small{font-weight:400;color:var(--muted)}
+.fld input,.fld select,.fld textarea{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fff;width:100%;outline:none;transition:border-color .15s}
+.fld select{border-radius:12px}
+.fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--brand)}
+.fld .hint{font-size:.8rem;color:var(--muted)}
+.fld .er{font-size:.82rem;color:var(--err);display:none}
+.fld.bad input,.fld.bad select{border-color:var(--err)}
+.fld.bad .er{display:block}
+.phone{display:flex;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.phone span{padding:12px 12px;background:var(--ice-2);border-right:1px solid var(--line);font-variant-numeric:tabular-nums;color:var(--muted)}
+.phone input{border:0;border-radius:0}
+.fld.bad .phone{border-color:var(--err)}
+.paym{display:flex;gap:14px;align-items:center;border:2px solid var(--brand);border-radius:var(--r);padding:16px;background:var(--ice-2)}
+.paym .dot{width:20px;height:20px;border-radius:50%;border:6px solid var(--brand);background:#fff;flex:none}
+.paym b{display:block}
+.paym span{font-size:.86rem;color:var(--muted)}
+.pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+
+.center{max-width:520px;margin:0 auto;text-align:center;display:grid;gap:16px;justify-items:center;padding-block:24px}
+.center h1{font-size:clamp(1.6rem,3vw,2.2rem)}
+.center p{color:var(--muted)}
+.otp{display:flex;gap:10px;justify-content:center}
+.otp input{width:56px;height:64px;text-align:center;font-size:1.5rem;font-family:var(--f-display);border:1px solid var(--line);border-radius:12px;outline:none}
+.otp input:focus{border-color:var(--brand)}
+.demo{font-size:.8rem;background:#fff7e6;color:#7a5200;padding:6px 12px;border-radius:99px}
+.okc{width:72px;height:72px;border-radius:50%;background:var(--glow);display:grid;place-items:center;color:#fff}
+.ordno{font-family:var(--f-display);font-weight:700;font-size:1.2rem;background:var(--ice);color:var(--brand);padding:8px 16px;border-radius:99px;font-variant-numeric:tabular-nums}
+
+/* Toast */
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:12px 14px 12px 18px;border-radius:99px;display:flex;gap:14px;align-items:center;font-size:.9rem;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:70;max-width:calc(100% - 32px)}
+.toast.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.toast span{white-space:nowrap}
+.toast a{color:#fff;font-weight:600;background:rgba(255,255,255,.14);padding:6px 12px;border-radius:99px;text-decoration:none;white-space:nowrap}
+
+footer{border-top:1px solid var(--line);background:var(--ice-2);font-size:.88rem;color:var(--muted)}
+.fgrid{display:grid;grid-template-columns:minmax(0,1.4fr) repeat(3,minmax(0,1fr));gap:24px;padding-block:40px}
+.fgrid h3{font-size:.95rem;color:var(--ink);margin-bottom:10px}
+.fgrid ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.fbot{border-top:1px solid var(--line);padding-block:16px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+@media (max-width:1000px){
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .cats{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .trust{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hgrid{grid-template-columns:minmax(0,1fr);padding:40px 28px}
+  .hstack{height:300px}
+  .hstack .t{width:140px}.hstack .t:nth-child(2){width:156px}
+  .pd,.two{grid-template-columns:minmax(0,1fr);gap:28px}
+  .pinfo,.sum{position:static}
+  .fgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  .hrow{flex-wrap:wrap;gap:12px}
+  .search{order:3;flex-basis:100%;max-width:none}
+  .lang button{padding:5px 7px}
+  .cartbtn .lbl{display:none}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 12px}
+  .cats{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .cat{padding:14px 6px;font-size:.82rem}.cat .ic{width:52px;height:52px}
+  .trust{grid-template-columns:minmax(0,1fr)}
+  .hgrid{padding:32px 20px}
+  .hstack{display:none}
+  .hero::after{right:-200px;top:auto;bottom:-280px;width:400px;height:400px;opacity:.45}
+  .camp{grid-template-columns:minmax(0,1fr);padding:28px 24px}
+  .it{grid-template-columns:64px minmax(0,1fr);}
+  .it .im{width:64px;height:64px}
+  .it .rt{grid-column:2;justify-items:start;grid-auto-flow:column;justify-content:space-between;align-items:center}
+  .pair{grid-template-columns:minmax(0,1fr)}
+  .fgrid{grid-template-columns:minmax(0,1fr)}
+  .strip .proto{display:none}
+  .otp input{width:48px;height:58px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="kmark" viewBox="0 0 48 48"><rect x="6" y="17" width="36" height="27" rx="9" fill="currentColor"/><g fill="currentColor"><circle cx="13" cy="15" r="2.2"/><circle cx="16.2" cy="9.6" r="2.2"/><circle cx="21.2" cy="6.4" r="2.2"/><circle cx="26.8" cy="6.4" r="2.2"/><circle cx="31.8" cy="9.6" r="2.2"/><circle cx="35" cy="15" r="2.2"/></g></symbol>
+    <g id="i-headphones"><path d="M14 38v-6a18 18 0 0 1 36 0v6"/><rect x="10" y="36" width="10" height="16" rx="4"/><rect x="44" y="36" width="10" height="16" rx="4"/></g>
+    <g id="i-charger"><rect x="20" y="14" width="24" height="30" rx="6"/><path d="M27 44v8M37 44v8M33 21l-5 8h8l-5 8"/></g>
+    <g id="i-watch"><rect x="19" y="18" width="26" height="28" rx="8"/><path d="M24 18l2-8h12l2 8M24 46l2 8h12l2-8M32 26v6l4 3"/></g>
+    <g id="i-lamp"><path d="M22 12h20l6 18H16z"/><path d="M32 30v20M22 52h20"/></g>
+    <g id="i-cup"><path d="M12 28h26v10a11 11 0 0 1-11 11h-4a11 11 0 0 1-11-11z"/><path d="M38 31h4a5 5 0 0 1 0 10h-4"/><path d="M20 14c0 4 4 5 4 9M28 14c0 4 4 5 4 9"/></g>
+    <g id="i-blanket"><rect x="12" y="16" width="40" height="32" rx="6"/><path d="M12 28h40M12 38h40M24 16v32M40 16v32"/></g>
+    <g id="i-cream"><rect x="15" y="29" width="34" height="20" rx="7"/><rect x="19" y="20" width="26" height="9" rx="3"/><path d="M22 39h20"/></g>
+    <g id="i-perfume"><rect x="18" y="26" width="28" height="26" rx="8"/><rect x="27" y="16" width="10" height="10" rx="2"/><path d="M37 20h8M24 38h16"/></g>
+    <g id="i-jacket"><path d="M24 12l8 6 8-6 10 6 2 34H12l2-34z"/><path d="M32 18v34M24 12l-2 14 4 4M40 12l2 14-4 4"/></g>
+    <g id="i-shoe"><path d="M10 44c0-8 2-18 6-23l8 6c4 3 10 4 16 5l10 3c3 1 4 3 4 6v3H10z"/><path d="M10 47h44M26 31l3-3M32 33l3-3"/></g>
+    <g id="i-bottle"><rect x="22" y="18" width="20" height="36" rx="8"/><rect x="25" y="10" width="14" height="8" rx="3"/><path d="M22 30h20"/></g>
+    <g id="i-blocks"><rect x="12" y="34" width="18" height="18" rx="3"/><rect x="34" y="34" width="18" height="18" rx="3"/><rect x="23" y="13" width="18" height="18" rx="3"/></g>
+  </defs>
+</svg>
+
+<div class="strip"><div class="in"><span id="stripTxt"></span><span class="proto" id="protoTxt"></span></div></div>
+
+<header class="top">
+  <div class="in">
+    <div class="hrow">
+      <a class="logo" href="#home" aria-label="Kose"><svg width="30" height="30"><use href="#kmark"/></svg><span>kose</span></a>
+      <div class="search" role="search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <label for="q" class="sr" id="qLabel">Search</label>
+        <input id="q" type="search" autocomplete="off">
+      </div>
+      <div class="hact">
+        <div class="lang" role="group" aria-label="Gjuha / Language">
+          <button data-l="sq">SQ</button><button data-l="en">EN</button><button data-l="tr">TR</button><button data-l="sr">SR</button>
+        </div>
+        <a class="cartbtn" href="#cart"><svg width="18" height="18"><use href="#kmark" style="color:#fff"/></svg><span class="lbl" id="cartLbl"></span><span class="n" id="cartN">0</span></a>
+      </div>
+    </div>
+    <nav class="catnav" id="catnav" aria-label="Kategoritë"></nav>
+  </div>
+</header>
+
+<main id="app" class="in" tabindex="-1"></main>
+
+<footer>
+  <div class="in">
+    <div class="fgrid" id="foot"></div>
+    <div class="fbot"><span>© 2026 Kose · Prishtinë, Kosovë</span><span id="footProto"></span></div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastTxt"></span><a href="#cart" id="toastLink"></a></div>
+
+<script>
+(function(){
+/* ---------- Metinler (4 dil) ---------- */
+const T={
+sq:{strip:"<b>Pagesa në dorëzim</b> · Dërgesa falas mbi 30 € · 1–3 ditë në të gjithë Kosovën",proto:"Prototip · porositë nuk dërgohen",search:"Kërko produkte…",cart:"Shporta",all:"Të gjitha",
+heroT:"Gjithçka që të duhet. E paguan kur të vjen.",heroS:"Porosit sot nga mbi 1 000 produkte. Dërgesa në 1–3 ditë pune në të gjitha 38 komunat e Kosovës.",heroB:"Shiko produktet",heroB2:"Ofertat e javës",
+tr1:"Pagesa në dorëzim",tr1s:"Paguan me para kur të vjen",tr2:"Dërgesa 1–3 ditë",tr2s:"Në të gjitha komunat",tr3:"Kthim 14 ditë",tr3s:"Pa pyetje të tepërta",tr4:"Mbështetje",tr4s:"Çdo ditë 09:00–21:00",
+cats:"Kategoritë",newT:"Të rejat",seeAll:"Shiko të gjitha",popT:"Më të shiturat",campT:"Java e shtëpisë",campS:"Deri në 30% zbritje për produktet e shtëpisë. Vetëm deri të dielën.",campB:"Shiko ofertat",
+add:"Shto në shportë",added:"U shtua në shportë",view:"Shiko shportën",qty:"Sasia",color:"Ngjyra",size:"Madhësia",save:"Kursen {x}",
+iDel:"Dërgesa: 1–3 ditë pune",iDelS:"Porosit sot, mbërrin deri më {d}.",iCod:"Pagesa në dorëzim",iCodS:"Paguan me para në dorë kur ta marrësh porosinë. Pa kartë.",iRet:"Kthim brenda 14 ditëve",iRetS:"Nëse nuk të pëlqen, e kthen falas.",
+details:"Detajet",subtotal:"Nëntotali",ship:"Dërgesa",free:"Falas",total:"Totali",toFree:"Edhe {x} dhe dërgesa është falas",gotFree:"Dërgesa jote është falas",checkout:"Vazhdo te porosia",
+empty:"Shporta është bosh",emptyS:"Shto disa produkte dhe kthehu këtu.",cont:"Vazhdo blerjen",remove:"Hiq",
+orderT:"Ku ta dërgojmë?",name:"Emri dhe mbiemri",phone:"Numri i celularit",phoneH:"Do të dërgojmë një SMS për ta konfirmuar porosinë.",city:"Komuna",choose:"Zgjidh komunën",address:"Adresa",addressP:"Rruga, numri, lagjja ose fshati",note:"Shënim për korrierin",opt:"opsional",noteP:"P.sh. telefono para se të vish",
+pay:"Mënyra e pagesës",payS:"Paguan {t} me para në dorë kur të vjen porosia.",place:"Konfirmo porosinë",summary:"Porosia jote",
+errName:"Shkruaj emrin dhe mbiemrin.",errPhone:"Shkruaj një numër celulari të Kosovës, p.sh. 044 123 456.",errCity:"Zgjidh komunën.",errAddr:"Shkruaj adresën e plotë.",errCode:"Kodi nuk është i saktë. Provo përsëri.",
+verT:"Konfirmo numrin",verS:"Dërguam një kod 4-shifror në {p}. Shkruaje këtu për ta konfirmuar porosinë.",verB:"Konfirmo",demo:"Prototip: kodi është {c}",back:"Ndrysho të dhënat",
+doneT:"Faleminderit, {n}! Porosia u pranua.",doneS:"Do të të njoftojmë me SMS kur korrieri të niset. Paguan {t} në dorëzim.",ordNo:"Numri i porosisë",home:"Kthehu në fillim",
+sort:"Rendit",sPop:"Më të shiturat",sLow:"Çmimi: nga më i ulëti",sHigh:"Çmimi: nga më i larti",results:"{n} produkte",searchFor:"Rezultatet për “{q}”",noRes:"Nuk gjetëm asgjë. Provo një fjalë tjetër.",
+sale:"Ofertë",nw:"E re",f1:"Kose",f1s:"Dyqani online i Kosovës. Porosit lehtë, paguaj në dorëzim.",f2:"Ndihmë",f3:"Kompania",f4:"Kontakt",
+fl:["Si të porosis","Dërgesa","Kthimet","Pyetjet e shpeshta"],fc:["Rreth nesh","Kushtet","Privatësia"],
+w:"Pesha",dim:"Përmasat",mat:"Materiali",war:"Garancia",bat:"Bateria",vol:"Vëllimi",age:"Mosha",yr:"vit",yrs:"vjet",mo:"muaj",hr:"orë",
+c:{black:"E zezë",white:"E bardhë",blue:"Blu",grey:"Gri",beige:"Bezhë"}},
+en:{strip:"<b>Cash on delivery</b> · Free delivery over 30 € · 1–3 days across Kosovo",proto:"Prototype · orders are not sent",search:"Search products…",cart:"Cart",all:"All",
+heroT:"Everything you need. Pay when it arrives.",heroS:"Order today from over 1,000 products. Delivered in 1–3 working days to all 38 municipalities of Kosovo.",heroB:"Browse products",heroB2:"Deals of the week",
+tr1:"Cash on delivery",tr1s:"Pay in cash when it arrives",tr2:"1–3 day delivery",tr2s:"To every municipality",tr3:"14-day returns",tr3s:"No awkward questions",tr4:"Support",tr4s:"Daily 09:00–21:00",
+cats:"Categories",newT:"New in",seeAll:"See all",popT:"Best sellers",campT:"Home week",campS:"Up to 30% off home products. Until Sunday only.",campB:"See the deals",
+add:"Add to cart",added:"Added to cart",view:"View cart",qty:"Quantity",color:"Colour",size:"Size",save:"Save {x}",
+iDel:"Delivery: 1–3 working days",iDelS:"Order today, arrives by {d}.",iCod:"Cash on delivery",iCodS:"Pay in cash when you receive the order. No card needed.",iRet:"14-day returns",iRetS:"Don't like it? Return it for free.",
+details:"Details",subtotal:"Subtotal",ship:"Delivery",free:"Free",total:"Total",toFree:"{x} more for free delivery",gotFree:"Your delivery is free",checkout:"Continue to checkout",
+empty:"Your cart is empty",emptyS:"Add a few products and come back here.",cont:"Continue shopping",remove:"Remove",
+orderT:"Where should we deliver?",name:"Full name",phone:"Mobile number",phoneH:"We'll send an SMS to confirm your order.",city:"Municipality",choose:"Choose municipality",address:"Address",addressP:"Street, number, neighbourhood or village",note:"Note for the courier",opt:"optional",noteP:"E.g. call before you arrive",
+pay:"Payment method",payS:"Pay {t} in cash when the order arrives.",place:"Place order",summary:"Your order",
+errName:"Enter your full name.",errPhone:"Enter a Kosovo mobile number, e.g. 044 123 456.",errCity:"Choose a municipality.",errAddr:"Enter your full address.",errCode:"That code is not right. Try again.",
+verT:"Confirm your number",verS:"We sent a 4-digit code to {p}. Enter it here to confirm the order.",verB:"Confirm",demo:"Prototype: the code is {c}",back:"Change details",
+doneT:"Thank you, {n}! Your order is in.",doneS:"We'll text you when the courier sets off. You pay {t} on delivery.",ordNo:"Order number",home:"Back to home",
+sort:"Sort",sPop:"Best sellers",sLow:"Price: low to high",sHigh:"Price: high to low",results:"{n} products",searchFor:"Results for “{q}”",noRes:"Nothing found. Try another word.",
+sale:"Sale",nw:"New",f1:"Kose",f1s:"Kosovo's online store. Easy ordering, cash on delivery.",f2:"Help",f3:"Company",f4:"Contact",
+fl:["How to order","Delivery","Returns","FAQ"],fc:["About us","Terms","Privacy"],
+w:"Weight",dim:"Dimensions",mat:"Material",war:"Warranty",bat:"Battery",vol:"Volume",age:"Age",yr:"year",yrs:"years",mo:"months",hr:"h",
+c:{black:"Black",white:"White",blue:"Blue",grey:"Grey",beige:"Beige"}},
+tr:{strip:"<b>Kapıda ödeme</b> · 30 € üzeri ücretsiz kargo · Tüm Kosova'ya 1–3 gün",proto:"Prototip · siparişler gönderilmez",search:"Ürün ara…",cart:"Sepet",all:"Tümü",
+heroT:"İhtiyacın olan her şey. Kapıda öde.",heroS:"1.000'den fazla ürün arasından bugün sipariş ver. Kosova'nın 38 belediyesine 1–3 iş gününde teslimat.",heroB:"Ürünlere göz at",heroB2:"Haftanın fırsatları",
+tr1:"Kapıda ödeme",tr1s:"Teslimatta nakit öde",tr2:"1–3 günde teslimat",tr2s:"Tüm belediyelere",tr3:"14 gün iade",tr3s:"Soru sorulmadan",tr4:"Destek",tr4s:"Her gün 09:00–21:00",
+cats:"Kategoriler",newT:"Yeni gelenler",seeAll:"Tümünü gör",popT:"Çok satanlar",campT:"Ev haftası",campS:"Ev ürünlerinde %30'a varan indirim. Sadece pazara kadar.",campB:"Fırsatları gör",
+add:"Sepete ekle",added:"Sepete eklendi",view:"Sepeti gör",qty:"Adet",color:"Renk",size:"Beden",save:"{x} tasarruf",
+iDel:"Teslimat: 1–3 iş günü",iDelS:"Bugün sipariş ver, en geç {d} kapında.",iCod:"Kapıda ödeme",iCodS:"Siparişi teslim alırken nakit ödersin. Kart gerekmez.",iRet:"14 gün içinde iade",iRetS:"Beğenmezsen ücretsiz iade edersin.",
+details:"Özellikler",subtotal:"Ara toplam",ship:"Kargo",free:"Ücretsiz",total:"Toplam",toFree:"Ücretsiz kargo için {x} daha",gotFree:"Kargon ücretsiz",checkout:"Siparişe devam et",
+empty:"Sepetin boş",emptyS:"Birkaç ürün ekleyip buraya dön.",cont:"Alışverişe devam et",remove:"Kaldır",
+orderT:"Nereye gönderelim?",name:"Ad soyad",phone:"Cep telefonu",phoneH:"Siparişi onaylamak için SMS göndereceğiz.",city:"Belediye",choose:"Belediye seç",address:"Adres",addressP:"Sokak, numara, mahalle veya köy",note:"Kurye için not",opt:"isteğe bağlı",noteP:"Örn. gelmeden önce ara",
+pay:"Ödeme yöntemi",payS:"Sipariş geldiğinde {t} nakit ödersin.",place:"Siparişi onayla",summary:"Siparişin",
+errName:"Adını ve soyadını yaz.",errPhone:"Kosova cep numarası yaz, örn. 044 123 456.",errCity:"Belediye seç.",errAddr:"Tam adresini yaz.",errCode:"Kod doğru değil. Tekrar dene.",
+verT:"Numaranı onayla",verS:"{p} numarasına 4 haneli bir kod gönderdik. Siparişi onaylamak için buraya yaz.",verB:"Onayla",demo:"Prototip: kod {c}",back:"Bilgileri değiştir",
+doneT:"Teşekkürler, {n}! Siparişin alındı.",doneS:"Kurye yola çıkınca SMS ile haber vereceğiz. Teslimatta {t} ödersin.",ordNo:"Sipariş numarası",home:"Ana sayfaya dön",
+sort:"Sırala",sPop:"Çok satanlar",sLow:"Fiyat: artan",sHigh:"Fiyat: azalan",results:"{n} ürün",searchFor:"“{q}” için sonuçlar",noRes:"Bir şey bulamadık. Başka bir kelime dene.",
+sale:"İndirim",nw:"Yeni",f1:"Kose",f1s:"Kosova'nın online mağazası. Kolay sipariş, kapıda ödeme.",f2:"Yardım",f3:"Şirket",f4:"İletişim",
+fl:["Nasıl sipariş verilir","Teslimat","İadeler","Sık sorulanlar"],fc:["Hakkımızda","Koşullar","Gizlilik"],
+w:"Ağırlık",dim:"Boyutlar",mat:"Malzeme",war:"Garanti",bat:"Pil",vol:"Hacim",age:"Yaş",yr:"yıl",yrs:"yıl",mo:"ay",hr:"saat",
+c:{black:"Siyah",white:"Beyaz",blue:"Mavi",grey:"Gri",beige:"Bej"}},
+sr:{strip:"<b>Plaćanje pouzećem</b> · Besplatna dostava preko 30 € · 1–3 dana na celom Kosovu",proto:"Prototip · porudžbine se ne šalju",search:"Pretraži proizvode…",cart:"Korpa",all:"Sve",
+heroT:"Sve što ti treba. Plaćaš kad stigne.",heroS:"Poruči danas od preko 1.000 proizvoda. Dostava za 1–3 radna dana u sve 38 opštine Kosova.",heroB:"Pogledaj proizvode",heroB2:"Ponude nedelje",
+tr1:"Plaćanje pouzećem",tr1s:"Plaćaš gotovinom pri dostavi",tr2:"Dostava 1–3 dana",tr2s:"U sve opštine",tr3:"Povrat 14 dana",tr3s:"Bez suvišnih pitanja",tr4:"Podrška",tr4s:"Svaki dan 09:00–21:00",
+cats:"Kategorije",newT:"Novo",seeAll:"Pogledaj sve",popT:"Najprodavanije",campT:"Nedelja doma",campS:"Do 30% popusta na proizvode za dom. Samo do nedelje.",campB:"Pogledaj ponude",
+add:"Dodaj u korpu",added:"Dodato u korpu",view:"Pogledaj korpu",qty:"Količina",color:"Boja",size:"Veličina",save:"Ušteda {x}",
+iDel:"Dostava: 1–3 radna dana",iDelS:"Poruči danas, stiže do {d}.",iCod:"Plaćanje pouzećem",iCodS:"Plaćaš gotovinom kad preuzmeš porudžbinu. Bez kartice.",iRet:"Povrat u roku od 14 dana",iRetS:"Ako ti se ne dopadne, vraćaš besplatno.",
+details:"Detalji",subtotal:"Međuzbir",ship:"Dostava",free:"Besplatno",total:"Ukupno",toFree:"Još {x} do besplatne dostave",gotFree:"Tvoja dostava je besplatna",checkout:"Nastavi na porudžbinu",
+empty:"Korpa je prazna",emptyS:"Dodaj nekoliko proizvoda i vrati se ovde.",cont:"Nastavi kupovinu",remove:"Ukloni",
+orderT:"Gde da dostavimo?",name:"Ime i prezime",phone:"Broj mobilnog",phoneH:"Poslaćemo SMS da potvrdimo porudžbinu.",city:"Opština",choose:"Izaberi opštinu",address:"Adresa",addressP:"Ulica, broj, naselje ili selo",note:"Napomena za kurira",opt:"opciono",noteP:"Npr. pozovi pre dolaska",
+pay:"Način plaćanja",payS:"Plaćaš {t} gotovinom kad porudžbina stigne.",place:"Potvrdi porudžbinu",summary:"Tvoja porudžbina",
+errName:"Upiši ime i prezime.",errPhone:"Upiši kosovski broj mobilnog, npr. 044 123 456.",errCity:"Izaberi opštinu.",errAddr:"Upiši punu adresu.",errCode:"Kod nije tačan. Pokušaj ponovo.",
+verT:"Potvrdi broj",verS:"Poslali smo četvorocifreni kod na {p}. Upiši ga ovde da potvrdiš porudžbinu.",verB:"Potvrdi",demo:"Prototip: kod je {c}",back:"Promeni podatke",
+doneT:"Hvala, {n}! Porudžbina je primljena.",doneS:"Javićemo ti SMS-om kad kurir krene. Plaćaš {t} pri dostavi.",ordNo:"Broj porudžbine",home:"Nazad na početnu",
+sort:"Sortiraj",sPop:"Najprodavanije",sLow:"Cena: od najniže",sHigh:"Cena: od najviše",results:"{n} proizvoda",searchFor:"Rezultati za „{q}“",noRes:"Ništa nismo našli. Probaj drugu reč.",
+sale:"Akcija",nw:"Novo",f1:"Kose",f1s:"Onlajn prodavnica Kosova. Lako naručivanje, plaćanje pouzećem.",f2:"Pomoć",f3:"Kompanija",f4:"Kontakt",
+fl:["Kako naručiti","Dostava","Povrat","Česta pitanja"],fc:["O nama","Uslovi","Privatnost"],
+w:"Težina",dim:"Dimenzije",mat:"Materijal",war:"Garancija",bat:"Baterija",vol:"Zapremina",age:"Uzrast",yr:"godina",yrs:"godine",mo:"meseci",hr:"h",
+c:{black:"Crna",white:"Bela",blue:"Plava",grey:"Siva",beige:"Bež"}}
+};
+const CATS=[
+ {id:"electronics",icon:"headphones",n:{sq:"Elektronikë",en:"Electronics",tr:"Elektronik",sr:"Elektronika"},bg:"#eaf1fd"},
+ {id:"home",icon:"lamp",n:{sq:"Shtëpi",en:"Home",tr:"Ev",sr:"Dom"},bg:"#eef3f8"},
+ {id:"beauty",icon:"perfume",n:{sq:"Bukuri",en:"Beauty",tr:"Kozmetik",sr:"Lepota"},bg:"#f1effa"},
+ {id:"fashion",icon:"jacket",n:{sq:"Veshje",en:"Fashion",tr:"Giyim",sr:"Odeća"},bg:"#edf2f7"},
+ {id:"sport",icon:"shoe",n:{sq:"Sport",en:"Sports",tr:"Spor",sr:"Sport"},bg:"#e9f4f6"},
+ {id:"kids",icon:"blocks",n:{sq:"Fëmijë",en:"Kids",tr:"Çocuk",sr:"Deca"},bg:"#f4f1ea"}
+];
+const COLORS={black:"#1a1f2b",white:"#ffffff",blue:"#244aa5",grey:"#9aa3b2",beige:"#d9c7a7"};
+const P=[
+ {id:1,cat:"electronics",icon:"headphones",price:39.9,old:54.9,pop:98,nw:0,n:{sq:"Kufje pa tel me anulim zhurme",en:"Noise-cancelling wireless headphones",tr:"Gürültü önleyici kablosuz kulaklık",sr:"Bežične slušalice sa poništavanjem buke"},colors:["black","white"],sp:[["bat","30 h"],["w","220 g"],["war","2 yrs"]]},
+ {id:2,cat:"electronics",icon:"charger",price:14.9,pop:80,nw:1,n:{sq:"Karikues i shpejtë USB-C 30W",en:"30W USB-C fast charger",tr:"30W USB-C hızlı şarj cihazı",sr:"Brzi USB-C punjač 30W"},colors:["white"],sp:[["w","60 g"],["war","1 yr"]]},
+ {id:3,cat:"electronics",icon:"watch",price:59,pop:91,nw:1,n:{sq:"Orë inteligjente me GPS",en:"Smart watch with GPS",tr:"GPS'li akıllı saat",sr:"Pametni sat sa GPS-om"},colors:["black","grey","blue"],sp:[["bat","7 d"],["w","38 g"],["war","2 yrs"]]},
+ {id:4,cat:"home",icon:"lamp",price:24.5,old:34.9,pop:70,nw:0,n:{sq:"Llambë tavoline LED me ndriçim të rregullueshëm",en:"Dimmable LED desk lamp",tr:"Ayarlanabilir LED masa lambası",sr:"LED stona lampa sa podešavanjem"},colors:["white","black"],sp:[["dim","38 × 16 cm"],["w","0,9 kg"],["war","2 yrs"]]},
+ {id:5,cat:"home",icon:"cup",price:18.9,pop:64,nw:1,n:{sq:"Set me 4 filxhanë qeramike",en:"Set of 4 ceramic cups",tr:"4'lü seramik fincan seti",sr:"Set od 4 keramičke šolje"},colors:["white","beige","blue"],sp:[["vol","250 ml"],["mat","Qeramikë / Ceramic"]]},
+ {id:6,cat:"home",icon:"blanket",price:34,old:44,pop:77,nw:0,n:{sq:"Batanije leshi 150 × 200",en:"Wool blanket 150 × 200",tr:"Yün battaniye 150 × 200",sr:"Vuneno ćebe 150 × 200"},colors:["grey","beige","blue"],sp:[["dim","150 × 200 cm"],["mat","80% lesh / wool"]]},
+ {id:7,cat:"beauty",icon:"cream",price:12.9,pop:88,nw:0,n:{sq:"Krem hidratues për fytyrë 50 ml",en:"Hydrating face cream 50 ml",tr:"Nemlendirici yüz kremi 50 ml",sr:"Hidratantna krema za lice 50 ml"},sp:[["vol","50 ml"]]},
+ {id:8,cat:"beauty",icon:"perfume",price:44,pop:73,nw:1,n:{sq:"Parfum Eau de Parfum 100 ml",en:"Eau de Parfum 100 ml",tr:"Eau de Parfum 100 ml",sr:"Parfem Eau de Parfum 100 ml"},sp:[["vol","100 ml"]]},
+ {id:9,cat:"fashion",icon:"jacket",price:69.9,old:89.9,pop:84,nw:0,n:{sq:"Xhaketë dimri e lehtë",en:"Lightweight winter jacket",tr:"Hafif kışlık mont",sr:"Lagana zimska jakna"},colors:["black","blue","beige"],sizes:["S","M","L","XL"],sp:[["mat","100% poliestër"],["w","650 g"]]},
+ {id:10,cat:"sport",icon:"shoe",price:49.9,pop:95,nw:1,n:{sq:"Atlete vrapimi",en:"Running shoes",tr:"Koşu ayakkabısı",sr:"Patike za trčanje"},colors:["white","black","blue"],sizes:["38","39","40","41","42","43","44","45"],sp:[["w","280 g"]]},
+ {id:11,cat:"sport",icon:"bottle",price:16.5,pop:68,nw:0,n:{sq:"Shishe termike 750 ml",en:"Insulated bottle 750 ml",tr:"Termos şişe 750 ml",sr:"Termos boca 750 ml"},colors:["blue","black","white"],sp:[["vol","750 ml"],["mat","Inox"]]},
+ {id:12,cat:"kids",icon:"blocks",price:21,pop:60,nw:1,n:{sq:"Set kubesh druri për fëmijë",en:"Wooden building blocks set",tr:"Ahşap yapı blokları seti",sr:"Set drvenih kocki za decu"},sp:[["age","3+"],["mat","Dru / Wood"]]}
+];
+const MUNI=["Deçan","Dragash","Drenas","Ferizaj","Fushë Kosovë","Gjakovë","Gjilan","Graçanicë","Hani i Elezit","Istog","Junik","Kaçanik","Kamenicë","Klinë","Kllokot","Leposaviq","Lipjan","Malishevë","Mamushë","Mitrovicë e Jugut","Mitrovicë e Veriut","Novobërdë","Obiliq","Partesh","Pejë","Podujevë","Prishtinë","Prizren","Rahovec","Ranillug","Shtërpcë","Shtime","Skënderaj","Suharekë","Viti","Vushtrri","Zubin Potok","Zveçan"];
+const FREE=30, SHIP=2;
+
+/* ---------- Durum ---------- */
+const store={get(k,d){try{const v=localStorage.getItem("kose:"+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem("kose:"+k,JSON.stringify(v))}catch(e){}}};
+const S={lang:store.get("lang","sq"),cart:store.get("cart",[]),q:"",sort:"pop",form:{name:"",phone:"",city:"",addr:"",note:""},code:"",order:null,pv:{}};
+const L=()=>T[S.lang];
+const t=(k,v)=>{let s=L()[k]??T.sq[k]??k;if(v)for(const x in v)s=s.replace("{"+x+"}",v[x]);return s};
+const eur=n=>{const s=n.toFixed(2).replace(".",",");return (S.lang==="en"?n.toFixed(2):s)+" €"};
+const pn=p=>p.n[S.lang]||p.n.sq;
+const cn=id=>{const c=CATS.find(c=>c.id===id);return c?(c.n[S.lang]||c.n.sq):""};
+const cbg=id=>(CATS.find(c=>c.id===id)||{}).bg||"#eaf1fd";
+const ico=(name,size,sw)=>`<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="${sw||2.4}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-${name}"/></svg>`;
+const unit=v=>v.replace(/(\d+) yrs?$/,(m,n)=>n+" "+(n==="1"?t("yr"):t("yrs"))).replace(/(\d+) h$/,(m,n)=>n+" "+t("hr")).replace(/(\d+) d$/,(m,n)=>n+" "+({sq:"ditë",en:"days",tr:"gün",sr:"dana"})[S.lang]);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const save=()=>{store.set("cart",S.cart);store.set("lang",S.lang)};
+const sub=()=>S.cart.reduce((a,i)=>a+P.find(p=>p.id===i.id).price*i.qty,0);
+const shipCost=s=>s>=FREE||s===0?0:SHIP;
+const count=()=>S.cart.reduce((a,i)=>a+i.qty,0);
+const delDate=()=>{const d=new Date();let n=0;while(n<3){d.setDate(d.getDate()+1);if(d.getDay()!==0)n++}
+  return d.toLocaleDateString({sq:"sq-AL",en:"en-GB",tr:"tr-TR",sr:"sr-Latn-RS"}[S.lang],{weekday:"long",day:"numeric",month:"long"})};
+
+/* ---------- Parçalar ---------- */
+function card(p){
+  const b=p.old?`<span class="badge sale">${t("sale")} −${Math.round((1-p.price/p.old)*100)}%</span>`:p.nw?`<span class="badge new">${t("nw")}</span>`:"";
+  return `<a class="card" href="#p-${p.id}">
+    <div class="im" style="background:${cbg(p.cat)}">${b}${ico(p.icon,"46%")}
+      <button class="quick" data-quick="${p.id}" aria-label="${esc(t("add"))}: ${esc(pn(p))}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div>
+    <span class="cat-l">${cn(p.cat)}</span><span class="nm">${esc(pn(p))}</span>
+    <span class="price"><b>${eur(p.price)}</b>${p.old?`<s>${eur(p.old)}</s>`:""}</span></a>`;
+}
+const iTruck=`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h11v10H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>`;
+const iCash=`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6 9.5v5M18 9.5v5"/></svg>`;
+const iBack=`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></svg>`;
+const iChat=`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/></svg>`;
+
+/* ---------- Görünümler ---------- */
+function vHome(){
+  const pop=[...P].sort((a,b)=>b.pop-a.pop).slice(0,4), nw=P.filter(p=>p.nw).slice(0,4);
+  const tiles=[P[0],P[9],P[7]];
+  return `<div class="view">
+  <section class="hero"><div class="hgrid">
+    <div><h1>${t("heroT")}</h1><p>${t("heroS")}</p>
+      <div class="hbtns"><a class="btn p" href="#shop">${t("heroB")}</a><a class="btn g" href="#c-home">${t("heroB2")}</a></div></div>
+    <div class="hstack" aria-hidden="true">${tiles.map(p=>`<a class="t" href="#p-${p.id}" tabindex="-1"><div class="im" style="background:${cbg(p.cat)};color:var(--brand)">${ico(p.icon,"55%")}</div><span>${esc(pn(p))}</span><b>${eur(p.price)}</b></a>`).join("")}</div>
+  </div></section>
+  <section class="trust">
+    <div>${iCash}<p><b>${t("tr1")}</b><span>${t("tr1s")}</span></p></div>
+    <div>${iTruck}<p><b>${t("tr2")}</b><span>${t("tr2s")}</span></p></div>
+    <div>${iBack}<p><b>${t("tr3")}</b><span>${t("tr3s")}</span></p></div>
+    <div>${iChat}<p><b>${t("tr4")}</b><span>${t("tr4s")}</span></p></div>
+  </section>
+  <section><div class="sh"><h2>${t("cats")}</h2></div>
+    <div class="cats">${CATS.map(c=>`<a class="cat" href="#c-${c.id}"><span class="ic">${ico(c.icon,34,2.6)}</span>${cn(c.id)}</a>`).join("")}</div></section>
+  <section><div class="sh"><h2>${t("popT")}</h2><a href="#shop">${t("seeAll")} →</a></div><div class="grid">${pop.map(card).join("")}</div></section>
+  <section class="camp"><div><h2>${t("campT")}</h2><p>${t("campS")}</p></div><a class="btn" href="#c-home">${t("campB")}</a></section>
+  <section><div class="sh"><h2>${t("newT")}</h2><a href="#shop">${t("seeAll")} →</a></div><div class="grid">${nw.map(card).join("")}</div></section>
+  </div>`;
+}
+function vList(cat){
+  let list=P.filter(p=>!cat||p.cat===cat);
+  const q=S.q.trim().toLowerCase();
+  if(q) list=list.filter(p=>Object.values(p.n).some(n=>n.toLowerCase().includes(q))||Object.values(CATS.find(c=>c.id===p.cat).n).some(n=>n.toLowerCase().includes(q)));
+  list.sort((a,b)=>S.sort==="low"?a.price-b.price:S.sort==="high"?b.price-a.price:b.pop-a.pop);
+  const title=q?t("searchFor",{q:esc(S.q.trim())}):cat?cn(cat):t("all");
+  return `<div class="view" style="gap:0">
+  <div class="lhead"><div><h1>${title}</h1><p class="cnt">${t("results",{n:list.length})}</p></div>
+    <div><label class="sr" for="sort">${t("sort")}</label><select id="sort">
+      <option value="pop"${S.sort==="pop"?" selected":""}>${t("sPop")}</option><option value="low"${S.sort==="low"?" selected":""}>${t("sLow")}</option><option value="high"${S.sort==="high"?" selected":""}>${t("sHigh")}</option></select></div></div>
+  <div class="chips"><a class="chip" href="#shop"${!cat?' aria-current="page"':""}>${t("all")}</a>${CATS.map(c=>`<a class="chip" href="#c-${c.id}"${cat===c.id?' aria-current="page"':""}>${cn(c.id)}</a>`).join("")}</div>
+  ${list.length?`<div class="grid">${list.map(card).join("")}</div>`:`<p class="emptyres">${t("noRes")}</p>`}
+  </div>`;
+}
+function vProduct(id){
+  const p=P.find(x=>x.id===id); if(!p) return vList();
+  const v=S.pv[id]||(S.pv[id]={c:p.colors?p.colors[0]:null,s:p.sizes?null:"-",q:1,img:0});
+  const shades=[cbg(p.cat),"#f4f7fc","#e6edf9","#eef1f6"];
+  const sizeMissing=p.sizes&&!v.s;
+  return `<div class="view" style="gap:0">
+  <nav class="crumbs" aria-label="breadcrumb"><a href="#home">Kose</a><span>/</span><a href="#c-${p.cat}">${cn(p.cat)}</a><span>/</span><span>${esc(pn(p))}</span></nav>
+  <div class="pd">
+    <div class="gal">
+      <div class="main" style="background:${shades[v.img]};color:${v.c&&v.c!=="white"?COLORS[v.c]:"var(--brand)"}">${p.old?`<span class="badge sale">${t("sale")} −${Math.round((1-p.price/p.old)*100)}%</span>`:""}${ico(p.icon,"52%",2)}</div>
+      <div class="thumbs">${shades.map((s,i)=>`<button data-img="${i}" aria-pressed="${v.img===i}" aria-label="${i+1}" style="background:${s};color:var(--brand)">${ico(p.icon,"50%",2.6)}</button>`).join("")}</div>
+    </div>
+    <div class="pinfo">
+      <div style="display:grid;gap:10px"><span class="cat-l" style="font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">${cn(p.cat)}</span><h1>${esc(pn(p))}</h1>
+        <div class="price"><b>${eur(p.price)}</b>${p.old?`<s>${eur(p.old)}</s><span class="save">${t("save",{x:eur(p.old-p.price)})}</span>`:""}</div></div>
+      ${p.colors?`<div class="opt"><span class="lb">${t("color")}: <span>${L().c[v.c]}</span></span><div class="sw">${p.colors.map(c=>`<button data-color="${c}" aria-pressed="${v.c===c}"><i style="background:${COLORS[c]}"></i>${L().c[c]}</button>`).join("")}</div></div>`:""}
+      ${p.sizes?`<div class="opt"><span class="lb">${t("size")}</span><div class="sw">${p.sizes.map(s=>`<button data-size="${s}" aria-pressed="${v.s===s}">${s}</button>`).join("")}</div></div>`:""}
+      <div class="buyrow"><div class="step" role="group" aria-label="${t("qty")}"><button data-q="-1" aria-label="−">−</button><output>${v.q}</output><button data-q="1" aria-label="+">+</button></div>
+        <button class="btn p" id="addBtn"${sizeMissing?" disabled":""}>${sizeMissing?t("size")+" ↑":t("add")}</button></div>
+      <div class="info">
+        <div>${iTruck}<p><b>${t("iDel")}</b><span>${t("iDelS",{d:delDate()})}</span></p></div>
+        <div>${iCash}<p><b>${t("iCod")}</b><span>${t("iCodS")}</span></p></div>
+        <div>${iBack}<p><b>${t("iRet")}</b><span>${t("iRetS")}</span></p></div>
+      </div>
+      <div style="display:grid;gap:12px"><h2 style="font-size:1.1rem">${t("details")}</h2>
+        <dl class="specs">${p.sp.map(([k,val])=>`<dt>${t(k)}</dt><dd>${esc(unit(val))}</dd>`).join("")}</dl></div>
+    </div>
+  </div>
+  <section style="margin-top:64px"><div class="sh"><h2>${t("popT")}</h2></div><div class="grid">${P.filter(x=>x.cat===p.cat&&x.id!==p.id).concat(P.filter(x=>x.cat!==p.cat)).slice(0,4).map(card).join("")}</div></section>
+  </div>`;
+}
+function summary(withItems){
+  const s=sub(),sh=shipCost(s),left=Math.max(0,FREE-s);
+  return `<aside class="sum"><h2>${t("summary")}</h2>
+   ${withItems?`<div class="mini">${S.cart.map(i=>{const p=P.find(x=>x.id===i.id);return `<div><span class="im" style="background:${cbg(p.cat)};color:var(--brand)">${ico(p.icon,26,2.6)}</span><span>${esc(pn(p))} <span style="color:var(--muted)">× ${i.qty}</span></span><b style="font-variant-numeric:tabular-nums">${eur(p.price*i.qty)}</b></div>`}).join("")}</div>`:""}
+   <div class="row"><span>${t("subtotal")}</span><span>${eur(s)}</span></div>
+   <div class="row"><span>${t("ship")}</span><span>${sh?eur(sh):t("free")}</span></div>
+   <div class="free"><span>${left>0?t("toFree",{x:eur(left)}):t("gotFree")}</span><div class="bar"><i style="width:${Math.min(100,s/FREE*100)}%"></i></div></div>
+   <div class="row t"><span>${t("total")}</span><span>${eur(s+sh)}</span></div>
+   ${withItems?"":`<a class="btn p w" href="#checkout">${t("checkout")}</a><p style="font-size:.82rem;color:var(--muted);display:flex;gap:8px;align-items:center"><span style="color:var(--brand)">${iCash}</span>${t("iCodS")}</p>`}
+  </aside>`;
+}
+function vCart(){
+  if(!S.cart.length) return `<div class="view"><div class="center"><div class="okc" style="background:var(--ice);color:var(--brand)"><svg width="34" height="34"><use href="#kmark"/></svg></div><h1>${t("empty")}</h1><p>${t("emptyS")}</p><a class="btn p" href="#shop">${t("cont")}</a></div></div>`;
+  return `<div class="view"><div class="two"><div><h1>${t("cart")}</h1><div class="items">${S.cart.map((i,ix)=>{const p=P.find(x=>x.id===i.id);
+    const vr=[i.c?L().c[i.c]:null,i.s&&i.s!=="-"?i.s:null].filter(Boolean).join(" · ");
+    return `<div class="it"><a href="#p-${p.id}" class="im" style="background:${cbg(p.cat)};color:var(--brand)" aria-hidden="true" tabindex="-1">${ico(p.icon,44,2.4)}</a>
+      <div style="display:grid;gap:4px;min-width:0"><a class="nm" href="#p-${p.id}">${esc(pn(p))}</a>${vr?`<span class="vr">${vr}</span>`:""}<span class="price"><b>${eur(p.price)}</b></span></div>
+      <div class="rt"><div class="step" role="group" aria-label="${t("qty")}"><button data-cq="${ix}" data-d="-1" aria-label="−">−</button><output>${i.qty}</output><button data-cq="${ix}" data-d="1" aria-label="+">+</button></div><button class="rm" data-rm="${ix}">${t("remove")}</button></div></div>`}).join("")}</div>
+    <p style="margin-top:20px"><a href="#shop" style="color:var(--brand);font-weight:600;text-decoration:none">← ${t("cont")}</a></p></div>
+    ${summary(false)}</div></div>`;
+}
+function fld(id,label,input,hint,err,optional){
+  return `<div class="fld" id="f-${id}"><label for="${id}">${label}${optional?` <small>(${t("opt")})</small>`:""}</label>${input}${hint?`<span class="hint">${hint}</span>`:""}<span class="er" id="e-${id}">${err||""}</span></div>`;
+}
+function vCheckout(){
+  if(!S.cart.length){location.hash="#cart";return ""}
+  const f=S.form,tot=sub()+shipCost(sub());
+  return `<div class="view"><div class="two"><div><h1>${t("orderT")}</h1>
+  <form class="co" id="co" novalidate>
+    ${fld("name",t("name"),`<input id="name" autocomplete="name" value="${esc(f.name)}" aria-describedby="e-name">`,"",t("errName"))}
+    ${fld("phone",t("phone"),`<div class="phone"><span>+383</span><input id="phone" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="44 123 456" value="${esc(f.phone)}" aria-describedby="e-phone"></div>`,t("phoneH"),t("errPhone"))}
+    <div class="pair">
+      ${fld("city",t("city"),`<select id="city" autocomplete="address-level2" aria-describedby="e-city"><option value="">${t("choose")}</option>${MUNI.map(m=>`<option${f.city===m?" selected":""}>${m}</option>`).join("")}</select>`,"",t("errCity"))}
+      ${fld("addr",t("address"),`<input id="addr" autocomplete="street-address" placeholder="${esc(t("addressP"))}" value="${esc(f.addr)}" aria-describedby="e-addr">`,"",t("errAddr"))}
+    </div>
+    ${fld("note",t("note"),`<input id="note" placeholder="${esc(t("noteP"))}" value="${esc(f.note)}">`,"","",true)}
+    <div class="fld"><span style="font-size:.88rem;font-weight:600">${t("pay")}</span>
+      <div class="paym"><span class="dot" aria-hidden="true"></span><span style="color:var(--brand)">${iCash}</span><p><b>${t("iCod")}</b><span>${t("payS",{t:eur(tot)})}</span></p></div></div>
+    <button class="btn p w" type="submit">${t("place")} · ${eur(tot)}</button>
+  </form></div>${summary(true)}</div></div>`;
+}
+function vVerify(){
+  if(!S.code){location.hash="#checkout";return ""}
+  return `<div class="view"><div class="center">
+    <div class="okc"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 18h3"/></svg></div>
+    <h1>${t("verT")}</h1><p>${t("verS",{p:"+383 "+esc(S.form.phone)})}</p>
+    <form id="otpf" style="display:grid;gap:16px;justify-items:center">
+      <div class="otp">${[0,1,2,3].map(i=>`<input inputmode="numeric" maxlength="1" aria-label="${i+1}" id="o${i}" autocomplete="${i?"off":"one-time-code"}">`).join("")}</div>
+      <span class="er" id="otpErr" style="color:var(--err);font-size:.86rem" hidden>${t("errCode")}</span>
+      <span class="demo">${t("demo",{c:S.code})}</span>
+      <button class="btn p" type="submit">${t("verB")}</button>
+      <a href="#checkout" style="color:var(--muted);font-size:.88rem">${t("back")}</a>
+    </form></div></div>`;
+}
+function vDone(){
+  const o=S.order; if(!o){location.hash="#home";return ""}
+  return `<div class="view"><div class="center">
+    <div class="okc"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
+    <h1>${t("doneT",{n:esc(o.first)})}</h1>
+    <p>${t("ordNo")}</p><span class="ordno">${o.no}</span>
+    <p>${t("doneS",{t:eur(o.total)})}</p>
+    <p style="font-size:.9rem">${t("iDelS",{d:delDate()})} · ${esc(o.city)}</p>
+    <a class="btn p" href="#home">${t("home")}</a></div></div>`;
+}
+
+/* ---------- Yönlendirme ---------- */
+const app=document.getElementById("app");
+function route(){
+  const h=(location.hash||"#home").slice(1);
+  let html,cur="";
+  if(h==="shop"){html=vList();cur="shop"}
+  else if(h.startsWith("c-")){S.q="";html=vList(h.slice(2));cur=h.slice(2)}
+  else if(h.startsWith("p-")){html=vProduct(+h.slice(2));cur=(P.find(p=>p.id===+h.slice(2))||{}).cat}
+  else if(h==="cart") html=vCart();
+  else if(h==="checkout") html=vCheckout();
+  else if(h==="verify") html=vVerify();
+  else if(h==="done") html=vDone();
+  else html=vHome();
+  if(html==="")return;
+  app.innerHTML=html;
+  chrome(cur);
+}
+function chrome(cur){
+  document.documentElement.lang=S.lang==="sr"?"sr-Latn":S.lang;
+  document.getElementById("stripTxt").innerHTML=t("strip");
+  document.getElementById("protoTxt").textContent=t("proto");
+  document.getElementById("footProto").textContent=t("proto");
+  const q=document.getElementById("q"); q.placeholder=t("search"); document.getElementById("qLabel").textContent=t("search");
+  document.getElementById("cartLbl").textContent=t("cart");
+  document.getElementById("cartN").textContent=count();
+  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.l===S.lang));
+  document.getElementById("catnav").innerHTML=`<a href="#shop"${cur==="shop"?' aria-current="page"':""}>${t("all")}</a>`+CATS.map(c=>`<a href="#c-${c.id}"${cur===c.id?' aria-current="page"':""}>${cn(c.id)}</a>`).join("");
+  const L_=L();
+  document.getElementById("foot").innerHTML=`<div><a class="logo" href="#home" style="margin-bottom:10px"><svg width="26" height="26"><use href="#kmark"/></svg><span style="font-size:1.35rem">kose</span></a><p style="max-width:34ch;margin-top:10px">${t("f1s")}</p></div>
+   <div><h3>${t("f2")}</h3><ul>${L_.fl.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+   <div><h3>${t("f3")}</h3><ul>${L_.fc.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+   <div><h3>${t("f4")}</h3><ul><li>+383 44 000 000</li><li>info@kose.example</li><li>Prishtinë</li></ul></div>`;
+}
+
+/* ---------- Sepet ---------- */
+let toastT;
+function addToCart(id,c,s,q){
+  const ex=S.cart.find(i=>i.id===id&&i.c===c&&i.s===s);
+  if(ex) ex.qty+=q; else S.cart.push({id,c,s,qty:q});
+  save(); document.getElementById("cartN").textContent=count();
+  const to=document.getElementById("toast");
+  document.getElementById("toastTxt").textContent=t("added");
+  document.getElementById("toastLink").textContent=t("view");
+  to.classList.add("on"); clearTimeout(toastT); toastT=setTimeout(()=>to.classList.remove("on"),2800);
+}
+
+/* ---------- Olaylar ---------- */
+document.addEventListener("click",e=>{
+  const qb=e.target.closest("[data-quick]");
+  if(qb){e.preventDefault();e.stopPropagation();const p=P.find(x=>x.id===+qb.dataset.quick);
+    if(p.sizes){location.hash="#p-"+p.id;return} addToCart(p.id,p.colors?p.colors[0]:null,"-",1);return}
+  const lb=e.target.closest(".lang button");
+  if(lb){S.lang=lb.dataset.l;save();route();return}
+  const h=(location.hash||"").slice(1);
+  if(h.startsWith("p-")){
+    const id=+h.slice(2),v=S.pv[id];if(!v)return;
+    const c=e.target.closest("[data-color]"),s=e.target.closest("[data-size]"),q=e.target.closest("[data-q]"),im=e.target.closest("[data-img]");
+    if(c){v.c=c.dataset.color;route();return}
+    if(s){v.s=s.dataset.size;route();return}
+    if(q){v.q=Math.max(1,Math.min(20,v.q+ +q.dataset.q));route();return}
+    if(im){v.img=+im.dataset.img;route();return}
+    if(e.target.closest("#addBtn")){addToCart(id,v.c,v.s,v.q);return}
+  }
+  const cq=e.target.closest("[data-cq]");
+  if(cq){const it=S.cart[+cq.dataset.cq];it.qty=Math.max(1,Math.min(20,it.qty+ +cq.dataset.d));save();route();return}
+  const rm=e.target.closest("[data-rm]");
+  if(rm){S.cart.splice(+rm.dataset.rm,1);save();route();return}
+});
+document.addEventListener("change",e=>{if(e.target.id==="sort"){S.sort=e.target.value;route()}});
+const qIn=document.getElementById("q");
+qIn.addEventListener("input",()=>{S.q=qIn.value;const h=location.hash.slice(1);
+  if(h!=="shop"){location.hash="#shop"}else route();
+  setTimeout(()=>{qIn.focus()},0)});
+document.addEventListener("input",e=>{if(e.target.closest("#co")){S.form[e.target.id]=e.target.value;e.target.closest(".fld")?.classList.remove("bad")}});
+document.addEventListener("submit",e=>{
+  e.preventDefault();
+  if(e.target.id==="co"){
+    const f=S.form; ["name","phone","city","addr","note"].forEach(k=>{const el=document.getElementById(k);if(el)f[k]=el.value.trim()});
+    const ph=f.phone.replace(/\D/g,"").replace(/^383/,"").replace(/^0/,"");
+    const bad={name:f.name.split(/\s+/).filter(Boolean).length<2,phone:!/^4[3-9]\d{6}$/.test(ph),city:!f.city,addr:f.addr.length<5};
+    let first=null;
+    for(const k in bad){document.getElementById("f-"+k).classList.toggle("bad",bad[k]);if(bad[k]&&!first)first=k}
+    if(first){document.getElementById(first).focus();return}
+    f.phone=ph.replace(/^(\d{2})(\d{3})(\d{3})$/,"$1 $2 $3");
+    S.code=String(1000+Math.floor(Math.random()*9000));
+    location.hash="#verify";
+  }
+  if(e.target.id==="otpf"){
+    const v=[0,1,2,3].map(i=>document.getElementById("o"+i).value).join("");
+    if(v!==S.code){document.getElementById("otpErr").hidden=false;document.getElementById("o0").focus();return}
+    const s=sub();
+    S.order={no:"KS-"+String(Date.now()).slice(-6),first:S.form.name.split(" ")[0],total:s+shipCost(s),city:S.form.city};
+    S.cart=[];S.code="";save();location.hash="#done";
+  }
+});
+document.addEventListener("input",e=>{
+  const m=/^o(\d)$/.exec(e.target.id||""); if(!m)return;
+  e.target.value=e.target.value.replace(/\D/g,"").slice(0,1);
+  if(e.target.value&&+m[1]<3)document.getElementById("o"+(+m[1]+1)).focus();
+});
+document.addEventListener("keydown",e=>{
+  const m=/^o(\d)$/.exec(e.target.id||""); if(m&&e.key==="Backspace"&&!e.target.value&&+m[1]>0)document.getElementById("o"+(+m[1]-1)).focus();
+});
+let lastH=location.hash;
+window.addEventListener("hashchange",()=>{route();if(!location.hash.startsWith("#shop")||lastH.startsWith("#p-"))window.scrollTo({top:0,behavior:"instant"});lastH=location.hash;
+  if(location.hash==="#verify")setTimeout(()=>document.getElementById("o0")?.focus(),50)});
+route();
+})();
+</script>
