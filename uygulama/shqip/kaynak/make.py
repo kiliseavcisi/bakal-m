@@ -63,8 +63,8 @@ def clip(text):
     return key
 
 GEMINI = os.path.join(HERE, ".clips-gemini")
-VOICE_DIR = os.path.join(HERE, os.environ.get("VOICE_DIR", ".clips-kokoro-agon"))      # main voice: Kokoro shqip "Agon" (male)
-ALT_DIR = os.path.join(HERE, os.environ.get("ALT_DIR", ".clips-kokoro-pf_dora"))       # second voice: Kokoro shqip + "Dora" style (female)
+VOICE_DIR = os.path.join(HERE, os.environ.get("VOICE_DIR", ".clips-azure-anila"))      # main voice: Azure neural "Anila" (female), azure_all.py
+ALT_DIR = os.path.join(HERE, os.environ.get("ALT_DIR", ".clips-azure-ilir"))           # second voice: Azure neural "Ilir" (male); men speak with it
 # Real Kosovo voices from Zani (zani_kosova.py): these clips replace the synthetic ones for both talkers
 ZMAP_F = os.path.join(HERE, ".zani-map.json")
 ZMAP = {t: p for t, p in (json.load(open(ZMAP_F)).items() if os.path.exists(ZMAP_F) else []) if os.path.exists(p)}
@@ -89,7 +89,7 @@ def audio(pack, text):
     if NO_MMS and not (os.path.exists(chosen) and os.path.exists(os.path.join(ALT_DIR, key + ".mp3"))): return pack + "#" + key
     src = chosen if os.path.exists(chosen) else os.path.join(CACHE, clip(text) + ".mp3")   # fall back to MMS
     packs.setdefault(pack, {})[key] = base64.b64encode(open(src, "rb").read()).decode()
-    alt = os.path.join(ALT_DIR, key + ".mp3")                                         # second talker (female)
+    alt = os.path.join(ALT_DIR, key + ".mp3")                                         # second talker (male)
     if not os.path.exists(alt): alt = os.path.join(CACHE, clip(text) + ".mp3")
     packs2.setdefault(pack, {})[key] = base64.b64encode(open(alt, "rb").read()).decode()
     return pack + "#" + key

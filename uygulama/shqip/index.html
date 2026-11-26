@@ -755,8 +755,11 @@ const sfx = {
 };
 let curAudio = null;
 const PACKS = {}, PACK_LOADING = {};
-/* Two talkers: packs/ = main voice (Piper "Edon"), packs2/ = second voice (MMS). Hearing more than one voice
-   is what makes perceptual training work (high-variability phonetic training). */
+/* Two talkers: packs/ = main voice (Azure "Anila", female), packs2/ = second voice (Azure "Ilir", male). Hearing more than one voice
+   is what makes perceptual training work (high-variability phonetic training). Men speak with the second voice. */
+const maleVoice = l => !!(l && l.who && !l.f);
+const MALE_G = { m: 1, o: 1 };
+const manSpeaks = who => !!(PEOPLE[who] && MALE_G[PEOPLE[who].g]);
 function loadPack(name, alt = false) {
   const id = (alt ? (alt === true ? "2" : alt) + ":" : "") + name, dir = alt === true ? "packs2/" : alt ? "packsv/" + alt + "/" : "packs/";
   if (PACKS[id]) return Promise.resolve(PACKS[id]);
@@ -796,7 +799,7 @@ function karaAnimate(w, au, alt) {
   if (au.readyState >= 2 && !au.paused) requestAnimationFrame(tick); else au.addEventListener("playing", () => requestAnimationFrame(tick), { once: true });
 }
 /* listening exercises: random talker when variety is on */
-function sayVar(w) { const alt = P.vary !== false && Math.random() < .4; say(w, false, alt); return alt; }
+function sayVar(w) { const alt = P.vary !== false && Math.random() < .25; say(w, false, alt); return alt; }
 
 /* ---------- Helpers ---------- */
 const $ = h => { const t = document.createElement("template"); t.innerHTML = h.trim(); return t.content.firstElementChild; };
@@ -1055,7 +1058,7 @@ function openStory(s, skipPrep) {
     const side = l.who ? (speakers.indexOf(l.who) % 2 ? "right" : "left") : "narr";
     const r = $(`<div class="line ${side}">${l.av ? `<div class="av" aria-hidden="true">${l.av}</div>` : ""}<button class="speaker sm" aria-label="Dinle">${I.speaker}</button>
       <div class="txt" role="button" tabindex="0">${l.who ? `<div class="who">${esc(l.who)}</div>` : ""}<div class="sq">${kara(l)}</div><div class="tr" hidden>${esc(l.tr)}</div></div></div>`);
-    const sayLine = () => { scene.show(l); const pr = say(l, false, l.f); if (pr) pr.then(au => au && au.addEventListener("ended", () => scene.quiet(), { once: true })); };
+    const sayLine = () => { scene.show(l); const pr = say(l, false, maleVoice(l)); if (pr) pr.then(au => au && au.addEventListener("ended", () => scene.quiet(), { once: true })); };
     r.querySelector(".speaker").onclick = sayLine;
     r.querySelector(".txt").onclick = e => { if (e.target.closest(".hw")) return; const t = r.querySelector(".tr"); t.hidden = !t.hidden; sayLine(); };
     lines.append(r); return r;
@@ -1073,7 +1076,7 @@ function openStory(s, skipPrep) {
       if (!storyPlay || i >= s.lines.length) { storyPlay = null; scene.quiet(); return; }
       const r = rows[i], l = s.lines[i]; r.classList.add("playing"); r.scrollIntoView({ block: "nearest", behavior: "smooth" });
       scene.show(l);
-      say(l, false, l.f).then(au => { if (!au) { i++; return next(); } au.onended = () => { i++; setTimeout(next, 450); }; au.onerror = () => { i++; next(); }; });
+      say(l, false, maleVoice(l)).then(au => { if (!au) { i++; return next(); } au.onended = () => { i++; setTimeout(next, 450); }; au.onerror = () => { i++; next(); }; });
     };
     next();
   };
@@ -1289,7 +1292,7 @@ function intro(st, ui) {
   if (ex) {
     const exr = $(`<div class="example"><div class="k">Cümlede</div><div class="row"><button class="speaker sm" aria-label="Cümleyi dinle">${I.speaker}</button>
       <div><div class="s">${kara(ex)}</div><div class="t">${esc(ex.tr)}</div></div></div></div>`);
-    exr.querySelector(".speaker").onclick = () => say(ex, false, ex.f);
+    exr.querySelector(".speaker").onclick = () => say(ex, false, maleVoice(ex));
     ui.body.append(exr);
     preload([ex.a]);
   }
@@ -2123,7 +2126,7 @@ function openRole(r) {
   const bubble = (who, l, me) => {
     const b = $(`<div class="cb ${me ? "me" : "npc"} pop">${me ? "" : `<div class="av">${icons(r.av)}</div>`}<div class="cbt"><div class="who">${esc(me ? "Sen" : r.npc)}</div><div class="sq">${kara(l)}</div><div class="tr">${esc(l.tr)}</div></div>
       <button class="speaker sm" aria-label="Dinle">${I.speaker}</button></div>`);
-    b.querySelector(".speaker").onclick = () => say(l, false, me ? !r.f : r.f);
+    b.querySelector(".speaker").onclick = () => say(l, false, me ? r.f : !r.f);
     chat.append(b); b.scrollIntoView({ block: "end", behavior: "smooth" }); return b;
   };
   const after = (pr, fn) => { let done = false; const go = () => { if (!done) { done = true; setTimeout(fn, 350); } }; Promise.resolve(pr).then(au => { if (!au) return go(); au.addEventListener("ended", go, { once: true }); au.addEventListener("error", go, { once: true }); }); setTimeout(go, 9000); };
@@ -2134,7 +2137,7 @@ function openRole(r) {
     bubble(r.npc, t, false);
     sheet.className = "sheet rsheet"; sheet.innerHTML = `<div class="rk">Cevabını seç</div>`;
     const list = $(`<div class="list"></div>`); sheet.append(list);
-    after(say(t, false, r.f), () => {});
+    after(say(t, false, !r.f), () => {});
     shuffle(t.o).forEach(o => {
       const b = $(`<button class="opt row ropt"><span class="rsq">${esc(o.sq)}</span><span class="rtr">${esc(o.tr)}</span></button>`);
       b.onclick = () => {
@@ -2143,7 +2146,7 @@ function openRole(r) {
           list.querySelectorAll(".opt").forEach(x => x.disabled = true); b.classList.add("ok");
           sheet.querySelector(".rfb")?.remove();
           bubble("Sen", o, true);
-          ti++; after(say(o, false, !r.f), turn);
+          ti++; after(say(o, false, r.f), turn);
         } else {
           sfx.no(); missed = true; b.classList.add("no"); b.disabled = true;
           sheet.querySelector(".rfb")?.remove();
@@ -2164,7 +2167,7 @@ function openRole(r) {
         box.replaceWith($(`<div class="rfb pop ${same ? "ok" : ""}"><span>${same ? "Birebir doğru!" : "Örnek cevap:"} <b>${esc(good.sq)}</b> <small>${esc(good.tr)}</small></span></div>`));
         const row = $(`<div class="grid2"><button class="btn ghost">Benimki de uygun</button><button class="btn ghost">Seçeneklere dön</button></div>`);
         if (same) row.children[1].remove();
-        row.children[0].onclick = () => { sfx.ok(); if (!missed) first++; row.remove(); bubble("Sen", good, true); ti++; after(say(good, false, !r.f), turn); };
+        row.children[0].onclick = () => { sfx.ok(); if (!missed) first++; row.remove(); bubble("Sen", good, true); ti++; after(say(good, false, r.f), turn); };
         if (row.children[1]) row.children[1].onclick = () => { missed = true; row.remove(); };
         sheet.append(row);
       };
@@ -2178,7 +2181,7 @@ function openRole(r) {
     sheet.className = "sheet ok";
     sheet.innerHTML = `<div class="fb pop"><div class="ic">${"⭐".repeat(stars)}</div><div><b>Konuşma tamamlandı! +${xp} XP</b><span>${first} / ${r.turns.length} cevabı ilk denemede bildin. Konuşmayı baştan dinleyip kendi cümlelerini sesli tekrar et.</span></div></div>`;
     const row = $(`<div class="grid2"><button class="btn ghost">${I.play}Baştan dinle</button><button class="btn good">Devam</button></div>`);
-    row.children[0].onclick = () => { const all = r.turns.flatMap(t => [[t, r.f], [t.o.find(o => o.ok), !r.f]]); let k = 0; const nx = () => { if (k < all.length) { const [l, alt] = all[k++]; after(say(l, false, alt), nx); } }; nx(); };
+    row.children[0].onclick = () => { const all = r.turns.flatMap(t => [[t, !r.f], [t.o.find(o => o.ok), r.f]]); let k = 0; const nx = () => { if (k < all.length) { const [l, alt] = all[k++]; after(say(l, false, alt), nx); } }; nx(); };
     row.children[1].onclick = () => { if (curAudio) curAudio.pause(); home("stories"); };
     sheet.append(row); celebrate(el.querySelector(".l-body"), xp, false);
   };
@@ -3294,7 +3297,7 @@ function teachView(host, p, onEnd) {
     tex.append($(comicPanel(ex)), $(`<div class="ttr">${esc(ex.tr)}</div>`));
     const br = blocksRow(ex); tex.append(br);
     box.querySelector(".tag").innerHTML = `${icon("💡")} Önce anla · örnek ${i + 1} / ${p.ex.length}`;
-    const go = () => { br.play(); setTimeout(() => say(ex), 250); };
+    const go = () => { br.play(); setTimeout(() => say(ex, false, manSpeaks(ex.who)), 250); };
     box.querySelector(".replay").onclick = go; setTimeout(go, 200);
     box.querySelector(".next").textContent = i < p.ex.length - 1 ? "Sonraki örnek" : (p.builder ? "Sayı kurucuya geç" : "Şimdi sen dene");
   };
