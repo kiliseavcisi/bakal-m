@@ -35,25 +35,12 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from pattern import Candle, detect
+from strategy import (ACTIVE, POZISYONDA, SURE, Params, advance_to_entry, close_trade,
+                      manage_position, new_setup, risk_pct)
 from structure import structure_events
 
 H4 = 4 * 3600 * 1000
 M15 = 15 * 60 * 1000
-
-
-@dataclass
-class Params:
-    expire_bars: int = 6
-    retest_bars: int = 20
-    touch_tol: float = 0.002
-    stop_buffer: float = 0.002
-    max_risk: float = 0.05
-    tp_r: float = 2.0
-    fee: float = 0.001
-    max_hold_bars: int = 30 * 96  # 30 gün
-    entry: str = "kapanis"
-    lb: int = 5
-    rb: int = 5
 
 
 @dataclass
@@ -87,9 +74,8 @@ def fmt_t(ms: int) -> str:
 
 
 def simulate(coin: str, h4: list[Candle], m15: list[Candle], p: Params, stats: dict) -> list[Trade]:
+    events = structure_events(m15, p.lb, p.rb, "close")
     times = [c.time for c in m15]
-    events = [e for e in structure_events(m15, p.lb, p.rb, "close") if e.kind == "CHOCH"]
-    ev_times = [e.time for e in events]
     used_events: set[int] = set()
     trades: list[Trade] = []
 
@@ -98,95 +84,32 @@ def simulate(coin: str, h4: list[Candle], m15: list[Candle], p: Params, stats: d
         if not sig:
             continue
         stats["durbun"] += 1
-        up = sig.direction == "UP"
-        start = h4[i].time + H4
-        expires = start + p.expire_bars * H4
-        invalid = min(c.low for c in sig.candles) if up else max(c.high for c in sig.candles)
-
-        # 2) ChoCh bul
-        k = bisect.bisect_left(ev_times, start)
-        ev = None
-        while k < len(events) and events[k].time < expires:
-            if events[k].direction == sig.direction:
-                ev = events[k]
-                break
-            k += 1
-        if ev is None:
-            stats["choch_yok"] += 1
-            continue
-        a = bisect.bisect_left(times, start)
-        if any((m15[x].close < invalid) if up else (m15[x].close > invalid) for x in range(a, ev.index)):
-            stats["iptal"] += 1
-            continue
-        if ev.index in used_events:
-            stats["ayni_choch"] += 1
-            continue
-        used_events.add(ev.index)
-        stats["choch"] += 1
-
-        # 3) seviyeler
-        H = ev.level
-        seg = m15[ev.pivot_index:ev.index + 1]
-        L = min(c.low for c in seg) if up else max(c.high for c in seg)
-        stop = L * (1 - p.stop_buffer) if up else L * (1 + p.stop_buffer)
-        if abs(H - stop) / H > p.max_risk:
-            stats["risk_buyuk"] += 1
-            continue
-
-        # 4) geri test
-        entry_i = None
-        entry = None
-        for n in range(ev.index + 1, min(ev.index + 1 + p.retest_bars, len(m15))):
-            c = m15[n]
-            touched = c.low <= H * (1 + p.touch_tol) if up else c.high >= H * (1 - p.touch_tol)
-            if not touched:
-                runaway = c.high >= H + p.tp_r * (H - stop) if up else c.low <= H - p.tp_r * (stop - H)
-                if runaway:
-                    break
+        s = advance_to_entry(new_setup(sig, H4), m15, events, p, M15)
+        if s.choch is not None and s.stage != "iptal":
+            if s.choch.index in used_events:
+                stats["ayni_choch"] += 1
                 continue
-            if (c.close <= L) if up else (c.close >= L):
-                stats["geri_test_bozuldu"] += 1
-                entry_i = -1
-                break
-            entry_i = n
-            entry = c.close if p.entry == "kapanis" else H
-            break
-        if entry_i is None:
-            stats["geri_test_yok"] += 1
+            used_events.add(s.choch.index)
+            stats["choch"] += 1
+        if s.stage in ACTIVE and s.stage != POZISYONDA:
+            stats["acik"] += 1  # veri bitti
             continue
-        if entry_i == -1:
+        if s.stage != POZISYONDA and s.stage not in ("HEDEF", "STOP"):
+            stats[s.stage] += 1
             continue
-        risk = (entry - stop) if up else (stop - entry)
-        if risk <= 0 or risk / entry > p.max_risk:
-            stats["risk_buyuk"] += 1
-            continue
-        target = entry + p.tp_r * risk if up else entry - p.tp_r * risk
-
-        # 5) sonuç
-        result, exit_price, exit_i = "SURE", None, None
-        first = entry_i if p.entry == "limit" else entry_i + 1
-        for n in range(first, min(entry_i + 1 + p.max_hold_bars, len(m15))):
-            c = m15[n]
-            hit_stop = c.low <= stop if up else c.high >= stop
-            hit_tp = (c.high >= target if up else c.low <= target) and n > entry_i
-            if hit_stop:
-                result, exit_price, exit_i = "STOP", stop, n
-                break
-            if hit_tp:
-                result, exit_price, exit_i = "HEDEF", target, n
-                break
-        if exit_i is None:
-            exit_i = min(entry_i + p.max_hold_bars, len(m15) - 1)
-            exit_price = m15[exit_i].close
-            if exit_i == len(m15) - 1 and exit_i < entry_i + p.max_hold_bars:
-                stats["acik"] += 1
-                continue  # veri bitti, hâlâ açık: sayma
-        move = (exit_price - entry) if up else (entry - exit_price)
-        r = (move - p.fee * entry) / risk
+        if s.stage == POZISYONDA:
+            after = m15[s.entry_index + 1:s.entry_index + 1 + p.max_hold_bars]
+            manage_position(s, after, p)
+            if s.stage == POZISYONDA:
+                if len(after) < p.max_hold_bars:
+                    stats["acik"] += 1  # veri bitti, hâlâ açık: sayma
+                    continue
+                close_trade(s, SURE, after[-1].close, after[-1].time, p)
         stats["islem"] += 1
-        trades.append(Trade(coin, sig.direction, fmt_t(h4[i].time), fmt_t(m15[entry_i].time),
-                            entry, stop, target, round(100 * risk / entry, 2), result,
-                            round(r, 3), fmt_t(m15[exit_i].time), exit_i - entry_i))
+        exit_i = bisect.bisect_left(times, s.exit_time)
+        trades.append(Trade(coin, s.direction, fmt_t(h4[i].time), fmt_t(s.entry_time),
+                            s.entry, s.stop, s.target, round(risk_pct(s), 2), s.stage,
+                            round(s.r, 3), fmt_t(s.exit_time), exit_i - s.entry_index))
     return trades
 
 

@@ -94,3 +94,21 @@ python backtest.py VERI_KLASORU --entry limit --tp 1.5
 ```
 
 `backtest_son100.csv`: 20 büyük coinde (2026-11 itibarıyla) son 100 işlemin dökümü.
+
+## Canlı kâğıt üstünde test (canli_test.py)
+
+Şu anda oluşan fiyatlarla stratejiyi gerçek para kullanmadan dener. Kurallar `backtest.py` ile birebir aynıdır, ikisi de `strategy.py`'yi kullanır. Bu yüzden sonuçlar doğrudan karşılaştırılabilir.
+
+Telegram'a gelen mesajlar:
+- ⏳ **ChoCh geldi:** Geri test seviyesi, stop ve planlanan hedef.
+- 🎯 **GİRİŞ:** Giriş, stop ve hedef.
+- ✅ **HEDEF** / ❌ **STOP:** Sonuç (R) ve o ana kadarki toplam başarı istatistiği.
+
+```bash
+pip install requests
+python canli_test.py            # PC açık kaldıkça çalışır
+python canli_test.py --rapor    # sonuç özeti
+```
+
+- Kapanan işlemler `canli_islemler.csv` dosyasına yazılır. Bot kapatılıp açılırsa kaldığı yerden devam eder (`canli_state.json`).
+- İlk çalıştırmada son 24 saatte oluşmuş ve süresi dolmamış dürbünler de takibe alınır. Ancak bot başlamadan önce gerçekleşmiş girişler sayılmaz.
