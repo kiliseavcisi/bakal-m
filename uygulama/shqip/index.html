@@ -757,7 +757,7 @@ let curAudio = null;
 const PACKS = {}, PACK_LOADING = {};
 /* Two talkers: packs/ = main voice (Azure "Anila", female), packs2/ = second voice (Azure "Ilir", male). Hearing more than one voice
    is what makes perceptual training work (high-variability phonetic training). Men speak with the second voice. */
-const maleVoice = l => !!(l && l.who && !l.f);
+const maleVoice = l => !!(l && l.who && !l.f && !(PEOPLE[l.who] && PEOPLE[l.who].g === "k"));
 const MALE_G = { m: 1, o: 1 };
 const manSpeaks = who => !!(PEOPLE[who] && MALE_G[PEOPLE[who].g]);
 function loadPack(name, alt = false) {
