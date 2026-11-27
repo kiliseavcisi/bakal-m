@@ -24,6 +24,7 @@ class StructureEvent:
     kind: str  # "CHOCH" / "BOS"
     level: float  # kırılan pivot seviyesi
     close: float
+    pivot_index: int = -1  # kırılan pivotun mum sırası
 
 
 def _is_pivot_high(c: Sequence[Candle], p: int, lb: int, rb: int) -> bool:
@@ -42,24 +43,24 @@ def structure_events(candles: Sequence[Candle], lb: int = 5, rb: int = 5,
                      confirm: str = "close") -> List[StructureEvent]:
     events: List[StructureEvent] = []
     trend = 0  # 1 yukarı, -1 aşağı, 0 belirsiz
-    ph = pl = None  # [seviye, kırıldı_mı]
+    ph = pl = None  # [seviye, kırıldı_mı, mum_sırası]
     for j, cj in enumerate(candles):
         p = j - rb  # pivotlar ancak rb mum sonra kesinleşir
         if p >= lb:
             if _is_pivot_high(candles, p, lb, rb):
-                ph = [candles[p].high, False]
+                ph = [candles[p].high, False, p]
             if _is_pivot_low(candles, p, lb, rb):
-                pl = [candles[p].low, False]
+                pl = [candles[p].low, False, p]
         up_src = cj.close if confirm == "close" else cj.high
         dn_src = cj.close if confirm == "close" else cj.low
         if ph and not ph[1] and up_src > ph[0]:
             ph[1] = True
             events.append(StructureEvent(j, cj.time, "UP",
-                                         "CHOCH" if trend == -1 else "BOS", ph[0], cj.close))
+                                         "CHOCH" if trend == -1 else "BOS", ph[0], cj.close, ph[2]))
             trend = 1
         if pl and not pl[1] and dn_src < pl[0]:
             pl[1] = True
             events.append(StructureEvent(j, cj.time, "DOWN",
-                                         "CHOCH" if trend == 1 else "BOS", pl[0], cj.close))
+                                         "CHOCH" if trend == 1 else "BOS", pl[0], cj.close, pl[2]))
             trend = -1
     return events

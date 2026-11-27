@@ -78,3 +78,19 @@ pip install pytest && pytest -q tests
 ```
 
 *Bu bot sadece formasyonu tespit eder. Yatırım tavsiyesi değildir.*
+
+## Geçmiş veri testi (backtest.py)
+
+Dürbün → alt TF ChoCh → ChoCh seviyesine geri test → giriş stratejisini geçmiş veride dener.
+- **Stop:** ChoCh hareketini başlatan dip/tepe.
+- **Hedef:** 2R.
+
+Veri klasöründe `15m/COIN.parquet` ve `4h/COIN.parquet` olmalı. Örnek kaynak: Hugging Face `rogerdehe/klines-binance` (futures/15m, futures/4h).
+
+```bash
+pip install pandas pyarrow
+python backtest.py VERI_KLASORU --last 100 --csv sonuc.csv
+python backtest.py VERI_KLASORU --entry limit --tp 1.5
+```
+
+`backtest_son100.csv`: 20 büyük coinde (2026-11 itibarıyla) son 100 işlemin dökümü.
