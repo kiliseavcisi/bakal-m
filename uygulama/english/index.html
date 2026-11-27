@@ -3462,13 +3462,25 @@ function sayVar(w) { const r = Math.random(), alt = P.vary === false ? false : r
   .board .ky { color: #c8162f; border: 3px solid #c8162f; border-radius: 50%; padding: 0 8px; }
   .board .en { color: #1f5fbf; font-weight: 700; }
   .board .ar { color: #c8162f; font-weight: 700; padding: 0 4px; }
+  .board .brd-pairs { display: flex; flex-wrap: wrap; gap: 8px 10px; padding: 4px 0; }
+  .board .bp { display: flex; flex-direction: column; align-items: center; animation: brdPop .5s ease-out both; }
+  .board .bp .bt { color: var(--c); font-size: 1.45rem; font-weight: 700; border-bottom: 3px solid var(--c); padding: 0 4px; }
+  .board .bp .bl { width: 3px; height: 16px; background: var(--c); opacity: .55; }
+  .board .bp .be { color: #fff; background: var(--c); border-radius: 10px; padding: 0 9px; font-size: 1.4rem; font-weight: 700; font-family: "Fredoka", "Lexend", sans-serif; }
+  @keyframes brdPop { from { opacity: 0; transform: translateY(8px) scale(.9); } to { opacity: 1; transform: none; } }
   .brd-cap { margin-top: 10px; font-size: .98rem; line-height: 1.45; color: var(--fg); background: var(--card, #fff); border-left: 4px solid #f2a516; padding: 8px 10px; border-radius: 8px; }
   .brd-tag { font-weight: 800; color: #b26b00; letter-spacing: .04em; font-size: .78rem; text-transform: uppercase; margin-bottom: 6px; }
   @media (prefers-color-scheme: dark) { .board { background: #f5f7f9; } }`;
   document.head.append(css);
   const ln = document.createElement("link"); ln.rel = "stylesheet"; ln.href = "https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap"; document.head.append(ln);
 })();
+const PAIR_C = ["#c8162f", "#1f5fbf", "#2e9d4f", "#b26b00", "#7b4bb7", "#0f8a8a"];
+function boardPairs(src) {
+  return `<div class="brd-pairs">${src.slice(1).split(" · ").map((p, k) => { const [t, e] = p.split("|");
+    return `<span class="bp" style="--c:${PAIR_C[k % PAIR_C.length]};animation-delay:${k * .45}s"><b class="bt">${esc(t)}</b><i class="bl"></i><b class="be">${esc(e || "")}</b></span>`; }).join("")}</div>`;
+}
 function boardRow(src) {
+  if (src[0] === "=") return boardPairs(src);
   const parts = src.split(/(\[[^\]]+\]|~[^~]+~|\{[^}]+\}|\*[^*]+\*|->)/g).filter(x => x);
   return parts.map(x => x === "->" ? `<span class="ar">→</span>`
     : x[0] === "[" ? `<span class="gh">${esc(x.slice(1, -1))}</span>`
