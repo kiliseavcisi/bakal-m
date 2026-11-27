@@ -258,3 +258,31 @@ GLOSS_EXTRA = {"a": "bir", "an": "bir", "the": "o (belirli)", "is": "-dir (o)", 
   "wait": "beklemek", "want": "istemek", "egg": "yumurta", "fish": "balık", "london.": "Londra", "can": "-ebilmek", "get": "almak", "sure": "tabii", "anything": "bir şey",
   "else": "başka", "you": "sen, siz", "much": "çok", "dollars": "dolar", "thanks": "teşekkürler", "oh": "ah", "ms.": "Bayan", "lee": "Lee", "jack": "Jack", "emma": "Emma",
   "leo": "Leo", "ali": "Ali", "york": "York", "family": "aile", "everyone!": "herkes", "under": "altında", "table": "masa", "work": "iş; çalışmak"}
+
+# "Tahta" (whiteboard): the WHY, step by step, in a teacher's voice, before the examples.
+# Each step: (Turkish narration, rows drawn on the board, English sentences played after the narration, clear board first)
+# Row markup: [x] hidden in Turkish (dashed)  ~x~ crossed out  {x} the key piece (red circle)  *x* English (blue)  -> arrow
+BOARDS = {
+ "e-be": [
+  ("Türkçe bir cümleyi tek kelimeye sıkıştırabilir. Yorgunum tek kelime, ama içinde üç ayrı bilgi var.",
+   ["Yorgun-um"], [], False),
+  ("Kim yorgun? Ben. Ama ben kelimesini söylemiyoruz, sondaki um ekinin içinde saklı. Bir de olmak fiili var, o da hiç görünmüyor.",
+   ["[ben] yorgun {-um}"], [], False),
+  ("İngilizce hiçbir şeyi saklamaz. Önce kimin olduğunu söyler, sonra olmak fiilini, en son durumu. Türkçede sondaki ek, İngilizcede başta iki ayrı kelime olur.",
+   ["*I* *am* tired"], ["I am tired."], False),
+  ("Kural hep aynı. Ben için I am, sen için you are, o için he is ya da she is. Türkçede o için ek bile yok, ama İngilizcede is yine yazılır.",
+   ["yorgun-{um} -> *I am* tired", "yorgun-{sun} -> *you are* tired", "yorgun-[dur] -> *she is* tired"], ["I'm tired.", "You're tired.", "She's tired."], True),
+  ("Konuşurken kısaltırlar: I am yerine I'm, you are yerine you're. Ama olmak fiili asla kaybolmaz, sadece küçülür. Türkçe gibi düşünüp onu atarsan cümle eksik kalır.",
+   ["*I am* -> *I'm*", "~I tired~ -> *I'm tired*"], [], False)],
+ "e-article": [
+  ("The neden var? Çünkü Türkçede de var, sadece kelime olarak değil. Şu iki cümleye bak.",
+   ["Kitap aldım.", "Kitabı aldım."], [], False),
+  ("İkisi aynı değil. Kitap aldım dersen, herhangi bir kitap, hangisi olduğu önemli değil. Kitabı aldım dersen, ikimizin de bildiği o kitap. Bu farkı sondaki ı eki taşıyor.",
+   ["Kitap aldım. -> herhangi bir kitap", "Kitab{ı} aldım. -> o bildiğimiz kitap"], [], True),
+  ("İngilizcede böyle bir ek yok. O yüzden aynı bilgiyi kelimenin önüne koymak zorunda. Herhangi biri için a, ikimizin de bildiği için the.",
+   ["Kitap aldım. -> I bought *a* book.", "Kitab{ı} aldım. -> I bought *the* book."], ["I bought a book.", "I bought the book."], True),
+  ("Türkçe bu bilgiyi bazen kelime sırasıyla da verir. Kapıda bir adam var dersen, adam yeni bilgidir. Adam kapıda dersen, hangi adam olduğunu ikimiz de biliyoruz.",
+   ["Kapıda [bir] adam var. -> *a* man", "{Adam} kapıda. -> *the* man"], ["There is a man at the door.", "The man is at the door."], True),
+  ("Yani the, Türkçedeki o bildiğimiz duygusunun kelime hâli. Her seferinde kendine şunu sor: karşımdaki, hangisini kastettiğimi biliyor mu? Biliyorsa the, bilmiyorsa a.",
+   ["Karşımdaki biliyor mu?", "evet -> *the* · hayır -> *a*"], [], True)],
+}

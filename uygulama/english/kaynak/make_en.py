@@ -4,11 +4,11 @@
 #   variety     packsv/sonia/ en-GB Sonia (female): a British talker now and then in listening drills
 # The Azure key is injected by the session's network proxy (swedencentral); nothing secret lives here.
 import base64, concurrent.futures as cf, hashlib, json, os, re, subprocess, sys, tempfile, time, urllib.error, urllib.request
-from content_en import UNITS, PATTERNS, PAIRS, SOUNDS, ROLES, STORIES, MOD, GLOSS_EXTRA
+from content_en import UNITS, PATTERNS, PAIRS, SOUNDS, ROLES, STORIES, MOD, GLOSS_EXTRA, BOARDS
 
 HERE = os.path.dirname(os.path.abspath(__file__)); OUT = os.path.dirname(HERE)
 URL = "https://swedencentral.tts.speech.microsoft.com/cognitiveservices/v1"
-VOICES = {"ava": ("en-US", "en-US-AvaNeural"), "andrew": ("en-US", "en-US-AndrewNeural"), "sonia": ("en-GB", "en-GB-SoniaNeural")}
+VOICES = {"ava": ("en-US", "en-US-AvaNeural"), "andrew": ("en-US", "en-US-AndrewNeural"), "sonia": ("en-GB", "en-GB-SoniaNeural"), "emel": ("tr-TR", "tr-TR-EmelNeural")}
 FEMALE = {"Emma", "Mom", "Ms. Lee"}
 AV = {"Emma": "👩", "Jack": "👨", "Mom": "👩‍🦰", "Dad": "👨‍🦱", "Leo": "👦", "Ms. Lee": "👩‍🏫", "Waiter": "🧑‍🍳", "Driver": "🧑‍✈️", "Clerk": "🧑‍💼"}
 LEAD = 0.1
@@ -71,6 +71,10 @@ WANT = {}                       # pack -> ordered texts
 def audio(pack, text):
     WANT.setdefault(pack, {})[text] = 1
     return pack + "#" + key(text)
+NARR = {}                       # Turkish teacher narration (Emel), main pack only
+def narr(text):
+    NARR[text] = 1
+    return "tahta#" + key(text)
 K = {}                          # text -> [main timings, second timings]
 def tm(text): return K.get(text, [None, None])
 
@@ -99,7 +103,9 @@ def build():
         for who, mood, sc, en, tr, ent, trt in p["ex"]:
             exs.append({"who": who, "mood": mood, "scene": sc, "trb": split_blocks(tr, trt), "sqb": split_blocks(en, ent), "sq": en, "tr": tr, "a": audio("kalip", en), "k": tm(en)})
         drills = [dict(s=x, o=o, c=0, tr=tr, why=why, full=filled(x, o[0]), a=audio("kalip", filled(x, o[0])), k=tm(filled(x, o[0]))) for x, o, tr, why in p["drills"]]
-        pats.append({"id": p["id"], "unit": p["unit"], "t": p["t"], "rule": p["rule"], "ex": exs, "drills": drills, "builder": False})
+        board = [{"t": say, "rows": rows, "clear": clear, "a": narr(say), "en": [{"sq": e, "tr": "", "a": audio("kalip", e), "k": tm(e)} for e in ens]}
+                 for say, rows, ens, clear in BOARDS.get(p["id"], [])]
+        pats.append({"id": p["id"], "unit": p["unit"], "t": p["t"], "rule": p["rule"], "ex": exs, "drills": drills, "builder": False, "board": board})
     stories = []
     for s in STORIES:
         pid = "s-" + s["id"]
@@ -127,7 +133,7 @@ def build():
 data = build()
 texts = list(dict.fromkeys(t for p in WANT.values() for t in p))
 print("texts", len(texts), "chars", sum(map(len, texts)), flush=True)
-jobs = [(t, v) for v in ("ava", "andrew", "sonia") for t in texts]
+jobs = [(t, v) for v in ("ava", "andrew", "sonia") for t in texts] + [(t, "emel") for t in NARR]
 with cf.ThreadPoolExecutor(3) as ex:
     res = dict(zip(jobs, ex.map(lambda j: clip(*j), jobs)))
 for t in texts: K[t] = [res[(t, "ava")][1], res[(t, "andrew")][1]]
@@ -138,5 +144,9 @@ for v, d in dirs.items():
     for pack, ts in WANT.items():
         json.dump({key(t): base64.b64encode(open(res[(t, v)][0], "rb").read()).decode() for t in ts},
                   open(os.path.join(OUT, d, pack + ".json"), "w"), separators=(",", ":"))
+if NARR:
+    json.dump({key(t): base64.b64encode(open(res[(t, "emel")][0], "rb").read()).decode() for t in NARR},
+              open(os.path.join(OUT, "packs", "tahta.json"), "w"), separators=(",", ":"))
+    import shutil; shutil.copy(os.path.join(OUT, "packs", "tahta.json"), os.path.join(OUT, "packs2", "tahta.json"))   # same teacher in both talkers
 json.dump(data, open(os.path.join(OUT, "data.json"), "w"), ensure_ascii=False, separators=(",", ":"))
 print("units", len(data["units"]), "words", sum(len(u["w"]) for u in data["units"]), "pats", len(data["pats"]), "stories", len(data["stories"]), "packs", len(WANT))
