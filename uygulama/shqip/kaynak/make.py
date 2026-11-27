@@ -16,11 +16,8 @@ from a2_stories import STORIES3, ROLES
 from freq import UNITS_F
 from new_units import UNITS_N, MODULES
 from v5_units import UNITS_V5, PLACE, MODULE_B1, MODULE_ROLES, ROLES2, TEXTS, GRAM2
-MODULES = [list(M) for M in MODULES]
-for M in MODULES:
-    M[4] = list(M[4]) + [u for u, mid in PLACE.items() if mid == M[0]]
-    M[5] = list(M[5]) + MODULE_ROLES.get(M[0], [])
-MODULES.append(list(MODULE_B1))
+from curriculum import MODULES_V7, TITLES, UNITS_V7, LOOK_V7, PATTERNS_V7, STORY_AFTER
+MODULES = [list(M) for M in MODULES_V7]          # curriculum v7: one research-ordered spine (see curriculum.py)
 try:
     from story_gloss import STORY_GLOSS
 except ImportError:
@@ -113,13 +110,24 @@ for uid, title, vid, vtitle, words, tips in UNITS3:
     units.append({"id": uid, "t": title, "season": 3, "lv": "A2", "tips": tips, "kos": uid == "kosova",
                   "ic": UNIT_LOOK[uid][0], "hue": UNIT_LOOK[uid][1],
                   "w": [{"sq": sq, "tr": tr, "p": p or EXTRA_PICS.get(sq, ""), "a": audio(uid, sq), "k": tm(sq), "m": MEMO.get(sq)} for sq, tr, p in words]})
-for uid, title, vid, vtitle, words, tips in UNITS_N + UNITS_V5:
+UNIT_LOOK.update(LOOK_V7)
+for uid, title, vid, vtitle, words, tips in UNITS_N + UNITS_V5 + UNITS_V7:
     units.append({"id": uid, "t": title, "season": 2, "tips": tips,
                   "ic": UNIT_LOOK[uid][0], "hue": UNIT_LOOK[uid][1],
                   "w": [{"sq": sq, "tr": tr, "p": p or EXTRA_PICS.get(sq, ""), "a": audio(uid, sq), "k": tm(sq), "m": MEMO.get(sq)} for sq, tr, p in words]})
 # Curriculum order: 14 modules (A1 = 9 stops in Albania, A2 = 5 in Kosovo), each with a can-do goal and a mission
 ORDER = {uid: (mi, k) for mi, M in enumerate(MODULES) for k, uid in enumerate(M[4])}
 units.sort(key=lambda u: ORDER[u["id"]])
+_seen = {}
+for u in units:                                       # one topic, one place: a word taught earlier is not taught again
+    if u["id"] in TITLES: u["t"] = TITLES[u["id"]]
+    keep = []
+    for w in u["w"]:
+        first = _seen.get(w["sq"])
+        same = first is not None and first.split(",")[0].split("/")[0].strip().lower() == w["tr"].split(",")[0].split("/")[0].strip().lower()
+        if same: continue
+        _seen.setdefault(w["sq"], w["tr"]); keep.append(w)
+    u["w"] = keep
 for u in units:
     mi = ORDER[u["id"]][0]; u["mod"] = mi; u["lv"] = MODULES[mi][2]; u["season"] = 3 if u["lv"] == "A2" else 2
 mods = [{"id": mid, "t": mt, "lv": lv, "can": can, "units": us, "roles": rs,
@@ -131,7 +139,7 @@ STORIES5 = [{"id": tid, "t": tt, "after": aft, "lv": lv, "cover": cov, "kind": "
 stories = []
 for s in STORIES + STORIES2 + STORIES3 + STORIES4 + STORIES5:
     if "src" in s: used_videos.add(s["src"][0])
-    stories.append({"id": s["id"], "t": s["t"], "after": s["after"], "kind": s.get("kind", "story"), "lv": s.get("lv") or ("A2" if s in STORIES3 else "A1"),
+    stories.append({"id": s["id"], "t": s["t"], "after": STORY_AFTER.get(s["id"], s["after"]), "kind": s.get("kind", "story"), "lv": s.get("lv") or ("A2" if s in STORIES3 else "A1"),
                     "cover": s.get("cover") or STORY_LOOK.get(s["id"], "📖"),
                     "lines": [{"who": who, "av": AVATARS.get(who, ""), "f": who in FEMALE, "sq": sq, "tr": tr, "a": audio("s-" + s["id"], sq), "k": tm(sq)} for who, sq, tr in s["lines"]],
                     "q": [{"q": q, "o": o, "c": c} for q, o, c in s["q"]]})
@@ -225,7 +233,7 @@ def expand_ex(e):
     return (who, mood, sc, split_blocks(tr, trt), split_blocks(sq, sqt), sq, tr)
 
 pats = []
-for P_ in PATTERNS + PATTERNS2:
+for P_ in PATTERNS + PATTERNS2 + PATTERNS_V7:
     P_["ex"] = [expand_ex(e) for e in P_["ex"] + EXTRA_EX.get(P_["id"], [])]
     exs = [{"who": who, "mood": mood, "scene": sc, "trb": trb, "sqb": sqb, "sq": sq, "tr": tr, "a": audio("kalip", sq), "k": tm(sq)}
            for who, mood, sc, trb, sqb, sq, tr in P_["ex"]]
