@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Përkthe</string>
+    <string name="title_activity_main">Përkthe</string>
+    <string name="package_name">com.bakalm.perkthe</string>
+    <string name="custom_url_scheme">com.bakalm.perkthe</string>
+</resources>

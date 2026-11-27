@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Përkthe</title>
+<style>
+:root { --bg: #f6f3ee; --card: #ffffff; --fg: #1f1a17; --mut: #6b625b; --line: #e4ddd3; --acc: #c8162f; --acc2: #1f5fbf; --ok: #2e9d4f; --soft: #fbeff0; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #151312; --card: #201d1b; --fg: #f1ece6; --mut: #a89f96; --line: #37312c; --acc: #ef4a5f; --acc2: #6aa0ff; --ok: #4cc472; --soft: #2a1b1e; } }
+:root[data-theme="dark"] { --bg: #151312; --card: #201d1b; --fg: #f1ece6; --mut: #a89f96; --line: #37312c; --acc: #ef4a5f; --acc2: #6aa0ff; --ok: #4cc472; --soft: #2a1b1e; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+.app { max-width: 640px; margin: 0 auto; padding: 14px 16px 40px; padding-top: max(14px, env(safe-area-inset-top)); }
+header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.logo { width: 40px; height: 40px; border-radius: 11px; background: var(--acc); color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 1.1rem; }
+h1 { font-size: 1.35rem; margin: 0; } .sub { color: var(--mut); font-size: .86rem; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; margin-bottom: 12px; }
+.status { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.status b { font-weight: 700; } .status .grow { flex: 1; min-width: 180px; }
+.bar { height: 8px; background: var(--line); border-radius: 99px; overflow: hidden; margin-top: 6px; } .bar i { display: block; height: 100%; width: 0; background: var(--acc2); transition: width .3s; }
+button { font: inherit; cursor: pointer; border-radius: 12px; border: 1px solid var(--line); background: var(--card); color: var(--fg); padding: 8px 12px; }
+button.pri { background: var(--acc); border-color: var(--acc); color: #fff; font-weight: 700; padding: 10px 16px; }
+button:disabled { opacity: .5; cursor: default; }
+.dir { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; margin-bottom: 10px; }
+.dir .l { text-align: center; font-weight: 700; padding: 8px; border-radius: 12px; background: var(--card); border: 1px solid var(--line); }
+.swap { width: 44px; height: 44px; border-radius: 50%; font-size: 1.2rem; padding: 0; }
+textarea { width: 100%; min-height: 110px; resize: vertical; font: inherit; font-size: 1.05rem; color: var(--fg); background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px; }
+textarea:focus { outline: 2px solid var(--acc2); border-color: transparent; }
+.row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin: 8px 0; }
+.row .sp { flex: 1; }
+label.tg { display: flex; gap: 6px; align-items: center; font-size: .92rem; color: var(--mut); }
+.out { min-height: 64px; font-size: 1.12rem; white-space: pre-wrap; }
+.out.busy { color: var(--mut); }
+.norm { font-size: .86rem; color: var(--mut); background: var(--soft); border-radius: 10px; padding: 6px 9px; margin-top: 8px; }
+.norm b { color: var(--fg); }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { font-size: .86rem; padding: 5px 10px; border-radius: 99px; }
+.hist { list-style: none; margin: 0; padding: 0; }
+.hist li { border-top: 1px solid var(--line); padding: 8px 0; display: grid; grid-template-columns: 1fr auto; gap: 6px; }
+.hist li:first-child { border-top: 0; }
+.hist .s { color: var(--mut); font-size: .88rem; } .hist .t { font-weight: 600; }
+.hist button { padding: 4px 8px; border: 0; background: none; font-size: 1.1rem; }
+h2 { font-size: 1rem; margin: 4px 0 8px; }
+.note { color: var(--mut); font-size: .82rem; }
+</style>
+</head>
+<body>
+<div class="app">
+  <header><div class="logo">P</div><div><h1>Përkthe</h1><div class="sub">Arnavutça ↔ Türkçe · Kosova ağzı destekli · internetsiz</div></div></header>
+
+  <div class="card status" id="status">
+    <div class="grow"><b id="st-t">Çeviri modeli yükleniyor…</b><div class="note" id="st-s"></div><div class="bar" id="bar" hidden><i></i></div></div>
+    <button class="pri" id="dl" hidden>İndir (900 MB)</button>
+  </div>
+
+  <div class="dir"><div class="l" id="l1">Arnavutça</div><button class="swap" id="swap" aria-label="Yönü değiştir">⇄</button><div class="l" id="l2">Türkçe</div></div>
+  <textarea id="src" placeholder="Arnavutça yaz… (Kosova ağzı da olur: “Qysh je? Kam me shku n'shpi.”)"></textarea>
+  <div class="row"><label class="tg" id="ghtg" hidden><input type="checkbox" id="gh"> Kosova ağzıyla yaz</label><span class="sp"></span><button class="pri" id="go" disabled>Çevir</button></div>
+
+  <div class="card">
+    <div class="out" id="out">Çeviri burada görünecek.</div>
+    <div class="norm" id="norm" hidden></div>
+    <div class="row"><button id="copy">Kopyala</button><button id="speak">🔊 Dinle</button><button id="fav">☆ Kaydet</button></div>
+  </div>
+
+  <div class="card"><h2>Kosova ağzından örnekler</h2><div class="chips" id="ex"></div></div>
+  <div class="card"><h2>Kaydedilenler ve geçmiş</h2><ul class="hist" id="hist"></ul><div class="note" id="hnote">Henüz çeviri yok.</div></div>
+  <p class="note">Çeviriyi Meta'nın açık kaynak NLLB-200 modeli telefonunda yapar; ilk indirmeden sonra internet gerekmez. Kosova ağzıyla yazılan Arnavutça önce standart Arnavutçaya çevrilir. Makine çevirisi hata yapabilir; önemli metinlerde bir Arnavutça bilene sor.</p>
+</div>
+<script src="gheg.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const st = { dir: "sq", busy: false, ready: false, id: 0 };
+const L = { sq: ["Arnavutça", "als_Latn", "sq-AL"], tr: ["Türkçe", "tur_Latn", "tr-TR"] };
+const S = { get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} } };
+let hist = S.get("pk-hist", []);
+const local = new URLSearchParams(location.search).get("local");   // test mode: model files served from this path
+const worker = new Worker("worker.js", { type: "module" });
+const files = {};
+worker.onmessage = e => {
+  const m = e.data;
+  if (m.type === "progress") {
+    const p = m.p;
+    if (p.status === "progress" && p.total) { files[p.file] = [p.loaded, p.total]; const a = Object.values(files).reduce((s, [l, t]) => [s[0] + l, s[1] + t], [0, 0]);
+      $("#bar").hidden = false; $("#bar i").style.width = (a[0] / Math.max(a[1], 1) * 100).toFixed(1) + "%";
+      $("#st-t").textContent = "Model indiriliyor…"; $("#st-s").textContent = `${(a[0] / 1e6).toFixed(0)} / ${(a[1] / 1e6).toFixed(0)} MB · Wi-Fi'de kal, bir kere iner.`; }
+    if (p.status === "ready") $("#st-t").textContent = "Model hazırlanıyor…";
+  } else if (m.type === "ready") {
+    st.ready = true; S.set("pk-ready", 1); $("#bar").hidden = true; $("#dl").hidden = true; $("#go").disabled = false;
+    $("#st-t").textContent = "Hazır · internetsiz çalışır"; $("#st-s").textContent = "Model telefonunda. Bir cümle birkaç saniye sürebilir.";
+  } else if (m.type === "partial" || m.type === "done") {
+    if (m.id !== st.id) return;
+    let t = m.text; if (st.dir === "tr" && $("#gh").checked) t = standardToGheg(t);
+    $("#out").textContent = t; $("#out").classList.toggle("busy", m.type === "partial");
+    if (m.type === "done") { st.busy = false; $("#go").disabled = false; $("#go").textContent = "Çevir"; save(st.lastSrc, t); }
+  } else if (m.type === "error") {
+    st.busy = false; $("#go").disabled = !st.ready; $("#go").textContent = "Çevir";
+    $("#st-t").textContent = st.ready ? "Hazır" : "Model yüklenemedi"; $("#st-s").textContent = m.message; $("#dl").hidden = st.ready;
+  }
+};
+function startLoad() { $("#dl").hidden = true; $("#st-t").textContent = "Model yükleniyor…"; worker.postMessage({ type: "load", local }); }
+if (S.get("pk-ready", 0) || local) startLoad();
+else { $("#st-t").textContent = "Çeviri modeli henüz indirilmedi"; $("#st-s").textContent = "Bir kere indirilir (yaklaşık 900 MB), sonra internetsiz çalışır. Wi-Fi önerilir."; $("#dl").hidden = false; }
+$("#dl").onclick = startLoad;
+
+function setDir(d) {
+  st.dir = d; const a = L[d], b = L[d === "sq" ? "tr" : "sq"];
+  $("#l1").textContent = a[0]; $("#l2").textContent = b[0]; $("#ghtg").hidden = d !== "tr";
+  $("#src").placeholder = d === "sq" ? "Arnavutça yaz… (Kosova ağzı da olur: “Qysh je? Kam me shku n'shpi.”)" : "Türkçe yaz…";
+}
+$("#swap").onclick = () => { const o = $("#out").textContent; setDir(st.dir === "sq" ? "tr" : "sq"); if (o && !o.startsWith("Çeviri burada")) { $("#src").value = o; $("#out").textContent = ""; } };
+$("#gh").checked = S.get("pk-gh", false); $("#gh").onchange = () => S.set("pk-gh", $("#gh").checked);
+
+function translate() {
+  const raw = $("#src").value.trim(); if (!raw || !st.ready || st.busy) return;
+  let text = raw; $("#norm").hidden = true;
+  if (st.dir === "sq") { const n = ghegToStandard(raw); if (n.replace(/\s+/g, " ") !== raw.replace(/\s+/g, " ")) { $("#norm").innerHTML = `Kosova ağzı standarda çevrildi: <b></b>`; $("#norm b").textContent = n; $("#norm").hidden = false; } text = n; }
+  st.busy = true; st.id++; st.lastSrc = raw; $("#go").disabled = true; $("#go").textContent = "Çevriliyor…";
+  $("#out").textContent = "…"; $("#out").classList.add("busy");
+  const a = L[st.dir], b = L[st.dir === "sq" ? "tr" : "sq"];
+  worker.postMessage({ type: "translate", id: st.id, text, src: a[1], tgt: b[1], local });
+}
+$("#go").onclick = translate;
+$("#src").addEventListener("keydown", e => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) translate(); });
+
+function save(src, out, fav = false) {
+  if (!src || !out) return;
+  hist = hist.filter(h => !(h.s === src && h.d === st.dir)); hist.unshift({ s: src, t: out, d: st.dir, f: fav }); hist = hist.slice(0, 60); S.set("pk-hist", hist); renderHist();
+}
+function renderHist() {
+  const ul = $("#hist"); ul.innerHTML = ""; $("#hnote").hidden = hist.length > 0;
+  [...hist.filter(h => h.f), ...hist.filter(h => !h.f)].forEach(h => {
+    const li = document.createElement("li");
+    li.innerHTML = `<div><div class="s"></div><div class="t"></div></div><button aria-label="Kaydet">${h.f ? "★" : "☆"}</button>`;
+    li.querySelector(".s").textContent = (h.d === "sq" ? "SQ → TR · " : "TR → SQ · ") + h.s; li.querySelector(".t").textContent = h.t;
+    li.querySelector("div").onclick = () => { setDir(h.d); $("#src").value = h.s; $("#out").textContent = h.t; $("#norm").hidden = true; };
+    li.querySelector("button").onclick = () => { h.f = !h.f; S.set("pk-hist", hist); renderHist(); };
+    ul.append(li);
+  });
+}
+renderHist();
+$("#fav").onclick = () => { const h = hist.find(x => x.s === st.lastSrc && x.d === st.dir); if (h) { h.f = true; S.set("pk-hist", hist); renderHist(); } };
+$("#copy").onclick = () => { try { navigator.clipboard.writeText($("#out").textContent); $("#copy").textContent = "Kopyalandı"; setTimeout(() => $("#copy").textContent = "Kopyala", 1200); } catch {} };
+$("#speak").onclick = () => {
+  const lang = L[st.dir === "sq" ? "tr" : "sq"][2], u = new SpeechSynthesisUtterance($("#out").textContent);
+  u.lang = lang; const v = speechSynthesis.getVoices().find(v => v.lang && v.lang.toLowerCase().startsWith(lang.slice(0, 2)));
+  if (!v && lang.startsWith("sq")) { $("#speak").textContent = "Telefonda Arnavutça ses yok"; setTimeout(() => $("#speak").textContent = "🔊 Dinle", 1800); return; }
+  if (v) u.voice = v; speechSynthesis.cancel(); speechSynthesis.speak(u);
+};
+["Qysh je? A je mirë?", "Çka po bën tash?", "Kam me shku n'shpi.", "Nana jem âsht n'Prishtinë.", "S'po du me fol tash.", "A ke me ardhë nesër?", "E kam pa n'treg."].forEach(t => {
+  const b = document.createElement("button"); b.className = "chip"; b.textContent = t; b.onclick = () => { setDir("sq"); $("#src").value = t; translate(); }; $("#ex").append(b);
+});
+setDir("sq");
+</script>
+</body>
+</html>

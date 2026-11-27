@@ -1,0 +1,8 @@
+{
+  "appId": "com.bakalm.perkthe",
+  "appName": "Përkthe",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": false
+  }
+}

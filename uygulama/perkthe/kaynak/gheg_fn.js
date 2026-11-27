@@ -1,0 +1,46 @@
+const FEM_END = ["a", "ja"];
+function ghConj(lemma, aux, refl) {
+  const p = GH.N[aux] ?? 0;
+  if (GH.I[lemma] && !refl) return GH.I[lemma][p];
+  if (lemma.endsWith("oj")) { const st = lemma.slice(0, -2); return st + (refl ? ["ohem", "ohesh", "ohet", "ohemi", "oheni", "ohen"] : ["oj", "osh", "ojë", "ojmë", "oni", "ojnë"])[p]; }
+  return lemma;
+}
+const cap = (w, like) => like && like[0] === like[0].toUpperCase() && like[0] !== like[0].toLowerCase() ? w.charAt(0).toUpperCase() + w.slice(1) : w;
+/* Gheg -> standard (before translating Albanian into Turkish) */
+function ghegToStandard(text) {
+  let t = text.replace(/\b([nNtTmMsS])['’]\s*/g, (m, c) => cap({ n: "në ", t: "të ", m: "më ", s: "nuk " }[c.toLowerCase()], c));
+  const w = t.match(/[\p{L}\p{N}_]+|[^\p{L}\p{N}_\s]+|\s+/gu) || [];
+  const out = [], nxt = k => { while (k < w.length && /^\s+$/.test(w[k])) k++; return k; };
+  const lastWord = () => { for (let i = out.length - 1; i >= 0; i--) if (!/^\s+$/.test(out[i])) return out[i]; return ""; };
+  for (let i = 0; i < w.length;) {
+    const x = w[i], lx = x.toLowerCase();
+    if (lx in GH.N) { const j = nxt(i + 1); if (j < w.length && w[j].toLowerCase() === "me") { let k = nxt(j + 1), u = false; if (k < w.length && w[k].toLowerCase() === "u") { u = true; k = nxt(k + 1); }
+      if (k < w.length && GH.P[w[k].toLowerCase()]) { const v = ghConj(GH.P[w[k].toLowerCase()][1], lx, u); out.push(cap("do", x) + " të " + (u && !/oh(et|en|em|esh)$/.test(v) ? "u " : "") + v); i = k + 1; continue; } } }
+    if (lx === "me") { let k = nxt(i + 1), pre = ""; if (k < w.length && w[k].toLowerCase() === "të") { pre = "të "; k = nxt(k + 1); } if (k < w.length && w[k].toLowerCase() === "u") { pre += "u "; k = nxt(k + 1); }
+      if (k < w.length && GH.P[w[k].toLowerCase()]) { out.push("të " + pre + GH.P[w[k].toLowerCase()][1]); i = k + 1; continue; } }
+    if (GH.P[lx] && ["kam", "ke", "ka", "kemi", "keni", "kanë", "kisha", "kishte", "kom"].includes(lastWord().toLowerCase())) { out.push(GH.P[lx][0]); i++; continue; }
+    if (lx === "jem" || lx === "jeme") { const pv = lastWord().toLowerCase(); out.push(FEM_END.some(e => pv.endsWith(e)) && !GH.M.includes(pv) ? "ime" : "im"); i++; continue; }
+    if (lx in GH.W) { out.push(GH.W[lx] ? cap(GH.W[lx], x) : ""); i++; continue; }
+    out.push(x); i++;
+  }
+  return out.join("").replace(/\s+/g, " ").replace(/ ([,.?!])/g, "$1").trim();
+}
+/* standard -> Kosovo colloquial (optional, on Turkish -> Albanian output) */
+const TO_GH = { "si": "qysh", "çfarë": "çka", "tani": "tash", "dua": "du", "një": "nji", "shtëpi": "shpi", "shtëpia": "shpija", "shtëpinë": "shpinë",
+  "nëna": "nana", "nënë": "nanë", "fëmijë": "fmi", "fëmija": "fmija", "fëmijët": "fmit", "vëlla": "vlla", "vëllai": "vllau", "shiko": "kqyr",
+  "gjithçka": "krejt", "vetëm": "veç", "akoma": "hala", "asgjë": "kurgjo", "askush": "kurkush", "është": "âsht", "jam": "jom", "këtu": "qitu", "shumë": "shum" };
+const LEMMA_OF = {}; // subjunctive form -> [lemma, person]
+for (const [l, forms] of Object.entries(GH.I)) forms.forEach((f, p) => { LEMMA_OF[f] = LEMMA_OF[f] || [l, p]; });
+const GPART = {}; for (const [g, [, l]] of Object.entries(GH.P)) if (!GPART[l]) GPART[l] = g;
+const AUX = ["kam", "ke", "ka", "kena", "keni", "kanë"];
+function lemmaOf(f) {
+  if (LEMMA_OF[f]) return LEMMA_OF[f];
+  const m = f.match(/^(.+o)(j|sh|jë|jmë|ni|jnë)$/); if (m) return [m[1] + "j", ["j", "sh", "jë", "jmë", "ni", "jnë"].indexOf(m[2])];
+  return null;
+}
+function standardToGheg(text) {
+  let t = text.replace(/\b(do|Do) të (\p{L}+)/gu, (all, d, v) => { const lp = lemmaOf(v.toLowerCase()); const g = lp && GPART[lp[0]]; return g ? cap(AUX[lp[1]], d) + " me " + g : all; });
+  t = t.replace(/\b(dua|Dua|duhet|Duhet) të (\p{L}+)/gu, (all, d, v) => { const lp = lemmaOf(v.toLowerCase()); const g = lp && GPART[lp[0]]; return g ? d + " me " + g : all; });
+  return t.replace(/[\p{L}]+/gu, x => TO_GH[x.toLowerCase()] ? cap(TO_GH[x.toLowerCase()], x) : x);
+}
+if (typeof module !== "undefined") module.exports = { ghegToStandard, standardToGheg };
