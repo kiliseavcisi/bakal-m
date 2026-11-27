@@ -16,6 +16,7 @@ from a2_stories import STORIES3, ROLES
 from freq import UNITS_F
 from new_units import UNITS_N, MODULES
 from v5_units import UNITS_V5, PLACE, MODULE_B1, MODULE_ROLES, ROLES2, TEXTS, GRAM2
+from tahta_sq import BOARDS_SQ
 from curriculum import MODULES_V7, TITLES, UNITS_V7, LOOK_V7, PATTERNS_V7, STORY_AFTER
 MODULES = [list(M) for M in MODULES_V7]          # curriculum v7: one research-ordered spine (see curriculum.py)
 try:
@@ -239,7 +240,9 @@ for P_ in PATTERNS + PATTERNS2 + PATTERNS_V7:
            for who, mood, sc, trb, sqb, sq, tr in P_["ex"]]
     drills = [dict(s=x, o=o, c=0, tr=tr, why=why, full=filled(x, o[0]), a=audio("kalip", filled(x, o[0])), k=tm(filled(x, o[0])))
               for x, o, tr, why in P_["drills"]]
-    pats.append({"id": P_["id"], "unit": P_["unit"], "t": P_["t"], "rule": P_["rule"], "ex": exs, "drills": drills, "builder": P_.get("builder", False)})
+    board = [{"t": re.sub(r"[«»]", "", say), "rows": rows, "clear": clear, "a": "tahta#" + hashlib.md5(say.encode()).hexdigest()[:10],
+              "en": [{"sq": e, "tr": "", "a": audio("kalip", e), "k": tm(e)} for e in ens]} for say, rows, ens, clear in BOARDS_SQ.get(P_["id"], [])]
+    pats.append({"id": P_["id"], "unit": P_["unit"], "t": P_["t"], "rule": P_["rule"], "ex": exs, "drills": drills, "builder": P_.get("builder", False), "board": board})
 nums = [{"n": n, "sq": t, "a": audio("numra", t), "k": tm(t)} for n, t in NUMBERS]
 # Verb conjugator: one clip per tense row (all six persons), word timings let each form light up
 conj = {"pron": PRON, "tenses": TENSES, "verbs": []}
@@ -323,6 +326,11 @@ os.makedirs(os.path.join(OUT, "packs2"), exist_ok=True)
 for name, d in packs2.items():
     json.dump(d, open(os.path.join(OUT, "packs2", name + ".json"), "w"), separators=(",", ":"))
 
+# Tahta narrations (tahta_tts.py): the same teacher clip in both talkers' packs
+_tdir = os.path.join(HERE, ".clips-tahta")
+_tahta = {k[:-4]: base64.b64encode(open(os.path.join(_tdir, k), "rb").read()).decode() for k in sorted(os.listdir(_tdir))} if os.path.isdir(_tdir) else {}
+if _tahta:
+    for _d in ("packs", "packs2"): json.dump(_tahta, open(os.path.join(OUT, _d, "tahta.json"), "w"), separators=(",", ":"))
 json.dump({"units": units, "stories": stories, "alpha": alpha, "gloss": gloss, "rev": rev, "pairs": pairs, "extra": extra, "roles": roles, "conj": conj, "gram": gram, "freq": FREQ, "mods": mods, "pats": pats, "nums": nums}, open(os.path.join(OUT, "data.json"), "w"), ensure_ascii=False, separators=(",", ":"))
 json.dump(list(dict.fromkeys(SAY)), open(os.path.join(HERE, ".say.json"), "w"), ensure_ascii=False)
 print("voice clips", len(os.listdir(VOICE_DIR)) if os.path.isdir(VOICE_DIR) else 0, "units", len(units), "words", sum(len(u["w"]) for u in units), "stories", len(stories), "packs", len(packs),

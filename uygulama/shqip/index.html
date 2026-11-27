@@ -3422,3 +3422,75 @@ function finish(passed) {
   el.querySelector(".sheet .btn").focus();
 }
 </script>
+<script>
+/* ---------- Tahta (whiteboard): the WHY of a pattern, written step by step with the teacher's voice ---------- */
+(() => {
+  const css = document.createElement("style");
+  css.textContent = `
+  .board { background: #fbfcfd; border: 3px solid #c9d3dc; border-radius: 14px; padding: 14px 16px 18px; min-height: 190px; position: relative;
+    box-shadow: inset 0 0 0 6px #f1f4f7; font-family: "Caveat", "Segoe Print", "Comic Sans MS", cursive; color: #1d2a36; }
+  .board .brd-row { font-size: 1.75rem; line-height: 1.25; margin: 6px 0; animation: brdWrite 1.1s ease-out both; clip-path: inset(0 0 0 0); }
+  @keyframes brdWrite { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+  .board .gh { color: #7d8a96; border: 2px dashed #9aa7b3; border-radius: 8px; padding: 0 6px; }
+  .board .st { position: relative; color: #7d8a96; } .board .st::after { content: ""; position: absolute; left: -2px; right: -2px; top: 52%; height: 3px; background: #c8162f; transform: rotate(-4deg); border-radius: 2px; }
+  .board .ky { color: #c8162f; border: 3px solid #c8162f; border-radius: 50%; padding: 0 8px; }
+  .board .en { color: #1f5fbf; font-weight: 700; }
+  .board .ar { color: #c8162f; font-weight: 700; padding: 0 4px; }
+  .board .brd-pairs { display: flex; flex-wrap: wrap; gap: 8px 10px; padding: 4px 0; }
+  .board .bp { display: flex; flex-direction: column; align-items: center; animation: brdPop .5s ease-out both; }
+  .board .bp .bt { color: var(--c); font-size: 1.45rem; font-weight: 700; border-bottom: 3px solid var(--c); padding: 0 4px; }
+  .board .bp .bl { width: 3px; height: 16px; background: var(--c); opacity: .55; }
+  .board .bp .be { color: #fff; background: var(--c); border-radius: 10px; padding: 0 9px; font-size: 1.4rem; font-weight: 700; font-family: "Fredoka", "Lexend", sans-serif; }
+  @keyframes brdPop { from { opacity: 0; transform: translateY(8px) scale(.9); } to { opacity: 1; transform: none; } }
+  .brd-cap { margin-top: 10px; font-size: .98rem; line-height: 1.45; color: var(--fg); background: var(--card, #fff); border-left: 4px solid #f2a516; padding: 8px 10px; border-radius: 8px; }
+  .brd-tag { font-weight: 800; color: #b26b00; letter-spacing: .04em; font-size: .78rem; text-transform: uppercase; margin-bottom: 6px; }
+  @media (prefers-color-scheme: dark) { .board { background: #f5f7f9; } }`;
+  document.head.append(css);
+  const ln = document.createElement("link"); ln.rel = "stylesheet"; ln.href = "https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap"; document.head.append(ln);
+})();
+const PAIR_C = ["#c8162f", "#1f5fbf", "#2e9d4f", "#b26b00", "#7b4bb7", "#0f8a8a"];
+function boardPairs(src) {
+  return `<div class="brd-pairs">${src.slice(1).split(" · ").map((p, k) => { const [t, e] = p.split("|");
+    return `<span class="bp" style="--c:${PAIR_C[k % PAIR_C.length]};animation-delay:${k * .45}s"><b class="bt">${esc(t)}</b><i class="bl"></i><b class="be">${esc(e || "")}</b></span>`; }).join("")}</div>`;
+}
+function boardRow(src) {
+  if (src[0] === "=") return boardPairs(src);
+  const parts = src.split(/(\[[^\]]+\]|~[^~]+~|\{[^}]+\}|\*[^*]+\*|->)/g).filter(x => x);
+  return parts.map(x => x === "->" ? `<span class="ar">→</span>`
+    : x[0] === "[" ? `<span class="gh">${esc(x.slice(1, -1))}</span>`
+    : x[0] === "~" ? `<span class="st">${esc(x.slice(1, -1))}</span>`
+    : x[0] === "{" ? `<span class="ky">${esc(x.slice(1, -1))}</span>`
+    : x[0] === "*" ? `<span class="en">${esc(x.slice(1, -1))}</span>` : esc(x)).join("");
+}
+function boardView(host, p, onEnd) {
+  const steps = p.board || []; let i = 0, run = 0;
+  preload(steps.flatMap(s => [s.a, ...s.en.map(e => e.a)]));
+  const box = $(`<div class="teach"><div class="tag new">${icon("🧑‍🏫")} Tahta · neden böyle?</div><h2 class="prompt">${esc(p.t)}</h2>
+    <div class="board" aria-live="polite"></div><div class="brd-cap"><div class="brd-tag"></div><div class="brd-t"></div></div>
+    <div class="row tnav"><button class="chip replay" type="button">${I.play}Tekrar dinle</button><button class="btn sm next" type="button">Devam</button></div></div>`);
+  const bd = box.querySelector(".board");
+  const play = () => {
+    const my = ++run, s = steps[i];
+    const seq = [s, ...s.en];
+    const nx = k => { if (my !== run || k >= seq.length) return; const pr = say(seq[k]); if (!pr) return nx(k + 1); pr.then(au => { if (!au) return nx(k + 1); au.addEventListener("ended", () => setTimeout(() => nx(k + 1), 350), { once: true }); }); };
+    nx(0);
+  };
+  const show = () => {
+    const s = steps[i];
+    if (s.clear) bd.innerHTML = "";
+    s.rows.forEach((r, j) => { const d = $(`<div class="brd-row" style="animation-delay:${j * .6}s">${boardRow(r)}</div>`); bd.append(d); });
+    box.querySelector(".brd-tag").textContent = `Adım ${i + 1} / ${steps.length}`;
+    box.querySelector(".brd-t").textContent = s.t;
+    box.querySelector(".next").textContent = i < steps.length - 1 ? "Devam" : "Örneklere geç";
+    setTimeout(play, 250);
+  };
+  box.querySelector(".replay").onclick = () => { if (curAudio) curAudio.pause(); play(); };
+  box.querySelector(".next").onclick = () => {
+    run++; if (curAudio) curAudio.pause();
+    if (i < steps.length - 1) { i++; show(); return; }
+    box.remove(); onEnd();
+  };
+  host.append(box); show();
+}
+{ const base = teachView; teachView = function (host, p, onEnd) { if (p.board && p.board.length && !host.querySelector(".board")) boardView(host, p, () => base(host, p, onEnd)); else base(host, p, onEnd); }; }
+</script>
