@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Köprü</string>
+    <string name="title_activity_main">Köprü</string>
+    <string name="package_name">com.bakalm.kopru</string>
+    <string name="custom_url_scheme">com.bakalm.kopru</string>
+</resources>
