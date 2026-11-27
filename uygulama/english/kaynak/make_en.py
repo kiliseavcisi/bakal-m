@@ -1,6 +1,6 @@
 # Builds ../data.json and the audio packs for the English app with Azure neural voices.
-#   main voice  packs/        en-US Ava (female)
-#   second      packs2/       en-US Andrew (male): men in stories, role-plays and comic panels speak with it
+#   main voice  packs/        en-US Ava HD (female)
+#   second      packs2/       en-US Andrew HD (male): men in stories, role-plays and comic panels speak with it
 #   variety     packsv/sonia/ en-GB Sonia (female): a British talker now and then in listening drills
 # The Azure key is injected by the session's network proxy (swedencentral); nothing secret lives here.
 import base64, concurrent.futures as cf, hashlib, json, os, re, subprocess, sys, tempfile, time, urllib.error, urllib.request
@@ -8,7 +8,8 @@ from content_en import UNITS, PATTERNS, PAIRS, SOUNDS, ROLES, STORIES, MOD, GLOS
 
 HERE = os.path.dirname(os.path.abspath(__file__)); OUT = os.path.dirname(HERE)
 URL = "https://swedencentral.tts.speech.microsoft.com/cognitiveservices/v1"
-VOICES = {"ava": ("en-US", "en-US-AvaNeural"), "andrew": ("en-US", "en-US-AndrewNeural"), "sonia": ("en-GB", "en-GB-SoniaNeural"), "emel": ("tr-TR", "tr-TR-EmelNeural")}
+VOICES = {"avahd": ("en-US", "en-US-Ava:DragonHDLatestNeural"), "andrewhd": ("en-US", "en-US-Andrew:DragonHDLatestNeural"), "sonia": ("en-GB", "en-GB-SoniaNeural"),
+          "teacher": ("tr-TR", "en-US-Ava:DragonHDLatestNeural")}   # HD voices; the teacher is Ava HD speaking Turkish (it switches to English words by itself)
 FEMALE = {"Emma", "Mom", "Ms. Lee"}
 AV = {"Emma": "👩", "Jack": "👨", "Mom": "👩‍🦰", "Dad": "👨‍🦱", "Leo": "👦", "Ms. Lee": "👩‍🏫", "Waiter": "🧑‍🍳", "Driver": "🧑‍✈️", "Clerk": "🧑‍💼"}
 LEAD = 0.1
@@ -133,19 +134,19 @@ def build():
 data = build()
 texts = list(dict.fromkeys(t for p in WANT.values() for t in p))
 print("texts", len(texts), "chars", sum(map(len, texts)), flush=True)
-jobs = [(t, v) for v in ("ava", "andrew", "sonia") for t in texts] + [(t, "emel") for t in NARR]
+jobs = [(t, v) for v in ("avahd", "andrewhd", "sonia") for t in texts] + [(t, "teacher") for t in NARR]
 with cf.ThreadPoolExecutor(3) as ex:
     res = dict(zip(jobs, ex.map(lambda j: clip(*j), jobs)))
-for t in texts: K[t] = [res[(t, "ava")][1], res[(t, "andrew")][1]]
+for t in texts: K[t] = [res[(t, "avahd")][1], res[(t, "andrewhd")][1]]
 data = build()                  # again, now with timings
-dirs = {"ava": "packs", "andrew": "packs2", "sonia": os.path.join("packsv", "sonia")}
+dirs = {"avahd": "packs", "andrewhd": "packs2", "sonia": os.path.join("packsv", "sonia")}
 for v, d in dirs.items():
     os.makedirs(os.path.join(OUT, d), exist_ok=True)
     for pack, ts in WANT.items():
         json.dump({key(t): base64.b64encode(open(res[(t, v)][0], "rb").read()).decode() for t in ts},
                   open(os.path.join(OUT, d, pack + ".json"), "w"), separators=(",", ":"))
 if NARR:
-    json.dump({key(t): base64.b64encode(open(res[(t, "emel")][0], "rb").read()).decode() for t in NARR},
+    json.dump({key(t): base64.b64encode(open(res[(t, "teacher")][0], "rb").read()).decode() for t in NARR},
               open(os.path.join(OUT, "packs", "tahta.json"), "w"), separators=(",", ":"))
     import shutil; shutil.copy(os.path.join(OUT, "packs", "tahta.json"), os.path.join(OUT, "packs2", "tahta.json"))   # same teacher in both talkers
 json.dump(data, open(os.path.join(OUT, "data.json"), "w"), ensure_ascii=False, separators=(",", ":"))
