@@ -80,3 +80,32 @@ def detect(candles: Sequence[Candle], strict_wicks: bool = False) -> Optional[Si
             return Signal("DOWN", line, (c1, c2, c3, c4))
 
     return None
+
+
+def is_star(history: Sequence[Candle], sig: Signal, trend_bars: int = 10,
+            long_mult: float = 1.0, small_ratio: float = 0.5) -> bool:
+    """Sabah / Akşam Yıldızı şartları (dürbüne ek filtre).
+
+    history: dürbünün 4 mumu dahil, öncesindeki mumlarla birlikte (en az
+    trend_bars + 4 mum). Şartlar (yükseliş; düşüş tam tersi):
+      1) Önceki trend: 1. mumun kapanışı, trend_bars mum öncesinin kapanışından düşük.
+      2) 1. mum uzun: gövdesi, önceki trend_bars mumun ortalama gövdesinin
+         long_mult katından büyük. 2. ve 3. mum küçük: gövdeleri 1. mumun
+         small_ratio katından küçük.
+      3) 4. mum, 1. mum gövdesinin ortasının üstünde kapanır.
+    """
+    if len(history) < trend_bars + 4:
+        return False
+    c1, c2, c3, c4 = sig.candles
+    prev = history[-(trend_bars + 4):-4]
+    body = lambda c: abs(c.close - c.open)
+    b1 = body(c1)
+    avg = sum(body(c) for c in prev) / len(prev)
+    if b1 <= 0 or b1 < long_mult * avg:
+        return False
+    if body(c2) > small_ratio * b1 or body(c3) > small_ratio * b1:
+        return False
+    mid = (c1.open + c1.close) / 2
+    if sig.direction == "UP":
+        return c1.close < prev[0].close and c4.close > mid
+    return c1.close > prev[0].close and c4.close < mid

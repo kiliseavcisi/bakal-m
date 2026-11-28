@@ -252,7 +252,8 @@ class Live:
         ltf_ms = data.INTERVAL_MS[cfg.ltf]
 
         if s.stage != POZISYONDA:
-            base = Setup(direction=s.direction, htf_step=s.htf_step, start=s.start, invalid=s.invalid)
+            base = Setup(direction=s.direction, htf_step=s.htf_step, start=s.start, invalid=s.invalid,
+                         height=s.height)
             s = advance_to_entry(base, m, structure_events(m, p.lb, p.rb, "close"), p, ltf_ms)
             if s.choch is not None:
                 ck = f"{rec['symbol']}:{s.choch.time}:{s.direction}"

@@ -34,9 +34,9 @@ from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
-from pattern import Candle, detect
+from pattern import Candle, detect, is_star
 from strategy import (ACTIVE, POZISYONDA, SURE, Params, advance_to_entry, close_trade,
-                      manage_position, new_setup, risk_pct)
+                      manage_choch_exit, manage_position, mfe_r, new_setup, risk_pct)
 from structure import structure_events
 
 H4 = 4 * 3600 * 1000
@@ -57,6 +57,7 @@ class Trade:
     r: float  # komisyon dahil R
     exit_time: str
     bars_held: int
+    mfe_r: float = 0.0  # stop olana kadar lehte en uzak mesafe (R)
 
 
 def load(path: Path) -> list[Candle]:
@@ -76,12 +77,16 @@ def fmt_t(ms: int) -> str:
 def simulate(coin: str, h4: list[Candle], m15: list[Candle], p: Params, stats: dict) -> list[Trade]:
     events = structure_events(m15, p.lb, p.rb, "close")
     times = [c.time for c in m15]
+    opp = {"UP": {e.time for e in events if e.direction == "DOWN"},
+           "DOWN": {e.time for e in events if e.direction == "UP"}}
     used_events: set[int] = set()
     trades: list[Trade] = []
 
     for i in range(3, len(h4)):
         sig = detect(h4[i - 3:i + 1])
         if not sig:
+            continue
+        if p.yildiz and not is_star(h4[max(0, i - 13):i + 1], sig):
             continue
         stats["durbun"] += 1
         s = advance_to_entry(new_setup(sig, H4), m15, events, p, M15)
@@ -97,9 +102,13 @@ def simulate(coin: str, h4: list[Candle], m15: list[Candle], p: Params, stats: d
         if s.stage != POZISYONDA and s.stage not in ("HEDEF", "STOP"):
             stats[s.stage] += 1
             continue
+        after = m15[s.entry_index + 1:s.entry_index + 1 + p.max_hold_bars]
         if s.stage == POZISYONDA:
             after = m15[s.entry_index + 1:s.entry_index + 1 + p.max_hold_bars]
-            manage_position(s, after, p)
+            if p.exit == "choch":
+                manage_choch_exit(s, after, opp[s.direction], p)
+            else:
+                manage_position(s, after, p)
             if s.stage == POZISYONDA:
                 if len(after) < p.max_hold_bars:
                     stats["acik"] += 1  # veri bitti, hâlâ açık: sayma
@@ -109,7 +118,8 @@ def simulate(coin: str, h4: list[Candle], m15: list[Candle], p: Params, stats: d
         exit_i = bisect.bisect_left(times, s.exit_time)
         trades.append(Trade(coin, s.direction, fmt_t(h4[i].time), fmt_t(s.entry_time),
                             s.entry, s.stop, s.target, round(risk_pct(s), 2), s.stage,
-                            round(s.r, 3), fmt_t(s.exit_time), exit_i - s.entry_index))
+                            round(s.r, 3), fmt_t(s.exit_time), exit_i - s.entry_index,
+                            round(mfe_r(s, after), 2)))
     return trades
 
 
@@ -118,9 +128,9 @@ def summarize(trades: list[Trade], title: str) -> None:
     if not n:
         print(f"\n{title}: işlem yok")
         return
-    wins = sum(t.result == "HEDEF" for t in trades)
+    wins = sum(t.r > 0 for t in trades)
     stops = sum(t.result == "STOP" for t in trades)
-    other = n - wins - stops
+    other = n - sum(t.result == "HEDEF" for t in trades) - stops
     rs = [t.r for t in trades]
     eq = peak = dd = 0.0
     streak = max_streak = 0
@@ -133,16 +143,22 @@ def summarize(trades: list[Trade], title: str) -> None:
     gross_w = sum(r for r in rs if r > 0)
     gross_l = -sum(r for r in rs if r < 0)
     print(f"\n=== {title} ===")
-    print(f"İşlem: {n} | Hedef: {wins} | Stop: {stops} | Süre doldu: {other}")
+    print(f"İşlem: {n} | Kazanan: {wins} | Stop: {stops} | Diğer çıkış: {other}")
     print(f"Başarı oranı: %{100 * wins / n:.1f}")
     print(f"Toplam: {sum(rs):+.1f}R | İşlem başı ortalama: {sum(rs) / n:+.3f}R")
     print(f"Profit factor: {gross_w / gross_l:.2f}" if gross_l else "Profit factor: ∞")
     print(f"En uzun stop serisi: {max_streak} | En büyük düşüş: {dd:.1f}R")
     print(f"Ortalama stop mesafesi: %{sum(t.risk_pct for t in trades) / n:.2f}")
+    win_r = [r for r in rs if r > 0]
+    if win_r:
+        print(f"Kazananların ortalaması: {sum(win_r) / len(win_r):+.2f}R | En büyük: {max(win_r):+.1f}R")
+    m = [t.mfe_r for t in trades]
+    print("Stop olmadan önce lehte en az ... gidenler: " + " · ".join(
+        f"{k}R %{100 * sum(x >= k for x in m) / n:.0f}" for k in (1, 2, 3, 5, 10)))
     for d in ("UP", "DOWN"):
         sub = [t for t in trades if t.direction == d]
         if sub:
-            w = sum(t.result == "HEDEF" for t in sub)
+            w = sum(t.r > 0 for t in sub)
             print(f"  {'Yükseliş' if d == 'UP' else 'Düşüş'}: {len(sub)} işlem, başarı %{100 * w / len(sub):.1f}, "
                   f"toplam {sum(t.r for t in sub):+.1f}R")
 
@@ -152,12 +168,17 @@ def main() -> None:
     ap.add_argument("data_dir")
     ap.add_argument("--entry", default="kapanis", choices=["kapanis", "limit"])
     ap.add_argument("--tp", type=float, default=2.0, help="hedef (R)")
+    ap.add_argument("--exit", default="hedef", choices=["hedef", "choch", "boy"],
+                    help="hedef = sabit R hedef, choch = hedef yok, ters ChoCh/BOS'ta çık, "
+                         "boy = hedef dürbün boyunun --boy katı")
+    ap.add_argument("--yildiz", action="store_true", help="Sabah/Akşam Yıldızı filtresi")
+    ap.add_argument("--boy", type=float, default=2.0, help="exit=boy için dürbün boyu katı")
     ap.add_argument("--last", type=int, default=100, help="özet için son N işlem")
     ap.add_argument("--csv", help="tüm işlemleri CSV'ye yaz")
     ap.add_argument("--coins", help="virgülle; boşsa klasördeki hepsi")
     args = ap.parse_args()
 
-    p = Params(entry=args.entry, tp_r=args.tp)
+    p = Params(entry=args.entry, tp_r=args.tp, exit=args.exit, boy_kat=args.boy, yildiz=args.yildiz)
     root = Path(args.data_dir)
     coins = args.coins.split(",") if args.coins else sorted(f.stem for f in (root / "15m").glob("*.parquet"))
     stats = dict.fromkeys(["durbun", "choch_yok", "iptal", "ayni_choch", "choch", "risk_buyuk",
@@ -179,7 +200,7 @@ def main() -> None:
         by_year.setdefault(t.entry_time[:4], []).append(t)
     print("\nYıllara göre:")
     for y, ts in sorted(by_year.items()):
-        w = sum(t.result == "HEDEF" for t in ts)
+        w = sum(t.r > 0 for t in ts)
         print(f"  {y}: {len(ts):4d} işlem, başarı %{100 * w / len(ts):5.1f}, toplam {sum(t.r for t in ts):+7.1f}R")
     if args.csv:
         with open(args.csv, "w", newline="", encoding="utf-8") as f:
